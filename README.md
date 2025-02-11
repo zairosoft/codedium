@@ -22,15 +22,15 @@ Akaunting uses [Laravel](http://laravel.com), the best existing PHP framework, a
 ## Installation
 
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
-* Clone the repository: `git clone https://github.com/akaunting/akaunting.git`
+* Clone the repository: `git clone https://github.com/nakornsoft/bitgrid.git`
 * Install dependencies: `composer install ; npm install ; npm run dev`
 * Install Akaunting:
 
 ```bash
-php artisan install --db-name="akaunting" --db-username="root" --db-password="pass" --admin-email="admin@company.com" --admin-password="123456"
+php artisan migrate"
 ```
 
-* Create sample data (optional): `php artisan sample-data:seed`
+* Create sample data (optional): `php artisan  db:seed --class="SampleSeeder"`
 
 ## Contributing
 
@@ -48,16 +48,10 @@ If you'd like to contribute translations, please check out our [Crowdin](https:/
 
 Please see [Releases](../../releases) for more information about what has changed recently.
 
-## Security
-
-Please review [our security policy](https://github.com/akaunting/akaunting/security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
-* [Denis Duliçi](https://github.com/denisdulici)
-* [Cüneyt Şentürk](https://github.com/cuneytsenturk)
-* [All Contributors](../../contributors)
+* [Nakornsoft](https://github.com/nakornsoft)
 
 ## License
 
-Akaunting is released under the [BSL license](LICENSE.txt).
+Bitgrid is released under the [BSL license](LICENSE.txt).
