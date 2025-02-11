@@ -8,7 +8,7 @@ Feel free to report security issues based on the following chart.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :x:                |
+| 1.0.x   | :white_check_mark:                |
 
 ## Reporting a Vulnerability
 
