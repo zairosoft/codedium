@@ -1,0 +1,8 @@
+{
+    "Calendar": true,
+    "Notes": true,
+    "Inventory": true,
+    "Invoices": true,
+    "Register": true,
+    "Website": true
+}

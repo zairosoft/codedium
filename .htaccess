@@ -81,4 +81,3 @@
   Header set Cache-Control "max-age=2678400, private"
   </filesmatch>
 </IfModule>
-
