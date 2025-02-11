@@ -31,6 +31,23 @@ php artisan module:publish
 
 [Docker File](DOCKER.md)
 
+# Passport API
+```bash
+php artisan passport:install
+php artisan passport:client --personal
+```
+
+# Deployment
+```bash
+chown -R www-data:www-data storage
+chown -R www-data:www-data bootstrap/cache
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+
+sudo chmod -R 775 storage
+sudo chmod -R ugo+rw storage
+```
+
 ## Changelog
 
 Please see [Releases](../../releases) for more information about what has changed recently.
