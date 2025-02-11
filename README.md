@@ -31,13 +31,13 @@ php artisan module:publish
 
 [Docker File](DOCKER.md)
 
-# Passport API
+## Passport API
 ```bash
 php artisan passport:install
 php artisan passport:client --personal
 ```
 
-# Deployment
+## Deployment
 ```bash
 chown -R www-data:www-data storage
 chown -R www-data:www-data bootstrap/cache
