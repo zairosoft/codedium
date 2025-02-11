@@ -112,3 +112,7 @@
     - `vendor/bin/rector process --dry-run`
 - Process
     - `vendor/bin/rector process`
+
+## Credits
+
+* [Refactorian](https://github.com/refactorian/laravel-docker)
