@@ -17,7 +17,7 @@ Online accounting software designed for small businesses and freelancers. Akaunt
 
 ## Framework
 
-Akaunting uses [Laravel](http://laravel.com), the best existing PHP framework, as the foundation framework and [Module](https://github.com/akaunting/module) package for Apps.
+Akaunting uses [Laravel](http://laravel.com), the best existing PHP framework, as the foundation framework and [Module](https://github.com/nWidart/laravel-modules) package for Apps.
 
 ## Installation
 
