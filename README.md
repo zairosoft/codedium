@@ -34,6 +34,10 @@ php artisan migrate
 
 Please see [Releases](../../releases) for more information about what has changed recently.
 
+## Security
+
+Please review [our security policy](https://github.com/nakornsoft/bitgrid/security/policy) on how to report security vulnerabilities.
+
 ## Credits
 
 * [Nakornsoft](https://github.com/nakornsoft)
