@@ -23,7 +23,7 @@
 # How To Deploy
 
 ### For first time only !
-- `git clone https://github.com/refactorian/laravel-docker.git`
+- `git clone https://github.com/nakornsoft/bitgrid.git`
 - `cd laravel-docker`
 - `docker compose up -d --build`
 - `docker compose exec phpmyadmin chmod 777 /sessions`
@@ -37,7 +37,7 @@
 
 
 ### Laravel App
-- URL: http://localhost/backoffice
+- URL: http://localhost/bitgrid
 
 ### Mailpit
 - URL: http://localhost:8025
@@ -45,16 +45,16 @@
 ### phpMyAdmin
 - URL: http://localhost:8080
 - Server: `db`
-- Username: `refactorian`
-- Password: `refactorian`
-- Database: `refactorian`
+- Username: `bitgrid`
+- Password: `bitgrid`
+- Database: `bitgrid`
 
 ### Adminer
 - URL: http://localhost:9090
 - Server: `db`
-- Username: `refactorian`
-- Password: `refactorian`
-- Database: `refactorian`
+- Username: `bitgrid`
+- Password: `bitgrid`
+- Database: `bitgrid`
 
 ### Basic docker compose commands
 - Build or rebuild services
