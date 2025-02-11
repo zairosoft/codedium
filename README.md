@@ -21,7 +21,7 @@ Bitgrid uses [Laravel](http://laravel.com), the best existing PHP framework, as 
 * Install Bitgrid:
 
 ```bash
-php artisan migrate"
+php artisan migrate
 ```
 
 * Create sample data (optional): `php artisan  db:seed --class="SampleSeeder"`
