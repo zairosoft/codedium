@@ -27,6 +27,7 @@ php artisan module:publish
 ```
 
 * Create sample data (optional): `php artisan  db:seed --class="SampleSeeder"`
+* Username: super@gmail.com Password: 12345678
 
 ## Docker
 
