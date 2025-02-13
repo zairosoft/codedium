@@ -60,8 +60,8 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 
 ## Credits
 
-* [Nakornsoft](https://github.com/nakornsoft)
+* [Nakornsoft](https://www.nakornsoft.com)
 
 ## License
 
-Bitgrid is released under the [GNU GENERAL PUBLIC License](LICENSE.txt).
+Bitgrid is released under the [GNU GENERAL PUBLIC License](license.txt).
