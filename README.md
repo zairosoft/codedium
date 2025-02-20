@@ -50,6 +50,13 @@ sudo chmod -R 775 storage
 sudo chmod -R ugo+rw storage
 ```
 
+## Schedule
+```bash
+crontab -e
+Add the command below to the last line
+* * * * * php /var/www/html/bitgrid/artisan schedule:run
+```
+
 ## Changelog
 
 Please see [Releases](../../releases) for more information about what has changed recently.
