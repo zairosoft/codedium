@@ -1,7 +1,7 @@
 # [Bitgrid](https://github.com/nakornsoft/bitgrid)
 Laravel CMS
 
-Online cms software designed for small businesses and freelancers. Bitgrid is built with modern technologies such as Laravel, Vite.js, Alpine.js, Tailwind, RESTful API etc. Thanks to its modular structure, Bitgrid provides an awesome App Store for users and developers.
+ซอฟต์แวร์ CMS ออนไลน์ที่ออกแบบมาสำหรับธุรกิจขนาดเล็กและฟรีแลนซ์ Bitgrid ถูกสร้างขึ้นโดยนครซอฟต์ ใช้เทคโนโลยีสมัยใหม่ เช่น Laravel, Vite.js, Alpine.js, Tailwind, RESTful API เป็นต้น ด้วยโครงสร้างแบบโมดูลาร์ Bitgrid จึงมอบ App Store ที่ยอดเยี่ยมให้กับผู้ใช้และนักพัฒนา
 
 [English](README.md)
 [ภาษาไทย](README-TH.md)
