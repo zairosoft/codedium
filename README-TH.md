@@ -8,8 +8,8 @@ Online cms software designed for small businesses and freelancers. Bitgrid is bu
 
 ## Requirements
 
-* PHP 8.2 or higher
-* Database (e.g.: MySQL, PostgreSQL, SQLite)
+* PHP 8.2 หรือ สูงกว่า
+* ฐานข้อมูล (e.g.: MySQL, PostgreSQL, SQLite)
 * Redis 5.0.14.1 or higher
 * Web Server (eg: Apache, Nginx, IIS)
 
