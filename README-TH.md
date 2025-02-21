@@ -17,7 +17,7 @@ Laravel CMS
 
 Bitgrid uses [Laravel](http://laravel.com), the best existing PHP framework, as the foundation framework and [Module](https://github.com/nWidart/laravel-modules) package for Apps.
 
-## Installation
+## การติดตั้ง
 
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
 * Clone the repository: `git clone https://github.com/nakornsoft/bitgrid.git`
