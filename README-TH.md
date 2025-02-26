@@ -74,6 +74,15 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 
 * [Nakornsoft](https://www.nakornsoft.com)
 
+## Support us
+
+* [Paypal](https://www.paypal.me/nakornsoft)
+
+## Work
+
+* [LinkedIn](https://www.linkedin.com/in/nakornsoft)
+* [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
+
 ## License
 
 Bitgrid is released under the [GNU GENERAL PUBLIC License](license.txt).
