@@ -80,8 +80,8 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 
 ## Work
 
-* [Linkedin](https://www.linkedin.com/in/nakornsoft)
-* [Whatsapp](https://web.whatsapp.com/send?phone=66989855565)
+* [LinkedIn](https://www.linkedin.com/in/nakornsoft)
+* [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
 
 ## License
 
