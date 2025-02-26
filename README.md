@@ -12,7 +12,7 @@ Online cms software designed for small businesses and freelancers. Bitgrid is bu
 
 * PHP 8.2 or higher
 * Database (e.g.: MySQL, PostgreSQL, SQLite)
-* Redis 5.0.14.1 or higher
+* Redis 5.0.14.1 or higher | [Windows](https://github.com/tporadowski/redis/releases/tag/v5.0.14.1) [Linux](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/)
 * Web Server (eg: Apache, Nginx, IIS)
 
 ## Framework
