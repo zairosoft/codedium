@@ -31,7 +31,7 @@ php artisan migrate
 php artisan module:publish
 ```
 
-* Create sample data (optional): `php artisan  db:seed --class="SampleSeeder"`
+* สร้างข้อมูลตัวอย่าง (optional): `php artisan  db:seed --class="SampleSeeder"`
 * Username: super@gmail.com Password: 12345678
 
 ## Docker
@@ -66,24 +66,24 @@ Add the command below to the last line
 
 Please see [Releases](../../releases) for more information about what has changed recently.
 
-## Security
+## ความปลอดภัย
 
 Please review [our security policy](https://github.com/nakornsoft/bitgrid/security/policy) on how to report security vulnerabilities.
 
-## Credits
+## เครดิต
 
 * [Nakornsoft](https://www.nakornsoft.com)
 
-## Support us
+## สนับสนุนเรา
 
 * [Paypal](https://www.paypal.me/nakornsoft)
 
-## Work
+## การจ้างงาน
 
 * [LinkedIn](https://www.linkedin.com/in/nakornsoft)
 * [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
 
-## License
+## ใบอนุญาต
 
 Bitgrid is released under the [GNU GENERAL PUBLIC License](license.txt).
 
