@@ -1,0 +1,11 @@
+{
+    "name": "Calendar",
+    "alias": "calendar",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Calendar\\App\\Providers\\CalendarServiceProvider"
+    ],
+    "files": []
+}

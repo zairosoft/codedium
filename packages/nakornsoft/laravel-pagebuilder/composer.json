@@ -1,0 +1,26 @@
+{
+    "name": "nakornsoft/laravel-pagebuilder",
+    "description": "laravel page builder",
+    "type": "package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Nakornsoft\\LaravelPagebuilder\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nakornsoft\\LaravelPagebuilder\\PagebuilderServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Nakornsoft",
+            "email": "info@nakornsoft.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

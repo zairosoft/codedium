@@ -1,0 +1,11 @@
+{
+    "name": "Notes",
+    "alias": "notes",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Notes\\App\\Providers\\NotesServiceProvider"
+    ],
+    "files": []
+}

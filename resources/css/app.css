@@ -1,0 +1,8 @@
+/* perfect scrollbar */
+@import '/public/assets/css/animate.css';
+@import '/public/assets/css/style.css';
+@import '/public/assets/css/perfect-scrollbar.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

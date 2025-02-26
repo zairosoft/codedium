@@ -1,0 +1,11 @@
+{
+    "name": "Website",
+    "alias": "website",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Website\\App\\Providers\\WebsiteServiceProvider"
+    ],
+    "files": []
+}
