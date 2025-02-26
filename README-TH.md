@@ -1,7 +1,7 @@
 # [Bitgrid](https://github.com/nakornsoft/bitgrid)
 Laravel CMS
 
-ซอฟต์แวร์ CMS ออนไลน์ที่ออกแบบมาสำหรับธุรกิจขนาดเล็กและฟรีแลนซ์ Bitgrid ถูกสร้างขึ้นโดยนครซอฟต์ ใช้เทคโนโลยีสมัยใหม่ เช่น Laravel, Vite.js, Alpine.js, Tailwind, RESTful API เป็นต้น ด้วยโครงสร้างแบบโมดูลาร์ Bitgrid จึงมอบ App Store ที่ยอดเยี่ยมให้กับผู้ใช้และนักพัฒนา
+ซอฟต์แวร์ CMS ออนไลน์ที่ออกแบบมาสำหรับธุรกิจขนาดเล็กและฟรีแลนซ์ Bitgrid ถูกสร้างขึ้นโดยนครซอฟต์ ใช้เทคโนโลยีสมัยใหม่ เช่น Laravel, Vite.js, Alpine.js, Tailwind, RESTful API เป็นต้น ด้วยโครงสร้างแบบโมดูลาร์ Bitgrid มี App Store ที่ยอดเยี่ยมให้กับผู้ใช้และนักพัฒนา
 
 ![Screen](https://www.nakornsoft.com/wp-content/uploads/2025/02/bitgrid.png "Dashboards")
 
