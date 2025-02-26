@@ -17,7 +17,7 @@ Laravel CMS
 
 ## Framework
 
-Bitgrid uses [Laravel](http://laravel.com), the best existing PHP framework, as the foundation framework and [Module](https://github.com/nWidart/laravel-modules) package for Apps.
+Bitgrid ใช้ [Laravel](http://laravel.com) ซึ่งเป็นเฟรมเวิร์ก PHP ที่ดีที่สุดที่มีอยู่เป็นเฟรมเวิร์กพื้นฐาน และแพ็กเกจ [Module](https://github.com/nWidart/laravel-modules) สำหรับแอป
 
 ## การติดตั้ง
 
