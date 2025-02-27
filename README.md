@@ -78,7 +78,7 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 
 * [Paypal](https://www.paypal.me/nakornsoft)
 
-## Work
+## For Job
 
 * [LinkedIn](https://www.linkedin.com/in/nakornsoft)
 * [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
