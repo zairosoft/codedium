@@ -21,7 +21,6 @@ class SampleSeeder extends Seeder
      */
     public function run(): void
     {
-
         /// Create Company
         Company::create([ 'email' => 'email@company.com', 'created_by' => 1, 'updated_by' => 1]);
         CompanyLang::create(['company_id' => 1, 'name' => 'My Company', 'code' => 'th']);
@@ -77,7 +76,7 @@ class SampleSeeder extends Seeder
 
         // Let's Create User and assign Role to it.
         $superAdminUser = User::firstOrCreate([
-            'email' => 'super@gmail.com',
+            'email' => 'superadmin@gmail.com',
         ], [
             'name' => 'Super Admin',
             'email' => 'super@gmail.com',
