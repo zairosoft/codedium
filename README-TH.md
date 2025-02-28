@@ -32,7 +32,7 @@ php artisan module:publish
 ```
 
 * สร้างข้อมูลตัวอย่าง (optional): `php artisan  db:seed --class="SampleSeeder"`
-* Username: super@gmail.com Password: 12345678
+* Username: superadmin@gmail.com Password: 12345678
 
 ## Docker
 
