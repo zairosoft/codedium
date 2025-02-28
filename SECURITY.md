@@ -12,4 +12,4 @@ Feel free to report security issues based on the following chart.
 
 ## Reporting a Vulnerability
 
-If you discover any security related issues, please email bitgrid@nakornsoft.com instead of using the issue tracker.
+If you discover any security related issues, please email nakhonsoft@gmail.com instead of using the issue tracker.
