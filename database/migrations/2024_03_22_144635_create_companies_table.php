@@ -27,6 +27,18 @@ return new class extends Migration
             $table->softDeletes();
             $table->index(['id']);
         });
+        Schema::create('company_langs', function (Blueprint $table) {
+            $table->integer('company_id');
+            $table->string('code')->default('th');
+            $table->string('name');
+            $table->string('address')->nullable();
+            $table->string('district')->nullable();
+            $table->string('province')->nullable();
+            $table->string('country')->nullable();
+            $table->string('zip')->nullable();
+            $table->timestamps();
+            $table->index(['company_id']);
+        });
     }
 
     /**
@@ -35,5 +47,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('companies');
+        Schema::dropIfExists('company_langs');
     }
 };

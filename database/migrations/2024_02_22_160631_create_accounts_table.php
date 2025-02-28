@@ -11,8 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
-            $table->id();
+        Schema::create('user_accounts', function (Blueprint $table) {
             $table->integer('user_id')->nullable();
             $table->integer('company_id')->nullable();
             $table->string('gender', 10)->nullable();
@@ -23,7 +22,15 @@ return new class extends Migration
             $table->string('website', 255)->nullable();
             $table->text('address')->nullable();
             $table->timestamps();
-            $table->index(['id', 'user_id']);
+            $table->index(['user_id']);
+        });
+
+        Schema::create('user_socials', function (Blueprint $table) {
+            $table->integer('user_id')->nullable();
+            $table->string('title')->nullable();
+            $table->string('details')->nullable();
+            $table->timestamps();
+            $table->index(['user_id']);
         });
     }
 

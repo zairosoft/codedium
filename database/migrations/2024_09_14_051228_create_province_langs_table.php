@@ -12,12 +12,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('province_langs', function (Blueprint $table) {
-            $table->id();
             $table->integer('province_id');
             $table->string('code')->default('th');
             $table->string('name');
             $table->timestamps();
-            $table->index(['id', 'province_id']);
+            $table->index(['province_id']);
         });
 
         // Insert some stuff

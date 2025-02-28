@@ -70,7 +70,6 @@
                 </ul>
             </div>
         </div>
-
         <div>
             <div x-data="{activeTab: parseInt(localStorage.getItem('activeTab')) || 0, setActiveTab(index){this.activeTab = index; localStorage.setItem('activeTab', index.toString());}}">
                 <ul role="tablist" class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">

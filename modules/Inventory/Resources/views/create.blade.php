@@ -2,15 +2,6 @@
 @section('title', 'แสดงรายการบทบาท')
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/quill.snow.css') }}" />
-    <style scoped>
-        .dark input[type='date']::-webkit-calendar-picker-indicator {
-            filter: invert(100%);
-        }
-        .float-right {
-            float: right;
-            margin-top: 5px;
-        }
-    </style>
 @endsection
 @section('content')
     <div x-data="form">
@@ -25,7 +16,7 @@
                                 <template x-if="isSubmitForm && !form.name">
                                     <p class="text-danger mt-1">กรุณาป้อนชื่อสินค้า</p>
                                 </template>
-                            </div>                            
+                            </div>
                         </div>
                         <div class="mt-5">
                             <label>รายละเอียดสินค้า</label>
@@ -113,7 +104,7 @@
                                                 <div>
                                                     <label for="name">Barcode</label>
                                                     <input id="barcode" name="barcode" type="text" placeholder="ป้อน Barcode" value="{{ old('barcode') }}" class="form-input" />
-                                                </div>                           
+                                                </div>
                                             </div>
                                             <div class="grid sm:grid-cols-2 gap-6 mt-5">
                                                 <div>
@@ -222,7 +213,7 @@
                         </div>
                         <div class="panel p-0">
                             <div class="p-4 border-b dark:border-[#191e3a] font-semibold text-base dark:text-white">
-                                หมวดหมู่สินค้า  <a href="#" class="text-primary hover:underline float-right text-xs">เพิ่ม</a>
+                                หมวดหมู่สินค้า  <a href="#" x-tooltip="{{ __('others.add') }}" class="inline-flex float-right p-1 bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></a>
                             </div>
                             <div action="" class="space-y-5 p-4">
                                 <div>

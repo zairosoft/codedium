@@ -27,5 +27,5 @@ class Account extends Model
         'website',
         'address',
     ];
-    protected $table = 'accounts';
+    protected $table = 'user_accounts';
 }

@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('branch_langs', function (Blueprint $table) {
-            $table->id();
             $table->integer('branch_id');
             $table->string('code')->default('th');
             $table->timestamps();
-            $table->index(['id', 'branch_id']);
+            $table->index(['branch_id']);
         });
     }
 

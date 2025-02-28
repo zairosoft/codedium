@@ -153,7 +153,7 @@ class SettingsController extends Controller
             if ($request->img != null) {
                 @unlink(public_path('/assets/images/companies/') . $request->img);
             }
-            $imageName = auth()->user()->id . time() . '.' . $request->image->getClientOriginalExtension();
+            $imageName = Auth::user()->id . time() . '.' . $request->image->getClientOriginalExtension();
             $request->image->move(public_path('/assets/images/companies'), $imageName);
             $data += ['img' => $imageName];
         }
@@ -170,7 +170,7 @@ class SettingsController extends Controller
         if (!empty($request->zip))
             $companyLang += ['zip' => $request->zip];
         CompanyLang::where([
-            "id" => $request->comid,
+            "company_id" => $request->comid,
             "code" => "th"
         ])->update($companyLang);
         Cache::forget('company');
@@ -199,7 +199,7 @@ class SettingsController extends Controller
             }
             $company->delete();
 
-            $lang = CompanyLang::find($request->id);
+            $lang = CompanyLang::where('company_id',$request->id);
             $lang->delete();
             Cache::forget('company');
             echo json_encode(["message" => "success"]);

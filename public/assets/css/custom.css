@@ -16,3 +16,8 @@
 .float-left {
     float: left;
 }
+
+.box-social {
+    position: absolute;
+    bottom: 20px;
+}

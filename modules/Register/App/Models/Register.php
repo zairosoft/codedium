@@ -9,7 +9,7 @@ use Modules\Register\Database\factories\RegisterFactory;
 class Register extends Model
 {
     use HasFactory;
-    protected $table = 'accounts';
+    protected $table = 'user_accounts';
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +17,7 @@ class Register extends Model
     protected $fillable = [
         'user_id',
     ];
-    
+
     protected static function newFactory(): RegisterFactory
     {
         //return RegisterFactory::new();

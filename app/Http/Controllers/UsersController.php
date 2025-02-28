@@ -29,7 +29,7 @@ class UsersController extends Controller
     {
         //echo timeAgo('2025-01-20 14:30:45');
         $users = Cache::remember('users', now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
-            return User::join('accounts', 'accounts.user_id', '=', 'users.id')
+            return User::join('user_accounts', 'user_accounts.user_id', '=', 'users.id')
                 ->offset(0)
                 ->limit(10)
                 ->get([
@@ -45,26 +45,6 @@ class UsersController extends Controller
         });
         return view('users.index', ['users' => $users]);
     }
-
-    // public function show()
-    // {
-    //     $users = Cache::remember('usershow', now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
-    //         return User::join('accounts', 'accounts.user_id', '=', 'users.id')
-    //             ->offset(0)
-    //             ->limit(10)
-    //             ->get([
-    //                 'users.id',
-    //                 'users.name',
-    //                 'users.email',
-    //                 'users.img',
-    //                 'users.last_logged_activities',
-    //                 'accounts.gender',
-    //                 'accounts.birthday',
-    //                 'accounts.phone'
-    //             ]);
-    //     });
-    //     echo json_encode($users);
-    // }
 
     public function show($id)
     {

@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_settings', function (Blueprint $table) {
-            $table->id();
             $table->integer('user_id');
             $table->string('theme', 50)->default('light')->nullable();
             $table->string('color')->nullable();
             $table->timestamps();
-            $table->index(['id', 'user_id']);
+            $table->index(['user_id']);
         });
     }
 

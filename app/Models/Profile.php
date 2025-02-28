@@ -13,5 +13,5 @@ class Profile extends Model
      *
      * @var string
      */
-    protected $table = 'accounts';
+    protected $table = 'user_accounts';
 }
