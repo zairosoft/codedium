@@ -66,6 +66,10 @@ Add the command below to the last line
 
 Please see [Releases](../../releases) for more information about what has changed recently.
 
+## New Features
+
+* Low Code Application Builder (coming soon)
+
 ## Security
 
 Please review [our security policy](https://github.com/nakornsoft/bitgrid/security/policy) on how to report security vulnerabilities.
