@@ -1,5 +1,5 @@
 .h-\[calc\(100vh-120px\)\] {
-    height: calc(100vh - 175px);
+    height: calc(100vh - 168px);
 }
 .max-w-\[16rem\] {
     max-width: 16rem;
@@ -7,4 +7,12 @@
 
 .leading {
     line-height: 14px;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
 }

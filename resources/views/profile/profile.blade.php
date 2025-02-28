@@ -83,7 +83,9 @@
             </div>
             <div class="panel lg:col-span-2 xl:col-span-3">
                 <div class="mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">สกิล</h5>
+                    <div class="font-semibold text-lg dark:text-white-light items-center justify-center">สกิล
+                        <a href="#" x-tooltip="{{ __('others.add') }}" class="inline-flex float-right p-2 bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></a>
+                    </div>
                 </div>
                 <div class="mb-5">
                     <div class="table-responsive text-[#515365] dark:text-white-light font-semibold">

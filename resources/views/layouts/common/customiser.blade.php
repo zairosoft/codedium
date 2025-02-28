@@ -15,8 +15,7 @@
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </a>
-                <h4 class="mb-1 dark:text-white">TEMPLATE CUSTOMIZER</h4>
-                <p class="text-white-dark">Set preferences that will be cookied for your live preview demonstration.</p>
+                <h4 class="mb-1 dark:text-white">THEME CUSTOMIZER</h4>
             </div>
             <div class="border border-dashed border-[#e0e6ed] dark:border-[#1b2e4b] rounded-md mb-3 p-3">
                 <h5 class="mb-1 text-base dark:text-white leading-none">Color Scheme</h5>
