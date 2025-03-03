@@ -62,14 +62,20 @@ Add the command below to the last line
 * * * * * php /var/www/html/bitgrid/artisan schedule:run
 ```
 
-## Changelog
+## Icon
 
-Please see [Releases](../../releases) for more information about what has changed recently.
+* [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736)
+* [Iconify](https://icon-sets.iconify.design)
+* [Lucide](https://lucide.dev/icons/)
 
 ## New Feature Low-Code
 
 * Page Builder (coming soon)
 * Workflow Builder (coming soon)
+
+## Changelog
+
+Please see [Releases](../../releases) for more information about what has changed recently.
 
 ## Security
 
