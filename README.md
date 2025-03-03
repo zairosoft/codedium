@@ -66,9 +66,10 @@ Add the command below to the last line
 
 Please see [Releases](../../releases) for more information about what has changed recently.
 
-## New Features
+## New Feature Low-Code
 
-* Low Code Application Builder (coming soon)
+* Page Builder (coming soon)
+* Workflow Builder (coming soon)
 
 ## Security
 
