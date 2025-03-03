@@ -107,14 +107,11 @@
                             <h6 class="text-lg font-bold mb-5">ข้อมูลทั่วไป</h6>
                             <div class="flex flex-col sm:flex-row">
                                 <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
-                                    <img src="{{ asset(auth()->user()->img === null ? 'assets/images/user.png' : 'assets/images/users/' . auth()->user()->img) }}"
-                                        alt="image"
-                                        class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto" id="preview" />
+                                    <img src="{{ asset(auth()->user()->img === null ? 'assets/images/user.png' : 'assets/images/users/' . auth()->user()->img) }}" alt="image" class="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto" id="preview" />
                                     <div class="upload-field-customized block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
                                         <input type="file" name="image" accept="image/*" id="file_upload" onchange="previewImage(event)"/>
                                         <span class="btn-upload">
-                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2"
                                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
@@ -128,7 +125,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     @csrf
                                     <div>
@@ -169,6 +165,15 @@
                                         <label for="phone">เบอร์โทรศัพท์</label>
                                         <input id="phone" type="text" name="phone" value="{{ old('phone', $account->phone) }}" placeholder="099 999 9999" x-mask="099 999 9999" class="form-input" id="phoneMask" />
                                     </div>
+                                </div>
+                            </div>
+                            <div class="mt-5 flex flex-col sm:flex-row">
+                                <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5"></div>
+                                <div class="flex-1 grid grid-cols-1 sm:grid-cols-1 gap-5">
+                                    <div>
+                                        <label for="about">เกี่ยวกับ</label>
+                                        <textarea class="form-textarea" name="about" placeholder="Enter Description" style="height: 125px;">{{ old('about', $account->about) }}</textarea>
+                                    </div>
                                     <div class="hidden lg:flex mt-1 gap-4">
                                         <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>
                                         <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-[#fafafa] border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">
@@ -177,6 +182,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
