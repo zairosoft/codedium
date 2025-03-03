@@ -188,9 +188,18 @@
                                             </div>
                                         @endif
                                     </div>
+                                </div>
+                            </div>
+                            <div class="mt-5 flex flex-col sm:flex-row">
+                                <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5"></div>
+                                <div class="flex-1 grid grid-cols-1 sm:grid-cols-1 gap-5">
+                                    <div>
+                                        <label for="about">เกี่ยวกับ</label>
+                                        <textarea class="form-textarea" name="about" placeholder="ป้อนคำอธิบาย" style="height: 125px;">{{ old('about') }}</textarea>
+                                    </div>
                                     <div class="hidden lg:flex mt-1 gap-4">
                                         <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>
-                                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">
+                                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-[#fafafa] border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">
                                             บันทึก
                                         </button>
                                     </div>

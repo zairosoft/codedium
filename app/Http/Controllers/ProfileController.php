@@ -49,7 +49,8 @@ class ProfileController extends Controller
             'phone' => $request->phone,
             'website' => $request->website,
             'profession' => $request->profession,
-            'address' => $request->address
+            'address' => $request->address,
+            'about' => $request->about
 
         ]);
         if (!empty($request->image)) {

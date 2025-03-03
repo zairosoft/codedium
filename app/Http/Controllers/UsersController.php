@@ -38,9 +38,9 @@ class UsersController extends Controller
                     'users.email',
                     'users.img',
                     'users.last_logged_activities',
-                    'accounts.gender',
-                    'accounts.birthday',
-                    'accounts.phone'
+                    'user_accounts.gender',
+                    'user_accounts.birthday',
+                    'user_accounts.phone'
                 ]);
         });
         return view('users.index', ['users' => $users]);
@@ -100,6 +100,8 @@ class UsersController extends Controller
             $acc += ['profession' => $request->profession];
         if (!empty($request->address))
             $acc += ['address' => $request->address];
+        if (!empty($request->about))
+            $acc += ['about' => $request->about];
         Account::create($acc);
         Cache::forget('users');
         $user->syncRoles($request->roles);
@@ -165,6 +167,8 @@ class UsersController extends Controller
             $acc += ['profession' => $request->profession];
         if (!empty($request->address))
             $acc += ['address' => $request->address];
+        if (!empty($request->about))
+            $acc += ['about' => $request->about];
         Account::where('user_id', $user->id)->update($acc);
         Cache::forget('users');
         return redirect('users')->withSuccess('บันทึกสำเร็จ');

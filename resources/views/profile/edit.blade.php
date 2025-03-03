@@ -172,7 +172,7 @@
                                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-1 gap-5">
                                     <div>
                                         <label for="about">เกี่ยวกับ</label>
-                                        <textarea class="form-textarea" name="about" placeholder="Enter Description" style="height: 125px;">{{ old('about', $account->about) }}</textarea>
+                                        <textarea class="form-textarea" name="about" placeholder="ป้อนคำอธิบาย" style="height: 125px;">{{ old('about', $account->about) }}</textarea>
                                     </div>
                                     <div class="hidden lg:flex mt-1 gap-4">
                                         <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>

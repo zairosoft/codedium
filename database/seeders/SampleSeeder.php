@@ -79,7 +79,7 @@ class SampleSeeder extends Seeder
             'email' => 'superadmin@gmail.com',
         ], [
             'name' => 'Super Admin',
-            'email' => 'super@gmail.com',
+            'email' => 'superadmin@gmail.com',
             'password' => Hash::make('12345678'),
         ]);
         Account::create([

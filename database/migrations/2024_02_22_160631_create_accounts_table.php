@@ -28,7 +28,14 @@ return new class extends Migration
         Schema::create('user_socials', function (Blueprint $table) {
             $table->integer('user_id')->nullable();
             $table->string('title')->nullable();
-            $table->string('details')->nullable();
+            $table->string('url')->nullable();
+            $table->timestamps();
+            $table->index(['user_id']);
+        });
+
+        Schema::create('user_skills', function (Blueprint $table) {
+            $table->integer('user_id')->nullable();
+            $table->string('title')->nullable();
             $table->timestamps();
             $table->index(['user_id']);
         });
@@ -39,6 +46,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('user_accounts');
+        Schema::dropIfExists('user_socials');
+        Schema::dropIfExists('user_skills');
     }
 };
