@@ -43,7 +43,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="mb-5">
+                    <div>
                         <div class="flex flex-col justify-center items-center">
                             <img src="{{ asset(auth()->user()->img === null ? 'assets/images/user.png' : 'assets/images/users/' . auth()->user()->img) }}"
                                 alt="image" class="w-24 h-24 rounded-full object-cover  mb-5" />
@@ -134,20 +134,7 @@
                 </div>
                 <div class="panel lg:col-span-2 xl:col-span-3">
                     <div class="mb-5">
-                        <div class="font-semibold text-lg dark:text-white-light items-center justify-center">เกี่ยวกับ
-                            <a href="#" x-tooltip="{{ __('others.add') }}"
-                                class="rounded inline-flex float-right p-2 bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
-                                    <path
-                                        d="M15.2869 3.15178L14.3601 4.07866L5.83882 12.5999L5.83881 12.5999C5.26166 13.1771 4.97308 13.4656 4.7249 13.7838C4.43213 14.1592 4.18114 14.5653 3.97634 14.995C3.80273 15.3593 3.67368 15.7465 3.41556 16.5208L2.32181 19.8021L2.05445 20.6042C1.92743 20.9852 2.0266 21.4053 2.31063 21.6894C2.59466 21.9734 3.01478 22.0726 3.39584 21.9456L4.19792 21.6782L7.47918 20.5844L7.47919 20.5844C8.25353 20.3263 8.6407 20.1973 9.00498 20.0237C9.43469 19.8189 9.84082 19.5679 10.2162 19.2751C10.5344 19.0269 10.8229 18.7383 11.4001 18.1612L11.4001 18.1612L19.9213 9.63993L20.8482 8.71306C22.3839 7.17735 22.3839 4.68748 20.8482 3.15178C19.3125 1.61607 16.8226 1.61607 15.2869 3.15178Z"
-                                        stroke="currentColor" stroke-width="1.5"></path>
-                                    <path opacity="0.5"
-                                        d="M14.36 4.07812C14.36 4.07812 14.4759 6.04774 16.2138 7.78564C17.9517 9.52354 19.9213 9.6394 19.9213 9.6394M4.19789 21.6777L2.32178 19.8015"
-                                        stroke="currentColor" stroke-width="1.5"></path>
-                                </svg>
-                            </a>
-                        </div>
+                        <h5 class="font-semibold text-lg dark:text-white-light items-center justify-center">เกี่ยวกับ</h5>
                     </div>
                     <div class="mb-5">
 
@@ -262,7 +249,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="rounded-md border border-gray-500/20 p-6 shadow-[rgb(31_45_61_/_10%)_0px_2px_10px_1px] dark:shadow-[0_2px_11px_0_rgb(6_8_24_/_39%)]">
                             <div class="mb-5">
-                                <h5 class="font-semibold text-lg dark:text-white-light">โซเชียลมีเดีย</h5>
+                                <h5 class="font-semibold text-lg dark:text-white-light">ความสมบูรณ์ของโปรไฟล์</h5>
                             </div>
                             <div class="space-y-4">
                                 <div class="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
@@ -315,33 +302,6 @@
                                                     class="block text-base text-[#515365] dark:text-white-light">$37,515</span>
                                             </h6>
                                             <p class="ltr:ml-auto rtl:mr-auto text-info">65%</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="border border-[#ebedf2] rounded dark:bg-[#1b2e4b] dark:border-0">
-                                    <div class="flex items-center justify-between p-4 py-2">
-                                        <div
-                                            class="shrink-0 grid place-content-center w-9 h-9 rounded-md bg-warning-light dark:bg-warning text-warning dark:text-warning-light">
-
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                                <path
-                                                    d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12Z"
-                                                    stroke="currentColor" stroke-width="1.5" />
-                                                <path opacity="0.5" d="M10 16H6" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" />
-                                                <path opacity="0.5" d="M14 16H12.5" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" />
-                                                <path opacity="0.5" d="M2 10L22 10" stroke="currentColor"
-                                                    stroke-width="1.5" stroke-linecap="round" />
-                                            </svg>
-                                        </div>
-                                        <div
-                                            class="ltr:ml-4 rtl:mr-4 flex items-start justify-between flex-auto font-semibold">
-                                            <h6 class="text-white-dark text-[13px] dark:text-white-dark">Expenses <span
-                                                    class="block text-base text-[#515365] dark:text-white-light">$55,085</span>
-                                            </h6>
-                                            <p class="ltr:ml-auto rtl:mr-auto text-warning">80%</p>
                                         </div>
                                     </div>
                                 </div>
