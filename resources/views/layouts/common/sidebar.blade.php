@@ -118,7 +118,7 @@
                 </li>
                 @endcan
             </ul>
-            <ul class="relative font-semibold p-3 py-0">
+            <ul class="relative font-semibold p-3 py-0" style="margin-top: 50px;">
                 @if(Route::has('support'))
                 <li class="nav-item">
                     <a href="{{ route('support') }}" class="group cursor-pointer">
