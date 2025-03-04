@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Session;
+use App\Models\Social;
 
 class ProfileController extends Controller
 {
@@ -24,7 +25,10 @@ class ProfileController extends Controller
         $account = Cache::remember('account' . Auth::user()->id, now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
             return Profile::where('user_id', Auth::user()->id)->first();
         });
-        return view('profile.profile', compact('account'));
+
+        $socials = Social::where('user_id', Auth::user()->id)->get();
+
+        return view('profile.profile', compact('account', 'socials'));
     }
 
     public function edit()

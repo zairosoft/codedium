@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'โปรไฟล์')
+@section('title', 'ตั้งค่าทั่วไป')
 @section('style')
     <link rel="stylesheet" href="{{ asset('assets/css/flatpickr.min.css') }}" />
     <style>

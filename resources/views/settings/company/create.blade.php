@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'บริษัท')
+@section('title', 'เพิ่มบริษัท')
 @section('style')
     <link rel="stylesheet" href="{{ asset('assets/css/flatpickr.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/nice-select2.css') }}" />

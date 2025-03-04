@@ -27,7 +27,7 @@ return new class extends Migration
 
         Schema::create('user_socials', function (Blueprint $table) {
             $table->integer('user_id')->nullable();
-            $table->string('title')->nullable();
+            $table->string('name')->nullable();
             $table->string('url')->nullable();
             $table->timestamps();
             $table->index(['user_id']);

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'เพิ่มสิทธิ์การใช้งาน')
+@section('title', 'ดูสิทธิ์การใช้งาน')
 @section('style')
 @endsection
 @section('content')

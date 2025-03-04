@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'ผู้ใช้ระบบ')
+@section('title', 'บริษัท')
 @section('style')
     <style>
         .btn-add {

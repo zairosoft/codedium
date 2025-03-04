@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'บริษัท')
+@section('title', 'ดูข้อมูลบริษัท')
 @section('content')
     <div>
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Account;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Social;
 
 use Illuminate\Support\Str;
 
@@ -50,9 +51,11 @@ class UsersController extends Controller
     {
         $users = User::find((int) $id);
         $account = Account::where('user_id', (int) $id)->first();
+        $socials = Social::where('user_id', $id)->get();
         return view('users.view', [
             'user' => $users,
             'account' => $account,
+            'socials' => $socials,
         ]);
     }
 

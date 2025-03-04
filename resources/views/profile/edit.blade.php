@@ -29,11 +29,8 @@
 @endsection
 @section('content')
     <div>
-
-
-
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">แก้ไข</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">โปรไฟล์</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -49,12 +46,6 @@
                 </ul>
             </div>
         </div>
-
-
-
-
-
-
         <div>
             <div  x-data="{activeTab: parseInt(localStorage.getItem('activeTab')) || 0, setActiveTab(index){this.activeTab = index; localStorage.setItem('activeTab', index.toString());}}">
                 <ul

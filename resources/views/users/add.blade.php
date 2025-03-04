@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'โปรไฟล์')
+@section('title', 'เพิ่มผู้ใช้ระบบ')
 @section('script')
 <script src="{{ asset('assets/js/nice-select2.js') }}"></script>
 <!-- script -->
@@ -52,7 +52,7 @@
     <div>
 
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">เพิ่มผู้ใช้ระบบ</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ผู้ใช้ระบบ</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>

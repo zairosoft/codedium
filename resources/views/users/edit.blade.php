@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'โปรไฟล์')
+@section('title', 'แก้ไขผู้ใช้ระบบ')
 @section('script')
 <script src="{{ asset('assets/js/nice-select2.js') }}"></script>
 <!-- script -->
@@ -51,7 +51,7 @@
 @section('content')
     <div>
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">แก้ไขโปรไฟล์</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ผู้ใช้ระบบ</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -68,9 +68,6 @@
             </div>
         </div>
         <div>
-            <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">แก้ไขโปรไฟล์</h5>
-            </div>
             <div x-data="{activeTab: parseInt(localStorage.getItem('activeTab')) || 0, setActiveTab(index){this.activeTab = index; localStorage.setItem('activeTab', index.toString());}}">
                 <ul class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
                     <li class="inline-block">
