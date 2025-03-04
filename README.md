@@ -73,6 +73,10 @@ Add the command below to the last line
 * Page Builder (coming soon)
 * Workflow Builder (coming soon)
 
+## Translation
+
+If you'd like to contribute translations, please check out our [Crowdin](https://crowdin.com/project/bitgrid) project.
+
 ## Changelog
 
 Please see [Releases](../../releases) for more information about what has changed recently.
