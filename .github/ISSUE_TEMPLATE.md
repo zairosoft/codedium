@@ -1,4 +1,4 @@
-Please, submit only real issues. Use the forum for support, feature requests, proposals, new versions, help etc. [https://akaunting.com/forum](https://github.com/nakornsoft/bitgrid/issues)
+Please, submit only real issues. Use the forum for support, feature requests, proposals, new versions, help etc. [issues](https://github.com/nakornsoft/bitgrid/issues)
 
 ### Steps to reproduce the issue
 
