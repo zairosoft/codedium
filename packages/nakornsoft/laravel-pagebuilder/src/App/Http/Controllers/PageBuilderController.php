@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Calendar\App\Http\Controllers;
+namespace Nakornsoft\PageBuilder\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
@@ -14,6 +14,7 @@ class PageBuilderController extends Controller
     public function index()
     {
 
+        return view('pagebuilder::builder');
     }
 
 }

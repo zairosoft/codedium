@@ -5,13 +5,13 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Nakornsoft\\LaravelPagebuilder\\": "src/"
+            "Nakornsoft\\PageBuilder\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Nakornsoft\\LaravelPagebuilder\\PagebuilderServiceProvider"
+                "Nakornsoft\\PageBuilder\\PagebuilderServiceProvider"
             ]
         }
     },
