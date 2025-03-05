@@ -1,5 +1,6 @@
-# Laravel Grapesjs Editor
-This package provide an esay way to integrate [GrapesJS](https://grapesjs.com/) into your laravel proejct.
+# Laravel Page Builder
+> A drag and drop pagebuilder to manage pages in any Laravel project.
+
 
 ## Installation
 
