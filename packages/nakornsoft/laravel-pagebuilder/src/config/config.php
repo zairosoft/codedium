@@ -14,7 +14,8 @@ return [
     // Routes Settings
     'routes' => [
         'middleware' => [
-            'web', 'auth',
+            'web',
+            'auth',
         ],
     ],
 

@@ -22,6 +22,10 @@ class ProfileController extends Controller
 
     public function profile()
     {
+        //echo Storage::url("app/public/uploads/logo.jpg");
+
+        //echo asset('storage/uploads/logo.jpg');
+
         $account = Cache::remember('account' . Auth::user()->id, now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
             return Profile::where('user_id', Auth::user()->id)->first();
         });

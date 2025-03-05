@@ -52,10 +52,10 @@
                                 @yield('content')
                             </div>
                         </div>
-                        {{-- <p class="absolute bottom-6 w-full text-center dark:text-white">
-                            @include('layouts.copy')
-                        </p> --}}
-                    </div> 
+                        <div class="dark:text-white-dark text-center pt-5 pb-4 mt-auto">
+                            <div class="footer-copyright">Copyright <span id="footer-year">{{ date('Y') }}</span> © {{ config('app.name') }} | <a href="{{ __('footer.link') }}" target="_blank">{{ __('footer.powered') }}</a></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
