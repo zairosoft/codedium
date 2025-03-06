@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/assets/images/logo.png
 /public/assets/images/users/
 /public/assets/images/companies/
 /storage/*.key
