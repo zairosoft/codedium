@@ -18,7 +18,8 @@
         "nwidart/laravel-modules": "^10.0",
         "opcodesio/log-viewer": "^3.12",
         "psr/simple-cache": "1.0",
-        "spatie/laravel-permission": "^6.4"
+        "spatie/laravel-permission": "^6.4",
+        "nakornsoft/laravel-pagebuilder": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -60,6 +61,14 @@
             "@php artisan key:generate --ansi"
         ]
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/nakornsoft/laravel-pagebuilder",
+            "options": {
+                "symlink": true
+            }
+        }],
     "extra": {
         "laravel": {
             "dont-discover": []
