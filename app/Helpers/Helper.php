@@ -271,7 +271,7 @@ function timeAgo($time)
 
     // Check for seconds
     if ($sec <= 60) {
-        $timeAgo = "$sec ".trans('seconds_ago');
+        $timeAgo = "$sec " . trans('seconds_ago');
     }
     // Check for minutes
     else if ($min <= 60) {

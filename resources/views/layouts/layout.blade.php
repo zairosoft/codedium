@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="ltr">
 <head>
+    <title>@yield('title') | {{ config('app.name') }}</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>@yield('title') | {{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="generator" content="Bitgrid CMS" />{{-- Meta author please give us credit  --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" type="image/x-icon" href="{{ url('public') }}/{{ config('settings.favicon') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -26,7 +26,7 @@ class SampleSeeder extends Seeder
         CompanyLang::create(['company_id' => 1, 'name' => 'My Company', 'code' => 'th']);
 
         // Create Settings
-        Settings::create(['key' => 'logo', 'value' => 'logo.svg', 'description' => 'Logo Website']);
+        Settings::create(['key' => 'logo', 'value' => 'logo.png', 'description' => 'Logo Website']);
         Settings::create(['key' => 'favicon', 'value' => 'favicon.ico', 'description' => 'Logo favicon Website']);
 
         // Create Permissions
