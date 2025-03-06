@@ -89,6 +89,7 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 ## เครดิต
 
 * [Nakornsoft](https://www.nakornsoft.com)
+* [All Contributors](https://github.com/nakornsoft/bitgrid/graphs/contributors)
 
 ## สนับสนุนเรา
 
