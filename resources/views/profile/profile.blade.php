@@ -144,8 +144,8 @@
                             <div class="mt-6 box-social flex flex-wrap items-center gap-6 2xl:gap-16">
                                 @foreach ($socials as $social)
                                 <div class="flex items-center gap-2">
-                                    <div class="rounded text-primary p-1 grid bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
-                                        <img src="{{ asset('assets/images') }}/{{ $social->name }}.png" width="30" height="30" alt="{{ $social->name }}">
+                                    <div class="rounded text-primary p-2 grid bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
+                                        <img src="{{ asset('assets/images/social') }}/{{ $social->name }}.png" width="30" height="30" alt="{{ $social->name }}">
                                     </div>
                                     <div>
                                         <div class="text-sm font-medium text-default-800 ">{{ ucfirst($social->name) }}</div>
@@ -154,8 +154,8 @@
                                 </div>
                                 @endforeach
                                 <div class="flex items-center gap-2">
-                                    <div class="rounded text-primary p-1 grid bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
-                                        <img src="{{ asset('assets/images/website.png') }}" width="30" height="30" alt="website">
+                                    <div class="rounded text-primary p-2 grid bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
+                                        <img src="{{ asset('assets/images/social/website.png') }}" width="30" height="30" alt="website">
                                     </div>
                                     <div>
                                         <div class="text-sm font-medium text-default-800">Website</div>
