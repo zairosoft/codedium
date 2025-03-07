@@ -31,8 +31,8 @@ Route::get('/', function ($locale = null) {
 })->name('main');
 
 Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('optimize:clear');
-    return redirect()->back();
+    Artisan::call('optimize:clear');
+    return redirect('/auth/login');
 });
 
 Route::controller(App\Http\Controllers\AuthController::class)->group(function () {

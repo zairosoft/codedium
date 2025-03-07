@@ -19,7 +19,7 @@ class Minifier
         $response = $next($request);
         $buffer = $response->getContent();
         if ($response instanceof Response && strpos($response->headers->get('Content-Type'), 'text/html') !== false) {
-            $devCredit = '<!--' . ' Gene' . 'rated ' . 'By ' . 'Bitgrid' . ' | ' . 'bit' . 'grid.' . 'nakorn' . 'soft.com ' . '-->';
+            $devCredit = "<!" . "--" . " Gene" . "rated " . "By " . "Bit" . "grid " . "CMS" . " | " . "bit" . "grid." . "nakorn" . "soft" . ".com " . "--" . ">" . "\n";
             $buffer = str_replace('</body>', $devCredit . '</body>', $buffer);
             $response->setContent($buffer);
         }
@@ -87,7 +87,6 @@ class Minifier
 
                         # strip whitespaces between = "'
                         '/=\s+(\"|\')/'              => "=$1"
-
                     ];
                 }
                 $buffer = preg_replace(array_keys($replace), array_values($replace), $buffer);
