@@ -91,7 +91,7 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 * [Nakornsoft](https://www.nakornsoft.com)
 * [All Contributors](https://github.com/nakornsoft/bitgrid/graphs/contributors)
 
-## สนับสนุนเรา
+## สนับสนุนฉัน
 
 * [Paypal](https://www.paypal.me/nakornsoft)
 
