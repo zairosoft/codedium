@@ -102,6 +102,6 @@ Route::get('notifications/show', [App\Http\Controllers\NotificationsController::
 Route::post('notifications/delete', [App\Http\Controllers\NotificationsController::class, 'delete'])->name('notifications.delete');
 
 // Route for support
-Route::get('/support', function () {
-    return view('welcome');
-})->name('support');
+// Route::get('/support', function () {
+//     return view('welcome');
+// })->name('support');
