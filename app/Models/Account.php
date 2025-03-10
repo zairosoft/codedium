@@ -23,9 +23,12 @@ class Account extends Model
         'gender',
         'birthday',
         'phone',
+        'about',
         'profession',
         'website',
         'address',
     ];
+
     protected $table = 'user_accounts';
+
 }

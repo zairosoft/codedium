@@ -267,7 +267,7 @@
                                 <div class="border-b border-[#ebedf2] dark:border-[#1b2e4b]">
                                     <div class="flex items-center justify-between py-2">
                                         <div class="flex-none">
-                                            <img src="/assets/images/card-americanexpress.svg" alt="image" />
+                                            <img src="{{ asset('assets/images/card-americanexpress.svg') }}" alt="image" />
                                         </div>
                                         <div class="flex items-center justify-between flex-auto ltr:ml-4 rtl:mr-4">
                                             <h6 class="text-[#515365] font-semibold dark:text-white-dark">American Express
@@ -281,7 +281,7 @@
                                 <div class="border-b border-[#ebedf2] dark:border-[#1b2e4b]">
                                     <div class="flex items-center justify-between py-2">
                                         <div class="flex-none">
-                                            <img src="/assets/images/card-mastercard.svg" alt="image" />
+                                            <img src="{{ asset('assets/images/card-mastercard.svg') }}" alt="image" />
                                         </div>
                                         <div class="flex items-center justify-between flex-auto ltr:ml-4 rtl:mr-4">
                                             <h6 class="text-[#515365] font-semibold dark:text-white-dark">Mastercard <span
@@ -294,7 +294,7 @@
                                 <div>
                                     <div class="flex items-center justify-between py-2">
                                         <div class="flex-none">
-                                            <img src="/assets/images/card-visa.svg" alt="image" />
+                                            <img src="{{ asset('assets/images/card-visa.svg') }}" alt="image" />
                                         </div>
                                         <div class="flex items-center justify-between flex-auto ltr:ml-4 rtl:mr-4">
                                             <h6 class="text-[#515365] font-semibold dark:text-white-dark">Visa <span
@@ -315,32 +315,6 @@
 
                 </template>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         </div>

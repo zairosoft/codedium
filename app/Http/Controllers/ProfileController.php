@@ -37,22 +37,18 @@ class ProfileController extends Controller
         /**
          * Get the user's profile completion percentage
          */
-        $user = Auth::user();
-        $userPercentage = $user->getProfileCompletionPercentage();
+        $userCompleted = Auth::user();
+        $userPercentage = $userCompleted->getProfileCompletionPercentage();
 
-        $accounts = Account::all();
-        $totalAccounts = $accounts->count();
-        if (!$totalAccounts) return 0;
-        $requiredFields = ['user_id', 'company_id', 'gender', 'birthday', 'phone', 'about', 'profession', 'website', 'address'];
-        $filledFields = 0;
-        foreach ($accounts as $account) {
-            foreach ($requiredFields as $field) {
-                if (!empty($account->$field)) $filledFields++;
-            }
-        }
-
-        $accountsPercentage = round(($filledFields / (count($requiredFields) * $totalAccounts)) * 100);
-        $percentage = (int)$userPercentage + (int)$accountsPercentage / 100;
+        $accountsPercentage = Account::all();
+        $completionData = $accountsPercentage->map(function ($record) {
+            $totalFields = count($record->getAttributes());
+            $filledFields = collect($record->getAttributes())->filter()->count();
+            $completionPercentage = ($filledFields / $totalFields) * 100;
+            return $completionPercentage;
+        });
+        $percentageTatal = $userPercentage + $completionData[0];
+        $percentage =  $percentageTatal * 100 / 200;
 
         return view('profile.profile', compact('account', 'socials', 'percentage'));
     }
