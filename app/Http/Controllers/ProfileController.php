@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -23,16 +24,37 @@ class ProfileController extends Controller
     public function profile()
     {
         //echo Storage::url("app/public/uploads/logo.jpg");
-
         //echo asset('storage/uploads/logo.jpg');
 
+        /**
+         * get the user's profile
+         */
         $account = Cache::remember('account' . Auth::user()->id, now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
             return Profile::where('user_id', Auth::user()->id)->first();
         });
-
         $socials = Social::where('user_id', Auth::user()->id)->get();
 
-        return view('profile.profile', compact('account', 'socials'));
+        /**
+         * Get the user's profile completion percentage
+         */
+        $user = Auth::user();
+        $userPercentage = $user->getProfileCompletionPercentage();
+
+        $accounts = Account::all();
+        $totalAccounts = $accounts->count();
+        if (!$totalAccounts) return 0;
+        $requiredFields = ['user_id', 'company_id', 'gender', 'birthday', 'phone', 'about', 'profession', 'website', 'address'];
+        $filledFields = 0;
+        foreach ($accounts as $account) {
+            foreach ($requiredFields as $field) {
+                if (!empty($account->$field)) $filledFields++;
+            }
+        }
+
+        $accountsPercentage = round(($filledFields / (count($requiredFields) * $totalAccounts)) * 100);
+        $percentage = (int)$userPercentage + (int)$accountsPercentage / 100;
+
+        return view('profile.profile', compact('account', 'socials', 'percentage'));
     }
 
     public function edit()

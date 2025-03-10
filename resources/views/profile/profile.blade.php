@@ -210,8 +210,8 @@
                                 <h5 class="font-semibold text-lg dark:text-white-light">ความสมบูรณ์</h5>
                             </div>
                             <div class="space-y-4">
-                                <div class="w-full h-4 bg-[#ebedf2] dark:bg-dark/40 rounded-full">
-                                    <div class="bg-success h-4 rounded-full w-10/12 text-center text-white text-xs">80%</div>
+                                <div class="w-full h-4 rounded-full bg-dark-light shadow dark:bg-[#1b2e4b]">
+                                    <div class="h-4 w-full rounded-full bg-gradient-to-r from-[#3cba92] to-[#0ba360] text-center text-white text-xs" style="width: {{ (int)$percentage }}%">{{ (int)$percentage }}%</div>
                                 </div>
                             </div>
                         </div>

@@ -29,6 +29,10 @@ class UsersController extends Controller
     public function index()
     {
         //echo timeAgo('2025-01-20 14:30:45');
+
+
+
+
         $users = Cache::remember('users', now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
             return User::join('user_accounts', 'user_accounts.user_id', '=', 'users.id')
                 ->offset(0)

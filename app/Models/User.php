@@ -55,4 +55,27 @@ class User extends Authenticatable
     // {
     //     return $this->belongsToMany(Permission::class);
     // }
+
+    public function getProfileCompletionPercentage()
+    {
+        // Define all profile fields that should be completed
+        $profileFields = [
+            'name',
+            'email',
+            'img',
+        ];
+
+        $totalFields = count($profileFields);
+        $completedFields = 0;
+
+        // Count completed fields
+        foreach ($profileFields as $field) {
+            if (!empty($this->$field)) {
+                $completedFields++;
+            }
+        }
+
+        // Calculate percentage
+        return $totalFields > 0 ? round(($completedFields / $totalFields) * 100) : 0;
+    }
 }
