@@ -95,7 +95,7 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 
 * [Paypal](https://www.paypal.me/nakornsoft)
 
-## For Job
+## Hire us for work
 
 * [LinkedIn](https://www.linkedin.com/in/nakornsoft)
 * [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
