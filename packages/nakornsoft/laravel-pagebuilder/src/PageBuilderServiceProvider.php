@@ -21,6 +21,7 @@ class PagebuilderServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         $this->loadViewsFrom(realpath(__DIR__ . '/resources/views/'), $this->namespace);
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         //$this->mergeConfigFrom(__DIR__ . '/config/config.php', $this->namespace);
         if ($this->app->runningInConsole()) {
             $this->publishFiles();
