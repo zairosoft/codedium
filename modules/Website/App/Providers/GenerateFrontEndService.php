@@ -1,6 +1,6 @@
 <?php
 
-namespace Nakornsoft\PageBuilder\App\Providers;
+namespace Modules\Website\App\Providers;
 
 class GenerateFrontEndService
 {
