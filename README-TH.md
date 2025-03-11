@@ -6,8 +6,7 @@
 
 ![Screen](https://www.nakornsoft.com/wp-content/uploads/2025/03/bitgrid.jpg "Dashboards")
 
-[English](README.md)
-[ภาษาไทย](README-TH.md)
+[ภาษาไทย](README-TH.md) | [English](README.md)
 
 ## Requirements
 
