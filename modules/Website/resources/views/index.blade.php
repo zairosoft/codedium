@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'ปฏิทิน')
+@section('title', 'เว็บไซต์')
 @section('style')
 @endsection
 @section('content')

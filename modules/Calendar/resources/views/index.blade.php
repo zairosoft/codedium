@@ -1,6 +1,5 @@
 @extends('layouts.layout')
 @section('title', 'ปฏิทิน')
-@section('content')
 @section('style')
 <link href='{{ asset('assets/css/fullcalendar.min.css')}}' rel='stylesheet' />
 <style>
@@ -54,6 +53,7 @@
 }
 </style>
 @endsection
+@section('content')
 <div x-data="calendar">
     <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ปฏิทิน</div>
