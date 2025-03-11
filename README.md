@@ -6,8 +6,7 @@ Online cms software designed for small businesses and freelancers. Bitgrid is bu
 
 ![Screen](https://www.nakornsoft.com/wp-content/uploads/2025/03/bitgrid.jpg "Dashboards")
 
-[English](README.md)
-[ภาษาไทย](README-TH.md)
+[English](README.md) | [ภาษาไทย](README-TH.md)
 
 ## Requirements
 
