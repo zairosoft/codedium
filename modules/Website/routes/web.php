@@ -19,4 +19,8 @@ Route::group([], function () {
     Route::get('page/{page}/editor', 'WebsiteController@index')->name('pages.editor');
 });
 
-
+Route::get('/front-end-builder', [WebsiteController::class, 'index'])->name('website.builder');
+Route::post('/page/create', [WebsiteController::class, 'store'])->name('website.store');
+Route::put('/page/{id}/edit', [WebsiteController::class, 'updateContent'])->name('website.edit');
+Route::put('/page/{id}/update', [WebsiteController::class, 'update'])->name('website.update');
+Route::delete('/page/{id}/delete', [WebsiteController::class, 'destroy'])->name('website.delete');
