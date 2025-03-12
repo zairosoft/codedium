@@ -24,6 +24,13 @@ Bitgrid ใช้ [Laravel](http://laravel.com) ซึ่งเป็นเฟ�
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
 * Clone the repository: `git clone https://github.com/nakornsoft/bitgrid.git`
 * Install dependencies: `composer install ; npm install ; npm run dev`
+* For linux install create folder link
+```bash
+ln -s modules Modules
+```
+or 
+Change config modules - > vendor/nwidart/laravel-modules/config/config.php
+'modules' => base_path('Modules') to 'modules' => base_path('modules')
 * Install Bitgrid:
 
 ```bash
