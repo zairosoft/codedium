@@ -28,10 +28,11 @@ Bitgrid ใช้ [Laravel](http://laravel.com) ซึ่งเป็นเฟ�
 ```bash
 ln -s modules Modules
 ```
-  or
+or
 
-  > Change config modules - > vendor/nwidart/laravel-modules/config/config.php
-  > 'modules' => base_path('Modules') to 'modules' => base_path('modules')
+> Change config modules - > vendor/nwidart/laravel-modules/config/config.php
+> 
+> 'modules' => base_path('Modules') to 'modules' => base_path('modules')
 * Install Bitgrid:
 
 ```bash
