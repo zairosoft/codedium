@@ -28,9 +28,9 @@ Bitgrid uses [Laravel](http://laravel.com), the best existing PHP framework, as 
 ```bash
 ln -s modules Modules
 ```
-Or
-
-ddd
+or 
+Change config modules - > vendor/nwidart/laravel-modules/config/config.php
+'modules' => base_path('Modules') to 'modules' => base_path('modules')
 
 * Install Bitgrid:
 
