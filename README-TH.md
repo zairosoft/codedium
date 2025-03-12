@@ -108,6 +108,7 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 * [LinkedIn](https://www.linkedin.com/in/nakornsoft)
 * [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
 * [Line](https://line.me/ti/p/@677htpdk)
+* [Facebook](https://www.facebook.com/nakornsoft)
 
 ## ใบอนุญาต
 
