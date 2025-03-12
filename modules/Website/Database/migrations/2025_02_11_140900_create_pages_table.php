@@ -26,10 +26,9 @@ return new class extends Migration
             $table->string('code');
             $table->string('name');
             $table->string('slug')->unique();
-            $table->longText('content')->nullable();
             $table->string('keywords')->nullable();
             $table->string('description')->nullable();
-
+            $table->longText('content')->nullable();
             $table->timestamps();
         });
 

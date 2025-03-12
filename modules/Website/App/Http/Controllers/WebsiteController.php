@@ -14,6 +14,11 @@ class WebsiteController extends Controller
 
     public function __construct(GenerateFrontEndService $generateFrontend)
     {
+        $this->middleware(['auth', 'lock']);
+        $this->middleware('permission:inventory view', ['only' => ['index']]);
+        $this->middleware('permission:inventory create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:inventory update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:inventory delete', ['only' => ['destroy']]);
         $this->generateFrontend = $generateFrontend;
     }
 
@@ -22,7 +27,7 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        $pages = Page::select('pages.*')
+        $pages = Page::select('pages.id', 'pages.is_published', 'page_langs.*')
             ->leftJoin('page_langs', 'pages.id', '=', 'page_langs.page_id')
             ->get();
 
