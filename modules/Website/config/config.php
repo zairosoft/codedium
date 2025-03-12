@@ -17,6 +17,12 @@ return [
             'description' => 'หน้าเว็บ',
         ],
         [
+            'name' => 'เมนู',
+            'route-name' => 'pages',
+            'title' => 'เมนู',
+            'description' => 'เมนู',
+        ],
+        [
             'name' => 'สื่อ',
             'route-name' => 'pages',
             'title' => 'สื่อ',
