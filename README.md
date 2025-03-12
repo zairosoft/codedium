@@ -24,11 +24,20 @@ Bitgrid uses [Laravel](http://laravel.com), the best existing PHP framework, as 
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
 * Clone the repository: `git clone https://github.com/nakornsoft/bitgrid.git`
 * Install dependencies: `composer install ; npm install ; npm run dev`
+* For linux install create folder link
+```bash
+ln -s modules Modules
+```
+Or
+
+ddd
+
 * Install Bitgrid:
 
 ```bash
 php artisan migrate
 php artisan module:publish
+php artisan storage:link
 ```
 
 * Create sample data (optional): `php artisan  db:seed --class="SampleSeeder"`
