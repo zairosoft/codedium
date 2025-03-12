@@ -31,6 +31,7 @@ ln -s modules Modules
 or
 
 > Change config modules - > vendor/nwidart/laravel-modules/config/config.php
+> 
 > 'modules' => base_path('Modules') to 'modules' => base_path('modules')
 * Install Bitgrid:
 
