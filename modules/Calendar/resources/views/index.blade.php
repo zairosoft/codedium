@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'ปฏิทิน')
 @section('style')
-<link href='{{ asset('modules/calendar/css/fullcalendar.min.css')}}' rel='stylesheet' />
+<link href='{{ Module::asset('calendar:css/fullcalendar.min.css')}}' rel='stylesheet' />
 <style>
 .work {
     background-color: #4361eecc;
@@ -200,8 +200,8 @@
 </div>
 @endsection
 @section('script')
-<script src='{{ asset('modules/calendar/js/fullcalendar.min.js') }}'></script>
-<script src='{{ asset('modules/calendar/js/locales-all.global.min.js')}}'></script>
+<script src='{{ Module::asset('calendar:js/fullcalendar.min.js') }}'></script>
+<script src='{{ Module::asset('calendar:js/locales-all.global.min.js') }}'></script>
 <script>
     document.addEventListener("alpine:init", () => {
         Alpine.data("calendar", () => ({
