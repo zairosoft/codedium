@@ -14,7 +14,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/settings/company') }}">บริษัท</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ route('setting.company') }}">บริษัท</a></li>
                     <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">ดู</a></li>
                 </ul>
             </div>

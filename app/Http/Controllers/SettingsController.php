@@ -67,15 +67,23 @@ class SettingsController extends Controller
         $request->validate(
             [
                 'name' => 'required|string|max:255',
+                'country' => 'required|string|max:4',
+                'currency' => 'required|string|max:4',
                 'email' => 'required|email|max:255|unique:users,email',
             ],
             [
+                'country' => trans('validation.required'),
+                'currency' => trans('validation.required'),
                 'email' => trans('validation.required'),
                 'name' => trans('validation.required'),
             ]
         );
 
         $data = ['email' => $request->email];
+        if (!empty($request->country))
+            $data += ['country' => $request->country];
+        if (!empty($request->currency))
+            $data += ['currency' => $request->currency];
         if (!empty($request->tel))
             $data += ['tel' => $request->tel];
         if (!empty($request->mobile))
@@ -199,7 +207,7 @@ class SettingsController extends Controller
             }
             $company->delete();
 
-            $lang = CompanyLang::where('company_id',$request->id);
+            $lang = CompanyLang::where('company_id', $request->id);
             $lang->delete();
             Cache::forget('company');
             echo json_encode(["message" => "success"]);

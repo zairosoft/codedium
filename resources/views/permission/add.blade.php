@@ -1,9 +1,9 @@
 @extends('layouts.layout')
-@section('title', 'เพิ่มสิทธิ์การใช้งาน')
+@section('title', __('users.add_permission'))
 @section('content')
     <div>
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">สิทธิ์การใช้งาน</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.add_permission') }}</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -17,9 +17,9 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/permissions') }}">สิทธิ์การใช้งาน</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/permissions') }}">{{ __('users.permissions') }}</a></li>
                     <li class="before:content-['/'] before:px-1.5"><a href="javascript:;"
-                            class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">เพิ่ม</a>
+                            class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.add_permission') }}</a>
                     </li>
                 </ul>
             </div>
@@ -29,16 +29,16 @@
                 <form class="space-y-5" method="POST" @submit.prevent="submitForm()">
                     @csrf
                     <div :class="[isSubmitForm ? (form.name ? '' : 'has-error') : '']">
-                        <label for="fullName">สิทธิ์การใช้งาน</label>
-                        <input id="fullName" type="text" name="name" placeholder="ป้อนสิทธิ์การใช้งาน" value="{{ old('name') }}" class="form-input" x-model="form.name" />
+                        <label for="fullName">{{ __('users.permission') }}</label>
+                        <input id="fullName" type="text" name="name" placeholder="{{ __('users.enter_permission') }}" value="{{ old('name') }}" class="form-input" x-model="form.name" />
                         <template x-if="isSubmitForm && !form.name">
-                            <p class="text-danger mt-1">กรุณาป้อนสิทธิ์การใช้งาน</p>
+                            <p class="text-danger mt-1">{{ __('users.please_enter_permission') }}</p>
                         </template>
                     </div>
                     <div class="hidden lg:flex mt-5 gap-4">
-                        <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>
-                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">
-                            บันทึก
+                        <a href="javascript:history.back()" class="btn btn-outline-danger">{{ __('others.cancel') }}</a>
+                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : '{{ __('others.save') }}'">
+                            {{ __('others.save') }}
                         </button>
                     </div>
                 </form>

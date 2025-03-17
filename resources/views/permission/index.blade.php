@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'สิทธิ์การใช้งาน')
+@section('title', __('users.permissions'))
 @section('style')
     <style>
         .btn-add {
@@ -14,7 +14,7 @@
     <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
     <div x-data="sorting">
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">รายการสิทธิ์การใช้งาน</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.permissions') }}</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -25,7 +25,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">สิทธิ์การใช้งาน</a>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.permissions') }}</a>
                     </li>
                 </ul>
             </div>
@@ -125,7 +125,7 @@
                 initializeTable() {
                     this.datatable = new simpleDatatables.DataTable('#myTable', {
                         data: {
-                            headings: ["ลำดับ", "ชื่อ", "ดู@can('permission update') / แก้ไข@endcan @can('permission delete') / ลบ@endcan"],
+                            headings: ["{{ __('users.no') }}", "{{ __('users.name') }}", "{{ __('others.view') }}@can('permission update') / {{ __('others.edit') }}@endcan @can('permission delete') / {{ __('others.delete') }}@endcan"],
                             data: this.dataArr,
                         },
                         perPage: 20,

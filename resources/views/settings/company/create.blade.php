@@ -48,7 +48,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/settings/company') }}">บริษัท</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ route('setting.company') }}">บริษัท</a></li>
                     <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">เพิ่ม</a>
                     </li>
                 </ul>
@@ -94,7 +94,7 @@
                 </ul>
                 <template x-if="tab === 'home'">
                     <div>
-                        <form action="{{ url('settings/company/store') }}" method="post" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]" enctype="multipart/form-data">
+                        <form action="{{ route('setting.company.store') }}" method="post" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]" enctype="multipart/form-data">
                             @csrf
                             <h6 class="text-lg font-bold mb-5">ข้อมูลทั่วไป</h6>
                             <div class="flex flex-col sm:flex-row">
@@ -162,35 +162,328 @@
                                                 placeholder="ป้อนเว็บไซต์" class="form-input">
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                        <div>
+
+                                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                                        <div class="md:col-span-2">
                                             <label for="tel">เลขประจำตัวผู้เสียภาษี</label>
-                                            <input id="tel" type="text" value="{{ old('tax_id') }}" name="tax_id"
-                                                placeholder="ป้อนเลขประจำตัวผู้เสียภาษี" class="form-input">
+                                            <input id="tel" type="text" value="{{ old('tax_id') }}" name="tax_id" placeholder="ป้อนเลขประจำตัวผู้เสียภาษี" class="form-input">
                                         </div>
                                         <div>
                                             <label for="phone">ID บริษัท</label>
-                                            <input id="phone" type="text" value="{{ old('company_id') }}" name="company_id"
-                                                placeholder="ป้อน ID บริษัท" class="form-input">
+                                            <input id="phone" type="text" value="{{ old('company_id') }}" name="company_id" placeholder="ป้อน ID บริษัท" class="form-input">
+                                        </div>
+                                        <div>
+                                            <label for="currency">{{ __('companies.currency.currency') }}</label>
+                                            <select name="currency" class="form-select">
+                                                <option value="">กรุณาเลือก</option>
+                                                <option value="USD" {{ old('currency') == 'USD' ? ' selected' : '' }}>{{ __('companies.currency.USD') }}</option>
+                                                <option value="EUR" {{ old('currency') == 'EUR' ? ' selected' : '' }}>{{ __('companies.currency.EUR') }}</option>
+                                                <option value="JPY" {{ old('currency') == 'JPY' ? ' selected' : '' }}>{{ __('companies.currency.JPY') }}</option>
+                                                <option value="GBP" {{ old('currency') == 'GBP' ? ' selected' : '' }}>{{ __('companies.currency.GBP') }}</option>
+                                                <option value="AUD" {{ old('currency') == 'AUD' ? ' selected' : '' }}>{{ __('companies.currency.AUD') }}</option>
+                                                <option value="CAD" {{ old('currency') == 'CAD' ? ' selected' : '' }}>{{ __('companies.currency.CAD') }}</option>
+                                                <option value="CHF" {{ old('currency') == 'CHF' ? ' selected' : '' }}>{{ __('companies.currency.CHF') }}</option>
+                                                <option value="CNY" {{ old('currency') == 'CNY' ? ' selected' : '' }}>{{ __('companies.currency.CNY') }}</option>
+                                                <option value="SEK" {{ old('currency') == 'SEK' ? ' selected' : '' }}>{{ __('companies.currency.SEK') }}</option>
+                                                <option value="NZD" {{ old('currency') == 'NZD' ? ' selected' : '' }}>{{ __('companies.currency.NZD') }}</option>
+                                                <option value="MXN" {{ old('currency') == 'MXN' ? ' selected' : '' }}>{{ __('companies.currency.MXN') }}</option>
+                                                <option value="SGD" {{ old('currency') == 'SGD' ? ' selected' : '' }}>{{ __('companies.currency.SGD') }}</option>
+                                                <option value="HKD" {{ old('currency') == 'HKD' ? ' selected' : '' }}>{{ __('companies.currency.HKD') }}</option>
+                                                <option value="NOK" {{ old('currency') == 'NOK' ? ' selected' : '' }}>{{ __('companies.currency.NOK') }}</option>
+                                                <option value="KRW" {{ old('currency') == 'KRW' ? ' selected' : '' }}>{{ __('companies.currency.KRW') }}</option>
+                                                <option value="TRY" {{ old('currency') == 'TRY' ? ' selected' : '' }}>{{ __('companies.currency.TRY') }}</option>
+                                                <option value="RUB" {{ old('currency') == 'RUB' ? ' selected' : '' }}>{{ __('companies.currency.RUB') }}</option>
+                                                <option value="INR" {{ old('currency') == 'INR' ? ' selected' : '' }}>{{ __('companies.currency.INR') }}</option>
+                                                <option value="BRL" {{ old('currency') == 'BRL' ? ' selected' : '' }}>{{ __('companies.currency.BRL') }}</option>
+                                                <option value="ZAR" {{ old('currency') == 'ZAR' ? ' selected' : '' }}>{{ __('companies.currency.ZAR') }}</option>
+                                                <option value="PHP" {{ old('currency') == 'PHP' ? ' selected' : '' }}>{{ __('companies.currency.PHP') }}</option>
+                                                <option value="IDR" {{ old('currency') == 'IDR' ? ' selected' : '' }}>{{ __('companies.currency.IDR') }}</option>
+                                                <option value="THB" {{ old('currency') == 'THB' ? ' selected' : '' }}>{{ __('companies.currency.THB') }}</option>
+                                                <option value="MYR" {{ old('currency') == 'MYR' ? ' selected' : '' }}>{{ __('companies.currency.MYR') }}</option>
+                                                <option value="VND" {{ old('currency') == 'VND' ? ' selected' : '' }}>{{ __('companies.currency.VND') }}</option>
+                                                <option value="AED" {{ old('currency') == 'AED' ? ' selected' : '' }}>{{ __('companies.currency.AED') }}</option>
+                                                <option value="SAR" {{ old('currency') == 'SAR' ? ' selected' : '' }}>{{ __('companies.currency.SAR') }}</option>
+                                                <option value="PLN" {{ old('currency') == 'PLN' ? ' selected' : '' }}>{{ __('companies.currency.PLN') }}</option>
+                                                <option value="CZK" {{ old('currency') == 'CZK' ? ' selected' : '' }}>{{ __('companies.currency.CZK') }}</option>
+                                                <option value="HUF" {{ old('currency') == 'HUF' ? ' selected' : '' }}>{{ __('companies.currency.HUF') }}</option>
+                                                <option value="DKK" {{ old('currency') == 'DKK' ? ' selected' : '' }}>{{ __('companies.currency.DKK') }}</option>
+                                                <option value="ILS" {{ old('currency') == 'ILS' ? ' selected' : '' }}>{{ __('companies.currency.ILS') }}</option>
+                                                <option value="CLP" {{ old('currency') == 'CLP' ? ' selected' : '' }}>{{ __('companies.currency.CLP') }}</option>
+                                                <option value="COP" {{ old('currency') == 'COP' ? ' selected' : '' }}>{{ __('companies.currency.COP') }}</option>
+                                                <option value="ARS" {{ old('currency') == 'ARS' ? ' selected' : '' }}>{{ __('companies.currency.ARS') }}</option>
+                                                <option value="EGP" {{ old('currency') == 'EGP' ? ' selected' : '' }}>{{ __('companies.currency.EGP') }}</option>
+                                                <option value="PKR" {{ old('currency') == 'PKR' ? ' selected' : '' }}>{{ __('companies.currency.PKR') }}</option>
+                                                <option value="BDT" {{ old('currency') == 'BDT' ? ' selected' : '' }}>{{ __('companies.currency.BDT') }}</option>
+                                            </select>
                                         </div>
                                     </div>
+
                                     <div>
-                                        <label for="gridAddress2">ที่อยู่</label>
-                                        <input id="gridAddress2" type="text" value="{{ old('address') }}" name="address" placeholder="ป้อนที่อยู่"
-                                            class="form-input">
+                                        <label for="gridAddress">ที่อยู่</label>
+                                        <textarea id="gridAddress" class="form-textarea" name="address" placeholder="ป้อนที่อยู่" style="height: 75px;">{{ old('address') }}</textarea>
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                                        <div class="md:col-span-2">
+                                        <div>
                                             <label for="district">อำเภอ / เขต</label>
                                             <input id="district" type="text" name="district" value="{{ old('district') }}" placeholder="ป้อนอำเภอ / เขต" class="form-input">
                                         </div>
                                         <div>
-                                            <label for="seachable-select">จังหวัด</label>
-                                            <select name="province" id="seachable-select">
+                                            <label for="province">จังหวัด</label>
+                                            <input id="province" type="text" name="province" value="{{ old('province') }}" placeholder="ป้อนจังหวัด" class="form-input">
+                                        </div>
+                                        <div>
+                                            <label for="seachable-select">{{ __('companies.country') }}</label>
+                                            <select name="country" id="seachable-select">
                                                 <option value="">กรุณาเลือก</option>
-                                                @foreach ($provinces as $province)
-                                                    <option value="{{ $province->name }}"{{ old('province') == $province->name ? ' selected' : '' }}>{{ $province->name }}</option>
-                                                @endforeach
+                                                <option value="AF" {{ old('country') == 'AF' ? ' selected' : '' }}>{{ __('countries.AF') }}</option>
+                                                <option value="AX" {{ old('country') == 'AX' ? ' selected' : '' }}>{{ __('countries.AX') }}</option>
+                                                <option value="AL" {{ old('country') == 'AL' ? ' selected' : '' }}>{{ __('countries.AL') }}</option>
+                                                <option value="DZ" {{ old('country') == 'DZ' ? ' selected' : '' }}>{{ __('countries.DZ') }}</option>
+                                                <option value="AS" {{ old('country') == 'AS' ? ' selected' : '' }}>{{ __('countries.AS') }}</option>
+                                                <option value="AD" {{ old('country') == 'AD' ? ' selected' : '' }}>{{ __('countries.AD') }}</option>
+                                                <option value="AO" {{ old('country') == 'AO' ? ' selected' : '' }}>{{ __('countries.AO') }}</option>
+                                                <option value="AI" {{ old('country') == 'AI' ? ' selected' : '' }}>{{ __('countries.AI') }}</option>
+                                                <option value="AQ" {{ old('country') == 'AQ' ? ' selected' : '' }}>{{ __('countries.AQ') }}</option>
+                                                <option value="AG" {{ old('country') == 'AG' ? ' selected' : '' }}>{{ __('countries.AG') }}</option>
+                                                <option value="AR" {{ old('country') == 'AR' ? ' selected' : '' }}>{{ __('countries.AR') }}</option>
+                                                <option value="AM" {{ old('country') == 'AM' ? ' selected' : '' }}>{{ __('countries.AM') }}</option>
+                                                <option value="AW" {{ old('country') == 'AW' ? ' selected' : '' }}>{{ __('countries.AW') }}</option>
+                                                <option value="AU" {{ old('country') == 'AU' ? ' selected' : '' }}>{{ __('countries.AU') }}</option>
+                                                <option value="AT" {{ old('country') == 'AT' ? ' selected' : '' }}>{{ __('countries.AT') }}</option>
+                                                <option value="AZ" {{ old('country') == 'AZ' ? ' selected' : '' }}>{{ __('countries.AZ') }}</option>
+                                                <option value="BS" {{ old('country') == 'BS' ? ' selected' : '' }}>{{ __('countries.BS') }}</option>
+                                                <option value="BH" {{ old('country') == 'BH' ? ' selected' : '' }}>{{ __('countries.BH') }}</option>
+                                                <option value="BD" {{ old('country') == 'BD' ? ' selected' : '' }}>{{ __('countries.BD') }}</option>
+                                                <option value="BB" {{ old('country') == 'BB' ? ' selected' : '' }}>{{ __('countries.BB') }}</option>
+                                                <option value="BY" {{ old('country') == 'BY' ? ' selected' : '' }}>{{ __('countries.BY') }}</option>
+                                                <option value="BE" {{ old('country') == 'BE' ? ' selected' : '' }}>{{ __('countries.BE') }}</option>
+                                                <option value="BZ" {{ old('country') == 'BZ' ? ' selected' : '' }}>{{ __('countries.BZ') }}</option>
+                                                <option value="BJ" {{ old('country') == 'BJ' ? ' selected' : '' }}>{{ __('countries.BJ') }}</option>
+                                                <option value="BM" {{ old('country') == 'BM' ? ' selected' : '' }}>{{ __('countries.BM') }}</option>
+                                                <option value="BT" {{ old('country') == 'BT' ? ' selected' : '' }}>{{ __('countries.BT') }}</option>
+                                                <option value="BO" {{ old('country') == 'BO' ? ' selected' : '' }}>{{ __('countries.BO') }}</option>
+                                                <option value="BQ" {{ old('country') == 'BQ' ? ' selected' : '' }}>{{ __('countries.BQ') }}</option>
+                                                <option value="BA" {{ old('country') == 'BA' ? ' selected' : '' }}>{{ __('countries.BA') }}</option>
+                                                <option value="BW" {{ old('country') == 'BW' ? ' selected' : '' }}>{{ __('countries.BW') }}</option>
+                                                <option value="BV" {{ old('country') == 'BV' ? ' selected' : '' }}>{{ __('countries.BV') }}</option>
+                                                <option value="BR" {{ old('country') == 'BR' ? ' selected' : '' }}>{{ __('countries.BR') }}</option>
+                                                <option value="IO" {{ old('country') == 'IO' ? ' selected' : '' }}>{{ __('countries.IO') }}</option>
+                                                <option value="BN" {{ old('country') == 'BN' ? ' selected' : '' }}>{{ __('countries.BN') }}</option>
+                                                <option value="BG" {{ old('country') == 'BG' ? ' selected' : '' }}>{{ __('countries.BG') }}</option>
+                                                <option value="BF" {{ old('country') == 'BF' ? ' selected' : '' }}>{{ __('countries.BF') }}</option>
+                                                <option value="BI" {{ old('country') == 'BI' ? ' selected' : '' }}>{{ __('countries.BI') }}</option>
+                                                <option value="CV" {{ old('country') == 'CV' ? ' selected' : '' }}>{{ __('countries.CV') }}</option>
+                                                <option value="KH" {{ old('country') == 'KH' ? ' selected' : '' }}>{{ __('countries.KH') }}</option>
+                                                <option value="CM" {{ old('country') == 'CM' ? ' selected' : '' }}>{{ __('countries.CM') }}</option>
+                                                <option value="CA" {{ old('country') == 'CA' ? ' selected' : '' }}>{{ __('countries.CA') }}</option>
+                                                <option value="KY" {{ old('country') == 'KY' ? ' selected' : '' }}>{{ __('countries.KY') }}</option>
+                                                <option value="CF" {{ old('country') == 'CF' ? ' selected' : '' }}>{{ __('countries.CF') }}</option>
+                                                <option value="TD" {{ old('country') == 'TD' ? ' selected' : '' }}>{{ __('countries.TD') }}</option>
+                                                <option value="CL" {{ old('country') == 'CL' ? ' selected' : '' }}>{{ __('countries.CL') }}</option>
+                                                <option value="CN" {{ old('country') == 'CN' ? ' selected' : '' }}>{{ __('countries.CN') }}</option>
+                                                <option value="CX" {{ old('country') == 'CX' ? ' selected' : '' }}>{{ __('countries.CX') }}</option>
+                                                <option value="CC" {{ old('country') == 'CC' ? ' selected' : '' }}>{{ __('countries.CC') }}</option>
+                                                <option value="CO" {{ old('country') == 'CO' ? ' selected' : '' }}>{{ __('countries.CO') }}</option>
+                                                <option value="KM" {{ old('country') == 'KM' ? ' selected' : '' }}>{{ __('countries.KM') }}</option>
+                                                <option value="CG" {{ old('country') == 'CG' ? ' selected' : '' }}>{{ __('countries.CG') }}</option>
+                                                <option value="CD" {{ old('country') == 'CD' ? ' selected' : '' }}>{{ __('countries.CD') }}</option>
+                                                <option value="CK" {{ old('country') == 'CK' ? ' selected' : '' }}>{{ __('countries.CK') }}</option>
+                                                <option value="CR" {{ old('country') == 'CR' ? ' selected' : '' }}>{{ __('countries.CR') }}</option>
+                                                <option value="CI" {{ old('country') == 'CI' ? ' selected' : '' }}>{{ __('countries.CI') }}</option>
+                                                <option value="HR" {{ old('country') == 'HR' ? ' selected' : '' }}>{{ __('countries.HR') }}</option>
+                                                <option value="CU" {{ old('country') == 'CU' ? ' selected' : '' }}>{{ __('countries.CU') }}</option>
+                                                <option value="CY" {{ old('country') == 'CY' ? ' selected' : '' }}>{{ __('countries.CY') }}</option>
+                                                <option value="CZ" {{ old('country') == 'CZ' ? ' selected' : '' }}>{{ __('countries.CZ') }}</option>
+                                                <option value="DK" {{ old('country') == 'DK' ? ' selected' : '' }}>{{ __('countries.DK') }}</option>
+                                                <option value="DJ" {{ old('country') == 'DJ' ? ' selected' : '' }}>{{ __('countries.DJ') }}</option>
+                                                <option value="DM" {{ old('country') == 'DM' ? ' selected' : '' }}>{{ __('countries.DM') }}</option>
+                                                <option value="DO" {{ old('country') == 'DO' ? ' selected' : '' }}>{{ __('countries.DO') }}</option>
+                                                <option value="EC" {{ old('country') == 'EC' ? ' selected' : '' }}>{{ __('countries.EC') }}</option>
+                                                <option value="EG" {{ old('country') == 'EG' ? ' selected' : '' }}>{{ __('countries.EG') }}</option>
+                                                <option value="SV" {{ old('country') == 'SV' ? ' selected' : '' }}>{{ __('countries.SV') }}</option>
+                                                <option value="GQ" {{ old('country') == 'GQ' ? ' selected' : '' }}>{{ __('countries.GQ') }}</option>
+                                                <option value="ER" {{ old('country') == 'ER' ? ' selected' : '' }}>{{ __('countries.ER') }}</option>
+                                                <option value="EE" {{ old('country') == 'EE' ? ' selected' : '' }}>{{ __('countries.EE') }}</option>
+                                                <option value="SZ" {{ old('country') == 'SZ' ? ' selected' : '' }}>{{ __('countries.SZ') }}</option>
+                                                <option value="ET" {{ old('country') == 'ET' ? ' selected' : '' }}>{{ __('countries.ET') }}</option>
+                                                <option value="FK" {{ old('country') == 'FK' ? ' selected' : '' }}>{{ __('countries.FK') }}</option>
+                                                <option value="FO" {{ old('country') == 'FO' ? ' selected' : '' }}>{{ __('countries.FO') }}</option>
+                                                <option value="FJ" {{ old('country') == 'FJ' ? ' selected' : '' }}>{{ __('countries.FJ') }}</option>
+                                                <option value="FI" {{ old('country') == 'FI' ? ' selected' : '' }}>{{ __('countries.FI') }}</option>
+                                                <option value="FR" {{ old('country') == 'FR' ? ' selected' : '' }}>{{ __('countries.FR') }}</option>
+                                                <option value="GF" {{ old('country') == 'GF' ? ' selected' : '' }}>{{ __('countries.GF') }}</option>
+                                                <option value="PF" {{ old('country') == 'PF' ? ' selected' : '' }}>{{ __('countries.PF') }}</option>
+                                                <option value="TF" {{ old('country') == 'TF' ? ' selected' : '' }}>{{ __('countries.TF') }}</option>
+                                                <option value="GA" {{ old('country') == 'GA' ? ' selected' : '' }}>{{ __('countries.GA') }}</option>
+                                                <option value="GM" {{ old('country') == 'GM' ? ' selected' : '' }}>{{ __('countries.GM') }}</option>
+                                                <option value="GE" {{ old('country') == 'GE' ? ' selected' : '' }}>{{ __('countries.GE') }}</option>
+                                                <option value="DE" {{ old('country') == 'DE' ? ' selected' : '' }}>{{ __('countries.DE') }}</option>
+                                                <option value="GH" {{ old('country') == 'GH' ? ' selected' : '' }}>{{ __('countries.GH') }}</option>
+                                                <option value="GI" {{ old('country') == 'GI' ? ' selected' : '' }}>{{ __('countries.GI') }}</option>
+                                                <option value="GR" {{ old('country') == 'GR' ? ' selected' : '' }}>{{ __('countries.GR') }}</option>
+                                                <option value="GL" {{ old('country') == 'GL' ? ' selected' : '' }}>{{ __('countries.GL') }}</option>
+                                                <option value="GD" {{ old('country') == 'GD' ? ' selected' : '' }}>{{ __('countries.GD') }}</option>
+                                                <option value="GP" {{ old('country') == 'GP' ? ' selected' : '' }}>{{ __('countries.GP') }}</option>
+                                                <option value="GU" {{ old('country') == 'GU' ? ' selected' : '' }}>{{ __('countries.GU') }}</option>
+                                                <option value="GT" {{ old('country') == 'GT' ? ' selected' : '' }}>{{ __('countries.GT') }}</option>
+                                                <option value="GG" {{ old('country') == 'GG' ? ' selected' : '' }}>{{ __('countries.GG') }}</option>
+                                                <option value="GN" {{ old('country') == 'GN' ? ' selected' : '' }}>{{ __('countries.GN') }}</option>
+                                                <option value="GW" {{ old('country') == 'GW' ? ' selected' : '' }}>{{ __('countries.GW') }}</option>
+                                                <option value="GY" {{ old('country') == 'GY' ? ' selected' : '' }}>{{ __('countries.GY') }}</option>
+                                                <option value="HT" {{ old('country') == 'HT' ? ' selected' : '' }}>{{ __('countries.HT') }}</option>
+                                                <option value="HM" {{ old('country') == 'HM' ? ' selected' : '' }}>{{ __('countries.HM') }}</option>
+                                                <option value="VA" {{ old('country') == 'VA' ? ' selected' : '' }}>{{ __('countries.VA') }}</option>
+                                                <option value="HN" {{ old('country') == 'HN' ? ' selected' : '' }}>{{ __('countries.HN') }}</option>
+                                                <option value="HK" {{ old('country') == 'HK' ? ' selected' : '' }}>{{ __('countries.HK') }}</option>
+                                                <option value="HU" {{ old('country') == 'HU' ? ' selected' : '' }}>{{ __('countries.HU') }}</option>
+                                                <option value="IS" {{ old('country') == 'IS' ? ' selected' : '' }}>{{ __('countries.IS') }}</option>
+                                                <option value="IN" {{ old('country') == 'IN' ? ' selected' : '' }}>{{ __('countries.IN') }}</option>
+                                                <option value="ID" {{ old('country') == 'ID' ? ' selected' : '' }}>{{ __('countries.ID') }}</option>
+                                                <option value="IR" {{ old('country') == 'IR' ? ' selected' : '' }}>{{ __('countries.IR') }}</option>
+                                                <option value="IQ" {{ old('country') == 'IQ' ? ' selected' : '' }}>{{ __('countries.IQ') }}</option>
+                                                <option value="IE" {{ old('country') == 'IE' ? ' selected' : '' }}>{{ __('countries.IE') }}</option>
+                                                <option value="IM" {{ old('country') == 'IM' ? ' selected' : '' }}>{{ __('countries.IM') }}</option>
+                                                <option value="IL" {{ old('country') == 'IL' ? ' selected' : '' }}>{{ __('countries.IL') }}</option>
+                                                <option value="IT" {{ old('country') == 'IT' ? ' selected' : '' }}>{{ __('countries.IT') }}</option>
+                                                <option value="CI" {{ old('country') == 'CI' ? ' selected' : '' }}>{{ __('countries.CI') }}</option>
+                                                <option value="JM" {{ old('country') == 'JM' ? ' selected' : '' }}>{{ __('countries.JM') }}</option>
+                                                <option value="JP" {{ old('country') == 'JP' ? ' selected' : '' }}>{{ __('countries.JP') }}</option>
+                                                <option value="JE" {{ old('country') == 'JE' ? ' selected' : '' }}>{{ __('countries.JE') }}</option>
+                                                <option value="JO" {{ old('country') == 'JO' ? ' selected' : '' }}>{{ __('countries.JO') }}</option>
+                                                <option value="KZ" {{ old('country') == 'KZ' ? ' selected' : '' }}>{{ __('countries.KZ') }}</option>
+                                                <option value="KE" {{ old('country') == 'KE' ? ' selected' : '' }}>{{ __('countries.KE') }}</option>
+                                                <option value="KI" {{ old('country') == 'KI' ? ' selected' : '' }}>{{ __('countries.KI') }}</option>
+                                                <option value="KP" {{ old('country') == 'KP' ? ' selected' : '' }}>{{ __('countries.KP') }}</option>
+                                                <option value="KR" {{ old('country') == 'KR' ? ' selected' : '' }}>{{ __('countries.KR') }}</option>
+                                                <option value="KW" {{ old('country') == 'KW' ? ' selected' : '' }}>{{ __('countries.KW') }}</option>
+                                                <option value="KG" {{ old('country') == 'KG' ? ' selected' : '' }}>{{ __('countries.KG') }}</option>
+                                                <option value="LA" {{ old('country') == 'LA' ? ' selected' : '' }}>{{ __('countries.LA') }}</option>
+                                                <option value="LV" {{ old('country') == 'LV' ? ' selected' : '' }}>{{ __('countries.LV') }}</option>
+                                                <option value="LB" {{ old('country') == 'LB' ? ' selected' : '' }}>{{ __('countries.LB') }}</option>
+                                                <option value="LS" {{ old('country') == 'LS' ? ' selected' : '' }}>{{ __('countries.LS') }}</option>
+                                                <option value="LR" {{ old('country') == 'LR' ? ' selected' : '' }}>{{ __('countries.LR') }}</option>
+                                                <option value="LY" {{ old('country') == 'LY' ? ' selected' : '' }}>{{ __('countries.LY') }}</option>
+                                                <option value="LI" {{ old('country') == 'LI' ? ' selected' : '' }}>{{ __('countries.LI') }}</option>
+                                                <option value="LT" {{ old('country') == 'LT' ? ' selected' : '' }}>{{ __('countries.LT') }}</option>
+                                                <option value="LU" {{ old('country') == 'LU' ? ' selected' : '' }}>{{ __('countries.LU') }}</option>
+                                                <option value="MO" {{ old('country') == 'MO' ? ' selected' : '' }}>{{ __('countries.MO') }}</option>
+                                                <option value="MK" {{ old('country') == 'MK' ? ' selected' : '' }}>{{ __('countries.MK') }}</option>
+                                                <option value="MG" {{ old('country') == 'MG' ? ' selected' : '' }}>{{ __('countries.MG') }}</option>
+                                                <option value="MW" {{ old('country') == 'MW' ? ' selected' : '' }}>{{ __('countries.MW') }}</option>
+                                                <option value="MY" {{ old('country') == 'MY' ? ' selected' : '' }}>{{ __('countries.MY') }}</option>
+                                                <option value="MV" {{ old('country') == 'MV' ? ' selected' : '' }}>{{ __('countries.MV') }}</option>
+                                                <option value="ML" {{ old('country') == 'ML' ? ' selected' : '' }}>{{ __('countries.ML') }}</option>
+                                                <option value="MT" {{ old('country') == 'MT' ? ' selected' : '' }}>{{ __('countries.MT') }}</option>
+                                                <option value="MH" {{ old('country') == 'MH' ? ' selected' : '' }}>{{ __('countries.MH') }}</option>
+                                                <option value="MQ" {{ old('country') == 'MQ' ? ' selected' : '' }}>{{ __('countries.MQ') }}</option>
+                                                <option value="MR" {{ old('country') == 'MR' ? ' selected' : '' }}>{{ __('countries.MR') }}</option>
+                                                <option value="MU" {{ old('country') == 'MU' ? ' selected' : '' }}>{{ __('countries.MU') }}</option>
+                                                <option value="YT" {{ old('country') == 'YT' ? ' selected' : '' }}>{{ __('countries.YT') }}</option>
+                                                <option value="MX" {{ old('country') == 'MX' ? ' selected' : '' }}>{{ __('countries.MX') }}</option>
+                                                <option value="FM" {{ old('country') == 'FM' ? ' selected' : '' }}>{{ __('countries.FM') }}</option>
+                                                <option value="MD" {{ old('country') == 'MD' ? ' selected' : '' }}>{{ __('countries.MD') }}</option>
+                                                <option value="MC" {{ old('country') == 'MC' ? ' selected' : '' }}>{{ __('countries.MC') }}</option>
+                                                <option value="MN" {{ old('country') == 'MN' ? ' selected' : '' }}>{{ __('countries.MN') }}</option>
+                                                <option value="ME" {{ old('country') == 'ME' ? ' selected' : '' }}>{{ __('countries.ME') }}</option>
+                                                <option value="MS" {{ old('country') == 'MS' ? ' selected' : '' }}>{{ __('countries.MS') }}</option>
+                                                <option value="MA" {{ old('country') == 'MA' ? ' selected' : '' }}>{{ __('countries.MA') }}</option>
+                                                <option value="MZ" {{ old('country') == 'MZ' ? ' selected' : '' }}>{{ __('countries.MZ') }}</option>
+                                                <option value="MM" {{ old('country') == 'MM' ? ' selected' : '' }}>{{ __('countries.MM') }}</option>
+                                                <option value="NA" {{ old('country') == 'NA' ? ' selected' : '' }}>{{ __('countries.NA') }}</option>
+                                                <option value="NR" {{ old('country') == 'NR' ? ' selected' : '' }}>{{ __('countries.NR') }}</option>
+                                                <option value="NP" {{ old('country') == 'NP' ? ' selected' : '' }}>{{ __('countries.NP') }}</option>
+                                                <option value="NL" {{ old('country') == 'NL' ? ' selected' : '' }}>{{ __('countries.NL') }}</option>
+                                                <option value="AN" {{ old('country') == 'AN' ? ' selected' : '' }}>{{ __('countries.AN') }}</option>
+                                                <option value="NC" {{ old('country') == 'NC' ? ' selected' : '' }}>{{ __('countries.NC') }}</option>
+                                                <option value="NZ" {{ old('country') == 'NZ' ? ' selected' : '' }}>{{ __('countries.NZ') }}</option>
+                                                <option value="NI" {{ old('country') == 'NI' ? ' selected' : '' }}>{{ __('countries.NI') }}</option>
+                                                <option value="NE" {{ old('country') == 'NE' ? ' selected' : '' }}>{{ __('countries.NE') }}</option>
+                                                <option value="NG" {{ old('country') == 'NG' ? ' selected' : '' }}>{{ __('countries.NG') }}</option>
+                                                <option value="NU" {{ old('country') == 'NU' ? ' selected' : '' }}>{{ __('countries.NU') }}</option>
+                                                <option value="NF" {{ old('country') == 'NF' ? ' selected' : '' }}>{{ __('countries.NF') }}</option>
+                                                <option value="MP" {{ old('country') == 'MP' ? ' selected' : '' }}>{{ __('countries.MP') }}</option>
+                                                <option value="NO" {{ old('country') == 'NO' ? ' selected' : '' }}>{{ __('countries.NO') }}</option>
+                                                <option value="OM" {{ old('country') == 'OM' ? ' selected' : '' }}>{{ __('countries.OM') }}</option>
+                                                <option value="PK" {{ old('country') == 'PK' ? ' selected' : '' }}>{{ __('countries.PK') }}</option>
+                                                <option value="PW" {{ old('country') == 'PW' ? ' selected' : '' }}>{{ __('countries.PW') }}</option>
+                                                <option value="PS" {{ old('country') == 'PS' ? ' selected' : '' }}>{{ __('countries.PS') }}</option>
+                                                <option value="PA" {{ old('country') == 'PA' ? ' selected' : '' }}>{{ __('countries.PA') }}</option>
+                                                <option value="PG" {{ old('country') == 'PG' ? ' selected' : '' }}>{{ __('countries.PG') }}</option>
+                                                <option value="PY" {{ old('country') == 'PY' ? ' selected' : '' }}>{{ __('countries.PY') }}</option>
+                                                <option value="PE" {{ old('country') == 'PE' ? ' selected' : '' }}>{{ __('countries.PE') }}</option>
+                                                <option value="PH" {{ old('country') == 'PH' ? ' selected' : '' }}>{{ __('countries.PH') }}</option>
+                                                <option value="PN" {{ old('country') == 'PN' ? ' selected' : '' }}>{{ __('countries.PN') }}</option>
+                                                <option value="PL" {{ old('country') == 'PL' ? ' selected' : '' }}>{{ __('countries.PL') }}</option>
+                                                <option value="PT" {{ old('country') == 'PT' ? ' selected' : '' }}>{{ __('countries.PT') }}</option>
+                                                <option value="QA" {{ old('country') == 'QA' ? ' selected' : '' }}>{{ __('countries.QA') }}</option>
+                                                <option value="RE" {{ old('country') == 'RE' ? ' selected' : '' }}>{{ __('countries.RE') }}</option>
+                                                <option value="RO" {{ old('country') == 'RO' ? ' selected' : '' }}>{{ __('countries.RO') }}</option>
+                                                <option value="RU" {{ old('country') == 'RU' ? ' selected' : '' }}>{{ __('countries.RU') }}</option>
+                                                <option value="RW" {{ old('country') == 'RW' ? ' selected' : '' }}>{{ __('countries.RW') }}</option>
+                                                <option value="BL" {{ old('country') == 'BL' ? ' selected' : '' }}>{{ __('countries.BL') }}</option>
+                                                <option value="SH" {{ old('country') == 'SH' ? ' selected' : '' }}>{{ __('countries.SH') }}</option>
+                                                <option value="KN" {{ old('country') == 'KN' ? ' selected' : '' }}>{{ __('countries.KN') }}</option>
+                                                <option value="LC" {{ old('country') == 'LC' ? ' selected' : '' }}>{{ __('countries.LC') }}</option>
+                                                <option value="MF" {{ old('country') == 'MF' ? ' selected' : '' }}>{{ __('countries.MF') }}</option>
+                                                <option value="PM" {{ old('country') == 'PM' ? ' selected' : '' }}>{{ __('countries.PM') }}</option>
+                                                <option value="VC" {{ old('country') == 'VC' ? ' selected' : '' }}>{{ __('countries.VC') }}</option>
+                                                <option value="WS" {{ old('country') == 'WS' ? ' selected' : '' }}>{{ __('countries.WS') }}</option>
+                                                <option value="SM" {{ old('country') == 'SM' ? ' selected' : '' }}>{{ __('countries.SM') }}</option>
+                                                <option value="ST" {{ old('country') == 'ST' ? ' selected' : '' }}>{{ __('countries.ST') }}</option>
+                                                <option value="SA" {{ old('country') == 'SA' ? ' selected' : '' }}>{{ __('countries.SA') }}</option>
+                                                <option value="SN" {{ old('country') == 'SN' ? ' selected' : '' }}>{{ __('countries.SN') }}</option>
+                                                <option value="RS" {{ old('country') == 'RS' ? ' selected' : '' }}>{{ __('countries.RS') }}</option>
+                                                <option value="SC" {{ old('country') == 'SC' ? ' selected' : '' }}>{{ __('countries.SC') }}</option>
+                                                <option value="SL" {{ old('country') == 'SL' ? ' selected' : '' }}>{{ __('countries.SL') }}</option>
+                                                <option value="SG" {{ old('country') == 'SG' ? ' selected' : '' }}>{{ __('countries.SG') }}</option>
+                                                <option value="SX" {{ old('country') == 'SX' ? ' selected' : '' }}>{{ __('countries.SX') }}</option>
+                                                <option value="SK" {{ old('country') == 'SK' ? ' selected' : '' }}>{{ __('countries.SK') }}</option>
+                                                <option value="SI" {{ old('country') == 'SI' ? ' selected' : '' }}>{{ __('countries.SI') }}</option>
+                                                <option value="SB" {{ old('country') == 'SB' ? ' selected' : '' }}>{{ __('countries.SB') }}</option>
+                                                <option value="SO" {{ old('country') == 'SO' ? ' selected' : '' }}>{{ __('countries.SO') }}</option>
+                                                <option value="ZA" {{ old('country') == 'ZA' ? ' selected' : '' }}>{{ __('countries.ZA') }}</option>
+                                                <option value="GS" {{ old('country') == 'GS' ? ' selected' : '' }}>{{ __('countries.GS') }}</option>
+                                                <option value="SS" {{ old('country') == 'SS' ? ' selected' : '' }}>{{ __('countries.SS') }}</option>
+                                                <option value="ES" {{ old('country') == 'ES' ? ' selected' : '' }}>{{ __('countries.ES') }}</option>
+                                                <option value="LK" {{ old('country') == 'LK' ? ' selected' : '' }}>{{ __('countries.LK') }}</option>
+                                                <option value="SD" {{ old('country') == 'SD' ? ' selected' : '' }}>{{ __('countries.SD') }}</option>
+                                                <option value="SR" {{ old('country') == 'SR' ? ' selected' : '' }}>{{ __('countries.SR') }}</option>
+                                                <option value="SJ" {{ old('country') == 'SJ' ? ' selected' : '' }}>{{ __('countries.SJ') }}</option>
+                                                <option value="SZ" {{ old('country') == 'SZ' ? ' selected' : '' }}>{{ __('countries.SZ') }}</option>
+                                                <option value="SE" {{ old('country') == 'SE' ? ' selected' : '' }}>{{ __('countries.SE') }}</option>
+                                                <option value="CH" {{ old('country') == 'CH' ? ' selected' : '' }}>{{ __('countries.CH') }}</option>
+                                                <option value="SY" {{ old('country') == 'SY' ? ' selected' : '' }}>{{ __('countries.SY') }}</option>
+                                                <option value="TW" {{ old('country') == 'TW' ? ' selected' : '' }}>{{ __('countries.TW') }}</option>
+                                                <option value="TJ" {{ old('country') == 'TJ' ? ' selected' : '' }}>{{ __('countries.TJ') }}</option>
+                                                <option value="TZ" {{ old('country') == 'TZ' ? ' selected' : '' }}>{{ __('countries.TZ') }}</option>
+                                                <option value="TH" {{ old('country') == 'TH' ? ' selected' : '' }}>{{ __('countries.TH') }}</option>
+                                                <option value="TL" {{ old('country') == 'TL' ? ' selected' : '' }}>{{ __('countries.TL') }}</option>
+                                                <option value="TG" {{ old('country') == 'TG' ? ' selected' : '' }}>{{ __('countries.TG') }}</option>
+                                                <option value="TK" {{ old('country') == 'TK' ? ' selected' : '' }}>{{ __('countries.TK') }}</option>
+                                                <option value="TO" {{ old('country') == 'TO' ? ' selected' : '' }}>{{ __('countries.TO') }}</option>
+                                                <option value="TT" {{ old('country') == 'TT' ? ' selected' : '' }}>{{ __('countries.TT') }}</option>
+                                                <option value="TN" {{ old('country') == 'TN' ? ' selected' : '' }}>{{ __('countries.TN') }}</option>
+                                                <option value="TR" {{ old('country') == 'TR' ? ' selected' : '' }}>{{ __('countries.TR') }}</option>
+                                                <option value="TM" {{ old('country') == 'TM' ? ' selected' : '' }}>{{ __('countries.TM') }}</option>
+                                                <option value="TC" {{ old('country') == 'TC' ? ' selected' : '' }}>{{ __('countries.TC') }}</option>
+                                                <option value="TV" {{ old('country') == 'TV' ? ' selected' : '' }}>{{ __('countries.TV') }}</option>
+                                                <option value="UG" {{ old('country') == 'UG' ? ' selected' : '' }}>{{ __('countries.UG') }}</option>
+                                                <option value="UA" {{ old('country') == 'UA' ? ' selected' : '' }}>{{ __('countries.UA') }}</option>
+                                                <option value="AE" {{ old('country') == 'AE' ? ' selected' : '' }}>{{ __('countries.AE') }}</option>
+                                                <option value="GB" {{ old('country') == 'GB' ? ' selected' : '' }}>{{ __('countries.GB') }}</option>
+                                                <option value="US" {{ old('country') == 'US' ? ' selected' : '' }}>{{ __('countries.US') }}</option>
+                                                <option value="UY" {{ old('country') == 'UY' ? ' selected' : '' }}>{{ __('countries.UY') }}</option>
+                                                <option value="UZ" {{ old('country') == 'UZ' ? ' selected' : '' }}>{{ __('countries.UZ') }}</option>
+                                                <option value="VU" {{ old('country') == 'VU' ? ' selected' : '' }}>{{ __('countries.VU') }}</option>
+                                                <option value="VE" {{ old('country') == 'VE' ? ' selected' : '' }}>{{ __('countries.VE') }}</option>
+                                                <option value="VN" {{ old('country') == 'VN' ? ' selected' : '' }}>{{ __('countries.VN') }}</option>
+                                                <option value="VG" {{ old('country') == 'VG' ? ' selected' : '' }}>{{ __('countries.VG') }}</option>
+                                                <option value="VI" {{ old('country') == 'VI' ? ' selected' : '' }}>{{ __('countries.VI') }}</option>
+                                                <option value="WF" {{ old('country') == 'WF' ? ' selected' : '' }}>{{ __('countries.WF') }}</option>
+                                                <option value="EH" {{ old('country') == 'EH' ? ' selected' : '' }}>{{ __('countries.EH') }}</option>
+                                                <option value="YE" {{ old('country') == 'YE' ? ' selected' : '' }}>{{ __('countries.YE') }}</option>
+                                                <option value="ZM" {{ old('country') == 'ZM' ? ' selected' : '' }}>{{ __('countries.ZM') }}</option>
+                                                <option value="ZW" {{ old('country') == 'ZW' ? ' selected' : '' }}>{{ __('countries.ZW') }}</option>
                                             </select>
                                         </div>
                                         <div>
@@ -198,6 +491,7 @@
                                             <input id="gridZip" type="text" name="zip" value="{{ old('zip') }}" placeholder="ป้อนรหัสไปรษณีย์" class="form-input">
                                         </div>
                                     </div>
+
                                     <div class="hidden lg:flex mt-1 gap-4">
                                         <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>
                                         <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">

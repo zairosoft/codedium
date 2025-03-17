@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'เพิ่มบทบาท')
+@section('title', __('users.add_role'))
 @section('style')
 <style>
     .is-invalid {
@@ -12,7 +12,7 @@
 @section('content')
     <div>
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">บทบาท</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.add_role') }}</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -26,8 +26,8 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/roles') }}">บทบาท</a></li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">เพิ่ม</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/roles') }}">{{ __('users.roles') }}</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.add_role') }}</a></li>
                 </ul>
             </div>
         </div>
@@ -36,10 +36,10 @@
                 <form action="{{ url('roles') }}" method="POST">
                     @csrf
                     <div class="@error('name')has-error @enderror">
-                        <label for="fullName">บทบาท</label>
-                        <input id="fullName" type="text" name="name" value="{{ old('name') }}" placeholder="ป้อนบทบาท" class="form-input" />
+                        <label for="fullName">{{ __('users.role') }}</label>
+                        <input id="fullName" type="text" name="name" value="{{ old('name') }}" placeholder="{{ __('users.enter_role') }}" class="form-input" />
                         @if ($errors->has('name'))
-                            <p class="text-danger mt-1">กรุณาป้อนบทบาท</p>
+                            <p class="text-danger mt-1">{{ __('users.please_enter_role') }}</p>
                         @endif
                     </div>
                     <div class="table-responsive mt-6">
@@ -47,8 +47,8 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="checkboxAll" class="form-checkbox" /></th>
-                                    <th>สิทธิ์</th>
-                                    <th>สิทธิ์ที่ใช้ได้</th>
+                                    <th>{{ __('users.menu') }}</th>
+                                    <th>{{ __('users.available_roles') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,9 +79,9 @@
                         </table>
                     </div>
                     <div class="hidden lg:flex mt-5 gap-4">
-                        <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>
-                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">
-                            บันทึก
+                        <a href="javascript:history.back()" class="btn btn-outline-danger">{{ __('others.cancel') }}</a>
+                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : '{{ __('others.save') }}'">
+                            {{ __('others.save') }}
                         </button>
                     </div>
                 </form>

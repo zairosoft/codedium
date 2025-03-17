@@ -51,7 +51,7 @@
 @section('content')
     <div>
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ผู้ใช้ระบบ</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">แก้ไขผู้ใช้</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/users') }}">ผู้ใช้ระบบ</a></li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">แก้ไข</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">แก้ไขผู้ใช้</a></li>
                 </ul>
             </div>
         </div>

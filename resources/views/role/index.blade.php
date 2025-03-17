@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'บทบาท')
+@section('title', __('users.roles'))
 @section('style')
     <style>
         .btn-add {
@@ -15,7 +15,7 @@
     <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
     <div x-data="sorting">
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">รายการบทบาท</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.roles') }}</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -26,7 +26,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">บทบาท</a>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.roles') }}</a>
                     </li>
                 </ul>
             </div>
@@ -127,7 +127,7 @@
                 initializeTable() {
                     this.datatable = new simpleDatatables.DataTable('#myTable', {
                         data: {
-                            headings: ["ลำดับ", "ชื่อ", "ดู@can('role update') / แก้ไข@endcan @can('role delete') / ลบ@endcan"],
+                            headings: ["{{ __('users.no') }}", "\{{ __('users.name') }}", "{{ __('others.view') }}@can('role update') / {{ __('others.edit') }}@endcan @can('role delete') / {{ __('others.delete') }}@endcan"],
                             data: this.dataArr,
                         },
                         perPage: 20,

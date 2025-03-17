@@ -39,10 +39,10 @@ Route::controller(App\Http\Controllers\AuthController::class)->group(function ()
     Route::get('/auth/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
     Route::get('auth/forgot/password', 'forgot')->name('forgot');
-    Route::post('auth/forgot/password', 'forgotpassword')->name('forgotpassword');
+    Route::post('auth/forgot/password', 'forgotpassword')->name('forgot.password');
     Route::get('auth/check/email', 'check')->name('checkemail');
     Route::get('/auth/reset/{token}', 'reset')->name('reset');
-    Route::post('/auth/reset/{token}', 'resetpassword')->name('resetpassword');
+    Route::post('/auth/reset/{token}', 'resetpassword')->name('reset.password');
     Route::get('/logout', 'logout')->name('logout');
 });
 
@@ -53,47 +53,46 @@ Route::controller(App\Http\Controllers\LockScreenController::class)->group(funct
 
 // Route for Permissions & Roles
 Route::group(['middleware' => ['role:super-admin|admin']], function () {
-
     // Permissions
     Route::resource('permissions', App\Http\Controllers\PermissionController::class);
-    Route::get('permissions/{id}/show', [App\Http\Controllers\PermissionController::class, 'view']);
-    Route::delete('permissions/delete', [App\Http\Controllers\PermissionController::class, 'destroy']);
+    Route::get('permissions/{id}/show', [App\Http\Controllers\PermissionController::class, 'view'])->name('permission.show');
+    Route::delete('permissions/delete', [App\Http\Controllers\PermissionController::class, 'destroy'])->name('permission.delete');
 
     // Roles
     Route::resource('roles', App\Http\Controllers\RoleController::class);
-    Route::get('roles/{id}/show', [App\Http\Controllers\RoleController::class, 'show']);
-    Route::delete('roles/delete', [App\Http\Controllers\RoleController::class, 'destroy']);
+    Route::get('roles/{id}/show', [App\Http\Controllers\RoleController::class, 'show'])->name('role.show');
+    Route::delete('roles/delete', [App\Http\Controllers\RoleController::class, 'destroy'])->name('role.delete');
 
     // Users
     Route::resource('users', App\Http\Controllers\UsersController::class);
-    Route::get('users/{id}/show', [App\Http\Controllers\UsersController::class, 'show']);
-    Route::get('users/show', [App\Http\Controllers\UsersController::class, 'show']);
-    Route::delete('user/delete', [App\Http\Controllers\UsersController::class, 'destroy']);
+    Route::get('users/{id}/show', [App\Http\Controllers\UsersController::class, 'show'])->name('user.show');
+    Route::get('users/show', [App\Http\Controllers\UsersController::class, 'show'])->name('user.show');
+    Route::delete('user/delete', [App\Http\Controllers\UsersController::class, 'destroy'])->name('user.delete');
 
     // Settings
-    Route::get('settings/general', [App\Http\Controllers\SettingsController::class, 'general']);
-    Route::post('general/update', [App\Http\Controllers\SettingsController::class, 'updateGeneral']);
+    Route::get('settings/general', [App\Http\Controllers\SettingsController::class, 'general'])->name('setting.general');
+    Route::post('general/update', [App\Http\Controllers\SettingsController::class, 'updateGeneral'])->name('setting.general.update');
 
-    Route::get('settings/company', [App\Http\Controllers\SettingsController::class, 'company']);
-    Route::get('settings/company/{id}/edit', [App\Http\Controllers\SettingsController::class, 'companyEdit']);
+    Route::get('settings/company', [App\Http\Controllers\SettingsController::class, 'company'])->name('setting.company');
+    Route::get('settings/company/{id}/edit', [App\Http\Controllers\SettingsController::class, 'companyEdit'])->name('setting.company.edit');
     Route::get('settings/company/{id}/show', [App\Http\Controllers\SettingsController::class, 'companyView']);
-    Route::get('settings/company/create', [App\Http\Controllers\SettingsController::class, 'companyCreate']);
-    Route::post('settings/company/store', [App\Http\Controllers\SettingsController::class, 'companyStore']);
-    Route::post('settings/company/update', [App\Http\Controllers\SettingsController::class, 'companyUpdate']);
-    Route::delete('settings/company/delete', [App\Http\Controllers\SettingsController::class, 'companyDestroy']);
+    Route::get('settings/company/create', [App\Http\Controllers\SettingsController::class, 'companyCreate'])->name('setting.company.create');
+    Route::post('settings/company/store', [App\Http\Controllers\SettingsController::class, 'companyStore'])->name('setting.company.store');
+    Route::post('settings/company/update', [App\Http\Controllers\SettingsController::class, 'companyUpdate'])->name('setting.company.update');
+    Route::delete('settings/company/delete', [App\Http\Controllers\SettingsController::class, 'companyDestroy'])->name('setting.company.delete');
 
     // Apps
-    Route::get('apps', [App\Http\Controllers\AppsController::class, 'index']);
-    Route::get('app/{id}/download', [App\Http\Controllers\AppsController::class, 'download']);
-    Route::get('app/{id}/install', [App\Http\Controllers\AppsController::class, 'install']);
-    Route::get('app/{id}/uninstall', [App\Http\Controllers\AppsController::class, 'unInstall']);
+    Route::get('apps', [App\Http\Controllers\AppsController::class, 'index'])->name('apps');
+    Route::get('app/{id}/download', [App\Http\Controllers\AppsController::class, 'download'])->name('app.download');
+    Route::get('app/{id}/install', [App\Http\Controllers\AppsController::class, 'install'])->name('app.install');
+    Route::get('app/{id}/uninstall', [App\Http\Controllers\AppsController::class, 'unInstall'])->name('app.uninstall');
 });
 
 Route::controller(App\Http\Controllers\ProfileController::class)->group(function () {
     Route::get('/profile', 'profile')->name('profile');
     Route::get('/profile/edit', 'edit')->name('profileedit');
     Route::post('/profile/update', 'update')->name('profileupdate');
-    Route::post('/profile/reset/password', 'resetpassword')->name('resetpassword');
+    Route::post('/profile/reset/password', 'resetpassword')->name('profile.reset.password');
 });
 
 // Route for notifications

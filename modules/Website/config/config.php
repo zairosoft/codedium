@@ -12,7 +12,7 @@ return [
     'sub-menu' => [
         [
             'name' => 'หน้าเว็บ',
-            'route-name' => 'pages',
+            'route-name' => 'website',
             'title' => 'หน้าเว็บ',
             'description' => 'หน้าเว็บ',
         ],

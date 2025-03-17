@@ -178,7 +178,7 @@
                     </div>
                 </div>
                 <div  x-show="activeTab === 1" role="tabpanel" id="panel-2" aria-labelledby="tab-2">
-                    <form action="{{ route('resetpassword') }}" method="post">
+                    <form action="{{ route('profile.reset.password') }}" method="post">
                         <div>
                             <div class="mb-5">
                                 <div class="panel">

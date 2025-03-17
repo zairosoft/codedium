@@ -247,7 +247,7 @@
             formData.append('favicon', favicon);
         }
         $.ajax({
-            url: '{{ url('general/update') }}',
+            url: '{{ route('setting.general.update') }}',
             type: 'POST',
             headers: {
                 'X-CSRF-Token': _token

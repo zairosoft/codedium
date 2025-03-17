@@ -63,7 +63,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/settings/company') }}">บริษัท</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ route('setting.company') }}">บริษัท</a></li>
                     <li class="before:content-['/'] before:px-1.5"><a href="javascript:;"
                             class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">แก้ไข</a>
                     </li>
@@ -96,7 +96,7 @@
                 </ul>
                 <div x-show="activeTab === 0" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
                     <div>
-                        <form action="{{ url('settings/company/update') }}" method="post"
+                        <form action="{{ route('setting.company.update') }}" method="post"
                             class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]"
                             enctype="multipart/form-data">
                             @csrf

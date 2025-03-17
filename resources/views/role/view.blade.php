@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'ดูรายการบทบาท')
+@section('title', __('users.view_role'))
 @section('style')
 <style>
 </style>
@@ -7,7 +7,7 @@
 @section('content')
 <div>
     <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">รายการบทบาท</div>
+        <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.role') }}</div>
         <div class="flex flex-wrap items-center justify-between gap-4">
             <ul class="flex text-gray-500 dark:text-white-dark">
                 <li>
@@ -18,8 +18,8 @@
                         </svg>
                     </a>
                 </li>
-                <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/roles') }}">บทบาท</a></li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">ดู</a></li>
+                <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/roles') }}">{{ __('users.roles') }}</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.view_role') }}</a></li>
             </ul>
         </div>
     </div>
@@ -29,7 +29,7 @@
                 @csrf
                 @method('PUT')
                 <div>
-                    <label for="name">บทบาท</label>
+                    <label for="name">{{ __('users.role') }}</label>
                     <div>
                         {{ $role->name }}
                     </div>
@@ -38,8 +38,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>สิทธิ์</th>
-                                <th>สิทธิ์ที่ใช้ได้</th>
+                                <th>{{ __('users.menu') }}</th>
+                                <th>{{ __('users.available_roles') }}</th>
                             </tr>
                         </thead>
                         <tbody>

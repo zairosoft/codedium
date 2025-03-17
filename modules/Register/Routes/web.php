@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/auth/register', 'RegisterController@index')->name('register');
-Route::post('/store', 'RegisterController@store')->name('store');
+Route::post('/store', 'RegisterController@store')->name('register.store');

@@ -5,7 +5,7 @@
     <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">{{  __('auth.register') }}</h1>
     <p class="text-base font-bold leading-normal text-white-dark">{{  __('auth.enter_register') }}</p>
 </div>
-<form class="space-y-5 dark:text-white" action="{{ route('store') }}" method="post">
+<form class="space-y-5 dark:text-white" action="{{ route('register.store') }}" method="post">
     @csrf
     @if(Session::has('success'))
         <div class="alert alert-success" role="alert">

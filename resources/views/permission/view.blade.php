@@ -1,11 +1,11 @@
 @extends('layouts.layout')
-@section('title', 'ดูสิทธิ์การใช้งาน')
+@section('title', __('users.view_permission'))
 @section('style')
 @endsection
 @section('content')
 <div>
     <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">สิทธิ์การใช้งาน</div>
+        <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.view_permission') }}</div>
         <div class="flex flex-wrap items-center justify-between gap-4">
             <ul class="flex text-gray-500 dark:text-white-dark">
                 <li>
@@ -16,8 +16,8 @@
                         </svg>
                     </a>
                 </li>
-                <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/permissions') }}">สิทธิ์การใช้งาน</a></li>
-                <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">ดู</a></li>
+                <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/permissions') }}">{{ __('users.permissions') }}</a></li>
+                <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.view_permission') }}</a></li>
             </ul>
         </div>
     </div>

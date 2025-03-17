@@ -5,7 +5,7 @@
         <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">{{ __('auth.forgot_password') }}</h1>
         <p class="text-base font-bold leading-normal text-white-dark">{{ __('auth.login_to') }}</p>
     </div>
-    <form class="space-y-5 dark:text-white" action="{{ route('forgotpassword') }}" method="post">
+    <form class="space-y-5 dark:text-white" action="{{ route('forgot.password') }}" method="post">
         @csrf
         <div>
             <label for="Email">{{ __('auth.email') }}</label>

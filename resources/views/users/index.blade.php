@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'ผู้ใช้ระบบ')
+@section('title', __('users.users'))
 @section('style')
     <style>
         .btn-add {
@@ -23,7 +23,7 @@
     <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
     <div x-data="sorting">
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ผู้ใช้ระบบ</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('users.users') }}</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -34,7 +34,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">ผู้ใช้ระบบ</a>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('users.users') }}</a>
                     </li>
                 </ul>
             </div>
@@ -126,7 +126,7 @@
                 initializeTable() {
                     this.datatable = new simpleDatatables.DataTable('#myTable', {
                         data: {
-                            headings: ["ลำดับ", "รูปโปรไฟล์", "ชื่อ", "วันเกิด", "เพศ", "อีเมล", "เบอร์โทรศัพท์", "บทบาท", "กิจกรรมเข้าใช้ระบบ", "ดู@can('user update') / แก้ไข@endcan @can('user delete') / ลบ@endcan"],
+                            headings: ["{{ __('users.no') }}", "{{ __('users.profile_picture') }}", "{{ __('users.name') }}", "วันเกิด", "เพศ", "อีเมล", "เบอร์โทรศัพท์", "{{ __('users.role') }}", "กิจกรรมเข้าใช้ระบบ", "{{ __('others.view') }}@can('user update') / {{ __('others.edit') }}@endcan @can('user delete') / {{ __('others.delete') }}@endcan"],
                             data: this.dataArr,
                         },
                         perPage: 20,
@@ -149,7 +149,7 @@
                         nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
                         labels: {
                             perPage: "<span class='ml-2'>{select}</span>",
-                            noRows: 'No data available',
+                            noRows: '{{ __('header.notifications.no data available') }}',
                         },
                         layout: {
                             top: '{search}',

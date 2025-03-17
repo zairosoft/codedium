@@ -23,9 +23,9 @@ class AppsController extends Controller
             $name = strtolower($module->getName());
 
             if (config($name . ".installable") == true) {
-                $installable = '<a href="javascript:;" class="btn btn-outline-primary w-1/2">ติดแล้ว</a>';
+                $installable = '<a href="javascript:;" class="btn btn-outline-primary w-1/2">'.trans('others.installed').'</a>';
             } else {
-                $installable = '<a href="javascript:;" class="btn btn-outline-primary w-1/2">ติดตั้ง</a>';
+                $installable = '<a href="javascript:;" class="btn btn-outline-primary w-1/2">'.trans('others.installed').'</a>';
             }
 
             $html .= '<div class="h-full">' .
@@ -35,7 +35,7 @@ class AppsController extends Controller
                 . '</div>' .
                 '<h5 class="text-dark text-lg font-semibold mb-3.5 dark:text-white-light">' . config($name . ".name") . '</h5>' .
                 '<p class="text-white-dark text-[15px]  mb-3.5">' . config($name . ".description") . '</p>' .
-                '<div class="hidden lg:flex mt-1 gap-4">' . $installable . ' <a href="javascript:;" class="btn btn-outline-danger w-1/2">ลบ</a></div>' .
+                '<div class="hidden lg:flex mt-1 gap-4">' . $installable . ' <a href="javascript:;" class="btn btn-outline-danger w-1/2">'.trans('others.delete').'</a></div>' .
                 '</div>' .
                 '</div>';
         }

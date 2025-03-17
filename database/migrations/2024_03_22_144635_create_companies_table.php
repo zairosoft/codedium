@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('company_id')->nullable();
             $table->string('currency')->nullable();
             $table->string('img')->nullable();
+            $table->string('country', 4)->nullable();
+            $table->string('currency', 4)->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();
@@ -34,7 +36,6 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('district')->nullable();
             $table->string('province')->nullable();
-            $table->string('country')->nullable();
             $table->string('zip')->nullable();
             $table->timestamps();
             $table->index(['company_id']);

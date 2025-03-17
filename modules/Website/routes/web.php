@@ -15,9 +15,9 @@ use Modules\Website\App\Http\Controllers\WebsiteController;
 */
 
 Route::group([], function () {
-    Route::get('pages', 'WebsiteController@index')->name('pages');
-    Route::get('/page/add', [WebsiteController::class, 'create'])->name('website.create');
-    Route::post('/page/create', [WebsiteController::class, 'store'])->name('website.store');
+    Route::get('pages', 'WebsiteController@index')->name('website');
+    Route::get('/page/create', [WebsiteController::class, 'create'])->name('website.create');
+    Route::post('/page/store', [WebsiteController::class, 'store'])->name('website.store');
     Route::put('/page/{id}/edit', [WebsiteController::class, 'updateContent'])->name('website.edit');
     Route::put('/page/{id}/update', [WebsiteController::class, 'update'])->name('website.update');
     Route::delete('/page/{id}/delete', [WebsiteController::class, 'destroy'])->name('website.delete');
