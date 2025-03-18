@@ -108,12 +108,12 @@ class SettingsController extends Controller
         ];
         if (!empty($request->address))
             $companyLang += ['address' => $request->address];
-        if (!empty($request->district))
-            $companyLang += ['district' => $request->district];
+        if (!empty($request->city))
+            $companyLang += ['city' => $request->city];
         if (!empty($request->province))
             $companyLang += ['province' => $request->province];
-        if (!empty($request->zip))
-            $companyLang += ['zip' => $request->zip];
+        if (!empty($request->postal_code))
+            $companyLang += ['postal_code' => $request->postal_code];
         CompanyLang::create($companyLang);
         Cache::forget('company');
         return redirect('settings/company')->withSuccess('บันทึกสำเร็จ');
@@ -171,12 +171,12 @@ class SettingsController extends Controller
         ];
         if (!empty($request->address))
             $companyLang += ['address' => $request->address];
-        if (!empty($request->district))
-            $companyLang += ['district' => $request->district];
+        if (!empty($request->city))
+            $companyLang += ['city' => $request->city];
         if (!empty($request->province))
             $companyLang += ['province' => $request->province];
-        if (!empty($request->zip))
-            $companyLang += ['zip' => $request->zip];
+        if (!empty($request->postal_code))
+            $companyLang += ['postal_code' => $request->postal_code];
         CompanyLang::where([
             "company_id" => $request->comid,
             "code" => "th"

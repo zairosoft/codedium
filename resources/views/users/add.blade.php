@@ -193,6 +193,18 @@
                             <div class="mt-5 flex flex-col sm:flex-row">
                                 <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5"></div>
                                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-1 gap-5">
+                                    @role('super-admin')
+                                    <div>
+                                        <label for="phone">บริษัท</label>
+                                        <select name="company_id" class="selectize" placeholder="เลือก...">
+                                            @foreach ($companys as $company)
+                                                <option value="{{ $company->company_id }}">{{ $company->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @else
+                                       <input type="hidden" name="company_id" value="{{ Session::get('company_id') }}">
+                                    @endrole
                                     <div>
                                         <label for="about">เกี่ยวกับ</label>
                                         <textarea class="form-textarea" name="about" placeholder="ป้อนคำอธิบาย" style="height: 125px;">{{ old('about') }}</textarea>

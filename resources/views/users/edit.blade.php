@@ -169,7 +169,11 @@
                                         <input id="phone" type="text" name="phone" value="{{ old('phone', $account->phone) }}" placeholder="099 999 9999" x-mask="099 999 9999" class="form-input" id="phoneMask" />
                                     </div>
                                     <div>
-                                        <label for="phone">บทบาท</label>
+                                        <label for="roles">บทบาท</label>
+                                        @if ($user->id == 1)
+                                        <input type="text" class="form-input disabled" name="roles[]" value="super-admin" disabled>
+                                        <input type="hidden" name="roles[]" value="super-admin">
+                                        @else
                                         <select name="roles[]" class="selectize" placeholder="เลือก..." multiple="multiple">
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role }}"
@@ -178,6 +182,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @endif
                                     </div>
                                     <div>
                                         <label for="Password">รหัสผ่าน</label>
@@ -192,6 +197,18 @@
                             <div class="mt-5 flex flex-col sm:flex-row">
                                 <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5"></div>
                                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-1 gap-5">
+                                    @role('super-admin')
+                                    <div>
+                                        <label for="phone">บริษัท</label>
+                                        <select name="company_id" class="selectize" placeholder="เลือก...">
+                                            @foreach ($companys as $company)
+                                                <option value="{{ $company->company_id }}" @if ($account->company_id == $company->company_id)selected @endif>{{ $company->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @else
+                                       <input type="hidden" name="company_id" value="{{ Session::get('company_id') }}">
+                                    @endrole
                                     <div>
                                         <label for="about">เกี่ยวกับ</label>
                                         <textarea class="form-textarea" name="about" placeholder="ป้อนคำอธิบาย" style="height: 125px;">{{ old('about', $account->about) }}</textarea>

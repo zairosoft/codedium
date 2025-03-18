@@ -4,7 +4,23 @@ return [
 
     'domain'                => 'Domain',
     'logo'                  => 'Logo',
+    'general_info'               => 'General info',
+    'edit_company'               => 'Edit Company',
+    'add_company'               => 'Add Company',
+    'company_lists'               => 'Company Lists',
+
+
+
+    'branches'               => 'Branches',
+
     'country'               => 'Country',
+    'name'               => 'Name',
+    'email'               => 'Email',
+    'phone'               => 'Phone',
+    'mobile'               => 'Mobile',
+    'website'               => 'Website',
+    'tax_id_number'         => 'Tax Id Number',
+    'company_id'         => 'Company ID',
 
     'currency' => [
         'currency'  => 'Currency',
@@ -48,10 +64,27 @@ return [
         "BDT" => "Bangladeshi Taka (৳)"
     ],
 
-    'error' => [
-        'not_user_company'  => 'Error: You are not allowed to change this company!',
-        'delete_active'     => 'Error: Can not delete the active company. Please, switch to another first!',
-        'disable_active'    => 'Error: Can not disable the active company. Please, switch to another first!',
+    "address" => [
+        "address" => "Address",
+        "city" => "Town / City",
+        "province" => "Province / State",
+        "country" => "Country",
+        "postal" => "Postal / Zip Code",
+    ],
+
+    "input" => [
+        "enter_company_name"    => "Enter company name",
+        "enter_phone_number"    => "Enter phone number",
+        "enter_mobile_phone"    => "Enter mobile phone",
+        "enter_email"           => "Enter email",
+        "enter_website"         => "Enter url website",
+        "enter_tax_number"      => "Enter tax number",
+        "enter_company_id"      => "Enter company id",
+        "enter_address"         => "Enter address",
+        "enter_city"            => "Enter Town / City",
+        "enter_province"        => "Enter Province / State",
+        "enter_postal"          => "Enter Postal / Zip Code",
+        "please_select"         => "Please select",
     ],
 
 ];

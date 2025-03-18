@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'เพิ่มบริษัท')
+@section('title', __('companies.add_company'))
 @section('style')
     <link rel="stylesheet" href="{{ asset('assets/css/flatpickr.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/nice-select2.css') }}" />
@@ -36,7 +36,7 @@
 @section('content')
     <div>
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ข้อมูลบริษัท</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">{{ __('companies.general_info') }}</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -48,8 +48,8 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ route('setting.company') }}">บริษัท</a></li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">เพิ่ม</a>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ route('setting.company') }}">{{ __('settings.companies') }}</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">{{ __('companies.add_company') }}</a>
                     </li>
                 </ul>
             </div>
@@ -66,7 +66,7 @@
                                 <path opacity="0.5" d="M2 12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274C22 8.77128 22 9.91549 22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039Z" stroke="currentColor" stroke-width="1.5" />
                                 <path d="M12 15L12 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
-                            ข้อมูลทั่วไป
+                            {{ __('companies.general_info') }}
                         </a>
                     </li>
                     {{-- <li class="inline-block">
@@ -96,7 +96,7 @@
                     <div>
                         <form action="{{ route('setting.company.store') }}" method="post" class="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-[#0e1726]" enctype="multipart/form-data">
                             @csrf
-                            <h6 class="text-lg font-bold mb-5">ข้อมูลทั่วไป</h6>
+                            <h6 class="text-lg font-bold mb-5">{{ __('companies.general_info') }}</h6>
                             <div class="flex flex-col sm:flex-row">
                                 <div class="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
                                     <img src="{{ asset('assets/images/image.png') }}" alt="image" class="w-20 h-20 md:w-32 md:h-32 object-cover mx-auto" id="preview" />
@@ -120,10 +120,9 @@
                                 </div>
                                 <div class="space-y-5 flex-1 grid">
                                     <div>
-                                        <label for="name">ชื่อ</label>
+                                        <label for="name">{{ __('companies.name') }}</label>
                                         <div class="relative text-white-dark @error('name')has-error @enderror">
-                                            <input id="name" type="text" placeholder="ป้อนชื่อบริษัท"
-                                                name="name" value="{{ old('name') }}" class="form-input" />
+                                            <input id="name" type="text" placeholder="{{ __('companies.input.enter_company_name') }}" name="name" value="{{ old('name') }}" class="form-input" />
                                         </div>
                                         @error('name')
                                             <div>
@@ -133,22 +132,19 @@
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <div>
-                                            <label for="tel">โทรศัพท์</label>
-                                            <input id="tel" value="{{ old('tel') }}" type="text" name="tel"
-                                                placeholder="ป้อนเบอร์โทรศัพท์" class="form-input">
+                                            <label for="tel">{{ __('companies.phone') }}</label>
+                                            <input id="tel" value="{{ old('tel') }}" type="text" name="tel" placeholder="{{ __('companies.input.enter_phone_number') }}" class="form-input">
                                         </div>
                                         <div>
-                                            <label for="phone">มือถือ</label>
-                                            <input id="phone" value="{{ old('mobile') }}" type="text" name="mobile" placeholder="ป้อนมือถือ"
-                                                class="form-input">
+                                            <label for="phone">{{ __('companies.mobile') }}</label>
+                                            <input id="phone" value="{{ old('mobile') }}" type="text" name="mobile" placeholder="{{ __('companies.input.enter_mobile_phone') }}" class="form-input">
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <div>
-                                            <label for="email">อีเมล</label>
+                                            <label for="email">{{ __('companies.email') }}</label>
                                             <div class="relative text-white-dark @error('email')has-error @enderror">
-                                                <input id="email" type="text" value="{{ old('email') }}" placeholder="ป้อนชื่อบริษัท"
-                                                    name="email" class="form-input" />
+                                                <input id="email" type="text" value="{{ old('email') }}" placeholder="{{ __('companies.input.enter_email') }}" name="email" class="form-input" />
                                             </div>
                                             @error('email')
                                                 <div>
@@ -157,25 +153,24 @@
                                             @enderror
                                         </div>
                                         <div>
-                                            <label for="website">เว็บไซต์</label>
-                                            <input id="website" type="url" value="{{ old('website') }}" name="website"
-                                                placeholder="ป้อนเว็บไซต์" class="form-input">
+                                            <label for="website">{{ __('companies.website') }}</label>
+                                            <input id="website" type="url" value="{{ old('website') }}" name="website" placeholder="{{ __('companies.input.enter_website') }}" class="form-input">
                                         </div>
                                     </div>
 
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
                                         <div class="md:col-span-2">
-                                            <label for="tel">เลขประจำตัวผู้เสียภาษี</label>
-                                            <input id="tel" type="text" value="{{ old('tax_id') }}" name="tax_id" placeholder="ป้อนเลขประจำตัวผู้เสียภาษี" class="form-input">
+                                            <label for="tel">{{ __('companies.tax_id_number') }}</label>
+                                            <input id="tel" type="text" value="{{ old('tax_id') }}" name="tax_id" placeholder="{{ __('companies.input.enter_tax_number') }}" class="form-input">
                                         </div>
                                         <div>
-                                            <label for="phone">ID บริษัท</label>
-                                            <input id="phone" type="text" value="{{ old('company_id') }}" name="company_id" placeholder="ป้อน ID บริษัท" class="form-input">
+                                            <label for="phone">{{ __('companies.company_id') }}</label>
+                                            <input id="phone" type="text" value="{{ old('company_id') }}" name="company_id" placeholder="{{ __('companies.input.enter_company_id') }}" class="form-input">
                                         </div>
                                         <div>
                                             <label for="currency">{{ __('companies.currency.currency') }}</label>
                                             <select name="currency" class="form-select">
-                                                <option value="">กรุณาเลือก</option>
+                                                <option value="">{{ __('companies.input.please_select') }}</option>
                                                 <option value="USD" {{ old('currency') == 'USD' ? ' selected' : '' }}>{{ __('companies.currency.USD') }}</option>
                                                 <option value="EUR" {{ old('currency') == 'EUR' ? ' selected' : '' }}>{{ __('companies.currency.EUR') }}</option>
                                                 <option value="JPY" {{ old('currency') == 'JPY' ? ' selected' : '' }}>{{ __('companies.currency.JPY') }}</option>
@@ -217,24 +212,23 @@
                                             </select>
                                         </div>
                                     </div>
-
                                     <div>
-                                        <label for="gridAddress">ที่อยู่</label>
-                                        <textarea id="gridAddress" class="form-textarea" name="address" placeholder="ป้อนที่อยู่" style="height: 75px;">{{ old('address') }}</textarea>
+                                        <label for="gridAddress">{{ __('companies.address.address') }}</label>
+                                        <textarea id="gridAddress" class="form-textarea" name="address" placeholder="{{ __('companies.input.enter_address') }}" style="height: 75px;">{{ old('address') }}</textarea>
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
                                         <div>
-                                            <label for="district">อำเภอ / เขต</label>
-                                            <input id="district" type="text" name="district" value="{{ old('district') }}" placeholder="ป้อนอำเภอ / เขต" class="form-input">
+                                            <label for="city">{{ __('companies.address.city') }}</label>
+                                            <input id="city" type="text" name="city" value="{{ old('city') }}" placeholder="{{ __('companies.input.enter_city') }}" class="form-input">
                                         </div>
                                         <div>
-                                            <label for="province">จังหวัด</label>
-                                            <input id="province" type="text" name="province" value="{{ old('province') }}" placeholder="ป้อนจังหวัด" class="form-input">
+                                            <label for="province">{{ __('companies.address.province') }}</label>
+                                            <input id="province" type="text" name="province" value="{{ old('province') }}" placeholder="{{ __('companies.input.enter_province') }}" class="form-input">
                                         </div>
                                         <div>
-                                            <label for="seachable-select">{{ __('companies.country') }}</label>
+                                            <label for="seachable-select">{{ __('companies.address.country') }}</label>
                                             <select name="country" id="seachable-select">
-                                                <option value="">กรุณาเลือก</option>
+                                                <option value="">{{ __('companies.input.please_select') }}</option>
                                                 <option value="AF" {{ old('country') == 'AF' ? ' selected' : '' }}>{{ __('countries.AF') }}</option>
                                                 <option value="AX" {{ old('country') == 'AX' ? ' selected' : '' }}>{{ __('countries.AX') }}</option>
                                                 <option value="AL" {{ old('country') == 'AL' ? ' selected' : '' }}>{{ __('countries.AL') }}</option>
@@ -487,15 +481,14 @@
                                             </select>
                                         </div>
                                         <div>
-                                            <label for="gridZip">รหัสไปรษณีย์</label>
-                                            <input id="gridZip" type="text" name="zip" value="{{ old('zip') }}" placeholder="ป้อนรหัสไปรษณีย์" class="form-input">
+                                            <label for="postalCode">{{ __('companies.address.postal') }}</label>
+                                            <input id="postalCode" type="text" name="postal_code" value="{{ old('postal_code') }}" placeholder="{{ __('companies.input.enter_postal') }}" class="form-input">
                                         </div>
                                     </div>
-
                                     <div class="hidden lg:flex mt-1 gap-4">
-                                        <a href="javascript:history.back()" class="btn btn-outline-danger">ยกเลิก</a>
-                                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : 'บันทึก'">
-                                            บันทึก
+                                        <a href="javascript:history.back()" class="btn btn-outline-danger">{{ __('others.cancel') }}</a>
+                                        <button class="btn btn-primary" type="submit" x-data="{loading:false}" x-on:click="loading = true; setTimeout(() => loading = false, 4000)" x-html="loading ? `<span class='animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle'></span>Loading` : '{{ __('others.save') }}'">
+                                            {{ __('others.save') }}
                                         </button>
                                     </div>
                                 </div>

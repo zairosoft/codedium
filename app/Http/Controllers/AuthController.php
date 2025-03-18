@@ -18,7 +18,6 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        // https://www.allphptricks.com/laravel-custom-user-registration-and-login-tutorial/
         $this->middleware('guest')->except([
             'logout',
             'profile',

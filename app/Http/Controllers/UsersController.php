@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Account;
+use App\Models\CompanyLang;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Social;
@@ -29,10 +30,6 @@ class UsersController extends Controller
     public function index()
     {
         //echo timeAgo('2025-01-20 14:30:45');
-
-
-
-
         $users = Cache::remember('users', now()->addMinutes((int)env('CACHE_EXPIRE')), function () {
             return User::join('user_accounts', 'user_accounts.user_id', '=', 'users.id')
                 ->offset(0)
@@ -66,7 +63,11 @@ class UsersController extends Controller
     public function create()
     {
         $roles = Role::pluck('name', 'name')->all();
-        return view('users.add', ['roles' => $roles]);
+        $companys = CompanyLang::where('code', app()->getLocale())->get();
+        return view('users.add', [
+            'roles' => $roles,
+            'companys'=> $companys
+        ]);
     }
 
     public function store(Request $request)
@@ -95,6 +96,8 @@ class UsersController extends Controller
             'updated_by' => Auth::user()->id,
         ]);
         $acc = ['user_id' => $user->id];
+        if (!empty($request->company_id))
+            $acc += ['company_id' => $request->company_id];
         if (!empty($request->gender))
             $acc += ['gender' => $request->gender];
         if (!empty($request->birthday))
@@ -120,12 +123,14 @@ class UsersController extends Controller
         $account = Account::where('user_id', (int) $user->id)->first();
         $roles = Role::pluck('name', 'name')->all();
         $userRoles = $user->roles->pluck('name', 'name')->all();
+        $companys = CompanyLang::where('code', app()->getLocale())->get();
+
         return view('users.edit', [
             'user' => $user,
             'roles' => $roles,
             'userRoles' => $userRoles,
             'account' => $account,
-
+            'companys'=> $companys
         ]);
     }
 
@@ -166,6 +171,8 @@ class UsersController extends Controller
         ];
         if (!empty($request->birthday))
             $acc += ['birthday' => date("Y-m-d", strtotime($request->birthday))];
+        if (!empty($request->company_id))
+            $acc += ['company_id' => $request->company_id];
         if (!empty($request->phone))
             $acc += ['phone' => $request->phone];
         if (!empty($request->website))

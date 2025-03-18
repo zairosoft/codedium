@@ -34,9 +34,10 @@ return new class extends Migration
             $table->string('code')->default('th');
             $table->string('name');
             $table->string('address')->nullable();
-            $table->string('district')->nullable();
+            $table->string('city')->nullable();
             $table->string('province')->nullable();
-            $table->string('zip')->nullable();
+            $table->string('country')->nullable();
+            $table->string('postal_code')->nullable();
             $table->timestamps();
             $table->index(['company_id']);
         });
