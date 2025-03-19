@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->string('tax_id')->nullable();
             $table->string('company_id')->nullable();
-            $table->string('currency')->nullable();
             $table->string('img')->nullable();
             $table->string('country', 4)->nullable();
             $table->string('currency', 4)->nullable();

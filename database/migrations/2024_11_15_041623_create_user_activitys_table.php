@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
             $table->timestamps();
-            $table->index(['id', 'user_id']);
+            $table->index(['user_id']);
         });
     }
 

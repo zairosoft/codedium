@@ -34,8 +34,6 @@
 @endsection
 @section('content')
     <div>
-
-
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
             <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">ตั้งค่าทั่วไป</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
@@ -58,9 +56,7 @@
             <div x-data="{ tab: 'settings' }">
                 <ul class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
                     <li class="inline-block">
-                        <a href="javascript:;"
-                            class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
-                            :class="{ '!border-primary text-primary': tab == 'settings' }" @click="tab='settings'">
+                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary" :class="{ '!border-primary text-primary': tab == 'settings' }" @click="tab='settings'">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                                 <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
                                 <path opacity="0.5"
@@ -70,6 +66,16 @@
                             ตั้งค่า
                         </a>
                     </li>
+                    <li class="inline-block">
+                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary" :class="{ '!border-primary text-primary': tab == 'menu' }" @click="tab='menu'">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                                <path d="M20 7L4 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path opacity="0.5" d="M20 12L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M20 17L4 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            เมนู
+                        </a>
+                    </li>
                 </ul>
                 <template x-if="tab === 'settings'">
                     <form id="uploadForm" method="post" enctype="multipart/form-data">
@@ -77,13 +83,13 @@
                         <div class="switch">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
                                 <div class="panel space-y-5">
-                                    <h5 class="font-semibold text-lg mb-4">Logo</h5>
+                                    <h5 class="font-semibold text-lg mb-4">{{ __('companies.logo') }}</h5>
                                     <div class="flex justify-around">
                                         <div class="inline-flex wrap-inline-flex">
                                             <span>
                                                 <img class="ms-3" id="preview1" width="100" height="100" alt="settings-dark" src="{{ asset('assets/images') }}/{{ config('settings.logo') }}" />
                                             </span>
-                                            <p class="mt-1">Logo</p>
+                                            <p class="mt-1">{{ __('companies.logo') }}</p>
                                             <div class="upload-field-customized block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60">
                                                 <input type="file" name="image" accept="image/svg+xml" id="image" onchange="previewImage1(event)">
                                                 <span class="btn-upload">
