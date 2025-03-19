@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/calendar",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Calendar\\": "",
+            "Modules\\Calendar\\App\\": "app/",
+            "Modules\\Calendar\\Database\\Factories\\": "database/factories/",
+            "Modules\\Calendar\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Calendar\\Tests\\": "tests/"
+        }
+    }
+}
