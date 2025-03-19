@@ -15,10 +15,10 @@ class WebsiteController extends Controller
     public function __construct(GenerateFrontEndService $generateFrontend)
     {
         $this->middleware(['auth', 'lock']);
-        $this->middleware('permission:inventory view', ['only' => ['index']]);
-        $this->middleware('permission:inventory create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:inventory update', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:inventory delete', ['only' => ['destroy']]);
+        $this->middleware('permission:website view', ['only' => ['index']]);
+        $this->middleware('permission:website create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:website update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:website delete', ['only' => ['destroy']]);
         $this->generateFrontend = $generateFrontend;
     }
 
@@ -47,7 +47,7 @@ class WebsiteController extends Controller
 
     public function create()
     {
-        return view('website::create');
+        return view('website::add');
     }
 
     public function store(Request $request)
@@ -57,7 +57,6 @@ class WebsiteController extends Controller
             'slug' => 'nullable|string|max:255|unique:pages,slug',
             'is_published' => 'boolean',
         ]);
-
         Page::create($validated);
     }
 
