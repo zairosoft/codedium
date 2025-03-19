@@ -3,16 +3,13 @@
 
 <img src="https://www.vvveb.com/img/dark-theme.png">
 
-## Installation
-
->`composer require nakornsoft/laravel-pagebuilder`
 
 
 ## Publish files & migrate
 
->`php artisan vendor:publish --tag="laravel-pagebuilder"`
+>`php artisan module:publish Website`
 
->`php artisan migrate`
+>`php artisan module:migrate Website`
 
 ## Credits
 
