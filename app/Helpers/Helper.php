@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 
 /**
  * Kullanicinin kullandigi isletim sistemi bilgisini alir.
@@ -113,33 +114,39 @@ function getMenu()
         $name = strtolower($key);
         if (config($name . ".application") == true && $module == true) {
             if ((int)$permission->can(config($name . ".role")) == true) {
+                $nameMenu = strtolower(config($name . ".name"));
+                if (Lang::has('modules.modules.' . $nameMenu . '')) {
+                    $nameModule = trans('modules.modules.' . $nameMenu . '');
+                } else {
+                    $nameModule = config($name . ".name");
+                }
                 if (config($name . ".sub-menu") == "") {
                     echo '<li class="nav-item">
 						<a href="' . route(config($name . ".route-name")) . '" class="group">
 							<div class="flex items-center">
 								' . config($name . ".icon") . '
-								<span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">' . config($name . ".name") . '</span>
+								<span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">' . $nameModule . '</span>
 							</div>
 						</a>
 					</li>';
                 } else {
                     echo '<li class="menu nav-item">
-						<button type="button" class="nav-link group" :class="{\'active\' : activeDropdown === \'' . strtolower(config($name . ".name")) . '\'}" @click="activeDropdown === \'' . strtolower(config($name . ".name")) . '\' ? activeDropdown = null : activeDropdown = \'' . strtolower(config($name . ".name")) . '\'">
+						<button type="button" class="nav-link group" :class="{\'active\' : activeDropdown === \'' . $nameMenu . '\'}" @click="activeDropdown === \'' . $nameMenu . '\' ? activeDropdown = null : activeDropdown = \'' . $nameMenu . '\'">
 							<div class="flex items-center">
 								' . config($name . ".icon") . '
-								<span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">' . config($name . ".name") . '</span>
+								<span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">' . $nameModule . '</span>
 							</div>
-							<div class="rtl:rotate-180" :class="{\'!rotate-90\' : activeDropdown === \'' . strtolower(config($name . ".name")) . '\'}">
+							<div class="rtl:rotate-180" :class="{\'!rotate-90\' : activeDropdown === \'' . $nameMenu . '\'}">
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 								</svg>
 							</div>
 						</button>
-						<ul x-cloak x-show="activeDropdown === \'' . strtolower(config($name . ".name")) . '\'" x-collapse class="sub-menu text-gray-500">';
+						<ul x-cloak x-show="activeDropdown === \'' . $nameMenu . '\'" x-collapse class="sub-menu text-gray-500">';
                     foreach (config($name . ".sub-menu") as $submenu) {
                         echo '<li>
-										<a href="' . route($submenu['route-name']) . '">' . $submenu['name'] . '</a>
-									  </li>';
+							    <a href="' . route($submenu['route-name']) . '">' . $submenu['name'] . '</a>
+							  </li>';
                     }
                     echo '</ul>
 					</li>';
