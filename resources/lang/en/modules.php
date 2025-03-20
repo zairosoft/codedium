@@ -3,7 +3,8 @@
 return [
 
     'modules' => [
-        'calendar' => 'Calendar000',
+        'calendar'      => 'Calendar',
+        'notes'         => 'Notes',
     ],
 
 ];

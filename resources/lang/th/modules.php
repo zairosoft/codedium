@@ -3,7 +3,8 @@
 return [
 
     'modules' => [
-        'calendar' => 'ปฏิทิน',
+        'calendar'      => 'ปฏิทิน',
+        'notes'         => 'โน๊ต',
     ],
 
 ];
