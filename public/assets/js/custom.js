@@ -234,5 +234,4 @@
             },
         });
     });
-    //document.querySelector('.footer-copyright a').innerHTML = 'Powered by Bitgrid';
 })();

@@ -5,4 +5,5 @@ return [
     'general' => 'General',
     'companies' => 'Companies',
     'apps' => 'Apps',
+    'log_errors' => 'Log errors',
 ];

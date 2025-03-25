@@ -109,7 +109,7 @@
                             <a href="{{ route('apps') }}">{{ __('settings.apps') }}</a>
                         </li>
                         <li>
-                            <a href="{{ url('log-viewer') }}" target="_blank">Logs</a>
+                            <a href="{{ url('log-viewer') }}" target="_blank">{{ __('settings.log_errors') }}</a>
                         </li>
                         {{-- <li>
                             <hr class="w-48 h-px mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700">

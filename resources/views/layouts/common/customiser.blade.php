@@ -15,11 +15,11 @@
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </a>
-                <h4 class="mb-1 dark:text-white">THEME CUSTOMIZER</h4>
+                <h4 class="mb-1 dark:text-white">เครื่องมือปรับแต่งธีม</h4>
             </div>
             <div class="border border-dashed border-[#e0e6ed] dark:border-[#1b2e4b] rounded-md mb-3 p-3">
-                <h5 class="mb-1 text-base dark:text-white leading-none">Color Scheme</h5>
-                <p class="text-white-dark text-xs">Overall light or dark presentation.</p>
+                <h5 class="mb-1 text-base dark:text-white leading-none">รูปแบบสีธีม</h5>
+                <p class="text-white-dark text-xs">แบบสว่างหรือแบบมืด</p>
                 <div class="grid grid-cols-3 gap-2 mt-3">
                     <button type="button" class="btn" :class="[$store.app.theme === 'light' ? 'btn-primary' :'btn-outline-primary']" @click="$store.app.toggleTheme('light')">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 ltr:mr-2 rtl:ml-2">
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="border border-dashed border-[#e0e6ed] dark:border-[#1b2e4b] rounded-md mb-3 p-3">
-                <h5 class="mb-1 text-base dark:text-white leading-none">Navigation Position</h5>
+                <h5 class="mb-1 text-base dark:text-white leading-none">ตำแหน่ง Navigation</h5>
                 <p class="text-white-dark text-xs">Select the primary navigation paradigm for your app.</p>
                 <div class="grid grid-cols-2 gap-2 mt-3">
                     <button type="button" class="btn" :class="[$store.app.menu === 'vertical' ? 'btn-primary' :'btn-outline-primary']" @click="$store.app.toggleMenu('vertical')">
@@ -82,8 +82,8 @@
                 </div>
             </div>
             <div class="border border-dashed border-[#e0e6ed] dark:border-[#1b2e4b] rounded-md mb-3 p-3">
-                <h5 class="mb-1 text-base dark:text-white leading-none">Direction</h5>
-                <p class="text-white-dark text-xs">Select the direction for your app.</p>
+                <h5 class="mb-1 text-base dark:text-white leading-none">ทิศทาง</h5>
+                <p class="text-white-dark text-xs">เลือกทิศทางสำหรับแอปของคุณ</p>
                 <div class="flex gap-2 mt-3">
                     <button type="button" class="btn flex-auto" :class="[$store.app.rtlClass === 'ltr' ? 'btn-primary' :'btn-outline-primary']" @click="$store.app.toggleRTL('ltr')">
                         LTR
