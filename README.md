@@ -42,7 +42,7 @@ php artisan storage:link
 ```
 
 * Create sample data (optional): `php artisan  db:seed --class="SampleSeeder"`
-* Username: superadmin@gmail.com Password: 12345678
+* Username: super@gmail.com Password: super
 
 ## Docker
 
