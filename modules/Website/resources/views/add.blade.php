@@ -32,7 +32,8 @@
     </div>
 </div>
 <div>
-    <form action="" method="post">
+    <form action="{{ route('website.store') }}" method="post">
+        @csrf
         <div class="flex gap-5 relative">
             <div class="flex-1">
                 <div class="panel">
@@ -53,7 +54,7 @@
                     </div>
                     <div class="mt-5">
                         <label for="notes">Meta description</label>
-                        <textarea id="notes" name="notes" class="form-textarea min-h-[130px]" placeholder="Notes...." x-model="params.notes"></textarea>
+                        <textarea id="notes" name="notes" class="form-textarea min-h-[130px]" placeholder="Notes...."></textarea>
                     </div>
                 </div>
             </div>
@@ -65,16 +66,15 @@
                     </div>
                     <div class="mt-5">
                         <label for="payment-method">สถานะ</label>
-                        <select name="payment-method" class="form-select">
-                            <option value="">Select Payment</option>
-                            <option value="bank">Bank Account</option>
-                            <option value="paypal">Paypal</option>
+                        <select name="is_published" class="form-select">
+                            <option value="1">เผยแพร่</option>
+                            <option value="0">ร่าง</option>
                         </select>
                     </div>
                 </div>
                 <div class="panel">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-1">
-                        <button type="button" class="btn btn-primary w-full gap-2">
+                        <button type="submit" class="btn btn-primary w-full gap-2">
                             {{ __('others.save') }}
                         </button>
                         <a href="javascript:history.back()" class="btn btn-outline-danger w-full gap-2">{{ __('others.cancel') }}</a>

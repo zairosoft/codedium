@@ -4,6 +4,7 @@ namespace Modules\Website\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Website\App\Models\Page;
+use Modules\Website\App\Models\PageLang;
 use Illuminate\Http\Request;
 use Modules\Website\App\Providers\GenerateFrontEndService;
 
@@ -52,12 +53,26 @@ class WebsiteController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:pages,slug',
-            'is_published' => 'boolean',
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'slug' => 'required|string|max:255',
+            ]
+        );
+        $page = Page::insertGetId([
+            'is_published' => $request->is_published,
         ]);
-        Page::create($validated);
+        PageLang::create([
+            'page_id' => (int)$page,
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'code' => app()->getLocale(),
+            'content' => $request->content,
+            'keywords' => $request->keywords,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('website');
     }
 
     public function edit(Page $page)
