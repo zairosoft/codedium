@@ -76,11 +76,11 @@ class SampleSeeder extends Seeder
 
         // Let's Create User and assign Role to it.
         $superAdminUser = User::firstOrCreate([
-            'email' => 'superadmin@gmail.com',
+            'email' => 'super@gmail.com',
         ], [
             'name' => 'Super Admin',
-            'email' => 'superadmin@gmail.com',
-            'password' => Hash::make('12345678'),
+            'email' => 'super@gmail.com',
+            'password' => Hash::make('super'),
         ]);
         Account::create([
             'user_id' => $superAdminUser->id,
