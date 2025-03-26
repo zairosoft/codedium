@@ -71,8 +71,7 @@ class WebsiteController extends Controller
             'keywords' => $request->keywords,
             'description' => $request->description,
         ]);
-
-        return redirect()->route('website');
+        return redirect()->route('website.edit', $request->slug)->with('message', 'State saved correctly!!!');
     }
 
     public function edit(Page $page)
