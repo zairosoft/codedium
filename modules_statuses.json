@@ -4,5 +4,6 @@
     "Inventory": true,
     "Invoices": true,
     "Register": true,
-    "Website": true
+    "Website": true,
+    "PageBuilder": true
 }

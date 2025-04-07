@@ -4,23 +4,42 @@ namespace Modules\Inventory\Models;
 
 use App\Models\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Inventory\Database\factories\ProductFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Inventory\Database\factories\CategoryFactory;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'product_categories';
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'id',
+        'company_id',
         'img',
+        'created_by',
+        'updated_by'
     ];
-    
-    protected static function newFactory(): CategoryFactory
+
+    /**
+     * Get the products for the category.
+     */
+    public function products()
     {
-        //return InventoryFactory::new();
+        return $this->hasMany(Product::class, 'category_id');
+    }
+
+    /**
+     * Get the translations for the category.
+     */
+    public function translations()
+    {
+        return $this->hasMany(CategoryLang::class, 'category_id');
+    }
+
+    protected static function newFactory()
+    {
+        //return CategoryFactory::new();
     }
 }
