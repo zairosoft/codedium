@@ -10,24 +10,24 @@ return [
     'website' => 'https://www.example.com',
     'description' => 'category management',
     'sub-menu' => [
-        // [
-        //     'name' => 'ภาพรวม',
-        //     'route-name' => 'overview',
-        //     'title' => 'ภาพรวม',
-        //     'description' => 'ภาพรวม',
-        // ],
+        [
+            'name' => 'ภาพรวม',
+            'route-name' => 'overview',
+            'title' => 'ภาพรวม',
+            'description' => 'ภาพรวม',
+        ],
         [
             'name' => 'สินค้า',
             'route-name' => 'inventory',
             'title' => 'สินค้า',
             'description' => 'ภาพรวม',
         ],
-        // [
-        //     'name' => 'รายงาน',
-        //     'route-name' => 'report',
-        //     'title' => 'รายงาน',
-        //     'description' => 'รายงาน',
-        // ],
+        [
+            'name' => 'รายงาน',
+            'route-name' => 'report',
+            'title' => 'รายงาน',
+            'description' => 'รายงาน',
+        ],
 
     ],
     'technical' => 'inventory',
