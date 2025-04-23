@@ -30,11 +30,6 @@ Route::get('/', function ($locale = null) {
     return redirect('/auth/login');
 })->name('main');
 
-Route::get('/clear-cache', function() {
-    Artisan::call('optimize:clear');
-    return redirect('/auth/login');
-});
-
 Route::controller(App\Http\Controllers\AuthController::class)->group(function () {
     Route::get('/auth/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
@@ -86,6 +81,12 @@ Route::group(['middleware' => ['role:super-admin|admin']], function () {
     Route::get('app/{id}/download', [App\Http\Controllers\AppsController::class, 'download'])->name('app.download');
     Route::get('app/{id}/install', [App\Http\Controllers\AppsController::class, 'install'])->name('app.install');
     Route::get('app/{id}/uninstall', [App\Http\Controllers\AppsController::class, 'unInstall'])->name('app.uninstall');
+
+    // Clear Cache
+    Route::get('/clear-cache', function() {
+        Artisan::call('optimize:clear');
+        return redirect()->back()->with('success', 'Cleared cache successfully.');
+    })->name('clear.cache');
 });
 
 Route::controller(App\Http\Controllers\ProfileController::class)->group(function () {

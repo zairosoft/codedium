@@ -109,6 +109,9 @@
                             <a href="{{ route('apps') }}">{{ __('settings.apps') }}</a>
                         </li>
                         <li>
+                            <a href="{{ route('clear.cache') }}">Clear cache</a>
+                        </li>
+                        <li>
                             <a href="{{ url('log-viewer') }}" target="_blank">{{ __('settings.log_errors') }}</a>
                         </li>
                         {{-- <li>
