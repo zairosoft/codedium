@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\CRM\App\Providers;
+namespace Modules\Crm\App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class CRMServiceProvider extends ServiceProvider
+class CrmServiceProvider extends ServiceProvider
 {
-    protected string $moduleName = 'CRM';
+    protected string $moduleName = 'Crm';
 
     protected string $moduleNameLower = 'crm';
 

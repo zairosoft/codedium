@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\CRM\App\Models;
+namespace Modules\Crm\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\CRM\Database\factories\CRMFactory;
+use Modules\Crm\Database\factories\CrmFactory;
 
-class CRM extends Model
+class Crm extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,8 @@ class CRM extends Model
      */
     protected $fillable = [];
     
-    protected static function newFactory(): CRMFactory
+    protected static function newFactory(): CrmFactory
     {
-        //return CRMFactory::new();
+        //return CrmFactory::new();
     }
 }

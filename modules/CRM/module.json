@@ -1,11 +1,11 @@
 {
-    "name": "CRM",
+    "name": "Crm",
     "alias": "crm",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\CRM\\App\\Providers\\CRMServiceProvider"
+        "Modules\\Crm\\App\\Providers\\CrmServiceProvider"
     ],
     "files": []
 }
