@@ -4,7 +4,7 @@
 
 ซอฟต์แวร์ CMS ออนไลน์ที่ออกแบบมาสำหรับธุรกิจขนาดเล็กและฟรีแลนซ์ Bitgrid ถูกสร้างขึ้นโดยนครซอฟต์ ใช้เทคโนโลยีสมัยใหม่ เช่น Laravel, Vite.js, Alpine.js, Tailwind, RESTful API เป็นต้น ด้วยโครงสร้างแบบโมดูลาร์ Bitgrid มี App Store ที่ยอดเยี่ยมให้กับผู้ใช้และนักพัฒนา
 
-![Screen](https://www.nakornsoft.com/wp-content/uploads/2025/03/bitgrid.jpg "Dashboards")
+![Screen](https://www.nakornsoft.com/assets/2025/04/bitgrid.webp "Dashboards")
 
 [ภาษาไทย](README-TH.md) | [English](README.md)
 
