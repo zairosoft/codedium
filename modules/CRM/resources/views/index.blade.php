@@ -1,12 +1,7 @@
-@extends('layouts.layout')
-@section('title', 'CRM')
-@section('style')
+@extends('crm::layouts.master')
 
-@endsection
 @section('content')
+    <h1>Hello World</h1>
 
-
-@endsection
-@section('script')
-
+    <p>Module: {!! config('crm.name') !!}</p>
 @endsection
