@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\CRM\App\Http\Controllers\CRMController;
+use Modules\CRM\App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,9 @@ use Modules\CRM\App\Http\Controllers\CRMController;
 |
 */
 
-Route::group([], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('crm', CRMController::class)->names('crm');
+    
+    // Customer management routes
+    Route::resource('crm/customers', CustomerController::class)->names('crm.customers');
 });
