@@ -17,15 +17,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Crm\\": "",
-            "Modules\\Crm\\App\\": "app/",
-            "Modules\\Crm\\Database\\Factories\\": "database/factories/",
-            "Modules\\Crm\\Database\\Seeders\\": "database/seeders/"
+            "Modules\\CRM\\": "",
+            "Modules\\CRM\\App\\": "app/",
+            "Modules\\CRM\\Database\\Factories\\": "database/factories/",
+            "Modules\\CRM\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Modules\\Crm\\Tests\\": "tests/"
+            "Modules\\CRM\\Tests\\": "tests/"
         }
     }
 }
