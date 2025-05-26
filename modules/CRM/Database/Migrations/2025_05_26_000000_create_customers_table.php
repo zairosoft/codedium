@@ -24,7 +24,10 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('status')->default('active');
             $table->text('notes')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
+            $table->index(['name']);
         });
     }
 
