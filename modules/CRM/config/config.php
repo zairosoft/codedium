@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => 'Crm', // see in folder lang -> modules.php
+    'name' => 'CRM', // see in folder lang -> modules.php
     'category' => 'Crm', // This is the category of the module
     'route-name' => 'calendar', // This is the route name of the module
     'role' => 'crm view', // This is the role of the module
