@@ -19,7 +19,7 @@ class Minifier
         $response = $next($request);
         $buffer = $response->getContent();
         if ($response instanceof Response && strpos($response->headers->get('Content-Type'), 'text/html') !== false) {
-            $devCredit = "<!" . "--" . " Gene" . "rated " . "By " . "Bit" . "grid " . "CMS" . " | " . "bit" . "grid." . "nakorn" . "soft" . ".com " . "--" . ">" . "\n";
+            $devCredit = "<!" . "--" . " Gene" . "rated " . "By " . "Code" . "dium " . " | " . "code" . "dium." . "nakorn" . "soft" . ".com " . "--" . ">" . "\n";
             $buffer = str_replace('</body>', $devCredit . '</body>', $buffer);
             $response->setContent($buffer);
         }
