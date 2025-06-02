@@ -2,9 +2,9 @@
 
 > Laravel cms (Developing)
 
-Online cms software designed for small businesses and freelancers. Bitgrid is built with modern technologies such as Laravel, Vite.js, Alpine.js, Tailwind, RESTful API etc. Thanks to its modular structure, Codedium provides an awesome App Store for users and developers.
+Online cms software designed for small businesses and freelancers. Codedium is built with modern technologies such as Laravel, Vite.js, Alpine.js, Tailwind, RESTful API etc. Thanks to its modular structure, Codedium provides an awesome App Store for users and developers.
 
-![Screen](https://www.nakornsoft.com/assets/2025/04/bitgrid.webp "Dashboards")
+![Screen](https://www.nakornsoft.com/assets/2025/04/codedium.webp "Dashboards")
 
 [English](README.md) | [ภาษาไทย](README-TH.md)
 
@@ -17,12 +17,12 @@ Online cms software designed for small businesses and freelancers. Bitgrid is bu
 
 ## Framework
 
-Bitgrid uses [Laravel](http://laravel.com), the best existing PHP framework, as the foundation framework and [Module](https://github.com/nWidart/laravel-modules) package for Apps.
+Codedium uses [Laravel](http://laravel.com), the best existing PHP framework, as the foundation framework and [Module](https://github.com/nWidart/laravel-modules) package for Apps.
 
 ## Installation
 
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
-* Clone the repository: `git clone https://github.com/nakornsoft/bitgrid.git`
+* Clone the repository: `git clone https://github.com/nakornsoft/codedium.git`
 * Install dependencies: `composer install ; npm install ; npm run dev`
 * For linux install create folder link modules
 ```bash
@@ -33,7 +33,7 @@ or
 > Change config modules - > vendor/nwidart/laravel-modules/config/config.php
 > 
 > 'modules' => base_path('Modules') to 'modules' => base_path('modules')
-* Install Bitgrid:
+* Install Codedium:
 
 ```bash
 php artisan migrate
@@ -70,7 +70,7 @@ sudo chmod -R ugo+rw bootstrap/cache/
 ```bash
 crontab -e
 Add the command below to the last line
-* * * * * php /var/www/html/bitgrid/artisan schedule:run
+* * * * * php /var/www/html/codedium/artisan schedule:run
 ```
 
 ## Icon
@@ -86,7 +86,7 @@ Add the command below to the last line
 
 ## Translation
 
-If you'd like to contribute translations, please check out our [Crowdin](https://crowdin.com/project/bitgrid) project.
+If you'd like to contribute translations, please check out our [Crowdin](https://crowdin.com/project/codedium) project.
 
 ## Changelog
 
@@ -94,12 +94,12 @@ Please see [Releases](../../releases) for more information about what has change
 
 ## Security
 
-Please review [our security policy](https://github.com/nakornsoft/bitgrid/security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/nakornsoft/codedium/security/policy) on how to report security vulnerabilities.
 
 ## Credits
 
 * [Nakornsoft](https://www.nakornsoft.com)
-* [All Contributors](https://github.com/nakornsoft/bitgrid/graphs/contributors)
+* [All Contributors](https://github.com/nakornsoft/codedium/graphs/contributors)
 
 ## Support Me
 
@@ -114,4 +114,4 @@ Please review [our security policy](https://github.com/nakornsoft/bitgrid/securi
 
 ## License
 
-Bitgrid is released under the [GNU GENERAL PUBLIC License](license.txt).
+Codedium is released under the [GNU GENERAL PUBLIC License](license.txt).
