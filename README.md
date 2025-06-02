@@ -1,8 +1,8 @@
-# [Bitgrid](https://github.com/nakornsoft/bitgrid)
+# [Codedium](https://github.com/nakornsoft/codedium)
 
 > Laravel cms (Developing)
 
-Online cms software designed for small businesses and freelancers. Bitgrid is built with modern technologies such as Laravel, Vite.js, Alpine.js, Tailwind, RESTful API etc. Thanks to its modular structure, Bitgrid provides an awesome App Store for users and developers.
+Online cms software designed for small businesses and freelancers. Bitgrid is built with modern technologies such as Laravel, Vite.js, Alpine.js, Tailwind, RESTful API etc. Thanks to its modular structure, Codedium provides an awesome App Store for users and developers.
 
 ![Screen](https://www.nakornsoft.com/assets/2025/04/bitgrid.webp "Dashboards")
 
