@@ -33,6 +33,8 @@ php artisan migrate:refresh
 
 php artisan migrate:refresh --path=/database/migrations/2023_01_01_000000_create_users_table.php
 
+composer self-update --1
+
 
 # NodeJS
 npm install
