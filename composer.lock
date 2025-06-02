@@ -25,7 +25,7 @@
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^10.1",
+                "phpunit/phpunit": "^11.1",
                 "vimeo/psalm": "5.16.0"
             },
             "type": "library",
@@ -89,7 +89,7 @@
             "require-dev": {
                 "doctrine/dbal": "^4.0.0",
                 "nesbot/carbon": "^2.71.0 || ^3.0.0",
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^11.3"
             },
             "type": "library",
             "autoload": {
