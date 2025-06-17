@@ -80,7 +80,7 @@ class SampleSeeder extends Seeder
         ], [
             'name' => 'Super Admin',
             'email' => 'super@gmail.com',
-            'password' => Hash::make('super'),
+            'password' => Hash::make('123456'),
         ]);
         Account::create([
             'user_id' => $superAdminUser->id,
@@ -98,7 +98,7 @@ class SampleSeeder extends Seeder
         ], [
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password' => Hash::make('admin'),
+            'password' => Hash::make('123456'),
         ]);
         Account::create([
             'user_id' => $adminUser->id,
@@ -116,7 +116,7 @@ class SampleSeeder extends Seeder
         ], [
             'name' => 'Staff',
             'email' => 'staff@gmail.com',
-            'password' => Hash::make('staff'),
+            'password' => Hash::make('123456'),
         ]);
         Account::create([
             'user_id' => $staffUser->id,
