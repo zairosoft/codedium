@@ -5,5 +5,6 @@
     "Invoices": false,
     "Register": false,
     "PageBuilder": false,
-    "CRM": false
+    "CRM": false,
+    "IntentForms": true
 }

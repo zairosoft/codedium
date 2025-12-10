@@ -1,0 +1,11 @@
+{
+    "name": "IntentForms",
+    "alias": "intentforms",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\IntentForms\\App\\Providers\\IntentFormsServiceProvider"
+    ],
+    "files": []
+}

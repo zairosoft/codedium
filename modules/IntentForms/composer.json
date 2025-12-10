@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/intentforms",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\IntentForms\\": "",
+            "Modules\\IntentForms\\App\\": "app/",
+            "Modules\\IntentForms\\Database\\Factories\\": "database/factories/",
+            "Modules\\IntentForms\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\IntentForms\\Tests\\": "tests/"
+        }
+    }
+}
