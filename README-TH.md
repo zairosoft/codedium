@@ -1,10 +1,10 @@
-# [Codedium](https://github.com/nakornsoft/codedium)
+# [Codedium](https://github.com/zairosoft/codedium)
 
 > Laravel cms
 
 ซอฟต์แวร์ CMS ออนไลน์ที่ออกแบบมาสำหรับธุรกิจขนาดเล็กและฟรีแลนซ์ Codedium ถูกสร้างขึ้นโดยนครซอฟต์ ใช้เทคโนโลยีสมัยใหม่ เช่น Laravel, Vite.js, Alpine.js, Tailwind, RESTful API เป็นต้น ด้วยโครงสร้างแบบโมดูลาร์ Codedium มี App Store ที่ยอดเยี่ยมให้กับผู้ใช้และนักพัฒนา
 
-![Screen](https://www.nakornsoft.com/assets/2025/04/codedium.webp "Dashboards")
+![Screen](https://www.zairosoft.com/assets/2025/04/codedium.webp "Dashboards")
 
 [ภาษาไทย](README-TH.md) | [English](README.md)
 
@@ -22,7 +22,7 @@ Codedium ใช้ [Laravel](http://laravel.com) ซึ่งเป็นเฟ�
 ## การติดตั้ง
 
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
-* Clone the repository: `git clone https://github.com/nakornsoft/codedium.git`
+* Clone the repository: `git clone https://github.com/zairosoft/codedium.git`
 * Install dependencies: `composer install ; npm install ; npm run dev`
 * For linux install create folder link modules
 ```bash
@@ -93,23 +93,23 @@ Please see [Releases](../../releases) for more information about what has change
 
 ## ความปลอดภัย
 
-Please review [our security policy](https://github.com/nakornsoft/codedium/security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/zairosoft/codedium/security/policy) on how to report security vulnerabilities.
 
 ## เครดิต
 
-* [Nakornsoft](https://www.nakornsoft.com)
-* [All Contributors](https://github.com/nakornsoft/codedium/graphs/contributors)
+* [Zairosoft](https://www.zairosoft.com)
+* [All Contributors](https://github.com/zairosoft/codedium/graphs/contributors)
 
 ## สนับสนุนฉัน
 
-* [Paypal](https://www.paypal.me/nakornsoft)
+* [Paypal](https://www.paypal.me/zairosoft)
 
 ## จ้างเราทำงาน
 
-* [LinkedIn](https://www.linkedin.com/in/nakornsoft)
+* [LinkedIn](https://www.linkedin.com/in/zairosoft)
 * [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
 * [Line](https://line.me/ti/p/@677htpdk)
-* [Facebook](https://www.facebook.com/nakornsoft)
+* [Facebook](https://www.facebook.com/zairosoft)
 
 ## ใบอนุญาต
 
