@@ -1,10 +1,10 @@
-# [Codedium](https://github.com/nakornsoft/codedium)
+# [Codedium](https://github.com/zairosoft/codedium)
 
 > Laravel cms (Developing)
 
 Online cms software designed for small businesses and freelancers. Codedium is built with modern technologies such as Laravel, Vite.js, Alpine.js, Tailwind, RESTful API etc. Thanks to its modular structure, Codedium provides an awesome App Store for users and developers.
 
-![Screen](https://www.nakornsoft.com/assets/2025/04/codedium.webp "Dashboards")
+![Screen](https://www.zairosoft.com/assets/2025/04/codedium.webp "Dashboards")
 
 [English](README.md) | [ภาษาไทย](README-TH.md)
 
@@ -22,7 +22,7 @@ Codedium uses [Laravel](http://laravel.com), the best existing PHP framework, as
 ## Installation
 
 * Install [Composer](https://getcomposer.org/download) and [Npm](https://nodejs.org/en/download)
-* Clone the repository: `git clone https://github.com/nakornsoft/codedium.git`
+* Clone the repository: `git clone https://github.com/zairosoft/codedium.git`
 * Install dependencies: `composer install ; npm install ; npm run dev`
 * For linux install create folder link modules
 ```bash
@@ -94,23 +94,23 @@ Please see [Releases](../../releases) for more information about what has change
 
 ## Security
 
-Please review [our security policy](https://github.com/nakornsoft/codedium/security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/zairosoft/codedium/security/policy) on how to report security vulnerabilities.
 
 ## Credits
 
-* [Nakornsoft](https://www.nakornsoft.com)
-* [All Contributors](https://github.com/nakornsoft/codedium/graphs/contributors)
+* [Zairosoft](https://www.zairosoft.com)
+* [All Contributors](https://github.com/zairosoft/codedium/graphs/contributors)
 
 ## Support Me
 
-* [Paypal](https://www.paypal.me/nakornsoft)
+* [Paypal](https://www.paypal.me/zairosoft)
 
 ## Hire us for work
 
-* [LinkedIn](https://www.linkedin.com/in/nakornsoft)
+* [LinkedIn](https://www.linkedin.com/in/zairosoft)
 * [WhatsApp](https://web.whatsapp.com/send?phone=66989855565)
 * [Line](https://line.me/ti/p/@677htpdk)
-* [Facebook](https://www.facebook.com/nakornsoft)
+* [Facebook](https://www.facebook.com/zairosoft)
 
 ## License
 
