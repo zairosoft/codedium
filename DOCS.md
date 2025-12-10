@@ -5,7 +5,7 @@ php artisan module:make Invoices
 
 php artisan module:make-model invoice Invoices
 
-php artisan module:make-controller ApiInvoicesController DMS
+php artisan module:make-controller ApiInvoicesController Invoices
 
 php artisan module:make-migration create_invoices_table Invoices
 
