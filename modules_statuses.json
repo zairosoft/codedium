@@ -1,10 +1,9 @@
 {
     "Calendar": true,
     "Notes": true,
-    "Inventory": true,
-    "Invoices": true,
-    "Register": true,
-    "Website": true,
-    "PageBuilder": true,
-    "CRM": true
+    "Inventory": false,
+    "Invoices": false,
+    "Register": false,
+    "PageBuilder": false,
+    "CRM": false
 }
