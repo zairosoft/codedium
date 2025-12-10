@@ -22,3 +22,4 @@ yarn-error.log
 /.idea
 /.vscode
 /public/modules
+.DS_Store
