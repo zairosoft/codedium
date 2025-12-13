@@ -77,7 +77,7 @@
                 @yield('content')
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 dark:text-white-dark text-center ltr:sm:text-left rtl:sm:text-right p-6 pt-0 mt-auto">
-                <div class="footer-copyright">Copyright <span id="footer-year">{{ date('Y') }}</span> © {{ config('app.name') }}<!--- | <a href="{{ __('footer.link') }}" target="_blank">{{ __('footer.powered') }}</a>--></div>
+                <div class="footer-copyright">Copyright <span id="footer-year">{{ date('Y') }}</span> © {{ config('app.name') }} | <a href="{{ __('footer.link') }}" target="_blank">{{ __('footer.powered') }}</a></div>
                 <div class="footer-version text-right color-secondary">{{ __('footer.version') }} 1.0.0</div>
             </div>
         </div>

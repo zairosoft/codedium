@@ -56,14 +56,14 @@ return new class extends Migration
         Permission::create(['name' => 'intentform allow']);
         Permission::create(['name' => 'intentform delete']);
 
-        $roleSuper = Role::findByName('super-admin');
-        $roleSuper->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform allow', 'intentform delete']);
+        // $roleSuper = Role::findByName('super-admin');
+        // $roleSuper->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform allow', 'intentform delete']);
 
-        $roleAdmin = Role::findByName('admin');
-        $roleAdmin->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform delete']);
+        // $roleAdmin = Role::findByName('admin');
+        // $roleAdmin->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform delete']);
 
-        $roleStaff = Role::findByName('staff');
-        $roleStaff->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform delete']);
+        // $roleStaff = Role::findByName('staff');
+        // $roleStaff->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform delete']);
     }
 
     /**

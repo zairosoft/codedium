@@ -3,7 +3,7 @@
 return [
 
     'version'               => 'Version',
-    'powered'               => 'Powered By Nakornsoft',
-    'link'                  => 'https://www.nakornsoft.com'
+    'powered'               => 'Powered By Zairosoft',
+    'link'                  => 'https://www.zairosoft.com'
 
 ];
