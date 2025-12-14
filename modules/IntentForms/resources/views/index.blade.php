@@ -96,7 +96,7 @@
                             total: '{{ $value->total }}',
                             status: '{{ $value->status }}',
                             date: '{{ $value->date }}',
-                            id: {{ $value->id }}
+                            actions: {{ $value->id }}
                         },
                     @endforeach
                 ],
@@ -128,7 +128,7 @@
                         perPage: 20,
                         perPageSelect: [20, 30, 50, 100],
                         columns: [{
-                            select: 9,
+                            select: 7,
                             sortable: false,
                             render: function(data, cell, row) {
                                 return `<ul class="flex gap-2">
