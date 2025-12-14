@@ -14,6 +14,13 @@ use Modules\IntentForms\App\Http\Controllers\IntentFormsController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('intentforms', IntentFormsController::class)->names('intentforms');
+Route::prefix('intentform')->group(function () {
+    Route::get('/', 'IntentFormsController@index')->name('intentform');
+    Route::get('/intentform', 'IntentFormsController@report')->name('intentform.report');
+    Route::get('/create', 'IntentFormsController@create')->name('intentform.create');
+    Route::post('/store', 'IntentFormsController@store')->name('intentform.store');
+    Route::get('/{id}/edit', 'IntentFormsController@edit')->name('intentform.edit');
+    Route::put('/{id}/update', 'IntentFormsController@update')->name('intentform.update');
+    Route::put('/{id}/print', 'IntentFormsController@print')->name('intentform.print');
+    Route::delete('/product/delete', 'IntentFormsController@destroy')->name('intentform.delete');
 });

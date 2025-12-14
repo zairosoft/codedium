@@ -28,17 +28,11 @@ return new class extends Migration
             $table->string('payee')->nullable(); //ผู้รับเงิน
             $table->string('payment_methods')->default('เงินสด'); //ช่องทางการชำระเงิน
             $table->float('total')->nullable();
+            $table->text('notes')->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();
             $table->index(['id', 'name']);
-        });
-
-        Schema::create('intentform_donations', function (Blueprint $table) {
-            $table->id();
-            $table->integer('type_id')->nullable();
-            $table->integer('intentform_id')->nullable();
-            $table->timestamps();
         });
 
         Schema::create('intentform_types', function (Blueprint $table) {
@@ -46,6 +40,15 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('price')->nullable();
             $table->string('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('intentform_donations', function (Blueprint $table) {
+            $table->id();
+            $table->integer('type_id')->nullable();
+            $table->integer('intentform_id')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->float('total')->nullable();
             $table->timestamps();
         });
 

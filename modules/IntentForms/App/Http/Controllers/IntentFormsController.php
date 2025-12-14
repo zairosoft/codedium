@@ -63,6 +63,11 @@ class IntentFormsController extends Controller
         //
     }
 
+    public function print($id)
+    {
+        return view('intentforms::print');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
