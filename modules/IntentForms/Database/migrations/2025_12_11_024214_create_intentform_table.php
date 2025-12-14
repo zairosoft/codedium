@@ -49,6 +49,7 @@ return new class extends Migration
             $table->integer('intentform_id')->nullable();
             $table->integer('quantity')->nullable();
             $table->float('total')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
 
