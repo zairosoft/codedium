@@ -90,14 +90,16 @@
                     @foreach ($users as $key => $user)
                         {
                             no: {{ $key + 1 }},
-                            dd: '<div class="flex items-center gap-2"> <img src="{{ asset($user->img === null ? 'assets/images/user.png' : 'assets/images/users/' . $user->img) }}" class="w-9 h-9 rounded-full max-w-none" alt="user-profile" /> </div>',
+                            dd: '<div class="flex items-center gap-2"> ddd</div>',
                             name: '{{ $user->name }}',
                             birthday: '{{ date('d-m-Y', strtotime($user->birthday)) }}',
                             gender: '{{ $user->gender }}',
                             email: '{{ $user->email }}',
                             phone: '{{ $user->phone }}',
-                            role: '@if (!empty($user->getRoleNames())) @foreach ($user->getRoleNames() as $rolename) <label class="badge text-center @if($rolename == "super-admin")bg-primary @elseif ($rolename == "admin")bg-success @elseif ($rolename == "staff")bg-secondary @else bg-dark @endif  mx-1">{{ $rolename }}</label> @endforeach @endif',
+                            role: '',
                             activities: '{{ $user->last_logged_activities }}',
+
+
                             id: {{ $user->id }}
                         },
                     @endforeach
@@ -124,7 +126,7 @@
                 initializeTable() {
                     this.datatable = new simpleDatatables.DataTable('#myTable', {
                         data: {
-                            headings: ["{{ __('users.no') }}", "{{ __('users.profile_picture') }}", "{{ __('users.name') }}", "วันเกิด", "เพศ", "อีเมล", "เบอร์โทรศัพท์", "{{ __('users.role') }}", "กิจกรรมเข้าใช้ระบบ", "{{ __('others.view') }}@can('user update') / {{ __('others.edit') }}@endcan @can('user delete') / {{ __('others.delete') }}@endcan"],
+                            headings: ["{{ __('users.no') }}", "ชื่อ", "เล่มที่/เลขที่", "บริการ", "เพศ", "การชำระเงิน", "จำนวนเงินทั้งหมด", "สถานะ", "วันที่", "{{ __('others.view') }}@can('user update') / {{ __('others.edit') }}@endcan @can('user delete') / {{ __('others.delete') }}@endcan"],
                             data: this.dataArr,
                         },
                         perPage: 20,

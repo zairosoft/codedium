@@ -24,5 +24,5 @@ return [
 
 
     'users' => 'ผู้ใช้ระบบ',
-    'profile_picture' => 'ผู้ใช้ระบบ',
+    'profile_picture' => 'รูปโปรไฟล์',
 ];

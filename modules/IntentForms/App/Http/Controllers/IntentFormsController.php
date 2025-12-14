@@ -18,6 +18,7 @@ class IntentFormsController extends Controller
     {
         $users = User::where('is_active', 1)->where('id', '!=', Auth::user()->id)->get();
 
+
         return view('intentforms::index', [
             'users' => $users,
         ]);
