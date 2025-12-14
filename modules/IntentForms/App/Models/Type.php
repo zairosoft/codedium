@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\IntentForms\Database\factories\IntentformFactory;
 
 
-class Intentform extends Model
+class Type extends Model
 {
     use HasFactory;
 
@@ -16,21 +16,10 @@ class Intentform extends Model
      */
     protected $fillable = [
         'id',
-        'volume',
-        'number',
-        'account_name',
-        'account_number',
-        'account_bank',
-        'refer',
         'name',
-        'status',
-        'date',
-        'other',
-        'payee',
-        'payment_methods',
-        'total',
-        'notes'
+        'price',
+        'description'
     ];
 
-    protected $table = 'intentforms';
+    protected $table = 'intentform_types';
 }

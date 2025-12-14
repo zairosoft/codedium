@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Models\User;
+use Modules\IntentForms\App\Models\Intentform;
 use Illuminate\Support\Facades\Auth;
 
 class IntentFormsController extends Controller
@@ -16,11 +16,11 @@ class IntentFormsController extends Controller
      */
     public function index()
     {
-        $users = User::where('is_active', 1)->where('id', '!=', Auth::user()->id)->get();
+        $intentforms = Intentform::get();
 
 
         return view('intentforms::index', [
-            'users' => $users,
+            'intentforms' => $intentforms,
         ]);
     }
 

@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="panel min-h-screen">
-            @can('user create')
+            @can('intentform create')
                 <div class="px-5">
                     <div class="md:absolute btn-add">
                         <div class="flex items-center">
@@ -87,20 +87,16 @@
             Alpine.data('sorting', () => ({
                 selectedRows: [],
                 items: [
-                    @foreach ($users as $key => $user)
+                    @foreach ($intentforms as $key => $value)
                         {
                             no: {{ $key + 1 }},
-                            dd: '<div class="flex items-center gap-2"> ddd</div>',
-                            name: '{{ $user->name }}',
-                            birthday: '{{ date('d-m-Y', strtotime($user->birthday)) }}',
-                            gender: '{{ $user->gender }}',
-                            email: '{{ $user->email }}',
-                            phone: '{{ $user->phone }}',
-                            role: '',
-                            activities: '{{ $user->last_logged_activities }}',
-
-
-                            id: {{ $user->id }}
+                            name: '{{ $value->name }}',
+                            number_runding: '{{ $value->volume }}/{{ $value->number }}',
+                            payment_methods: '{{ $value->payment_methods }}',
+                            total: '{{ $value->total }}',
+                            status: '{{ $value->status }}',
+                            date: '{{ $value->date }}',
+                            id: {{ $value->id }}
                         },
                     @endforeach
                 ],
@@ -126,7 +122,7 @@
                 initializeTable() {
                     this.datatable = new simpleDatatables.DataTable('#myTable', {
                         data: {
-                            headings: ["{{ __('users.no') }}", "ชื่อ", "เล่มที่/เลขที่", "บริการ", "เพศ", "การชำระเงิน", "จำนวนเงินทั้งหมด", "สถานะ", "วันที่", "{{ __('others.view') }}@can('user update') / {{ __('others.edit') }}@endcan @can('user delete') / {{ __('others.delete') }}@endcan"],
+                            headings: ["ลำดับ", "ชื่อ", "เล่มที่/เลขที่", "การชำระเงิน", "จำนวนเงินทั้งหมด", "สถานะ", "วันที่", "{{ __('others.view') }}@can('intentform update') / {{ __('others.edit') }}@endcan @can('intentform delete') / {{ __('others.delete') }}@endcan"],
                             data: this.dataArr,
                         },
                         perPage: 20,
