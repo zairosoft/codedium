@@ -21,6 +21,7 @@ Route::prefix('intentform')->group(function () {
     Route::post('/store', 'IntentFormsController@store')->name('intentform.store');
     Route::get('/{id}/edit', 'IntentFormsController@edit')->name('intentform.edit');
     Route::put('/{id}/update', 'IntentFormsController@update')->name('intentform.update');
-    Route::put('/{id}/print', 'IntentFormsController@print')->name('intentform.print');
+    Route::get('/{id}/show', 'IntentFormsController@show')->name('intentform.show');
+    Route::get('/{id}/print', 'IntentFormsController@print')->name('intentform.print');
     Route::delete('/product/delete', 'IntentFormsController@destroy')->name('intentform.delete');
 });

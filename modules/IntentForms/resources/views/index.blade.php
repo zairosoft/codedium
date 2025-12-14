@@ -94,7 +94,7 @@
                             number_runding: '{{ $value->volume }}/{{ $value->number }}',
                             payment_methods: '{{ $value->payment_methods }}',
                             total: '{{ $value->total }}',
-                            status: '{{ $value->status == 1 ? '<svg viewBox="0 0 6 6" aria-hidden="true" class="qxd qyg"> <circle r="3" cx="3" cy="3"></circle> </svg> ใช้งาน" : "<svg viewBox="0 0 6 6" aria-hidden="true" class="qxd qyf"> <circle r="3" cx="3" cy="3"></circle> </svg> ไม่ใช้งาน' }}',
+                            status: '{{ $value->status == 1 ? "ใช้งาน" : "ไม่ใช้งาน" }}',
                             date: '{{ $value->date }}',
                             actions: {{ $value->id }}
                         },
