@@ -91,7 +91,7 @@
                         {
                             no: {{ $key + 1 }},
                             name: '{{ $value->name }}',
-                            number_runding: '{{ $value->volume }}/{{ $value->number }}',
+                            number_runding: ' {{ $value->number }} / {{ $value->volume }}',
                             payment_methods: '{{ $value->payment_methods }}',
                             total: '{{ $value->total }}',
                             status: '{{ $value->status == 1 ? "ใช้งาน" : "ไม่ใช้งาน" }}',
@@ -122,7 +122,7 @@
                 initializeTable() {
                     this.datatable = new simpleDatatables.DataTable('#myTable', {
                         data: {
-                            headings: ["ลำดับ", "ชื่อ", "เล่มที่/เลขที่", "การชำระเงิน", "จำนวนเงินทั้งหมด", "สถานะ", "วันที่", "{{ __('others.view') }}@can('intentform update') / {{ __('others.edit') }}@endcan @can('intentform delete') / {{ __('others.delete') }}@endcan"],
+                            headings: ["ลำดับ", "ชื่อ", "เลขที่ / เล่มที่", "การชำระเงิน", "จำนวนเงินทั้งหมด", "สถานะ", "วันที่", "{{ __('others.view') }}@can('intentform update') / {{ __('others.edit') }}@endcan @can('intentform delete') / {{ __('others.delete') }}@endcan"],
                             data: this.dataArr,
                         },
                         perPage: 20,
@@ -186,18 +186,19 @@
                         body: JSON.stringify(dataID)
                     }).then((res) => res.json()).then((response) => {
                         this.showMessage(response);
-                    });
-                    if (this.itemID) {
-                        if (this.itemID != 1) {
-                            this.items = this.items.filter((d) => d.id != this.itemID);
-                            this.selectedRows = [];
+                        
+                        // Remove row from table only after successful deletion
+                        if (response.type === 'success') {
+                            if (this.itemID) {
+                                this.items = this.items.filter((d) => d.actions != this.itemID);
+                                this.selectedRows = [];
+                            } else {
+                                this.items = this.items.filter((d) => !this.selectedRows.includes(d.actions));
+                                this.selectedRows = [];
+                            }
                         }
-                    } else {
-                        this.items = this.items.filter((d) => !this.selectedRows.includes(d.id));
-                        this.selectedRows = [];
-                    }
+                    });
                     this.isDeleteModal = false;
-                    this.searchItems();
                 },
                 showMessage(response) {
                     if (response['type'] == 'success') {

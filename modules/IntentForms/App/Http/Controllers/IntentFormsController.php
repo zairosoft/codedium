@@ -39,8 +39,22 @@ class IntentFormsController extends Controller
         
         // Get next volume and number
         $lastIntentform = Intentform::orderBy('id', 'desc')->first();
-        $nextVolume = $lastIntentform ? $lastIntentform->volume : 1;
-        $nextNumber = $lastIntentform ? $lastIntentform->number + 1 : 1;
+        
+        if ($lastIntentform) {
+            if ($lastIntentform->number >= 99) {
+                // Reset number to 1 and increment volume
+                $nextVolume = $lastIntentform->volume + 1;
+                $nextNumber = 1;
+            } else {
+                // Increment number, keep same volume
+                $nextVolume = $lastIntentform->volume;
+                $nextNumber = $lastIntentform->number + 1;
+            }
+        } else {
+            // First record
+            $nextVolume = 1;
+            $nextNumber = 1;
+        }
 
         return view('intentforms::create', [
             'company' => $company,
@@ -83,8 +97,22 @@ class IntentFormsController extends Controller
 
             // Get next volume and number
             $lastIntentform = Intentform::orderBy('id', 'desc')->first();
-            $volume = $lastIntentform ? $lastIntentform->volume : 1;
-            $number = $lastIntentform ? $lastIntentform->number + 1 : 1;
+            
+            if ($lastIntentform) {
+                if ($lastIntentform->number >= 99) {
+                    // Reset number to 1 and increment volume
+                    $volume = $lastIntentform->volume + 1;
+                    $number = 1;
+                } else {
+                    // Increment number, keep same volume
+                    $volume = $lastIntentform->volume;
+                    $number = $lastIntentform->number + 1;
+                }
+            } else {
+                // First record
+                $volume = 1;
+                $number = 1;
+            }
 
             // Create intentform
             $intentform = Intentform::create([
@@ -122,7 +150,7 @@ class IntentFormsController extends Controller
 
             DB::commit();
             Session::flash('success', 'บันทึกข้อมูลสำเร็จ');
-            return redirect()->route('intentform');
+            return redirect()->route('intentform.edit', $intentform->id);
         } catch (\Exception $e) {
             DB::rollBack();
             Session::flash('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());

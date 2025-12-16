@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('intentforms', function (Blueprint $table) {
             $table->id();
-            $table->integer('volume')->nullable(); // เล่มที่
+            $table->integer('volume')->default(1);// เล่มที่
             $table->integer('number')->nullable(); // เลขที่
             $table->string('account_name')->nullable(); // ชื่อบัญชี
             $table->string('account_number')->nullable(); // เลขที่บัญชี

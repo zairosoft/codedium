@@ -40,8 +40,8 @@
                         </div>
                         <div class="w-full lg:w-1/2 lg:max-w-fit">
                             <div class="flex items-center">
-                                <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เล่มที่ / เลขที่</label>
-                                <div>{{ $nextVolume }} / {{ $nextNumber }}</div>
+                                <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เลขที่ / เล่มที่</label>
+                                <div>{{ $nextNumber }} / {{ $nextVolume }}</div>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
