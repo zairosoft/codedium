@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('other')->nullable(); //อื่นๆที่บริจาก
             $table->string('payee')->nullable(); //ผู้รับเงิน
             $table->string('payment_methods')->default('เงินสด'); //ช่องทางการชำระเงิน
+            $table->string('foundation')->nullable(); // มูลนิธิ
             $table->float('total')->nullable(); //จำนวนเงินรวม
             $table->text('notes')->nullable();
             $table->integer('created_by')->nullable();
@@ -48,7 +49,7 @@ return new class extends Migration
             $table->integer('type_id')->nullable();
             $table->integer('intentform_id')->nullable();
             $table->integer('quantity')->nullable();
-            $table->float('total')->nullable();
+            $table->float('sub_total')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });

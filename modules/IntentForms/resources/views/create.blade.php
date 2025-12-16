@@ -44,7 +44,7 @@
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
-                                <input id="date" type="date" name="date" class="form-input w-2/3 lg:w-[250px]" x-model="params.dueDate" />
+                                <input id="date" type="date" name="date" class="form-input w-2/3 lg:w-[250px]" />
                             </div>
                         </div>
                     </div>
@@ -60,8 +60,7 @@
                                         type="text"
                                         name="reciever-name"
                                         class="form-input flex-1"
-                                        x-model="params.to.name"
-                                        placeholder="Enter Name"
+                                        placeholder="กรอกชื่อบัญชี"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
@@ -71,30 +70,27 @@
                                         type="email"
                                         name="reciever-email"
                                         class="form-input flex-1"
-                                        x-model="params.to.email"
-                                        placeholder="Enter Email"
+                                        placeholder="กรอกเลขบัญชี"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="reciever-address" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">Address</label>
+                                    <label for="name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">บัตรนี้แสดงว่า</label>
                                     <input
-                                        id="reciever-address"
+                                        id="name"
                                         type="text"
-                                        name="reciever-address"
+                                        name="name"
                                         class="form-input flex-1"
-                                        x-model="params.to.address"
-                                        placeholder="Enter Address"
+                                        placeholder="กรอกบัตรนี้แสดงว่า"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="reciever-number" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">Phone Number</label>
+                                    <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
                                     <input
-                                        id="reciever-number"
+                                        id="payee"
                                         type="text"
-                                        name="reciever-number"
+                                        name="payee"
                                         class="form-input flex-1"
-                                        x-model="params.to.phone"
-                                        placeholder="Enter Phone Number"
+                                        placeholder="กรอกผู้รับเงิน"
                                     />
                                 </div>
                             </div>
@@ -107,41 +103,29 @@
                                         type="text"
                                         name="acno"
                                         class="form-input flex-1"
-                                        x-model="params.bankInfo.no"
-                                        placeholder="Enter Account Number"
+                                        placeholder="กรอกธนาคาร / เวลา"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="bank-name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">อ้างอิง</label>
+                                    <label for="refer" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">อ้างอิง</label>
                                     <input
-                                        id="bank-name"
+                                        id="refer"
                                         type="text"
-                                        name="bank-name"
+                                        name="refer"
                                         class="form-input flex-1"
-                                        x-model="params.bankInfo.name"
-                                        placeholder="Enter Bank Name"
+                                        placeholder="กรอกอ้างอิง"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="swift-code" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">SWIFT Number</label>
+                                    <label for="foundation" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">มูลนิธิ</label>
                                     <input
-                                        id="swift-code"
+                                        id="foundation
                                         type="text"
-                                        name="swift-code"
+                                        name="foundation"
                                         class="form-input flex-1"
-                                        x-model="params.bankInfo.swiftCode"
-                                        placeholder="Enter SWIFT Number"
-                                    />
-                                </div>
-                                <div class="mt-4 flex items-center">
-                                    <label for="iban-code" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">IBAN Number</label>
-                                    <input
-                                        id="iban-code"
-                                        type="text"
-                                        name="iban-code"
-                                        class="form-input flex-1"
-                                        x-model="params.bankInfo.ibanNo"
-                                        placeholder="Enter IBAN Number"
+                                        value="{{ $company->name }}"
+                                        {{-- value="มูลนิธิการกุศลสามัคคีสว่างบูชาธรรมสธาน อุบลราชธานี" --}}
+                                        placeholder="กรอกมูลนิธิ"
                                     />
                                 </div>
 
@@ -181,9 +165,9 @@
                                                     x-model="item.description"
                                                 ></textarea>
                                             </td>
-                                            <td><input type="number" class="form-input w-32" placeholder="Quantity" x-model="item.quantity" /></td>
-                                            <td><input type="text" class="form-input w-32" placeholder="Price" x-model="item.amount" /></td>
-                                            <td x-text="`$${item.amount * item.quantity}`"></td>
+                                            <td><input type="number" class="form-input w-32" placeholder="จำนวน" x-model="item.quantity" /></td>
+                                            <td><input type="text" class="form-input w-32" placeholder="ราคา" name="price[]" x-model="item.price" /></td>
+                                            <td x-text="`${item.price * item.quantity}`"><input type="hidden" name="sub_total" value="`${item.price * item.quantity}`"></td>
                                             <td>
                                                 <button type="button" @click="removeItem(item)">
                                                     <svg
@@ -210,28 +194,12 @@
                         </div>
                         <div class="mt-6 flex flex-col justify-between px-4 sm:flex-row">
                             <div class="mb-6 sm:mb-0">
-                                <button type="button" class="btn btn-primary" @click="addItem()">Add Item</button>
+                                <button type="button" class="btn btn-primary" @click="addItem()">เพิ่มรายการ</button>
                             </div>
                             <div class="sm:w-2/5">
-                                <div class="flex items-center justify-between">
-                                    <div>Subtotal</div>
-                                    <div>$0.00</div>
-                                </div>
-                                <div class="mt-4 flex items-center justify-between">
-                                    <div>Tax(%)</div>
-                                    <div>0%</div>
-                                </div>
-                                <div class="mt-4 flex items-center justify-between">
-                                    <div>Shipping Rate($)</div>
-                                    <div>$0.00</div>
-                                </div>
-                                <div class="mt-4 flex items-center justify-between">
-                                    <div>Discount(%)</div>
-                                    <div>0%</div>
-                                </div>
                                 <div class="mt-4 flex items-center justify-between font-semibold">
-                                    <div>Total</div>
-                                    <div>$0.00</div>
+                                    <div>รวม</div>
+                                    <div>0.00</div>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +212,6 @@
                                 name="notes"
                                 class="form-textarea min-h-[130px]"
                                 placeholder="หมายเหตุ...."
-                                x-model="params.notes"
                             ></textarea>
                         </div>
                     </div>
@@ -254,42 +221,9 @@
                         <div>
                             <label for="status">สถานะ</label>
                             <select id="status" name="status" class="form-select">
-                                <option value=""></option>
-                                <option value=""></option>
-                                <option value=""></option>
+                                <option value="1">ใช้งาน</option>
+                                <option value="2">ไม่ใช้งาน</option>
                             </select>
-                        </div>
-                        <div class="mt-4">
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                <div>
-                                    <label for="tax">Tax(%) </label>
-                                    <input id="tax" type="number" name="tax" class="form-input" placeholder="Tax" x-model="tax" />
-                                </div>
-                                <div>
-                                    <label for="discount">Discount(%) </label>
-                                    <input
-                                        id="discount"
-                                        type="number"
-                                        name="discount"
-                                        class="form-input"
-                                        placeholder="Discount"
-                                        x-model="discount"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div>
-                                <label for="shipping-charge">Shipping Charge($) </label>
-                                <input
-                                    id="shipping-charge"
-                                    type="number"
-                                    name="shipping-charge"
-                                    class="form-input"
-                                    placeholder="Shipping Charge"
-                                    x-model="shippingCharge"
-                                />
-                            </div>
                         </div>
                         <div class="mt-4">
                             <label for="payment-method">ช่องทางการชำระ</label>
@@ -322,7 +256,7 @@
                                     />
                                     <path opacity="0.5" d="M7 8H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
-                                Save
+                                บันทึก
                             </button>
 
                             <a href="apps-invoice-preview.html" class="btn btn-primary w-full gap-2">
@@ -346,35 +280,8 @@
                                         stroke-width="1.5"
                                     ></path>
                                 </svg>
-                                Preview
+                                พิมพ์
                             </a>
-
-                            <button type="button" class="btn btn-secondary w-full gap-2">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                    ></path>
-                                    <path
-                                        d="M12 2L12 15M12 15L9 11.5M12 15L15 11.5"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    ></path>
-                                </svg>
-                                Download
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -410,28 +317,6 @@
         document.addEventListener('alpine:init', () => {
                 Alpine.data('invoiceAdd', () => ({
                     items: [],
-                    selectedFile: null,
-                    params: {
-                        title: '',
-                        invoiceNo: '',
-                        to: {
-                            name: '',
-                            email: '',
-                            address: '',
-                            phone: '',
-                        },
-
-                        invoiceDate: '',
-                        dueDate: '',
-                        bankInfo: {
-                            no: '',
-                            name: '',
-                            swiftCode: '',
-                            country: '',
-                            ibanNo: '',
-                        },
-                        notes: '',
-                    },
                     tax: null,
                     discount: null,
                     shippingCharge: null,
@@ -443,9 +328,8 @@
                             id: 1,
                             title: '',
                             description: '',
-                            rate: 0,
                             quantity: 1,
-                            amount: 0,
+                            price: 0,
                         });
                     },
 
@@ -458,9 +342,8 @@
                             id: maxId + 1,
                             title: '',
                             description: '',
-                            rate: 0,
                             quantity: 1,
-                            amount: 0,
+                            price: 0,
                         });
                     },
 

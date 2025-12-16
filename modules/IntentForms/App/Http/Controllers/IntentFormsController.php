@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\IntentForms\App\Models\Intentform;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CompanyLang;
+use Illuminate\Support\Facades\Session;
+
+use function PHPSTORM_META\type;
 
 class IntentFormsController extends Controller
 {
@@ -29,7 +33,22 @@ class IntentFormsController extends Controller
      */
     public function create()
     {
-        return view('intentforms::create');
+
+
+        $company = CompanyLang::first();
+        $type = CompanyLang::first();
+
+
+
+
+
+
+
+
+        return view('intentforms::create', [
+            'company' => $company,
+            'type' => $type,
+        ]);
     }
 
     /**
