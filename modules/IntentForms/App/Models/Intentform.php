@@ -28,9 +28,17 @@ class Intentform extends Model
         'other',
         'payee',
         'payment_methods',
+        'foundation',
         'total',
-        'notes'
+        'notes',
+        'created_by',
+        'updated_by'
     ];
 
     protected $table = 'intentforms';
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'intentform_id');
+    }
 }

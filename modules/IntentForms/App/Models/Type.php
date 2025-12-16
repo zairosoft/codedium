@@ -22,4 +22,9 @@ class Type extends Model
     ];
 
     protected $table = 'intentform_types';
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'type_id');
+    }
 }

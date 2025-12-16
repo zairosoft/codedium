@@ -200,7 +200,7 @@ class UsersController extends Controller
             ]);
         } else {
             $user = User::find($request->id);
-            if ($user->img != null) {
+            if (@$user->img != null) {
                 @unlink(public_path('/assets/images/companies/') . $user->img);
             }
             $user->delete();

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'เพิ่มผู้ใช้ระบบ')
+@section('title', 'เพิ่มอนุโมทนาบัตร')
 @section('script')
 
 @endsection
@@ -10,7 +10,7 @@
     <div>
 
         <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">เพิ่ม</div>
+            <div class="text-lg font-semibold ltr:sm:text-left rtl:sm:text-right dark:text-white-light">เพิ่มอนุโมทนาบัตร</div>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <ul class="flex text-gray-500 dark:text-white-dark">
                     <li>
@@ -21,13 +21,14 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/users') }}">ผู้ใช้ระบบ</a></li>
-                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">เพิ่มผู้ใช้</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="{{ url('/intentform') }}">อนุโมทนาบัตร</a></li>
+                    <li class="before:content-['/'] before:px-1.5"><a href="javascript:;" class="text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70">เพิ่ม</a></li>
                 </ul>
             </div>
         </div>
 
-         <div x-data="invoiceAdd">
+         <form action="{{ route('intentform.store') }}" method="POST" x-data="invoiceAdd">
+            @csrf
             <div class="flex flex-col gap-2.5 xl:flex-row">
                 <div class="panel flex-1 px-0 py-6 ltr:lg:mr-6 rtl:lg:ml-6">
                     <div class="flex flex-wrap justify-between px-4">
@@ -40,11 +41,11 @@
                         <div class="w-full lg:w-1/2 lg:max-w-fit">
                             <div class="flex items-center">
                                 <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เล่มที่ / เลขที่</label>
-                                <div> 1 / 23 </div>
+                                <div>{{ $nextVolume }} / {{ $nextNumber }}</div>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
-                                <input id="date" type="date" name="date" class="form-input w-2/3 lg:w-[250px]" />
+                                <input id="date" type="date" name="date" class="form-input w-2/3 lg:w-[250px]" required value="{{ old('date', date('Y-m-d')) }}" />
                             </div>
                         </div>
                     </div>
@@ -54,23 +55,25 @@
                             <div class="mb-6 w-full lg:w-1/2 ltr:lg:mr-6 rtl:lg:ml-6">
                                 <div class="text-lg font-semibold">ข้อมูล</div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="reciever-name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ชื่อบัญชี</label>
+                                    <label for="account_name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ชื่อบัญชี</label>
                                     <input
-                                        id="reciever-name"
+                                        id="account_name"
                                         type="text"
-                                        name="reciever-name"
+                                        name="account_name"
                                         class="form-input flex-1"
                                         placeholder="กรอกชื่อบัญชี"
+                                        value="{{ old('account_name') }}"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="reciever-email" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">เลขบัญชี</label>
+                                    <label for="account_number" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">เลขบัญชี</label>
                                     <input
-                                        id="reciever-email"
-                                        type="email"
-                                        name="reciever-email"
+                                        id="account_number"
+                                        type="text"
+                                        name="account_number"
                                         class="form-input flex-1"
                                         placeholder="กรอกเลขบัญชี"
+                                        value="{{ old('account_number') }}"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
@@ -81,6 +84,8 @@
                                         name="name"
                                         class="form-input flex-1"
                                         placeholder="กรอกบัตรนี้แสดงว่า"
+                                        required
+                                        value="{{ old('name') }}"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
@@ -91,19 +96,21 @@
                                         name="payee"
                                         class="form-input flex-1"
                                         placeholder="กรอกผู้รับเงิน"
+                                        value="{{ old('payee') }}"
                                     />
                                 </div>
                             </div>
                             <div class="w-full lg:w-1/2">
                                 <div class="text-lg font-semibold">&nbsp;</div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="acno" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ธนาคาร / เวลา</label>
+                                    <label for="account_bank" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ธนาคาร / เวลา</label>
                                     <input
-                                        id="acno"
+                                        id="account_bank"
                                         type="text"
-                                        name="acno"
+                                        name="account_bank"
                                         class="form-input flex-1"
                                         placeholder="กรอกธนาคาร / เวลา"
+                                        value="{{ old('account_bank') }}"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
@@ -114,17 +121,17 @@
                                         name="refer"
                                         class="form-input flex-1"
                                         placeholder="กรอกอ้างอิง"
+                                        value="{{ old('refer') }}"
                                     />
                                 </div>
                                 <div class="mt-4 flex items-center">
                                     <label for="foundation" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">มูลนิธิ</label>
                                     <input
-                                        id="foundation
+                                        id="foundation"
                                         type="text"
                                         name="foundation"
                                         class="form-input flex-1"
-                                        value="{{ $company->name }}"
-                                        {{-- value="มูลนิธิการกุศลสามัคคีสว่างบูชาธรรมสธาน อุบลราชธานี" --}}
+                                        value="{{ old('foundation', $company->name) }}"
                                         placeholder="กรอกมูลนิธิ"
                                     />
                                 </div>
@@ -153,22 +160,44 @@
                                     <template x-for="(item, i) in items" :key="i">
                                         <tr class="border-b border-[#e0e6ed] align-top dark:border-[#1b2e4b]">
                                             <td>
-                                                <select id="type" name="type_id[]" class="form-select min-w-[200px]">
+                                                <select 
+                                                    :name="'type_id['+i+']'" 
+                                                    class="form-select min-w-[200px]" 
+                                                    @change="updatePrice($event, i)"
+                                                >
                                                     <option value="เลือก">เลือกรายการ</option>
 
-                                                    @foreach ($type as $item)
-                                                        <option value="{{ $item->id }}" x-price="{{ $item->price }}">{{ $item->name }}</option>
+                                                    @foreach ($type as $typeItem)
+                                                        <option value="{{ $typeItem->id }}" data-price="{{ $typeItem->price }}">{{ $typeItem->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 <textarea
                                                     class="form-textarea mt-4"
-                                                    name="description"
+                                                    :name="'description['+i+']'"
                                                     placeholder="รายละเอียด..."
                                                 ></textarea>
                                             </td>
-                                            <td><input type="number" class="form-input w-32" placeholder="จำนวน" x-model="item.quantity" /></td>
-                                            <td><input type="text" class="form-input w-32" placeholder="ราคา" name="price[]" x-model="item.price" /></td>
-                                            <td x-text="`${item.price * item.quantity}`"><input type="hidden" name="sub_total" value="`${item.price * item.quantity}`"></td>
+                                            <td>
+                                                <input 
+                                                    type="number" 
+                                                    class="form-input w-32" 
+                                                    placeholder="จำนวน" 
+                                                    x-model="item.quantity"
+                                                    :name="'quantity['+i+']'"
+                                                    min="0"
+                                                />
+                                            </td>
+                                            <td>
+                                                <input 
+                                                    type="number" 
+                                                    step="0.01"
+                                                    class="form-input w-32" 
+                                                    placeholder="ราคา" 
+                                                    :name="'price['+i+']'" 
+                                                    x-model="item.price" 
+                                                />
+                                            </td>
+                                            <td x-text="formatNumber(item.price * item.quantity)"></td>
                                             <td>
                                                 <button type="button" @click="removeItem(item)">
                                                     <svg
@@ -200,7 +229,7 @@
                             <div class="sm:w-2/5">
                                 <div class="mt-4 flex items-center justify-between font-semibold">
                                     <div>รวม</div>
-                                    <div>0.00</div>
+                                    <div x-text="formatNumber(getTotal())"></div>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +242,7 @@
                                 name="notes"
                                 class="form-textarea min-h-[130px]"
                                 placeholder="หมายเหตุ...."
-                            ></textarea>
+                            >{{ old('notes') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -221,22 +250,22 @@
                     <div class="panel mb-5">
                         <div>
                             <label for="status">สถานะ</label>
-                            <select id="status" name="status" class="form-select">
-                                <option value="1">ใช้งาน</option>
-                                <option value="2">ไม่ใช้งาน</option>
+                            <select id="status" name="status" class="form-select" required>
+                                <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>ใช้งาน</option>
+                                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>ไม่ใช้งาน</option>
                             </select>
                         </div>
                         <div class="mt-4">
                             <label for="payment-method">ช่องทางการชำระ</label>
-                            <select id="payment-method" name="" class="form-select" x-model="paymentMethod">
-                                <option value="เงินสด">เงินสด</option>
-                                <option value="เงินโอน">เงินโอน</option>
+                            <select id="payment-method" name="payment_methods" class="form-select" required>
+                                <option value="เงินสด" {{ old('payment_methods', 'เงินสด') == 'เงินสด' ? 'selected' : '' }}>เงินสด</option>
+                                <option value="เงินโอน" {{ old('payment_methods') == 'เงินโอน' ? 'selected' : '' }}>เงินโอน</option>
                             </select>
                         </div>
                     </div>
                     <div class="panel">
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-1">
-                            <button type="button" class="btn btn-success w-full gap-2">
+                            <button type="submit" class="btn btn-success w-full gap-2">
                                 <svg
                                     width="24"
                                     height="24"
@@ -260,34 +289,17 @@
                                 บันทึก
                             </button>
 
-                            <a href="apps-invoice-preview.html" class="btn btn-primary w-full gap-2">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                    ></path>
-                                    <path
-                                        d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                        stroke="currentColor"
-                                        stroke-width="1.5"
-                                    ></path>
+                            <a href="{{ route('intentform') }}" class="btn btn-outline-danger w-full gap-2">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z" fill="currentColor"/>
                                 </svg>
-                                พิมพ์
+                                ยกเลิก
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <script>
@@ -310,7 +322,6 @@
             setTimeout(() => {
                 window.onload = showAlert();
             }, "500");
-            // {!! \Session::get('success') !!}
         @endif
 
 
@@ -318,10 +329,6 @@
         document.addEventListener('alpine:init', () => {
                 Alpine.data('invoiceAdd', () => ({
                     items: [],
-                    tax: null,
-                    discount: null,
-                    shippingCharge: null,
-                    paymentMethod: '',
 
                     init() {
                         //set default data
@@ -332,6 +339,14 @@
                             quantity: 1,
                             price: 0,
                         });
+                    },
+
+                    updatePrice(event, index) {
+                        const selectedOption = event.target.options[event.target.selectedIndex];
+                        const price = selectedOption.getAttribute('data-price');
+                        if (price) {
+                            this.items[index].price = parseFloat(price);
+                        }
                     },
 
                     addItem() {
@@ -351,6 +366,16 @@
                     removeItem(item) {
                         this.items = this.items.filter((d) => d.id != item.id);
                     },
+
+                    getTotal() {
+                        return this.items.reduce((total, item) => {
+                            return total + (parseFloat(item.price) || 0) * (parseFloat(item.quantity) || 0);
+                        }, 0);
+                    },
+
+                    formatNumber(num) {
+                        return parseFloat(num || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    }
                 }));
             });
     </script>

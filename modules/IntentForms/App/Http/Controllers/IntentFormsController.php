@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\IntentForms\App\Models\Intentform;
 use Modules\IntentForms\App\Models\Type;
+use Modules\IntentForms\App\Models\Donation;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CompanyLang;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class IntentFormsController extends Controller
 {
@@ -32,21 +34,19 @@ class IntentFormsController extends Controller
      */
     public function create()
     {
-
-
         $company = CompanyLang::first();
         $type = Type::get();
-
-
-
-
-
-
-
+        
+        // Get next volume and number
+        $lastIntentform = Intentform::orderBy('id', 'desc')->first();
+        $nextVolume = $lastIntentform ? $lastIntentform->volume : 1;
+        $nextNumber = $lastIntentform ? $lastIntentform->number + 1 : 1;
 
         return view('intentforms::create', [
             'company' => $company,
             'type' => $type,
+            'nextVolume' => $nextVolume,
+            'nextNumber' => $nextNumber,
         ]);
     }
 
@@ -55,7 +55,79 @@ class IntentFormsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+        $request->validate([
+            'date' => 'required|date',
+            'account_name' => 'nullable|string',
+            'account_number' => 'nullable|string',
+            'account_bank' => 'nullable|string',
+            'name' => 'required|string',
+            'payee' => 'nullable|string',
+            'refer' => 'nullable|string',
+            'foundation' => 'nullable|string',
+            'payment_methods' => 'required|string',
+            'status' => 'required|integer',
+            'notes' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Calculate total from donation items
+            $total = 0;
+            if ($request->has('type_id') && is_array($request->type_id)) {
+                foreach ($request->type_id as $index => $typeId) {
+                    $quantity = $request->quantity[$index] ?? 0;
+                    $price = $request->price[$index] ?? 0;
+                    $total += $quantity * $price;
+                }
+            }
+
+            // Get next volume and number
+            $lastIntentform = Intentform::orderBy('id', 'desc')->first();
+            $volume = $lastIntentform ? $lastIntentform->volume : 1;
+            $number = $lastIntentform ? $lastIntentform->number + 1 : 1;
+
+            // Create intentform
+            $intentform = Intentform::create([
+                'volume' => $volume,
+                'number' => $number,
+                'date' => $request->date,
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+                'account_bank' => $request->account_bank,
+                'name' => $request->name,
+                'payee' => $request->payee,
+                'refer' => $request->refer,
+                'foundation' => $request->foundation,
+                'payment_methods' => $request->payment_methods,
+                'status' => $request->status,
+                'total' => $total,
+                'notes' => $request->notes,
+                'created_by' => Auth::id(),
+            ]);
+
+            // Create donation line items
+            if ($request->has('type_id') && is_array($request->type_id)) {
+                foreach ($request->type_id as $index => $typeId) {
+                    if ($typeId && $typeId !== 'เลือก') {
+                        Donation::create([
+                            'intentform_id' => $intentform->id,
+                            'type_id' => $typeId,
+                            'quantity' => $request->quantity[$index] ?? 1,
+                            'sub_total' => ($request->quantity[$index] ?? 0) * ($request->price[$index] ?? 0),
+                            'description' => $request->description[$index] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+            Session::flash('success', 'บันทึกข้อมูลสำเร็จ');
+            return redirect()->route('intentform');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Session::flash('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -63,7 +135,13 @@ class IntentFormsController extends Controller
      */
     public function show($id)
     {
-        return view('intentforms::show');
+        $intentform = Intentform::with('donations.type')->findOrFail($id);
+        $company = CompanyLang::first();
+
+        return view('intentforms::view', [
+            'intentform' => $intentform,
+            'company' => $company,
+        ]);
     }
 
     /**
@@ -71,7 +149,15 @@ class IntentFormsController extends Controller
      */
     public function edit($id)
     {
-        return view('intentforms::edit');
+        $intentform = Intentform::with('donations')->findOrFail($id);
+        $company = CompanyLang::first();
+        $type = Type::get();
+
+        return view('intentforms::edit', [
+            'intentform' => $intentform,
+            'company' => $company,
+            'type' => $type,
+        ]);
     }
 
     /**
@@ -79,19 +165,114 @@ class IntentFormsController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        //
+        $request->validate([
+            'date' => 'required|date',
+            'account_name' => 'nullable|string',
+            'account_number' => 'nullable|string',
+            'account_bank' => 'nullable|string',
+            'name' => 'required|string',
+            'payee' => 'nullable|string',
+            'refer' => 'nullable|string',
+            'foundation' => 'nullable|string',
+            'payment_methods' => 'required|string',
+            'status' => 'required|integer',
+            'notes' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $intentform = Intentform::findOrFail($id);
+
+            // Calculate total from donation items
+            $total = 0;
+            if ($request->has('type_id') && is_array($request->type_id)) {
+                foreach ($request->type_id as $index => $typeId) {
+                    $quantity = $request->quantity[$index] ?? 0;
+                    $price = $request->price[$index] ?? 0;
+                    $total += $quantity * $price;
+                }
+            }
+
+            // Update intentform
+            $intentform->update([
+                'date' => $request->date,
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+                'account_bank' => $request->account_bank,
+                'name' => $request->name,
+                'payee' => $request->payee,
+                'refer' => $request->refer,
+                'foundation' => $request->foundation,
+                'payment_methods' => $request->payment_methods,
+                'status' => $request->status,
+                'total' => $total,
+                'notes' => $request->notes,
+                'updated_by' => Auth::id(),
+            ]);
+
+            // Delete existing donations
+            Donation::where('intentform_id', $intentform->id)->delete();
+
+            // Create new donation line items
+            if ($request->has('type_id') && is_array($request->type_id)) {
+                foreach ($request->type_id as $index => $typeId) {
+                    if ($typeId && $typeId !== 'เลือก') {
+                        Donation::create([
+                            'intentform_id' => $intentform->id,
+                            'type_id' => $typeId,
+                            'quantity' => $request->quantity[$index] ?? 1,
+                            'sub_total' => ($request->quantity[$index] ?? 0) * ($request->price[$index] ?? 0),
+                            'description' => $request->description[$index] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+            Session::flash('success', 'อัพเดทข้อมูลสำเร็จ');
+            return redirect()->route('intentform');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Session::flash('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     public function print($id)
     {
-        return view('intentforms::print');
+        $intentform = Intentform::with('donations.type')->findOrFail($id);
+        $company = CompanyLang::first();
+
+        return view('intentforms::print', [
+            'intentform' => $intentform,
+            'company' => $company,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $id = $request->input('id');
+            $intentform = Intentform::findOrFail($id);
+            
+            // Delete associated donations first
+            Donation::where('intentform_id', $intentform->id)->delete();
+            
+            // Delete the intentform
+            $intentform->delete();
+
+            return response()->json([
+                'type' => 'success',
+                'message' => 'ลบข้อมูลสำเร็จ'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
