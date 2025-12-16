@@ -200,13 +200,13 @@ class UsersController extends Controller
             ]);
         } else {
             $user = User::find($request->id);
+            Cache::forget('users');
             if (@$user->img != null) {
                 @unlink(public_path('/assets/images/companies/') . $user->img);
             }
             $user->delete();
             $account = Account::find($request->id);
             $account->delete();
-            Cache::forget('users');
             echo json_encode([
                 "type" => "success",
                 "message" => "ลบสำเร็จ"
