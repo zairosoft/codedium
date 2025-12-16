@@ -153,16 +153,17 @@
                                     <template x-for="(item, i) in items" :key="i">
                                         <tr class="border-b border-[#e0e6ed] align-top dark:border-[#1b2e4b]">
                                             <td>
-                                                <input
-                                                    type="text"
-                                                    class="form-input min-w-[200px]"
-                                                    placeholder="Enter Item Name"
-                                                    x-model="item.title"
-                                                />
+                                                <select id="type" name="type_id[]" class="form-select min-w-[200px]">
+                                                    <option value="เลือก">เลือกรายการ</option>
+
+                                                    @foreach ($type as $item)
+                                                        <option value="{{ $item->id }}" x-price="{{ $item->price }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
                                                 <textarea
                                                     class="form-textarea mt-4"
-                                                    placeholder="Enter Description"
-                                                    x-model="item.description"
+                                                    name="description"
+                                                    placeholder="รายละเอียด..."
                                                 ></textarea>
                                             </td>
                                             <td><input type="number" class="form-input w-32" placeholder="จำนวน" x-model="item.quantity" /></td>

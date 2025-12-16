@@ -7,11 +7,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\IntentForms\App\Models\Intentform;
+use Modules\IntentForms\App\Models\Type;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CompanyLang;
 use Illuminate\Support\Facades\Session;
-
-use function PHPSTORM_META\type;
 
 class IntentFormsController extends Controller
 {
@@ -36,7 +35,7 @@ class IntentFormsController extends Controller
 
 
         $company = CompanyLang::first();
-        $type = CompanyLang::first();
+        $type = Type::get();
 
 
 
