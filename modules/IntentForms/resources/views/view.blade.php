@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="mb-5">
-                    <div class="flex flex-wrap justify-between px-4">
+                    <div class="flex flex-wrap justify-between">
                         <div class="mb-6 w-full lg:w-1/2">
                             <div class="text-lg font-semibold mb-3">{{ $company->name }}</div>
                             <div class="space-y-1 text-gray-500 dark:text-gray-400">
@@ -57,11 +57,11 @@
                         </div>
                         <div class="w-full lg:w-1/2 lg:max-w-fit">
                             <div class="flex items-center justify-between mb-2">
-                                <div class="font-semibold">เล่มที่ / เลขที่:</div>
+                                <div class="font-semibold">เล่มที่ / เลขที่: &nbsp;</div>
                                 <div class="ml-4">{{ $intentform->volume }} / {{ $intentform->number }}</div>
                             </div>
                             <div class="flex items-center justify-between mb-2">
-                                <div class="font-semibold">วันที่:</div>
+                                <div class="font-semibold">วันที่: &nbsp;</div>
                                 <div class="ml-4">{{ \Carbon\Carbon::parse($intentform->date)->format('d/m/Y') }}</div>
                             </div>
                             <div class="flex items-center justify-between">
@@ -162,8 +162,8 @@
                             </tbody>
                             <tfoot>
                                 <tr class="bg-gray-100 dark:bg-gray-700">
-                                    <td colspan="4" class="text-right font-semibold">รวมทั้งสิ้น:</td>
-                                    <td class="text-right font-semibold">{{ number_format($intentform->total, 2) }} บาท</td>
+                                    <td colspan="4" class="text-right font-semibold p-4">รวมทั้งสิ้น:</td>
+                                    <td class="text-right font-semibold p-4">{{ number_format($intentform->total, 2) }} บาท</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -171,8 +171,8 @@
                 </div>
 
                 @if($intentform->notes)
-                    <div class="mt-8 px-4">
-                        <div class="text-lg font-semibold mb-3">หมายเหตุ</div>
+                    <div class="mt-8 pt-2 pb-2">
+                        <div class="text-lg font-semibold p-4">หมายเหตุ</div>
                         <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded">
                             {{ $intentform->notes }}
                         </div>

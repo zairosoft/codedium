@@ -150,7 +150,7 @@ class IntentFormsController extends Controller
 
             DB::commit();
             Session::flash('success', 'บันทึกข้อมูลสำเร็จ');
-            return redirect()->route('intentform.edit', $intentform->id);
+            return redirect()->route('intentform.show', $intentform->id);
         } catch (\Exception $e) {
             DB::rollBack();
             Session::flash('error', 'เกิดข้อผิดพลาด: ' . $e->getMessage());

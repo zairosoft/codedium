@@ -96,7 +96,7 @@
                                         name="payee"
                                         class="form-input flex-1"
                                         placeholder="กรอกผู้รับเงิน"
-                                        value="{{ old('payee') }}"
+                                        value="{{ Auth::user()->name }}"
                                     />
                                 </div>
                             </div>
