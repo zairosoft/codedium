@@ -21,10 +21,10 @@ class IntentFormsController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'lock']);
-        $this->middleware('permission:intentforms view', ['only' => ['index', 'report', 'show']]);
-        $this->middleware('permission:intentforms create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:intentforms update', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:intentforms delete', ['only' => ['destroy']]);
+        $this->middleware('permission:intentform view', ['only' => ['index', 'report', 'show']]);
+        $this->middleware('permission:intentform create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:intentform update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:intentform delete', ['only' => ['destroy']]);
     }
 
     /**
