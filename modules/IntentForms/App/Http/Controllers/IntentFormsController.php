@@ -16,6 +16,17 @@ use Illuminate\Support\Facades\DB;
 
 class IntentFormsController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'lock']);
+        $this->middleware('permission:intentforms view', ['only' => ['index', 'report', 'show']]);
+        $this->middleware('permission:intentforms create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:intentforms update', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:intentforms delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -36,10 +47,10 @@ class IntentFormsController extends Controller
     {
         $company = CompanyLang::first();
         $type = Type::get();
-        
+
         // Get next volume and number
         $lastIntentform = Intentform::orderBy('id', 'desc')->first();
-        
+
         if ($lastIntentform) {
             if ($lastIntentform->number >= 99) {
                 // Reset number to 1 and increment volume
@@ -97,7 +108,7 @@ class IntentFormsController extends Controller
 
             // Get next volume and number
             $lastIntentform = Intentform::orderBy('id', 'desc')->first();
-            
+
             if ($lastIntentform) {
                 if ($lastIntentform->number >= 99) {
                     // Reset number to 1 and increment volume
@@ -266,12 +277,29 @@ class IntentFormsController extends Controller
         }
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function print($id)
     {
         $intentform = Intentform::with('donations.type')->findOrFail($id);
         $company = CompanyLang::first();
 
         return view('intentforms::print', [
+            'intentform' => $intentform,
+            'company' => $company,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function report()
+    {
+        $intentform = Intentform::with('donations.type')->get();
+        $company = CompanyLang::first();
+
+        return view('intentforms::report', [
             'intentform' => $intentform,
             'company' => $company,
         ]);
@@ -285,10 +313,10 @@ class IntentFormsController extends Controller
         try {
             $id = $request->input('id');
             $intentform = Intentform::findOrFail($id);
-            
+
             // Delete associated donations first
             Donation::where('intentform_id', $intentform->id)->delete();
-            
+
             // Delete the intentform
             $intentform->delete();
 
