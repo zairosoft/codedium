@@ -18,7 +18,7 @@ return [
         ],
         [
             'name' => 'บริจาค',
-            'route-name' => 'intentform.type',
+            'route-name' => 'intentform.types.index',
             'title' => 'บริจาค',
             'description' => 'บริจาค',
         ],

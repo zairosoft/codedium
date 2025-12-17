@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\IntentForms\App\Http\Controllers\IntentFormsController;
+use Modules\IntentForms\App\Http\Controllers\TypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,10 +26,11 @@ Route::prefix('intentform')->group(function () {
     Route::get('/{id}/print', 'IntentFormsController@print')->name('intentform.print');
     Route::delete('/product/delete', 'IntentFormsController@destroy')->name('intentform.delete');
 
-    Route::get('/type', 'IntentFormsController@type')->name('intentform.type');
-    Route::get('/type/create', 'IntentFormsController@typeCreate')->name('intentform.type.create');
-    Route::post('/type/store', 'IntentFormsController@typeStore')->name('intentform.type.store');
-    Route::get('/type/{id}/edit', 'IntentFormsController@typeEdit')->name('intentform.type.edit');
-    Route::put('/type/{id}/update', 'IntentFormsController@typeUpdate')->name('intentform.type.update');
-    Route::delete('/type/{id}/delete', 'IntentFormsController@typeDestroy')->name('intentform.type.delete');
+    // Type management routes
+    Route::get('/types', 'TypeController@index')->name('intentform.types.index');
+    Route::get('/types/create', 'TypeController@create')->name('intentform.types.create');
+    Route::post('/types/store', 'TypeController@store')->name('intentform.types.store');
+    Route::get('/types/{id}/edit', 'TypeController@edit')->name('intentform.types.edit');
+    Route::put('/types/{id}/update', 'TypeController@update')->name('intentform.types.update');
+    Route::delete('/types/delete', 'TypeController@destroy')->name('intentform.types.delete');
 });
