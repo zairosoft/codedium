@@ -17,6 +17,12 @@ return [
             'description' => 'ภาพรวม',
         ],
         [
+            'name' => 'บริจาค',
+            'route-name' => 'intentform.type',
+            'title' => 'บริจาค',
+            'description' => 'บริจาค',
+        ],
+        [
             'name' => 'รายงาน',
             'route-name' => 'intentform.report',
             'title' => 'รายงาน',
