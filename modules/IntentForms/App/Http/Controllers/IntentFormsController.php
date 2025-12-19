@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\CompanyLang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\IntentForms\App\Exports\IntentFormReportExport;
+use Carbon\Carbon;
+
 
 class IntentFormsController extends Controller
 {
@@ -46,7 +50,7 @@ class IntentFormsController extends Controller
     public function create()
     {
         $company = CompanyLang::first();
-        $type = Type::get();
+        $type = Type::where('status', 1)->get();
 
         // Get next volume and number
         $lastIntentform = Intentform::orderBy('id', 'desc')->first();
@@ -292,15 +296,46 @@ class IntentFormsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display report page with filters
      */
-    public function report()
+    public function report(Request $request)
     {
-        $intentform = Intentform::with('donations.type')->get();
+        $query = Intentform::with('donations.type')->orderBy('date', 'desc');
         $company = CompanyLang::first();
 
+        // Apply filters
+        if ($request->has('filter_type') && $request->has('filter_value')) {
+            $filterType = $request->filter_type;
+            $filterValue = $request->filter_value;
+
+            switch ($filterType) {
+                case 'daily':
+                    $query->whereDate('date', $filterValue);
+                    break;
+                case 'weekly':
+                    $startDate = Carbon::parse($filterValue)->startOfWeek();
+                    $endDate = Carbon::parse($filterValue)->endOfWeek();
+                    $query->whereBetween('date', [$startDate, $endDate]);
+                    break;
+                case 'monthly':
+                    $date = Carbon::parse($filterValue . '-01');
+                    $query->whereMonth('date', $date->month)
+                        ->whereYear('date', $date->year);
+                    break;
+                case 'yearly':
+                    $query->whereYear('date', $filterValue);
+                    break;
+            }
+        }
+
+        $intentforms = $query->get();
+        $totalAmount = $intentforms->sum('total');
+
         return view('intentforms::report', [
-            'intentform' => $intentform,
+            'intentforms' => $intentforms,
+            'totalAmount' => $totalAmount,
+            'filterType' => $request->filter_type ?? 'monthly',
+            'filterValue' => $request->filter_value ?? Carbon::now()->format('Y-m'),
             'company' => $company,
         ]);
     }
@@ -331,4 +366,68 @@ class IntentFormsController extends Controller
             ], 500);
         }
     }
+
+
+    /**
+     * Export report to Excel
+     */
+    public function exportReport(Request $request)
+    {
+        $query = Intentform::with('donations.type')->orderBy('date', 'asc');
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+
+        // Apply same filters as report page
+        if ($request->has('filter_type') && $request->has('filter_value')) {
+            $filterType = $request->filter_type;
+            $filterValue = $request->filter_value;
+
+            switch ($filterType) {
+                case 'daily':
+                    $query->whereDate('date', $filterValue);
+                    $date = Carbon::parse($filterValue);
+                    $month = $date->month;
+                    $year = $date->year;
+                    $filename = 'report_' . $date->format('d-m-Y');
+                    break;
+                case 'weekly':
+                    $startDate = Carbon::parse($filterValue)->startOfWeek();
+                    $endDate = Carbon::parse($filterValue)->endOfWeek();
+                    $query->whereBetween('date', [$startDate, $endDate]);
+                    $month = $startDate->month;
+                    $year = $startDate->year;
+                    $filename = 'report_week_' . $startDate->format('d-m-Y');
+                    break;
+                case 'monthly':
+                    $date = Carbon::parse($filterValue . '-01');
+                    $query->whereMonth('date', $date->month)
+                        ->whereYear('date', $date->year);
+                    $month = $date->month;
+                    $year = $date->year;
+                    // Use Thai Buddhist year
+                    $thaiYear = $date->year + 543;
+                    $filename = 'report_' . $date->month . ':' . $thaiYear;
+                    break;
+                case 'yearly':
+                    $query->whereYear('date', $filterValue);
+                    $year = $filterValue;
+                    $month = 1; // Default to January for title
+                    $thaiYear = $filterValue + 543;
+                    $filename = 'report_' . $thaiYear;
+                    break;
+                default:
+                    $filename = 'report_' . Carbon::now()->format('m-Y');
+            }
+        } else {
+            $filename = 'report_' . Carbon::now()->format('m-Y');
+        }
+
+        $intentforms = $query->get();
+
+        return Excel::download(
+            new IntentFormReportExport($intentforms, $month, $year),
+            $filename . '.xlsx'
+        );
+    }
 }
+

@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Modules\IntentForms\Database\Seeders\IntentFormsDatabaseSeeder;
 
 return new class extends Migration {
     /**
@@ -39,6 +40,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->nullable();
             $table->float('price')->nullable();
+            $table->integer('status')->default(1);
             $table->string('description')->nullable();
             $table->timestamps();
         });
@@ -68,6 +70,9 @@ return new class extends Migration {
 
         // $roleStaff = Role::findByName('staff');
         // $roleStaff->givePermissionTo(['intentform create', 'intentform view', 'intentform update', 'intentform delete']);
+
+        $seeder = new IntentFormsDatabaseSeeder();
+        $seeder->run();
     }
 
     /**

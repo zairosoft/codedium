@@ -17,7 +17,8 @@ use Modules\IntentForms\App\Http\Controllers\TypeController;
 
 Route::prefix('intentform')->group(function () {
     Route::get('/', 'IntentFormsController@index')->name('intentform');
-    Route::get('/intentform', 'IntentFormsController@report')->name('intentform.report');
+    Route::get('/report', 'IntentFormsController@report')->name('intentform.report');
+    Route::get('/report/export', 'IntentFormsController@exportReport')->name('intentform.report.export');
     Route::get('/create', 'IntentFormsController@create')->name('intentform.create');
     Route::post('/store', 'IntentFormsController@store')->name('intentform.store');
     Route::get('/{id}/edit', 'IntentFormsController@edit')->name('intentform.edit');
