@@ -32,20 +32,18 @@
             font-family: 'Sarabun', 'TH Sarabun New', sans-serif;
             width: 19.3cm;
             height: 14.3cm;
-            font-size: 11px;
-            line-height: 1.3;
-            color: #000;
-            padding: 0.5cm 0.8cm;
-            position: relative;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         .container {
-            width: 100%;
-            height: 100%;
+            width: 19.3cm;
+            height: 14.3cm;
             display: flex;
             flex-direction: column;
             background-image: url('https://zairosoft.dev/codedium/88_page-0001.jpg');
-            background-size: 100% 100%;
+            background-size: 19.3cm 14.3cm;
             background-position: center;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
