@@ -41,6 +41,7 @@ class TypeController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:500',
+            'status' => 'required|integer|in:0,1',
         ]);
 
         try {
@@ -48,6 +49,7 @@ class TypeController extends Controller
                 'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
+                'status' => $request->status,
             ]);
 
             Session::flash('success', 'เพิ่มประเภทการบริจาคสำเร็จ');
@@ -79,6 +81,7 @@ class TypeController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:500',
+            'status' => 'required|integer|in:0,1',
         ]);
 
         try {
@@ -88,6 +91,7 @@ class TypeController extends Controller
                 'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
+                'status' => $request->status,
             ]);
 
             Session::flash('success', 'อัพเดทประเภทการบริจาคสำเร็จ');

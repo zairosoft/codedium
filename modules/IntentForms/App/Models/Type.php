@@ -18,7 +18,8 @@ class Type extends Model
         'id',
         'name',
         'price',
-        'description'
+        'description',
+        'status'
     ];
 
     protected $table = 'intentform_types';

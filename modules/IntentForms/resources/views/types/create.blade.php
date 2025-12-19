@@ -60,6 +60,18 @@
                             <span class="text-danger text-xs">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <div>
+                        <label for="status">สถานะ <span class="text-danger">*</span></label>
+                        <select id="status" name="status" class="form-select @error('status') border-danger @enderror"
+                            required>
+                            <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>ใช้งาน</option>
+                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>ไม่ใช้งาน</option>
+                        </select>
+                        @error('status')
+                            <span class="text-danger text-xs">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mt-6 flex gap-4">
