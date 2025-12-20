@@ -86,19 +86,70 @@
             width: 20px;
             height: 20px;
         }
+
+        /* Controls Container */
+        .controls {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 1000;
+        }
+
+        /* Update button position to be relative to controls */
+        .print-button {
+            position: static;
+            /* Reset fixed position as parent is fixed */
+        }
+
+
+
+        .toggle-switch input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #4f46e5;
+        }
+
+        /* No Background Class */
+        .container.no-bg {
+            background-image: none !important;
+        }
     </style>
 </head>
 
 <body>
-    <button onclick="window.print()" class="print-button no-print">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-            <rect x="6" y="14" width="12" height="8"></rect>
-        </svg>
-        <span>พิมพ์ใบอนุโมทนาบัตร</span>
-    </button>
+    <div class="controls no-print">
+        <label class="toggle-switch">
+            <input type="checkbox" id="bgToggle" checked onchange="toggleBackground()">
+            <span>แสดงรูปพื้นหลัง</span>
+        </label>
+
+        <button onclick="window.print()" class="print-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>พิมพ์ใบอนุโมทนาบัตร</span>
+        </button>
+    </div>
+
+    <script>
+        function toggleBackground() {
+            const container = document.querySelector('.container');
+            const checkbox = document.getElementById('bgToggle');
+
+            if (checkbox.checked) {
+                container.classList.remove('no-bg');
+            } else {
+                container.classList.add('no-bg');
+            }
+        }
+    </script>
 
 
 
@@ -130,12 +181,25 @@
         <div class="account_number" style="margin-top: 27mm; margin-left: 151mm; position: absolute;">
             {{ $intentform->account_number }}
         </div>
-        <div class="account_number" style="margin-top: 36mm; margin-left: 33mm; position: absolute;">
+        <div class="account_number" style="margin-top: 36mm; margin-left: 34mm; position: absolute;">
             {{ $intentform->account_number }}
         </div>
 
         <div class="refer" style="margin-top: 36mm; margin-left: 137mm; position: absolute;">
             {{ $intentform->refer }}
+        </div>
+
+        <div class="name" style="margin-top: 85mm; margin-left: 36mm; position: absolute;">
+            {{ $intentform->name }}
+        </div>
+
+
+
+
+
+
+        <div class="payee" style="margin-top: 139mm; margin-left: 124mm; position: absolute;">
+            {{ $intentform->payee }}
         </div>
 
 
