@@ -189,22 +189,33 @@
             {{ $intentform->refer }}
         </div>
 
-        <div class="name" style="margin-top: 85mm; margin-left: 36mm; position: absolute;">
+        <div class="name" style="margin-top: 86mm;margin-left: 36mm;position: absolute;">
             {{ $intentform->name }}
         </div>
 
 
+        <div class="foundation" style="margin-top: 112mm;margin-left: 25mm;position: absolute;">
+            {{ $intentform->foundation }}
+        </div>
 
-
-
-
+        @php
+            $date = \Carbon\Carbon::parse($intentform->date)->locale('th');
+            $day = $date->format('d');
+            $month = $date->monthName;
+            $year = $date->year + 543;
+        @endphp
+        <div class="date-day" style="margin-top: 129mm;margin-left: 116mm;position: absolute;">
+            {{ $day }}
+        </div>
+        <div class="date-month" style="margin-top: 129mm;margin-left: 135mm;position: absolute;">
+            {{ $month }}
+        </div>
+        <div class="date-year" style="margin-top: 129mm;margin-left: 165mm;position: absolute;">
+            {{ $year }}
+        </div>
         <div class="payee" style="margin-top: 139mm; margin-left: 124mm; position: absolute;">
             {{ $intentform->payee }}
         </div>
-
-
-
-
     </div>
 </body>
 
