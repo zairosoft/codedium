@@ -7,7 +7,7 @@
     <title>อนุโมทนาบัตร - {{ $intentform->volume }}/{{ $intentform->number }}</title>
     <style>
         @page {
-            size: 19.3cm 14.3cm;
+            size: 20.3cm 15.3cm;
             margin: 0;
         }
 
@@ -30,21 +30,22 @@
 
         body {
             font-family: 'Sarabun', 'TH Sarabun New', sans-serif;
-            width: 19.3cm;
-            height: 14.3cm;
+            width: 20.3cm;
+            height: 15.3cm;
             margin: 0;
             padding: 0;
             overflow: hidden;
         }
 
         .container {
-            width: 19.3cm;
-            height: 14.3cm;
+            width: 20.3cm;
+            height: 15.3cm;
             display: flex;
             flex-direction: column;
             background-image: url('https://zairosoft.dev/codedium/88_page-0001.jpg');
-            background-size: 19.3cm 14.3cm;
+            background-size: 100% 100%;
             background-position: center;
+            background-repeat: no-repeat;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
@@ -90,7 +91,8 @@
 
 <body>
     <button onclick="window.print()" class="print-button no-print">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 6 2 18 2 18 9"></polyline>
             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
             <rect x="6" y="14" width="12" height="8"></rect>
@@ -98,7 +100,46 @@
         <span>พิมพ์ใบอนุโมทนาบัตร</span>
     </button>
 
+
+
+
+
+
+
+
     <div class="container">
+
+
+
+
+
+
+
+
+        <div class="volume" style=" margin-top: 16mm; margin-left: 49mm; position: absolute; ">
+            {{ $intentform->volume }}
+        </div>
+        <div class="number" style=" margin-top: 16mm; margin-left: 158mm; position: absolute; ">
+            {{ $intentform->number }}
+        </div>
+
+
+        <div class="account_name" style="margin-top: 27mm; margin-left: 33mm; position: absolute;">
+            {{ $intentform->account_name }}
+        </div>
+        <div class="account_number" style="margin-top: 27mm; margin-left: 151mm; position: absolute;">
+            {{ $intentform->account_number }}
+        </div>
+        <div class="account_number" style="margin-top: 36mm; margin-left: 33mm; position: absolute;">
+            {{ $intentform->account_number }}
+        </div>
+
+        <div class="refer" style="margin-top: 36mm; margin-left: 137mm; position: absolute;">
+            {{ $intentform->refer }}
+        </div>
+
+
+
 
     </div>
 </body>
