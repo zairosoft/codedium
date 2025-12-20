@@ -215,13 +215,13 @@
             $month = $date->monthName;
             $year = $date->year + 543;
         @endphp
-        <div class="date-day" style="margin-top: 129mm;margin-left: 116mm;position: absolute;">
+        <div class="date-day" style="margin-top: 129.2mm; margin-left: 116mm; position: absolute; font-size: 13px;">
             {{ $day }}
         </div>
-        <div class="date-month" style="margin-top: 129mm;margin-left: 135mm;position: absolute;">
+        <div class="date-month" style="margin-top: 129.2mm; margin-left: 135mm;position: absolute; font-size: 13px;">
             {{ $month }}
         </div>
-        <div class="date-year" style="margin-top: 129mm;margin-left: 165mm;position: absolute;">
+        <div class="date-year" style="margin-top: 129.2mm; margin-left: 165mm;position: absolute; font-size: 13px;">
             {{ $year }}
         </div>
         <div class="payee" style="margin-top: 139mm; margin-left: 124mm; position: absolute;">
@@ -287,7 +287,7 @@
                 </div>
             @endif
             @if($donation->type->id == 9)
-                <div style="margin-top: 102.5mm; margin-left: 137.5mm; position: absolute;">
+                <div style="margin-top: 103mm; margin-left: 137.5mm; position: absolute;">
                     ✓
                 </div>
                 <div style="margin-top: 102.5mm; margin-left: 146mm;position: absolute;">
