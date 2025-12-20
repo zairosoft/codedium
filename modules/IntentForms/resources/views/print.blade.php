@@ -193,10 +193,21 @@
             {{ $intentform->name }}
         </div>
 
+        @php
+            $foundationParts = explode(' ', $intentform->foundation, 2);
+            $foundationName = $foundationParts[0] ?? $intentform->foundation;
+            $foundationProvince = $foundationParts[1] ?? '';
+        @endphp
 
         <div class="foundation" style="margin-top: 112mm;margin-left: 25mm;position: absolute;">
-            {{ $intentform->foundation }}
+            {{ $foundationName }}
         </div>
+
+        @if($foundationProvince)
+            <div class="foundation-province" style="margin-top: 112mm;margin-left: 133mm;position: absolute;">
+                {{ $foundationProvince }}
+            </div>
+        @endif
 
         @php
             $date = \Carbon\Carbon::parse($intentform->date)->locale('th');
@@ -216,6 +227,32 @@
         <div class="payee" style="margin-top: 139mm; margin-left: 124mm; position: absolute;">
             {{ $intentform->payee }}
         </div>
+
+
+
+
+        @forelse($intentform->intentformDonations as $index => $donation)
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>
+                    <div class="font-semibold">{{ $donation->type->name ?? '-' }}</div>
+                    @if($donation->description)
+                        <div class="text-sm text-gray-500">{{ $donation->description }}</div>
+                    @endif
+                </td>
+                <td>{{ number_format($donation->quantity) }}</td>
+                <td>{{ number_format($donation->type->price ?? 0, 2) }} บาท</td>
+                <td class="text-right">{{ number_format($donation->sub_total, 2) }} บาท</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5" class="text-center">ไม่มีรายการบริจาค</td>
+            </tr>
+        @endforelse
+
+
+
+
     </div>
 </body>
 
