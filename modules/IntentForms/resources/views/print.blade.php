@@ -179,7 +179,7 @@
             {{ $intentform->account_name }}
         </div>
         <div class="account_number" style="margin-top: 27mm; margin-left: 151mm; position: absolute;">
-            {{ $intentform->account_number }}
+            {{ $intentform->account_bank }}
         </div>
         <div class="account_number" style="margin-top: 36mm; margin-left: 34mm; position: absolute;">
             {{ $intentform->account_number }}
@@ -189,7 +189,7 @@
             {{ $intentform->refer }}
         </div>
 
-        <div class="name" style="margin-top: 86mm;margin-left: 36mm;position: absolute;">
+        <div class="name" style="margin-top: 85.7mm; margin-left: 36mm; position: absolute;">
             {{ $intentform->name }}
         </div>
 
@@ -199,12 +199,12 @@
             $foundationProvince = $foundationParts[1] ?? '';
         @endphp
 
-        <div class="foundation" style="margin-top: 112mm;margin-left: 25mm;position: absolute;">
+        <div class="foundation" style="margin-top: 112mm; margin-left: 25mm; position: absolute;">
             {{ $foundationName }}
         </div>
 
         @if($foundationProvince)
-            <div class="foundation-province" style="margin-top: 112mm;margin-left: 133mm;position: absolute;">
+            <div class="foundation-province" style="margin-top: 112mm; margin-left: 133mm; position: absolute;">
                 {{ $foundationProvince }}
             </div>
         @endif
@@ -231,24 +231,71 @@
 
 
 
-        @forelse($intentform->intentformDonations as $index => $donation)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>
-                    <div class="font-semibold">{{ $donation->type->name ?? '-' }}</div>
-                    @if($donation->description)
-                        <div class="text-sm text-gray-500">{{ $donation->description }}</div>
-                    @endif
-                </td>
-                <td>{{ number_format($donation->quantity) }}</td>
-                <td>{{ number_format($donation->type->price ?? 0, 2) }} บาท</td>
-                <td class="text-right">{{ number_format($donation->sub_total, 2) }} บาท</td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="5" class="text-center">ไม่มีรายการบริจาค</td>
-            </tr>
-        @endforelse
+
+
+
+        @foreach($intentform->donations as $index => $donation)
+
+            @if($donation->type->id == 1)
+                <div style="margin-top: 95mm; margin-left: 56mm; position: absolute;">
+                    ✓
+                </div>
+            @endif
+
+            @if($donation->type->id == 2)
+                <div style="margin-top: 95mm; margin-left: 83mm; position: absolute;">
+                    ✓
+                </div>
+            @endif
+
+            @if($donation->type->id == 3)
+                <div style="margin-top: 95mm; margin-left: 107.5mm; osition: absolute;">
+                    ✓
+                </div>
+            @endif
+
+            @if($donation->type->id == 4)
+                <div style="margin-top: 95mm; margin-left: 137.5mm; position: absolute;">
+                    ✓
+                </div>
+            @endif
+            @if($donation->type->id == 5)
+                <div style="margin-top: 95mm; margin-left: 179mm; position: absolute;">
+                    ✓
+                </div>
+            @endif
+            @if($donation->type->id == 6)
+                <div style="margin-top: 103mm;margin-left: 11.5mm;position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 102.5mm; margin-left: 30mm;position: absolute;">
+                    {{ $donation->description }}
+                </div>
+            @endif
+
+            @if($donation->type->id == 7)
+                <div style="margin-top: 103mm; margin-left: 56mm; position: absolute;">
+                    ✓
+                </div>
+            @endif
+            @if($donation->type->id == 8)
+                <div style="margin-top: 103mm; margin-left: 83mm; position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 102.5mm; margin-left: 100.5mm;position: absolute;">
+                    {{ $donation->description }}
+                </div>
+            @endif
+            @if($donation->type->id == 9)
+                <div style="margin-top: 102.5mm; margin-left: 137.5mm; position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 102.5mm; margin-left: 146mm;position: absolute;">
+                    {{ $donation->description }}
+                </div>
+            @endif
+
+        @endforeach
 
 
 
