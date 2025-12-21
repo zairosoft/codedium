@@ -1,5 +1,89 @@
 <!DOCTYPE html>
 <html lang="th">
+@php
+    if (!function_exists('baht_text')) {
+        function baht_text($number, $include_unit = true, $display_zero = true)
+        {
+            if (!is_numeric($number)) {
+                return null;
+            }
+
+            $BAHT_TEXT_NUMBERS = array('ศูนย์', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า');
+            $BAHT_TEXT_UNITS = array('', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน');
+            $BAHT_TEXT_ONE_IN_TENTH = 'เอ็ด';
+            $BAHT_TEXT_TWENTY = 'ยี่';
+            $BAHT_TEXT_INTEGER = 'ถ้วน';
+            $BAHT_TEXT_BAHT = 'บาท';
+            $BAHT_TEXT_SATANG = 'สตางค์';
+            $BAHT_TEXT_POINT = 'จุด';
+
+            $log = floor(log($number, 10));
+            if ($log > 5) {
+                $millions = floor($log / 6);
+                $million_value = pow(1000000, $millions);
+                $normalised_million = floor($number / $million_value);
+                $rest = $number - ($normalised_million * $million_value);
+                $millions_text = '';
+                for ($i = 0; $i < $millions; $i++) {
+                    $millions_text .= $BAHT_TEXT_UNITS[6];
+                }
+                return baht_text($normalised_million, false) . $millions_text . baht_text($rest, true, false);
+            }
+
+            $number_str = (string) floor($number);
+            $text = '';
+            $unit = 0;
+
+            if ($display_zero && $number_str == '0') {
+                $text = $BAHT_TEXT_NUMBERS[0];
+            } else
+                for ($i = strlen($number_str) - 1; $i > -1; $i--) {
+                    $current_number = (int) $number_str[$i];
+
+                    $unit_text = '';
+                    if ($unit == 0 && $i > 0) {
+                        $previous_number = isset($number_str[$i - 1]) ? (int) $number_str[$i - 1] : 0;
+                        if ($current_number == 1 && $previous_number > 0) {
+                            $unit_text .= $BAHT_TEXT_ONE_IN_TENTH;
+                        } else if ($current_number > 0) {
+                            $unit_text .= $BAHT_TEXT_NUMBERS[$current_number];
+                        }
+                    } else if ($unit == 1 && $current_number == 2) {
+                        $unit_text .= $BAHT_TEXT_TWENTY;
+                    } else if ($current_number > 0 && ($unit != 1 || $current_number != 1)) {
+                        $unit_text .= $BAHT_TEXT_NUMBERS[$current_number];
+                    }
+
+                    if ($current_number > 0) {
+                        $unit_text .= $BAHT_TEXT_UNITS[$unit];
+                    }
+
+                    $text = $unit_text . $text;
+                    $unit++;
+                }
+
+            if ($include_unit) {
+                $text .= $BAHT_TEXT_BAHT;
+
+                $satang = explode('.', number_format($number, 2, '.', ''))[1];
+                $text .= $satang == 0
+                    ? $BAHT_TEXT_INTEGER
+                    : baht_text($satang, false) . $BAHT_TEXT_SATANG;
+            } else {
+                $exploded = explode('.', $number);
+                if (isset($exploded[1])) {
+                    $text .= $BAHT_TEXT_POINT;
+                    $decimal = (string) $exploded[1];
+                    for ($i = 0; $i < strlen($decimal); $i++) {
+                        $text .= $BAHT_TEXT_NUMBERS[$decimal[$i]];
+                    }
+                }
+            }
+
+            return $text;
+        }
+    }
+@endphp
 
 <head>
     <meta charset="UTF-8">
@@ -167,47 +251,59 @@
 
 
 
-        <div class="volume" style=" margin-top: 16mm; margin-left: 49mm; position: absolute; ">
+        <div class="volume"
+            style="margin-top: 16mm;margin-left: 49mm;position: absolute; font-size: 20px;font-weight: bold;">
             {{ $intentform->volume }}
         </div>
-        <div class="number" style=" margin-top: 16mm; margin-left: 158mm; position: absolute; ">
+        <div class="number"
+            style="margin-top: 16mm;margin-left: 158mm;position: absolute; font-size: 20px;font-weight: bold;">
             {{ $intentform->number }}
         </div>
 
 
         <div class="account_name" style="margin-top: 27mm; margin-left: 33mm; position: absolute;">
-            {{ $intentform->account_name }}
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->account_name }}
+            @else
+                -
+            @endif
         </div>
         <div class="account_number" style="margin-top: 27mm; margin-left: 151mm; position: absolute;">
-            {{ $intentform->account_bank }}
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->account_bank }}
+            @else
+                -
+            @endif
         </div>
         <div class="account_number" style="margin-top: 36mm; margin-left: 34mm; position: absolute;">
-            {{ $intentform->account_number }}
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->account_number }}
+            @else
+                -
+            @endif
         </div>
 
         <div class="refer" style="margin-top: 36mm; margin-left: 137mm; position: absolute;">
-            {{ $intentform->refer }}
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->refer }}
+            @else
+                -
+            @endif
         </div>
 
         <div class="name" style="margin-top: 85.7mm; margin-left: 36mm; position: absolute;">
             {{ $intentform->name }}
         </div>
 
-        @php
-            $foundationParts = explode(' ', $intentform->foundation, 2);
-            $foundationName = $foundationParts[0] ?? $intentform->foundation;
-            $foundationProvince = $foundationParts[1] ?? '';
-        @endphp
 
-        <div class="foundation" style="margin-top: 112mm; margin-left: 25mm; position: absolute;">
-            {{ $foundationName }}
+        <div class="foundation" style="margin-top: 112mm; margin-left: 50mm; position: absolute;">
+            {{ number_format($intentform->total, 2) }}
         </div>
 
-        @if($foundationProvince)
-            <div class="foundation-province" style="margin-top: 112mm; margin-left: 133mm; position: absolute;">
-                {{ $foundationProvince }}
-            </div>
-        @endif
+        <div class="foundation-province" style="margin-top: 112mm; margin-left: 133mm; position: absolute;">
+            {{ baht_text($intentform->total) }}
+        </div>
+
 
         @php
             $date = \Carbon\Carbon::parse($intentform->date)->locale('th');

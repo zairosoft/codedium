@@ -96,9 +96,9 @@
                                         placeholder="กรอกอ้างอิง" value="{{ old('refer') }}" />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="foundation" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">มูลนิธิ</label>
-                                    <input id="foundation" type="text" name="foundation" class="form-input flex-1"
-                                        value="{{ old('foundation', $company->name) }}" placeholder="กรอกมูลนิธิ" />
+                                    <label for="foundation" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">แก่มูลนิธิ</label>
+                                    <input id="foundation" type="text" class="form-input flex-1" value="0.00"
+                                        placeholder="ให้แก่มูลนิธิ" />
                                 </div>
 
                             </div>
@@ -131,7 +131,8 @@
 
                                                     @foreach ($type as $typeItem)
                                                         <option value="{{ $typeItem->id }}" data-price="{{ $typeItem->price }}">
-                                                            {{ $typeItem->name }}</option>
+                                                            {{ $typeItem->name }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                                 <textarea class="form-textarea mt-4" :name="'description['+i+']'"
