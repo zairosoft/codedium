@@ -126,7 +126,7 @@
             height: 15.3cm;
             display: flex;
             flex-direction: column;
-            background-image: url('https://zairosoft.dev/codedium/88_page-0001.jpg');
+            /* background-image: url('https://zairosoft.dev/codedium/test2.png'); */
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
@@ -206,10 +206,10 @@
 
 <body>
     <div class="controls no-print">
-        <label class="toggle-switch">
+        <!-- <label class="toggle-switch">
             <input type="checkbox" id="bgToggle" checked onchange="toggleBackground()">
             <span>แสดงรูปพื้นหลัง</span>
-        </label>
+        </label> -->
 
         <button onclick="window.print()" class="print-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -252,30 +252,30 @@
 
 
         <div class="volume"
-            style="margin-top: 16mm;margin-left: 49mm;position: absolute; font-size: 20px;font-weight: bold;">
+            style="margin-top: 26mm;margin-left: 40mm;position: absolute;font-size: 20px;font-weight: bold;">
             {{ $intentform->volume }}
         </div>
         <div class="number"
-            style="margin-top: 16mm;margin-left: 158mm;position: absolute; font-size: 20px;font-weight: bold;">
+            style="margin-top: 26mm;margin-left: 175mm;position: absolute;font-size: 20px;font-weight: bold;">
             {{ $intentform->number }}
         </div>
 
 
-        <div class="account_name" style="margin-top: 27mm; margin-left: 33mm; position: absolute;">
+        <div class="account_name" style="margin-top: 35mm;margin-left: 40mm;position: absolute;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_name }}
             @else
                 -
             @endif
         </div>
-        <div class="account_number" style="margin-top: 27mm; margin-left: 151mm; position: absolute;">
+        <div class="account_number" style="margin-top: 35mm;margin-left: 132mm;position: absolute;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_bank }}
             @else
                 -
             @endif
         </div>
-        <div class="account_number" style="margin-top: 36mm; margin-left: 34mm; position: absolute;">
+        <div class="account_number" style="margin-top: 42mm;margin-left: 42mm;position: absolute;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_number }}
             @else
@@ -283,7 +283,7 @@
             @endif
         </div>
 
-        <div class="refer" style="margin-top: 36mm; margin-left: 137mm; position: absolute;">
+        <div class="refer" style="margin-top: 42mm;margin-left: 132mm;position: absolute;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->refer }}
             @else
@@ -291,16 +291,16 @@
             @endif
         </div>
 
-        <div class="name" style="margin-top: 85.7mm; margin-left: 36mm; position: absolute;">
+        <div class="name" style="margin-top: 86mm; margin-left: 66mm;position: absolute;">
             {{ $intentform->name }}
         </div>
 
 
-        <div class="foundation" style="margin-top: 112mm; margin-left: 50mm; position: absolute;">
+        <div class="foundation" style="margin-top: 107mm;margin-left: 52mm;position: absolute;">
             {{ number_format($intentform->total, 2) }}
         </div>
 
-        <div class="foundation-province" style="margin-top: 112mm; margin-left: 133mm; position: absolute;">
+        <div class="foundation-province" style="margin-top: 107mm;margin-left: 128mm;position: absolute;">
             {{ baht_text($intentform->total) }}
         </div>
 
@@ -311,16 +311,16 @@
             $month = $date->monthName;
             $year = $date->year + 543;
         @endphp
-        <div class="date-day" style="margin-top: 129.2mm; margin-left: 116mm; position: absolute; font-size: 13px;">
+        <div class="date-day" style="margin-top: 122mm; margin-left: 116mm; position: absolute; font-size: 13px;">
             {{ $day }}
         </div>
-        <div class="date-month" style="margin-top: 129.2mm; margin-left: 135mm;position: absolute; font-size: 13px;">
+        <div class="date-month" style="margin-top: 122mm; margin-left: 135mm;position: absolute; font-size: 13px;">
             {{ $month }}
         </div>
-        <div class="date-year" style="margin-top: 129.2mm; margin-left: 165mm;position: absolute; font-size: 13px;">
+        <div class="date-year" style="margin-top: 122mm; margin-left: 165mm;position: absolute; font-size: 13px;">
             {{ $year }}
         </div>
-        <div class="payee" style="margin-top: 139mm; margin-left: 124mm; position: absolute;">
+        <div class="payee" style="margin-top: 130mm;margin-left: 136mm;position: absolute;">
             {{ $intentform->payee }}
         </div>
 
@@ -333,60 +333,60 @@
         @foreach($intentform->donations as $index => $donation)
 
             @if($donation->type->id == 1)
-                <div style="margin-top: 95mm; margin-left: 56mm; position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 66mm;position: absolute;">
                     ✓
                 </div>
             @endif
 
             @if($donation->type->id == 2)
-                <div style="margin-top: 95mm; margin-left: 83mm; position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 90mm;position: absolute;">
                     ✓
                 </div>
             @endif
 
             @if($donation->type->id == 3)
-                <div style="margin-top: 95mm; margin-left: 107.5mm; osition: absolute;">
+                <div style="margin-top: 93mm;margin-left: 112mm;position: absolute;">
                     ✓
                 </div>
             @endif
 
             @if($donation->type->id == 4)
-                <div style="margin-top: 95mm; margin-left: 137.5mm; position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
             @endif
             @if($donation->type->id == 5)
-                <div style="margin-top: 95mm; margin-left: 179mm; position: absolute;">
+                <div style="margin-top: 93mm; margin-left: 179mm; position: absolute;">
                     ✓
                 </div>
             @endif
             @if($donation->type->id == 6)
-                <div style="margin-top: 103mm;margin-left: 11.5mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 20mm;position: absolute;">
                     ✓
                 </div>
-                <div style="margin-top: 102.5mm; margin-left: 30mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 40mm;position: absolute;">
                     {{ $donation->description }}
                 </div>
             @endif
 
             @if($donation->type->id == 7)
-                <div style="margin-top: 103mm; margin-left: 56mm; position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 61mm;position: absolute;">
                     ✓
                 </div>
             @endif
             @if($donation->type->id == 8)
-                <div style="margin-top: 103mm; margin-left: 83mm; position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 90mm;position: absolute;">
                     ✓
                 </div>
-                <div style="margin-top: 102.5mm; margin-left: 100.5mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 106mm;position: absolute;">
                     {{ $donation->description }}
                 </div>
             @endif
             @if($donation->type->id == 9)
-                <div style="margin-top: 103mm; margin-left: 137.5mm; position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 141mm;position: absolute;">
                     ✓
                 </div>
-                <div style="margin-top: 102.5mm; margin-left: 146mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 156mm;position: absolute;">
                     {{ $donation->description }}
                 </div>
             @endif
