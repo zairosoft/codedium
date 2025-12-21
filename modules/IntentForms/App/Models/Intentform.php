@@ -28,7 +28,6 @@ class Intentform extends Model
         'other',
         'payee',
         'payment_methods',
-        'foundation',
         'total',
         'notes',
         'created_by',

@@ -47,8 +47,8 @@
                         </div>
                         <div class="w-full lg:w-1/2 lg:max-w-fit">
                             <div class="flex items-center">
-                                <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เลขที่ / เล่มที่</label>
-                                <div>{{ $nextNumber }} / {{ $nextVolume }}</div>
+                                <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เล่มที่ / เลขที่</label>
+                                <div>{{ $nextVolume }} / {{ $nextNumber }}</div>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
@@ -77,11 +77,7 @@
                                     <input id="name" type="text" name="name" class="form-input flex-1"
                                         placeholder="กรอกบัตรนี้แสดงว่า" required value="{{ old('name') }}" />
                                 </div>
-                                <div class="mt-4 flex items-center">
-                                    <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
-                                    <input id="payee" type="text" name="payee" class="form-input flex-1"
-                                        placeholder="กรอกผู้รับเงิน" value="{{ Auth::user()->name }}" />
-                                </div>
+
                             </div>
                             <div class="w-full lg:w-1/2">
                                 <div class="text-lg font-semibold">&nbsp;</div>
@@ -96,9 +92,9 @@
                                         placeholder="กรอกอ้างอิง" value="{{ old('refer') }}" />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="to_foundation" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">แก่มูลนิธิ</label>
-                                    <input id="to_foundation" type="text" class="form-input flex-1" value="0.00"
-                                        placeholder="ให้แก่มูลนิธิ" />
+                                    <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
+                                    <input id="payee" type="text" name="payee" class="form-input flex-1"
+                                        placeholder="กรอกผู้รับเงิน" value="{{ Auth::user()->name }}" />
                                 </div>
 
                             </div>

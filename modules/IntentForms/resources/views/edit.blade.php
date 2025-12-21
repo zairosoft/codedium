@@ -48,8 +48,8 @@
                         </div>
                         <div class="w-full lg:w-1/2 lg:max-w-fit">
                             <div class="flex items-center">
-                                <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เลขที่ / เล่มที่</label>
-                                <div>{{ $intentform->number }} / {{ $intentform->volume }}</div>
+                                <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เล่มที่ / เลขที่</label>
+                                <div>{{ $intentform->volume }} / {{ $intentform->number }}</div>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
@@ -81,11 +81,7 @@
                                         placeholder="กรอกบัตรนี้แสดงว่า" required
                                         value="{{ old('name', $intentform->name) }}" />
                                 </div>
-                                <div class="mt-4 flex items-center">
-                                    <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
-                                    <input id="payee" type="text" name="payee" class="form-input flex-1"
-                                        placeholder="กรอกผู้รับเงิน" value="{{ old('payee', $intentform->payee) }}" />
-                                </div>
+
                             </div>
                             <div class="w-full lg:w-1/2">
                                 <div class="text-lg font-semibold">&nbsp;</div>
@@ -101,9 +97,9 @@
                                         placeholder="กรอกอ้างอิง" value="{{ old('refer', $intentform->refer) }}" />
                                 </div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="foundation" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">แก่มูลนิธิ</label>
-                                    <input id="foundation" type="text" class="form-input flex-1"
-                                        value="{{ number_format($intentform->total, 2) }}" placeholder="ให้แก่มูลนิธิ" />
+                                    <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
+                                    <input id="payee" type="text" name="payee" class="form-input flex-1"
+                                        placeholder="กรอกผู้รับเงิน" value="{{ old('payee', $intentform->payee) }}" />
                                 </div>
 
                             </div>
@@ -281,8 +277,8 @@
                         });
                     @endforeach
 
-                                // Add one empty item if no items exist
-                                if (this.items.length === 0) {
+                                        // Add one empty item if no items exist
+                                        if (this.items.length === 0) {
                         this.items.push({
                             id: 1,
                             type_id: '',
