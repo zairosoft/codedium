@@ -15,11 +15,6 @@ class ExpensesDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
-
-
-
-
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
 
