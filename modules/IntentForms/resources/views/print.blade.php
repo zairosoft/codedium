@@ -255,14 +255,14 @@
                 -
             @endif
         </div>
-        <div class="account_number" style="margin-top: 38mm;margin-left: 136mm;position: absolute; font-size: 22px;">
+        <div class="account_bank" style="margin-top: 38mm;margin-left: 140mm;position: absolute; font-size: 22px;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_bank }}
             @else
                 -
             @endif
         </div>
-        <div class="account_number" style="margin-top: 49mm;margin-left: 46mm;position: absolute; font-size: 22px;">
+        <div class="account_number" style="margin-top: 45mm;margin-left: 46mm;position: absolute; font-size: 22px;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_number }}
             @else
@@ -270,7 +270,7 @@
             @endif
         </div>
 
-        <div class="refer" style="margin-top: 49mm;margin-left: 136mm;position: absolute; font-size: 22px;">
+        <div class="refer" style="margin-top: 45mm;margin-left: 136mm;position: absolute; font-size: 22px;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->refer }}
             @else
@@ -278,7 +278,7 @@
             @endif
         </div>
 
-        <div class="name" style="margin-top: 85mm;margin-left: 60mm;position: absolute;font-size: 22px;">
+        <div class="name" style="margin-top: 84.5mm;margin-left: 60mm;position: absolute;font-size: 24px;">
             {{ $intentform->name }}
         </div>
 
@@ -316,30 +316,30 @@
         @foreach($intentform->donations as $index => $donation)
 
             @if($donation->type->id == 1)
-                <div style="margin-top: 93mm;margin-left: 68mm;position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 67mm;position: absolute;">
                     ✓
                 </div>
             @endif
 
             @if($donation->type->id == 2)
-                <div style="margin-top: 93mm;margin-left: 92mm;position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 91mm;position: absolute;">
                     ✓
                 </div>
             @endif
 
             @if($donation->type->id == 3)
-                <div style="margin-top: 93mm;margin-left: 114mm;position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 113mm;position: absolute;">
                     ✓
                 </div>
             @endif
 
             @if($donation->type->id == 4)
-                <div style="margin-top: 93mm;margin-left: 141mm;position: absolute;">
+                <div style="margin-top: 93mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
             @endif
             @if($donation->type->id == 5)
-                <div style="margin-top: 93mm; margin-left: 177mm; position: absolute;">
+                <div style="margin-top: 93mm; margin-left: 176mm; position: absolute;">
                     ✓
                 </div>
             @endif
@@ -353,12 +353,12 @@
             @endif
 
             @if($donation->type->id == 7)
-                <div style="margin-top: 100mm;margin-left: 68mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 67mm;position: absolute;">
                     ✓
                 </div>
             @endif
             @if($donation->type->id == 8)
-                <div style="margin-top: 100mm;margin-left: 92mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 91mm;position: absolute;">
                     ✓
                 </div>
                 <div style="margin-top: 99mm;margin-left: 109mm;position: absolute; font-size: 22px;">
@@ -366,7 +366,7 @@
                 </div>
             @endif
             @if($donation->type->id == 9)
-                <div style="margin-top: 100mm;margin-left: 141mm;position: absolute;">
+                <div style="margin-top: 100mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
                 <div style="margin-top: 99mm;margin-left: 156mm;position: absolute; font-size: 22px;">
