@@ -16,6 +16,18 @@ return [
             'title' => 'ภาพรวม',
             'description' => 'ภาพรวม',
         ],
+        [
+            'name' => 'หมวดหมู่',
+            'route-name' => 'expenses.categories.index',
+            'title' => 'หมวดหมู่',
+            'description' => 'หมวดหมู่',
+        ],
+        [
+            'name' => 'รายงาน',
+            'route-name' => 'expenses.report',
+            'title' => 'รายงาน',
+            'description' => 'รายงาน',
+        ],
 
     ],
     'technical' => 'expenses',

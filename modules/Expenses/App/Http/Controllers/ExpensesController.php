@@ -249,4 +249,109 @@ class ExpensesController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Display report page with filters
+     */
+    public function report(Request $request)
+    {
+        $query = Expense::with('items.category')->orderBy('date', 'desc');
+
+        // Apply filters
+        if ($request->has('filter_type') && $request->has('filter_value')) {
+            $filterType = $request->filter_type;
+            $filterValue = $request->filter_value;
+
+            switch ($filterType) {
+                case 'daily':
+                    $query->whereDate('date', $filterValue);
+                    break;
+                case 'weekly':
+                    $startDate = Carbon::parse($filterValue)->startOfWeek();
+                    $endDate = Carbon::parse($filterValue)->endOfWeek();
+                    $query->whereBetween('date', [$startDate, $endDate]);
+                    break;
+                case 'monthly':
+                    $date = Carbon::parse($filterValue . '-01');
+                    $query->whereMonth('date', $date->month)
+                        ->whereYear('date', $date->year);
+                    break;
+                case 'yearly':
+                    $query->whereYear('date', $filterValue);
+                    break;
+            }
+        }
+
+        $expenses = $query->get();
+        $totalAmount = $expenses->sum('total');
+
+        return view('expenses::report', [
+            'expenses' => $expenses,
+            'totalAmount' => $totalAmount,
+            'filterType' => $request->filter_type ?? 'monthly',
+            'filterValue' => $request->filter_value ?? Carbon::now()->format('Y-m'),
+        ]);
+    }
+
+    /**
+     * Export report to Excel
+     */
+    public function exportReport(Request $request)
+    {
+        $query = Expense::with('items.category')->orderBy('date', 'asc');
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+
+        // Apply same filters as report page
+        if ($request->has('filter_type') && $request->has('filter_value')) {
+            $filterType = $request->filter_type;
+            $filterValue = $request->filter_value;
+
+            switch ($filterType) {
+                case 'daily':
+                    $query->whereDate('date', $filterValue);
+                    $date = Carbon::parse($filterValue);
+                    $month = $date->month;
+                    $year = $date->year;
+                    $filename = 'expense_report_' . $date->format('d-m-Y');
+                    break;
+                case 'weekly':
+                    $startDate = Carbon::parse($filterValue)->startOfWeek();
+                    $endDate = Carbon::parse($filterValue)->endOfWeek();
+                    $query->whereBetween('date', [$startDate, $endDate]);
+                    $month = $startDate->month;
+                    $year = $startDate->year;
+                    $filename = 'expense_report_week_' . $startDate->format('d-m-Y');
+                    break;
+                case 'monthly':
+                    $date = Carbon::parse($filterValue . '-01');
+                    $query->whereMonth('date', $date->month)
+                        ->whereYear('date', $date->year);
+                    $month = $date->month;
+                    $year = $date->year;
+                    // Use Thai Buddhist year
+                    $thaiYear = $date->year + 543;
+                    $filename = 'expense_report_' . $date->month . ':' . $thaiYear;
+                    break;
+                case 'yearly':
+                    $query->whereYear('date', $filterValue);
+                    $year = $filterValue;
+                    $month = 1; // Default to January for title
+                    $thaiYear = $filterValue + 543;
+                    $filename = 'expense_report_' . $thaiYear;
+                    break;
+                default:
+                    $filename = 'expense_report_' . Carbon::now()->format('m-Y');
+            }
+        } else {
+            $filename = 'expense_report_' . Carbon::now()->format('m-Y');
+        }
+
+        $expenses = $query->get();
+
+        return Excel::download(
+            new ExpenseReportExport($expenses, $month, $year),
+            $filename . '.xlsx'
+        );
+    }
 }
