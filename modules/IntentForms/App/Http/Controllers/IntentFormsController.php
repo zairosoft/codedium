@@ -36,7 +36,7 @@ class IntentFormsController extends Controller
      */
     public function index()
     {
-        $intentforms = Intentform::get();
+        $intentforms = Intentform::orderByDesc('id')->get();
 
 
         return view('intentforms::index', [
