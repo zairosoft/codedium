@@ -50,9 +50,23 @@ class IntentFormsDatabaseSeeder extends Seeder
         ]);
 
         Type::create([
-            'name' => 'โคม',
+            'name' => 'โคมไฟประทีป - เล็ก',
             'status' => 1,
-            'price' => 100.00,
+            'price' => 240.00,
+            'created_by' => 1,
+        ]);
+
+        Type::create([
+            'name' => 'โคมไฟประทีป - กลาง',
+            'status' => 1,
+            'price' => 480.00,
+            'created_by' => 1,
+        ]);
+
+        Type::create([
+            'name' => 'โคมไฟประทีป - ใหญ่',
+            'status' => 1,
+            'price' => 1200.00,
             'created_by' => 1,
         ]);
 
@@ -66,14 +80,14 @@ class IntentFormsDatabaseSeeder extends Seeder
         Type::create([
             'name' => 'ปีชง',
             'status' => 1,
-            'price' => 100.00,
+            'price' => 200.00,
             'created_by' => 1,
         ]);
 
         Type::create([
             'name' => 'อื่นๆ',
             'status' => 1,
-            'price' => 100.00,
+            'price' => 0.00,
             'created_by' => 1,
         ]);
 

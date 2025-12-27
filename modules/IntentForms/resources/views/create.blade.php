@@ -139,7 +139,8 @@
                                                     x-model="item.quantity" :name="'quantity['+i+']'" min="0" />
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01" class="form-input w-32" readonly
+                                                <input type="number" step="0.01" class="form-input w-32"
+                                                    :readonly="!item.isOther"
                                                     placeholder="ราคา" :name="'price['+i+']'" x-model="item.price" />
                                             </td>
                                             <td x-text="formatNumber(item.price * item.quantity)"></td>
@@ -267,12 +268,18 @@
                         description: '',
                         quantity: 1,
                         price: 0,
+                        isOther: false,
                     });
                 },
 
                 updatePrice(event, index) {
                     const selectedOption = event.target.options[event.target.selectedIndex];
                     const price = selectedOption.getAttribute('data-price');
+                    const typeName = selectedOption.text.trim();
+                    
+                    // Check if selected type is "อื่นๆ"
+                    this.items[index].isOther = (typeName === 'อื่นๆ');
+                    
                     if (price) {
                         this.items[index].price = parseFloat(price);
                     }
@@ -289,6 +296,7 @@
                         description: '',
                         quantity: 1,
                         price: 0,
+                        isOther: false,
                     });
                 },
 

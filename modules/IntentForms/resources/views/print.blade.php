@@ -237,7 +237,7 @@
 
 
     <div class="container">
-      
+
         <div class="volume"
             style="margin-top: 28mm;  margin-left: 46mm; position: absolute; font-size: 24px; font-weight: bold;">
             {{ $intentform->volume }}
@@ -252,21 +252,21 @@
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_name }}
             @else
-                -
+                &nbsp;
             @endif
         </div>
         <div class="account_bank" style="margin-top: 38mm;margin-left: 140mm;position: absolute; font-size: 22px;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_bank }}
             @else
-                -
+                &nbsp;
             @endif
         </div>
         <div class="account_number" style="margin-top: 45mm;margin-left: 46mm;position: absolute; font-size: 22px;">
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->account_number }}
             @else
-                -
+                &nbsp;
             @endif
         </div>
 
@@ -274,7 +274,7 @@
             @if ($intentform->payment_methods == 'เงินโอน')
                 {{ $intentform->refer }}
             @else
-                -
+                &nbsp;
             @endif
         </div>
 
@@ -287,7 +287,8 @@
             {{ number_format($intentform->total, 2) }}
         </div>
 
-        <div class="foundation-province" style="margin-top: 108mm;margin-left: 128mm;position: absolute; font-size: 22px;">
+        <div class="foundation-province"
+            style="margin-top: 108mm;margin-left: 128mm;position: absolute; font-size: 22px;">
             {{ baht_text($intentform->total) }}
         </div>
 
@@ -310,8 +311,6 @@
         <div class="payee" style="margin-top: 131mm;margin-left: 140mm;position: absolute; font-size: 22px;">
             {{ $intentform->payee }}
         </div>
-
-
 
         @foreach($intentform->donations as $index => $donation)
 

@@ -144,8 +144,9 @@
                                                     x-model="item.quantity" :name="'quantity['+i+']'" min="0" />
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01" class="form-input w-32" readonly
-                                                    placeholder="ราคา" :name="'price['+i+']'" x-model="item.price" />
+                                                <input type="number" step="0.01" class="form-input w-32"
+                                                    :readonly="!item.isOther" placeholder="ราคา" :name="'price['+i+']'"
+                                                    x-model="item.price" />
                                             </td>
                                             <td x-text="formatNumber(item.price * item.quantity)"></td>
                                             <td>
@@ -274,11 +275,12 @@
                             description: '{{ $donation->description ?? '' }}',
                             quantity: {{ $donation->quantity }},
                             price: {{ $donation->type->price ?? 0 }},
+                            isOther: ('{{ $donation->type->name ?? '' }}' === 'อื่นๆ'),
                         });
                     @endforeach
 
-                                                // Add one empty item if no items exist
-                                                if (this.items.length === 0) {
+                                                    // Add one empty item if no items exist
+                                                    if (this.items.length === 0) {
                         this.items.push({
                             id: 1,
                             type_id: '',
@@ -286,6 +288,7 @@
                             description: '',
                             quantity: 1,
                             price: 0,
+                            isOther: false,
                         });
                     }
                 },
@@ -293,6 +296,11 @@
                 updatePrice(event, index) {
                     const selectedOption = event.target.options[event.target.selectedIndex];
                     const price = selectedOption.getAttribute('data-price');
+                    const typeName = selectedOption.text.trim();
+
+                    // Check if selected type is "อื่นๆ"
+                    this.items[index].isOther = (typeName === 'อื่นๆ');
+
                     if (price) {
                         this.items[index].price = parseFloat(price);
                     }
@@ -310,6 +318,7 @@
                         description: '',
                         quantity: 1,
                         price: 0,
+                        isOther: false,
                     });
                 },
 
