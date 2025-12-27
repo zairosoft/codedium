@@ -126,7 +126,7 @@
             height: 15.3cm;
             display: flex;
             flex-direction: column;
-            /*background-image: url('https://www.buchathamubon.org/test2.png');*/
+            background-image: url('https://www.buchathamubon.org/test2.png');
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
@@ -342,7 +342,7 @@
                     ✓
                 </div>
             @endif
-            @if($donation->type->id == 6)
+            @if($donation->type->id == 6 || $donation->type->id == 7 || $donation->type->id == 8)
                 <div style="margin-top: 100mm;margin-left: 28mm;position: absolute;">
                     ✓
                 </div>
@@ -351,12 +351,12 @@
                 </div>
             @endif
 
-            @if($donation->type->id == 7)
+            @if($donation->type->id == 9)
                 <div style="margin-top: 100mm;margin-left: 67mm;position: absolute;">
                     ✓
                 </div>
             @endif
-            @if($donation->type->id == 8)
+            @if($donation->type->id == 10)
                 <div style="margin-top: 100mm;margin-left: 91mm;position: absolute;">
                     ✓
                 </div>
@@ -364,7 +364,7 @@
                     {{ $donation->description }}
                 </div>
             @endif
-            @if($donation->type->id == 9)
+            @if($donation->type->id == 11)
                 <div style="margin-top: 100mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
