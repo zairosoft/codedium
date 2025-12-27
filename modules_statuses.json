@@ -7,5 +7,6 @@
     "PageBuilder": false,
     "CRM": false,
     "IntentForms": true,
-    "Expenses": true
+    "Expenses": true,
+    "Dashboard": true
 }
