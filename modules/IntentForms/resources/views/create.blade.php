@@ -48,7 +48,7 @@
                         <div class="w-full lg:w-1/2 lg:max-w-fit">
                             <div class="flex items-center">
                                 <label for="number" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">เล่มที่ / เลขที่</label>
-                                <div>{{ $nextVolume }} / {{ $nextNumber }}</div>
+                                <div><span x-text="currentVolume"></span> / <span x-text="currentNumber"></span></div>
                             </div>
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
@@ -140,8 +140,8 @@
                                             </td>
                                             <td>
                                                 <input type="number" step="0.01" class="form-input w-32"
-                                                    :readonly="!item.isOther"
-                                                    placeholder="ราคา" :name="'price['+i+']'" x-model="item.price" />
+                                                    :readonly="!item.isOther" placeholder="ราคา" :name="'price['+i+']'"
+                                                    x-model="item.price" />
                                             </td>
                                             <td x-text="formatNumber(item.price * item.quantity)"></td>
                                             <td>
@@ -191,7 +191,8 @@
                         </div>
                         <div class="mt-4">
                             <label for="payment-method">ช่องทางการชำระ</label>
-                            <select id="payment-method" name="payment_methods" class="form-select" required>
+                            <select id="payment-method" name="payment_methods" class="form-select" required
+                                x-model="paymentMethod" @change="updateRunningNumber()">
                                 <option value="เงินสด" {{ old('payment_methods', 'เงินสด') == 'เงินสด' ? 'selected' : '' }}>
                                     เงินสด</option>
                                 <option value="เงินโอน" {{ old('payment_methods') == 'เงินโอน' ? 'selected' : '' }}>เงินโอน
@@ -259,9 +260,13 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('invoiceAdd', () => ({
                 items: [],
+                paymentMethod: '{{ old('payment_methods', 'เงินสด') }}',
+                currentVolume: '{{ $nextVolumeCash }}',
+                currentNumber: '{{ $nextNumberCash }}',
 
                 init() {
                     //set default data
+                    this.updateRunningNumber();
                     this.items.push({
                         id: 1,
                         title: '',
@@ -272,14 +277,24 @@
                     });
                 },
 
+                updateRunningNumber() {
+                    if (this.paymentMethod === 'เงินสด') {
+                        this.currentVolume = '{{ $nextVolumeCash }}'.padStart(3, '0');
+                        this.currentNumber = '{{ $nextNumberCash }}';
+                    } else if (this.paymentMethod === 'เงินโอน') {
+                        this.currentVolume = '{{ $nextVolumeTransfer }}'.padStart(3, '0');
+                        this.currentNumber = '{{ $nextNumberTransfer }}';
+                    }
+                },
+
                 updatePrice(event, index) {
                     const selectedOption = event.target.options[event.target.selectedIndex];
                     const price = selectedOption.getAttribute('data-price');
                     const typeName = selectedOption.text.trim();
-                    
+
                     // Check if selected type is "อื่นๆ"
                     this.items[index].isOther = (typeName === 'อื่นๆ');
-                    
+
                     if (price) {
                         this.items[index].price = parseFloat(price);
                     }

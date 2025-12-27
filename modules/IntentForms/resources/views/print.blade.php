@@ -88,7 +88,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>อนุโมทนาบัตร - {{ $intentform->volume }}/{{ $intentform->number }}</title>
+    <title>อนุโมทนาบัตร - {{ sprintf('%03d', $intentform->volume) }}/{{ $intentform->number }}</title>
     <style>
         @page {
             size: 20.3cm 15.3cm;
@@ -240,7 +240,7 @@
 
         <div class="volume"
             style="margin-top: 28mm;  margin-left: 46mm; position: absolute; font-size: 24px; font-weight: bold;">
-            {{ $intentform->volume }}
+            {{ sprintf('%03d', $intentform->volume) }}
         </div>
         <div class="number"
             style="margin-top: 28mm; margin-left: 180mm; position: absolute; font-size: 24px; font-weight: bold;">

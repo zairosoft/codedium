@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Modules\IntentForms\App\Models\Intentform;
 use Modules\IntentForms\App\Models\Type;
 use Modules\IntentForms\App\Models\Donation;
+use Modules\IntentForms\App\Models\RunningNumber;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CompanyLang;
 use Illuminate\Support\Facades\Session;
@@ -52,30 +53,49 @@ class IntentFormsController extends Controller
         $company = CompanyLang::first();
         $type = Type::where('status', 1)->get();
 
-        // Get next volume and number
-        $lastIntentform = Intentform::orderBy('id', 'desc')->first();
-
-        if ($lastIntentform) {
-            if ($lastIntentform->number >= 99) {
-                // Reset number to 1 and increment volume
-                $nextVolume = $lastIntentform->volume + 1;
-                $nextNumber = 1;
+        // Logic next volume / number for Cash
+        $runCash = RunningNumber::where('type', 'เงินสด')->first();
+        if ($runCash) {
+            if ($runCash->number >= 99) {
+                $nextVolumeCash = $runCash->volume + 1;
+                if ($nextVolumeCash > 999)
+                    $nextVolumeCash = 1;
+                $nextNumberCash = 1;
             } else {
-                // Increment number, keep same volume
-                $nextVolume = $lastIntentform->volume;
-                $nextNumber = $lastIntentform->number + 1;
+                $nextVolumeCash = $runCash->volume;
+                $nextNumberCash = $runCash->number + 1;
             }
         } else {
-            // First record
-            $nextVolume = 1;
-            $nextNumber = 1;
+            // Fallback if not seeded
+            $nextVolumeCash = 1;
+            $nextNumberCash = 1;
+        }
+
+        // Logic next volume / number for Transfer
+        $runTransfer = RunningNumber::where('type', 'เงินโอน')->first();
+        if ($runTransfer) {
+            if ($runTransfer->number >= 99) {
+                $nextVolumeTransfer = $runTransfer->volume + 1;
+                if ($nextVolumeTransfer > 999)
+                    $nextVolumeTransfer = 1;
+                $nextNumberTransfer = 1;
+            } else {
+                $nextVolumeTransfer = $runTransfer->volume;
+                $nextNumberTransfer = $runTransfer->number + 1;
+            }
+        } else {
+            // Fallback if not seeded
+            $nextVolumeTransfer = 1;
+            $nextNumberTransfer = 1;
         }
 
         return view('intentforms::create', [
             'company' => $company,
             'type' => $type,
-            'nextVolume' => $nextVolume,
-            'nextNumber' => $nextNumber,
+            'nextVolumeCash' => $nextVolumeCash,
+            'nextNumberCash' => $nextNumberCash,
+            'nextVolumeTransfer' => $nextVolumeTransfer,
+            'nextNumberTransfer' => $nextNumberTransfer,
         ]);
     }
 
@@ -109,29 +129,42 @@ class IntentFormsController extends Controller
                 }
             }
 
-            // Get next volume and number
-            $lastIntentform = Intentform::orderBy('id', 'desc')->first();
+            // Get next volume and number from RunningNumber table with lock
+            $runningNumber = RunningNumber::where('type', $request->payment_methods)
+                ->lockForUpdate()
+                ->first();
 
-            if ($lastIntentform) {
-                if ($lastIntentform->number >= 99) {
-                    // Reset number to 1 and increment volume
-                    $volume = $lastIntentform->volume + 1;
-                    $number = 1;
-                } else {
-                    // Increment number, keep same volume
-                    $volume = $lastIntentform->volume;
-                    $number = $lastIntentform->number + 1;
-                }
-            } else {
-                // First record
-                $volume = 1;
-                $number = 1;
+            if (!$runningNumber) {
+                // Should be seeded, but fallback create if missing (auto-heal)
+                $runningNumber = RunningNumber::create([
+                    'type' => $request->payment_methods,
+                    'volume' => 1,
+                    'number' => 0
+                ]);
             }
 
-            // Create intentform
+            // Calculate next values
+            $nextNumber = $runningNumber->number + 1;
+            $nextVolume = $runningNumber->volume;
+
+            if ($nextNumber >= 100) { // Reset after 99
+                $nextNumber = 1;
+                $nextVolume++;
+                if ($nextVolume > 999) {
+                    $nextVolume = 1;
+                }
+            }
+
+            // Update RunningNumber state
+            $runningNumber->update([
+                'volume' => $nextVolume,
+                'number' => $nextNumber
+            ]);
+
+            // Create intentform with these values
             $intentform = Intentform::create([
-                'volume' => $volume,
-                'number' => $number,
+                'volume' => $nextVolume,
+                'number' => $nextNumber,
                 'date' => $request->date,
                 'account_name' => $request->account_name,
                 'account_number' => $request->account_number,
