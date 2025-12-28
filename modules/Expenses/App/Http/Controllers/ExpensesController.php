@@ -53,6 +53,8 @@ class ExpensesController extends Controller
         return view('expenses::create', [
             'categories' => $categories,
             'nextRefNumber' => $nextRefNumber,
+            'defaultCurrency' => 'THB',
+            'defaultVatPercentage' => 7,
         ]);
     }
 
@@ -63,10 +65,15 @@ class ExpensesController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
+            'due_date' => 'nullable|date',
             'reference_number' => 'nullable|string',
-            'category' => 'nullable|string',
             'payee' => 'required|string',
+            'vendor_name' => 'nullable|string',
             'payment_method' => 'required|string',
+            'currency' => 'required|string',
+            'vat_exempt' => 'nullable|boolean',
+            'discount_percentage' => 'nullable|numeric',
+            'withholding_tax_percentage' => 'nullable|numeric',
             'status' => 'required|integer',
             'description' => 'nullable|string',
             'notes' => 'nullable|string',
@@ -74,27 +81,61 @@ class ExpensesController extends Controller
 
         DB::beginTransaction();
         try {
-            // Calculate total from expense items
-            $total = 0;
+            // Calculate subtotal from expense items
+            $subtotal = 0;
             if ($request->has('category_id') && is_array($request->category_id)) {
                 foreach ($request->category_id as $index => $categoryId) {
                     $quantity = $request->quantity[$index] ?? 0;
                     $unitPrice = $request->unit_price[$index] ?? 0;
-                    $total += $quantity * $unitPrice;
+                    $itemDiscountPercentage = $request->item_discount_percentage[$index] ?? 0;
+
+                    $amount = $quantity * $unitPrice;
+                    $itemDiscountAmount = $amount * ($itemDiscountPercentage / 100);
+                    $itemTotal = $amount - $itemDiscountAmount;
+
+                    $subtotal += $itemTotal;
                 }
             }
+
+            // Calculate discount
+            $discountPercentage = $request->discount_percentage ?? 0;
+            $discountAmount = $subtotal * ($discountPercentage / 100);
+            $afterDiscount = $subtotal - $discountAmount;
+
+            // Calculate VAT
+            $vatExempt = $request->has('vat_exempt');
+            $vatPercentage = $vatExempt ? 0 : ($request->vat_percentage ?? 7);
+            $vatAmount = $afterDiscount * ($vatPercentage / 100);
+
+            // Calculate withholding tax
+            $whtPercentage = $request->withholding_tax_percentage ?? 0;
+            $whtAmount = $afterDiscount * ($whtPercentage / 100);
+
+            // Calculate grand total
+            $grandTotal = $afterDiscount + $vatAmount - $whtAmount;
 
             // Create expense
             $expense = Expense::create([
                 'date' => $request->date,
+                'due_date' => $request->due_date,
                 'reference_number' => $request->reference_number,
-                'category' => $request->category,
                 'payee' => $request->payee,
+                'vendor_name' => $request->vendor_name,
                 'payment_method' => $request->payment_method,
-                'status' => $request->status,
-                'total' => $total,
+                'currency' => $request->currency ?? 'THB',
+                'vat_exempt' => $vatExempt,
+                'subtotal' => $subtotal,
+                'discount_percentage' => $discountPercentage,
+                'discount_amount' => $discountAmount,
+                'vat_percentage' => $vatPercentage,
+                'vat_amount' => $vatAmount,
+                'withholding_tax_percentage' => $whtPercentage,
+                'withholding_tax_amount' => $whtAmount,
+                'total' => $subtotal,
+                'grand_total' => $grandTotal,
                 'description' => $request->description,
                 'notes' => $request->notes,
+                'status' => $request->status,
                 'created_by' => Auth::id(),
             ]);
 
@@ -102,15 +143,42 @@ class ExpensesController extends Controller
             if ($request->has('category_id') && is_array($request->category_id)) {
                 foreach ($request->category_id as $index => $categoryId) {
                     if ($categoryId && $categoryId !== 'เลือก') {
+                        $quantity = $request->quantity[$index] ?? 0;
+                        $unitPrice = $request->unit_price[$index] ?? 0;
+                        $itemDiscountPercentage = $request->item_discount_percentage[$index] ?? 0;
+
+                        $amount = $quantity * $unitPrice;
+                        $itemDiscountAmount = $amount * ($itemDiscountPercentage / 100);
+                        $itemTotal = $amount - $itemDiscountAmount;
+
                         ExpenseItem::create([
                             'expense_id' => $expense->id,
                             'category_id' => $categoryId,
-                            'quantity' => $request->quantity[$index] ?? 1,
-                            'unit_price' => $request->unit_price[$index] ?? 0,
-                            'sub_total' => ($request->quantity[$index] ?? 0) * ($request->unit_price[$index] ?? 0),
+                            'quantity' => $quantity,
+                            'unit_price' => $unitPrice,
+                            'discount_percentage' => $itemDiscountPercentage,
+                            'discount_amount' => $itemDiscountAmount,
+                            'amount' => $amount,
+                            'total' => $itemTotal,
                             'description' => $request->item_description[$index] ?? null,
                         ]);
                     }
+                }
+            }
+
+            // Handle file uploads
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $path = $file->storeAs('expenses/attachments', $filename, 'public');
+
+                    $expense->attachments()->create([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $path,
+                        'file_size' => $file->getSize(),
+                        'mime_type' => $file->getMimeType(),
+                        'uploaded_by' => Auth::id(),
+                    ]);
                 }
             }
 
@@ -129,7 +197,7 @@ class ExpensesController extends Controller
      */
     public function show($id)
     {
-        $expense = Expense::with('items.category')->findOrFail($id);
+        $expense = Expense::with(['items.category', 'attachments'])->findOrFail($id);
 
         return view('expenses::view', [
             'expense' => $expense,
@@ -141,7 +209,7 @@ class ExpensesController extends Controller
      */
     public function edit($id)
     {
-        $expense = Expense::with('items')->findOrFail($id);
+        $expense = Expense::with(['items', 'attachments'])->findOrFail($id);
         $categories = ExpenseCategory::get();
 
         return view('expenses::edit', [
@@ -157,40 +225,79 @@ class ExpensesController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
+            'due_date' => 'nullable|date',
             'reference_number' => 'nullable|string',
-            'category' => 'nullable|string',
             'payee' => 'required|string',
+            'vendor_name' => 'nullable|string',
             'payment_method' => 'required|string',
+            'currency' => 'required|string',
+            'vat_exempt' => 'nullable|boolean',
+            'discount_percentage' => 'nullable|numeric',
+            'withholding_tax_percentage' => 'nullable|numeric',
             'status' => 'required|integer',
             'description' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
 
+        $expense = Expense::findOrFail($id);
+
         DB::beginTransaction();
         try {
-            $expense = Expense::findOrFail($id);
-
-            // Calculate total from expense items
-            $total = 0;
+            // Calculate subtotal from expense items
+            $subtotal = 0;
             if ($request->has('category_id') && is_array($request->category_id)) {
                 foreach ($request->category_id as $index => $categoryId) {
                     $quantity = $request->quantity[$index] ?? 0;
                     $unitPrice = $request->unit_price[$index] ?? 0;
-                    $total += $quantity * $unitPrice;
+                    $itemDiscountPercentage = $request->item_discount_percentage[$index] ?? 0;
+
+                    $amount = $quantity * $unitPrice;
+                    $itemDiscountAmount = $amount * ($itemDiscountPercentage / 100);
+                    $itemTotal = $amount - $itemDiscountAmount;
+
+                    $subtotal += $itemTotal;
                 }
             }
+
+            // Calculate discount
+            $discountPercentage = $request->discount_percentage ?? 0;
+            $discountAmount = $subtotal * ($discountPercentage / 100);
+            $afterDiscount = $subtotal - $discountAmount;
+
+            // Calculate VAT
+            $vatExempt = $request->has('vat_exempt');
+            $vatPercentage = $vatExempt ? 0 : ($request->vat_percentage ?? 7);
+            $vatAmount = $afterDiscount * ($vatPercentage / 100);
+
+            // Calculate withholding tax
+            $whtPercentage = $request->withholding_tax_percentage ?? 0;
+            $whtAmount = $afterDiscount * ($whtPercentage / 100);
+
+            // Calculate grand total
+            $grandTotal = $afterDiscount + $vatAmount - $whtAmount;
 
             // Update expense
             $expense->update([
                 'date' => $request->date,
+                'due_date' => $request->due_date,
                 'reference_number' => $request->reference_number,
-                'category' => $request->category,
                 'payee' => $request->payee,
+                'vendor_name' => $request->vendor_name,
                 'payment_method' => $request->payment_method,
-                'status' => $request->status,
-                'total' => $total,
+                'currency' => $request->currency ?? 'THB',
+                'vat_exempt' => $vatExempt,
+                'subtotal' => $subtotal,
+                'discount_percentage' => $discountPercentage,
+                'discount_amount' => $discountAmount,
+                'vat_percentage' => $vatPercentage,
+                'vat_amount' => $vatAmount,
+                'withholding_tax_percentage' => $whtPercentage,
+                'withholding_tax_amount' => $whtAmount,
+                'total' => $subtotal,
+                'grand_total' => $grandTotal,
                 'description' => $request->description,
                 'notes' => $request->notes,
+                'status' => $request->status,
                 'updated_by' => Auth::id(),
             ]);
 
@@ -201,15 +308,42 @@ class ExpensesController extends Controller
             if ($request->has('category_id') && is_array($request->category_id)) {
                 foreach ($request->category_id as $index => $categoryId) {
                     if ($categoryId && $categoryId !== 'เลือก') {
+                        $quantity = $request->quantity[$index] ?? 0;
+                        $unitPrice = $request->unit_price[$index] ?? 0;
+                        $itemDiscountPercentage = $request->item_discount_percentage[$index] ?? 0;
+
+                        $amount = $quantity * $unitPrice;
+                        $itemDiscountAmount = $amount * ($itemDiscountPercentage / 100);
+                        $itemTotal = $amount - $itemDiscountAmount;
+
                         ExpenseItem::create([
                             'expense_id' => $expense->id,
                             'category_id' => $categoryId,
-                            'quantity' => $request->quantity[$index] ?? 1,
-                            'unit_price' => $request->unit_price[$index] ?? 0,
-                            'sub_total' => ($request->quantity[$index] ?? 0) * ($request->unit_price[$index] ?? 0),
+                            'quantity' => $quantity,
+                            'unit_price' => $unitPrice,
+                            'discount_percentage' => $itemDiscountPercentage,
+                            'discount_amount' => $itemDiscountAmount,
+                            'amount' => $amount,
+                            'total' => $itemTotal,
                             'description' => $request->item_description[$index] ?? null,
+                            'chart_of_account_id' => null, // Future use
                         ]);
                     }
+                }
+            }
+
+            // Handle file attachments
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('expenses/attachments', 'public');
+
+                    $expense->attachments()->create([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $path,
+                        'file_size' => $file->getSize(),
+                        'file_type' => $file->getClientMimeType(),
+                        'uploaded_by' => Auth::id(),
+                    ]);
                 }
             }
 

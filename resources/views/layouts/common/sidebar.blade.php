@@ -25,7 +25,7 @@
                 x-data="{ activeDropdown: null }">
                 @can('dashboard view')
                     <li class="nav-item">
-                        <a href="{{ url('dashboard') }}" class="group">
+                        <a href="{{ route('dashboard') }}" class="group">
                             <div class="flex items-center">
                                 <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +37,7 @@
                                         fill="currentColor"></path>
                                 </svg>
                                 <span
-                                    class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{{ __('dashboard.dashboard') }}</span>
+                                    class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Dashboard</span>
                             </div>
                         </a>
                     </li>

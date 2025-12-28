@@ -30,7 +30,8 @@
             </div>
         </div>
 
-        <form action="{{ route('expenses.update', $expense->id) }}" method="POST" x-data="expenseEdit">
+        <form action="{{ route('expenses.update', $expense->id) }}" method="POST" enctype="multipart/form-data"
+            x-data="expenseEdit">
             @csrf
             @method('PUT')
             <div class="flex flex-col gap-2.5 xl:flex-row">
@@ -51,7 +52,24 @@
                             <div class="mt-4 flex items-center">
                                 <label for="date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันที่</label>
                                 <input id="date" type="date" name="date" class="form-input w-2/3 lg:w-[250px]" required
-                                    value="{{ old('date', $expense->date) }}" />
+                                    value="{{ old('date', $expense->date->format('Y-m-d')) }}" />
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="due_date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันครบกำหนด</label>
+                                <input id="due_date" type="date" name="due_date" class="form-input w-2/3 lg:w-[250px]"
+                                    value="{{ old('due_date', $expense->due_date ? $expense->due_date->format('Y-m-d') : '') }}" />
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="currency" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">สกุลเงิน</label>
+                                <select id="currency" name="currency" class="form-select w-2/3 lg:w-[250px]" required
+                                    x-model="currency">
+                                    <option value="THB" {{ old('currency', $expense->currency) == 'THB' ? 'selected' : '' }}>
+                                        THB - บาท</option>
+                                    <option value="USD" {{ old('currency', $expense->currency) == 'USD' ? 'selected' : '' }}>
+                                        USD - ดอลลาร์</option>
+                                    <option value="EUR" {{ old('currency', $expense->currency) == 'EUR' ? 'selected' : '' }}>
+                                        EUR - ยูโร</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -61,14 +79,15 @@
                             <div class="mb-6 w-full lg:w-1/2 ltr:lg:mr-6 rtl:lg:ml-6">
                                 <div class="text-lg font-semibold">ข้อมูล</div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="category" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">หมวดหมู่</label>
-                                    <input id="category" type="text" name="category" class="form-input flex-1"
-                                        placeholder="กรอกหมวดหมู่" value="{{ old('category', $expense->category) }}" />
-                                </div>
-                                <div class="mt-4 flex items-center">
                                     <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
                                     <input id="payee" type="text" name="payee" class="form-input flex-1"
                                         placeholder="กรอกผู้รับเงิน" required value="{{ old('payee', $expense->payee) }}" />
+                                </div>
+                                <div class="mt-4 flex items-center">
+                                    <label for="vendor_name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ชื่อผู้จำหน่าย</label>
+                                    <input id="vendor_name" type="text" name="vendor_name" class="form-input flex-1"
+                                        placeholder="กรอกชื่อผู้จำหน่าย"
+                                        value="{{ old('vendor_name', $expense->vendor_name) }}" />
                                 </div>
                             </div>
                             <div class="w-full lg:w-1/2">
@@ -96,8 +115,10 @@
                                 <thead>
                                     <tr>
                                         <th>หมวดหมู่</th>
+                                        <th>รายละเอียด</th>
                                         <th class="w-1">จำนวน</th>
                                         <th class="w-1">ราคาต่อหน่วย</th>
+                                        <th class="w-1">ส่วนลด %</th>
                                         <th>รวม</th>
                                         <th class="w-1"></th>
                                     </tr>
@@ -105,7 +126,7 @@
                                 <tbody>
                                     <template x-if="items.length <= 0">
                                         <tr>
-                                            <td colspan="5" class="!text-center font-semibold">No Item Available</td>
+                                            <td colspan="7" class="!text-center font-semibold">No Item Available</td>
                                         </tr>
                                     </template>
                                     <template x-for="(item, i) in items" :key="i">
@@ -120,18 +141,26 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <textarea class="form-textarea mt-4" :name="'item_description['+i+']'"
-                                                    placeholder="รายละเอียด..." x-model="item.description"></textarea>
                                             </td>
                                             <td>
-                                                <input type="number" class="form-input w-32" placeholder="จำนวน"
+                                                <textarea class="form-textarea" :name="'item_description['+i+']'"
+                                                    placeholder="รายละเอียด..." rows="1"
+                                                    x-model="item.description"></textarea>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-input w-24" placeholder="จำนวน"
                                                     x-model="item.quantity" :name="'quantity['+i+']'" min="0" />
                                             </td>
                                             <td>
                                                 <input type="number" step="0.01" class="form-input w-32" placeholder="ราคา"
                                                     :name="'unit_price['+i+']'" x-model="item.unit_price" />
                                             </td>
-                                            <td x-text="formatNumber(item.unit_price * item.quantity)"></td>
+                                            <td>
+                                                <input type="number" step="0.01" class="form-input w-24" placeholder="0"
+                                                    :name="'item_discount_percentage['+i+']'"
+                                                    x-model="item.discount_percentage" min="0" max="100" />
+                                            </td>
+                                            <td class="text-right" x-text="formatNumber(getItemTotal(item))"></td>
                                             <td>
                                                 <button type="button" @click="removeItem(item)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
@@ -153,11 +182,100 @@
                                 <button type="button" class="btn btn-primary" @click="addItem()">เพิ่มรายการ</button>
                             </div>
                             <div class="sm:w-2/5">
-                                <div class="mt-4 flex items-center justify-between font-semibold">
-                                    <div>รวม</div>
-                                    <div x-text="formatNumber(getTotal())"></div>
+                                <!-- Subtotal -->
+                                <div class="flex items-center justify-between">
+                                    <div>รวมมูลค่า</div>
+                                    <div x-text="formatNumber(getSubtotal())"></div>
+                                </div>
+
+                                <!-- Discount -->
+                                <div class="mt-4 flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <span>ส่วนลด</span>
+                                        <input type="number" step="0.01" name="discount_percentage"
+                                            x-model="discountPercentage" class="form-input w-20" placeholder="0" min="0"
+                                            max="100" />
+                                        <span>%</span>
+                                    </div>
+                                    <div x-text="formatNumber(getDiscountAmount())"></div>
+                                </div>
+
+                                <!-- Subtotal after discount -->
+                                <div class="mt-4 flex items-center justify-between">
+                                    <div>รวมหลังหักส่วนลด</div>
+                                    <div x-text="formatNumber(getAfterDiscount())"></div>
+                                </div>
+
+                                <!-- VAT -->
+                                <div class="mt-4 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" name="vat_exempt" class="form-checkbox"
+                                                x-model="vatExempt" />
+                                            <span class="ltr:ml-2 rtl:mr-2">ยกเว้น VAT</span>
+                                        </label>
+                                        <input type="hidden" name="vat_percentage" :value="vatPercentage" />
+                                    </div>
+                                    <div x-text="formatNumber(getVatAmount())"></div>
+                                </div>
+
+                                <!-- Withholding Tax -->
+                                <div class="mt-4 flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <span>หัก ณ ที่จ่าย</span>
+                                        <input type="number" step="0.01" name="withholding_tax_percentage"
+                                            x-model="whtPercentage" class="form-input w-20" placeholder="0" min="0"
+                                            max="100" />
+                                        <span>%</span>
+                                    </div>
+                                    <div x-text="formatNumber(getWhtAmount())"></div>
+                                </div>
+
+                                <hr class="my-4 border-[#e0e6ed] dark:border-[#1b2e4b]" />
+
+                                <!-- Grand Total -->
+                                <div class="flex items-center justify-between text-lg font-bold">
+                                    <div>รวมราคาสุทธิ</div>
+                                    <div class="text-primary" x-text="formatNumber(getGrandTotal())"></div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 px-4">
+                        <div>
+                            <label>ไฟล์แนบปัจจุบัน</label>
+                            @if($expense->attachments->count() > 0)
+                                <div class="mt-2 space-y-2">
+                                    @foreach($expense->attachments as $attachment)
+                                        <div
+                                            class="flex items-center justify-between rounded border border-gray-200 p-2 dark:border-gray-700">
+                                            <div class="flex items-center gap-2">
+                                                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                                    </path>
+                                                </svg>
+                                                <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank"
+                                                    class="text-primary hover:underline">
+                                                    {{ $attachment->file_name }}
+                                                </a>
+                                                <span class="text-xs text-gray-500">({{ $attachment->formatted_size }})</span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="mt-2 text-sm text-gray-500">ไม่มีไฟล์แนบ</p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mt-4 px-4">
+                        <div>
+                            <label for="attachments">แนบไฟล์เอกสารเพิ่มเติม</label>
+                            <input type="file" id="attachments" name="attachments[]" class="form-input" multiple
+                                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" />
+                            <p class="mt-1 text-xs text-gray-500">สามารถแนบไฟล์หลายไฟล์ได้</p>
                         </div>
                     </div>
                     <div class="mt-8 px-4">
@@ -196,14 +314,7 @@
                                 </svg>
                                 บันทึก
                             </button>
-
                             <a href="{{ route('expenses') }}" class="btn btn-outline-danger w-full gap-2">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"
-                                        fill="currentColor" />
-                                </svg>
                                 ยกเลิก
                             </a>
                         </div>
@@ -214,45 +325,56 @@
     </div>
 
     <script>
+        async function showAlert() {
+            const toast = window.Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3500,
+                padding: '2em',
+            });
+            toast.fire({
+                icon: 'success',
+                title: '{!! \Session::get('success') !!}',
+                padding: '2em',
+            });
+        }
+        @if (\Session::has('success'))
+            setTimeout(() => {
+                window.onload = showAlert();
+            }, "500");
+        @endif
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('expenseEdit', () => ({
-                items: [],
-
-                init() {
-                    // Load existing expense items
-                    @foreach($expense->items as $item)
-                        this.items.push({
-                            id: {{ $item->id }},
-                            category_id: '{{ $item->category_id }}',
-                            description: '{{ $item->description ?? '' }}',
-                            quantity: {{ $item->quantity }},
-                            unit_price: {{ $item->unit_price }},
-                        });
-                    @endforeach
-
-                        // Add one empty item if no items exist
-                        if (this.items.length === 0) {
-                        this.items.push({
-                            id: 1,
-                            category_id: '',
-                            description: '',
-                            quantity: 1,
-                            unit_price: 0,
-                        });
-                    }
-                },
+                items: @json($expense->items->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'category_id' => $item->category_id,
+                        'description' => $item->description,
+                        'quantity' => $item->quantity,
+                        'unit_price' => $item->unit_price,
+                        'discount_percentage' => $item->discount_percentage ?? 0,
+                    ];
+                })),
+                currency: '{{ old('currency', $expense->currency ?? 'THB') }}',
+                discountPercentage: {{ old('discount_percentage', $expense->discount_percentage ?? 0) }},
+                vatExempt: {{ old('vat_exempt', $expense->vat_exempt ?? 0) ? 'true' : 'false' }},
+                vatPercentage: {{ old('vat_percentage', $expense->vat_percentage ?? 7) }},
+                whtPercentage: {{ old('withholding_tax_percentage', $expense->withholding_tax_percentage ?? 0) }},
 
                 addItem() {
                     let maxId = 0;
                     if (this.items && this.items.length) {
-                        maxId = this.items.reduce((max, character) => (character.id > max ? character.id : max), this.items[0].id);
+                        maxId = this.items.reduce((max, item) => (item.id > max ? item.id : max), this.items[0].id);
                     }
                     this.items.push({
                         id: maxId + 1,
-                        category_id: '',
+                        category_id: null,
                         description: '',
                         quantity: 1,
                         unit_price: 0,
+                        discount_percentage: 0
                     });
                 },
 
@@ -260,10 +382,35 @@
                     this.items = this.items.filter((d) => d.id != item.id);
                 },
 
-                getTotal() {
-                    return this.items.reduce((total, item) => {
-                        return total + (parseFloat(item.unit_price) || 0) * (parseFloat(item.quantity) || 0);
-                    }, 0);
+                getItemTotal(item) {
+                    const amount = (parseFloat(item.unit_price) || 0) * (parseFloat(item.quantity) || 0);
+                    const discount = amount * ((parseFloat(item.discount_percentage) || 0) / 100);
+                    return amount - discount;
+                },
+
+                getSubtotal() {
+                    return this.items.reduce((total, item) => total + this.getItemTotal(item), 0);
+                },
+
+                getDiscountAmount() {
+                    return this.getSubtotal() * ((parseFloat(this.discountPercentage) || 0) / 100);
+                },
+
+                getAfterDiscount() {
+                    return this.getSubtotal() - this.getDiscountAmount();
+                },
+
+                getVatAmount() {
+                    if (this.vatExempt) return 0;
+                    return this.getAfterDiscount() * ((parseFloat(this.vatPercentage) || 0) / 100);
+                },
+
+                getWhtAmount() {
+                    return this.getAfterDiscount() * ((parseFloat(this.whtPercentage) || 0) / 100);
+                },
+
+                getGrandTotal() {
+                    return this.getAfterDiscount() + this.getVatAmount() - this.getWhtAmount();
                 },
 
                 formatNumber(num) {

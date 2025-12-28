@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <form action="{{ route('expenses.store') }}" method="POST" x-data="expenseAdd">
+        <form action="{{ route('expenses.store') }}" method="POST" enctype="multipart/form-data" x-data="expenseAdd">
             @csrf
             <div class="flex flex-col gap-2.5 xl:flex-row">
                 <div class="panel flex-1 px-0 py-6 ltr:lg:mr-6 rtl:lg:ml-6">
@@ -52,6 +52,20 @@
                                 <input id="date" type="date" name="date" class="form-input w-2/3 lg:w-[250px]" required
                                     value="{{ old('date', date('Y-m-d')) }}" />
                             </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="due_date" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">วันครบกำหนด</label>
+                                <input id="due_date" type="date" name="due_date" class="form-input w-2/3 lg:w-[250px]"
+                                    value="{{ old('due_date') }}" />
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <label for="currency" class="mb-0 flex-1 ltr:mr-2 rtl:ml-2">สกุลเงิน</label>
+                                <select id="currency" name="currency" class="form-select w-2/3 lg:w-[250px]" required
+                                    x-model="currency">
+                                    <option value="THB">THB - บาท</option>
+                                    <option value="USD">USD - ดอลลาร์</option>
+                                    <option value="EUR">EUR - ยูโร</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <hr class="my-6 border-[#e0e6ed] dark:border-[#1b2e4b]" />
@@ -60,14 +74,14 @@
                             <div class="mb-6 w-full lg:w-1/2 ltr:lg:mr-6 rtl:lg:ml-6">
                                 <div class="text-lg font-semibold">ข้อมูล</div>
                                 <div class="mt-4 flex items-center">
-                                    <label for="category" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">หมวดหมู่</label>
-                                    <input id="category" type="text" name="category" class="form-input flex-1"
-                                        placeholder="กรอกหมวดหมู่" value="{{ old('category') }}" />
-                                </div>
-                                <div class="mt-4 flex items-center">
                                     <label for="payee" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ผู้รับเงิน</label>
                                     <input id="payee" type="text" name="payee" class="form-input flex-1"
                                         placeholder="กรอกผู้รับเงิน" required value="{{ old('payee') }}" />
+                                </div>
+                                <div class="mt-4 flex items-center">
+                                    <label for="vendor_name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ชื่อผู้จำหน่าย</label>
+                                    <input id="vendor_name" type="text" name="vendor_name" class="form-input flex-1"
+                                        placeholder="กรอกชื่อผู้จำหน่าย" value="{{ old('vendor_name') }}" />
                                 </div>
                             </div>
                             <div class="w-full lg:w-1/2">
@@ -95,8 +109,10 @@
                                 <thead>
                                     <tr>
                                         <th>หมวดหมู่</th>
+                                        <th>รายละเอียด</th>
                                         <th class="w-1">จำนวน</th>
                                         <th class="w-1">ราคาต่อหน่วย</th>
+                                        <th class="w-1">ส่วนลด %</th>
                                         <th>รวม</th>
                                         <th class="w-1"></th>
                                     </tr>
@@ -104,7 +120,7 @@
                                 <tbody>
                                     <template x-if="items.length <= 0">
                                         <tr>
-                                            <td colspan="5" class="!text-center font-semibold">No Item Available</td>
+                                            <td colspan="7" class="!text-center font-semibold">No Item Available</td>
                                         </tr>
                                     </template>
                                     <template x-for="(item, i) in items" :key="i">
@@ -118,18 +134,25 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <textarea class="form-textarea mt-4" :name="'item_description['+i+']'"
-                                                    placeholder="รายละเอียด..."></textarea>
                                             </td>
                                             <td>
-                                                <input type="number" class="form-input w-32" placeholder="จำนวน"
+                                                <textarea class="form-textarea" :name="'item_description['+i+']'"
+                                                    placeholder="รายละเอียด..." rows="1"></textarea>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-input w-24" placeholder="จำนวน"
                                                     x-model="item.quantity" :name="'quantity['+i+']'" min="0" />
                                             </td>
                                             <td>
                                                 <input type="number" step="0.01" class="form-input w-32" placeholder="ราคา"
                                                     :name="'unit_price['+i+']'" x-model="item.unit_price" />
                                             </td>
-                                            <td x-text="formatNumber(item.unit_price * item.quantity)"></td>
+                                            <td>
+                                                <input type="number" step="0.01" class="form-input w-24" placeholder="0"
+                                                    :name="'item_discount_percentage['+i+']'"
+                                                    x-model="item.discount_percentage" min="0" max="100" />
+                                            </td>
+                                            <td class="text-right" x-text="formatNumber(getItemTotal(item))"></td>
                                             <td>
                                                 <button type="button" @click="removeItem(item)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
@@ -151,11 +174,71 @@
                                 <button type="button" class="btn btn-primary" @click="addItem()">เพิ่มรายการ</button>
                             </div>
                             <div class="sm:w-2/5">
-                                <div class="mt-4 flex items-center justify-between font-semibold">
-                                    <div>รวม</div>
-                                    <div x-text="formatNumber(getTotal())"></div>
+                                <!-- Subtotal -->
+                                <div class="flex items-center justify-between">
+                                    <div>รวมมูลค่า</div>
+                                    <div x-text="formatNumber(getSubtotal())"></div>
+                                </div>
+
+                                <!-- Discount -->
+                                <div class="mt-4 flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <span>ส่วนลด</span>
+                                        <input type="number" step="0.01" name="discount_percentage"
+                                            x-model="discountPercentage" class="form-input w-20" placeholder="0" min="0"
+                                            max="100" />
+                                        <span>%</span>
+                                    </div>
+                                    <div x-text="formatNumber(getDiscountAmount())"></div>
+                                </div>
+
+                                <!-- Subtotal after discount -->
+                                <div class="mt-4 flex items-center justify-between">
+                                    <div>รวมหลังหักส่วนลด</div>
+                                    <div x-text="formatNumber(getAfterDiscount())"></div>
+                                </div>
+
+                                <!-- VAT -->
+                                <div class="mt-4 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" name="vat_exempt" class="form-checkbox"
+                                                x-model="vatExempt" />
+                                            <span class="ltr:ml-2 rtl:mr-2">ยกเว้น VAT</span>
+                                        </label>
+                                        <input type="hidden" name="vat_percentage" :value="vatPercentage" />
+                                    </div>
+                                    <div x-text="formatNumber(getVatAmount())"></div>
+                                </div>
+
+                                <!-- Withholding Tax -->
+                                <div class="mt-4 flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <span>หัก ณ ที่จ่าย</span>
+                                        <input type="number" step="0.01" name="withholding_tax_percentage"
+                                            x-model="whtPercentage" class="form-input w-20" placeholder="0" min="0"
+                                            max="100" />
+                                        <span>%</span>
+                                    </div>
+                                    <div x-text="formatNumber(getWhtAmount())"></div>
+                                </div>
+
+                                <hr class="my-4 border-[#e0e6ed] dark:border-[#1b2e4b]" />
+
+                                <!-- Grand Total -->
+                                <div class="flex items-center justify-between text-lg font-bold">
+                                    <div>รวมราคาสุทธิ</div>
+                                    <div class="text-primary" x-text="formatNumber(getGrandTotal())"></div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 px-4">
+                        <div>
+                            <label for="attachments">แนบไฟล์เอกสาร</label>
+                            <input type="file" id="attachments" name="attachments[]" class="form-input" multiple
+                                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" />
+                            <p class="mt-1 text-xs text-gray-500">สามารถแนบไฟล์หลายไฟล์ได้</p>
                         </div>
                     </div>
                     <div class="mt-8 px-4">
@@ -233,29 +316,33 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('expenseAdd', () => ({
                 items: [],
+                currency: 'THB',
+                discountPercentage: 0,
+                vatExempt: false,
+                vatPercentage: 7,
+                whtPercentage: 0,
 
                 init() {
-                    //set default data
                     this.items.push({
                         id: 1,
-                        title: '',
                         description: '',
                         quantity: 1,
                         unit_price: 0,
+                        discount_percentage: 0
                     });
                 },
 
                 addItem() {
                     let maxId = 0;
                     if (this.items && this.items.length) {
-                        maxId = this.items.reduce((max, character) => (character.id > max ? character.id : max), this.items[0].id);
+                        maxId = this.items.reduce((max, item) => (item.id > max ? item.id : max), this.items[0].id);
                     }
                     this.items.push({
                         id: maxId + 1,
-                        title: '',
                         description: '',
                         quantity: 1,
                         unit_price: 0,
+                        discount_percentage: 0
                     });
                 },
 
@@ -263,10 +350,39 @@
                     this.items = this.items.filter((d) => d.id != item.id);
                 },
 
+                getItemTotal(item) {
+                    const amount = (parseFloat(item.unit_price) || 0) * (parseFloat(item.quantity) || 0);
+                    const discount = amount * ((parseFloat(item.discount_percentage) || 0) / 100);
+                    return amount - discount;
+                },
+
+                getSubtotal() {
+                    return this.items.reduce((total, item) => total + this.getItemTotal(item), 0);
+                },
+
+                getDiscountAmount() {
+                    return this.getSubtotal() * ((parseFloat(this.discountPercentage) || 0) / 100);
+                },
+
+                getAfterDiscount() {
+                    return this.getSubtotal() - this.getDiscountAmount();
+                },
+
+                getVatAmount() {
+                    if (this.vatExempt) return 0;
+                    return this.getAfterDiscount() * ((parseFloat(this.vatPercentage) || 0) / 100);
+                },
+
+                getWhtAmount() {
+                    return this.getAfterDiscount() * ((parseFloat(this.whtPercentage) || 0) / 100);
+                },
+
+                getGrandTotal() {
+                    return this.getAfterDiscount() + this.getVatAmount() - this.getWhtAmount();
+                },
+
                 getTotal() {
-                    return this.items.reduce((total, item) => {
-                        return total + (parseFloat(item.unit_price) || 0) * (parseFloat(item.quantity) || 0);
-                    }, 0);
+                    return this.getSubtotal();
                 },
 
                 formatNumber(num) {

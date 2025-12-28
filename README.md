@@ -75,7 +75,7 @@ Add the command below to the last line
 
 ## Icon
 
-* [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736)
+* [Solar Icons Set](https://www.figma.com/file/agsPUbJSO4OcokUIxJRZvw/Solar-Icon-Set-(Community)?node-id=0%3A1&t=Xr5s4CqZbVgAQU9X-0)
 * [Iconify](https://icon-sets.iconify.design)
 * [Lucide](https://lucide.dev/icons/)
 

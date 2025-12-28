@@ -3,65 +3,120 @@
 namespace Modules\Dashboard\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Modules\IntentForms\App\Models\Intentform;
+use Modules\Expenses\App\Models\Expense;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'lock']);
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard::index');
-    }
+        // Default to monthly view
+        $filterType = $request->get('filter_type', 'monthly');
+        $filterValue = $request->get('filter_value', Carbon::now()->format('Y-m'));
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('dashboard::create');
-    }
+        // Initialize queries
+        $incomeQuery = Intentform::query();
+        $expenseQuery = Expense::query();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
+        // Apply date filters
+        switch ($filterType) {
+            case 'daily':
+                $incomeQuery->whereDate('date', $filterValue);
+                $expenseQuery->whereDate('date', $filterValue);
+                break;
+            case 'weekly':
+                $startDate = Carbon::parse($filterValue)->startOfWeek();
+                $endDate = Carbon::parse($filterValue)->endOfWeek();
+                $incomeQuery->whereBetween('date', [$startDate, $endDate]);
+                $expenseQuery->whereBetween('date', [$startDate, $endDate]);
+                break;
+            case 'monthly':
+                $date = Carbon::parse($filterValue . '-01');
+                $incomeQuery->whereMonth('date', $date->month)
+                    ->whereYear('date', $date->year);
+                $expenseQuery->whereMonth('date', $date->month)
+                    ->whereYear('date', $date->year);
+                break;
+            case 'yearly':
+                $incomeQuery->whereYear('date', $filterValue);
+                $expenseQuery->whereYear('date', $filterValue);
+                break;
+        }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('dashboard::show');
-    }
+        // Get totals
+        $totalIncome = $incomeQuery->sum('total');
+        $totalExpense = $expenseQuery->sum('grand_total');
+        $netProfit = $totalIncome - $totalExpense;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('dashboard::edit');
-    }
+        // Income by payment method
+        $incomeByPaymentMethod = Intentform::query()
+            ->when($filterType == 'daily', function ($q) use ($filterValue) {
+                $q->whereDate('date', $filterValue);
+            })
+            ->when($filterType == 'weekly', function ($q) use ($filterValue) {
+                $startDate = Carbon::parse($filterValue)->startOfWeek();
+                $endDate = Carbon::parse($filterValue)->endOfWeek();
+                $q->whereBetween('date', [$startDate, $endDate]);
+            })
+            ->when($filterType == 'monthly', function ($q) use ($filterValue) {
+                $date = Carbon::parse($filterValue . '-01');
+                $q->whereMonth('date', $date->month)->whereYear('date', $date->year);
+            })
+            ->when($filterType == 'yearly', function ($q) use ($filterValue) {
+                $q->whereYear('date', $filterValue);
+            })
+            ->select('payment_methods', DB::raw('SUM(total) as total'))
+            ->groupBy('payment_methods')
+            ->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
+        // Expense by category
+        $expenseByCategory = DB::table('expenses')
+            ->join('expense_items', 'expenses.id', '=', 'expense_items.expense_id')
+            ->join('expense_categories', 'expense_items.category_id', '=', 'expense_categories.id')
+            ->when($filterType == 'daily', function ($q) use ($filterValue) {
+                $q->whereDate('expenses.date', $filterValue);
+            })
+            ->when($filterType == 'weekly', function ($q) use ($filterValue) {
+                $startDate = Carbon::parse($filterValue)->startOfWeek();
+                $endDate = Carbon::parse($filterValue)->endOfWeek();
+                $q->whereBetween('expenses.date', [$startDate, $endDate]);
+            })
+            ->when($filterType == 'monthly', function ($q) use ($filterValue) {
+                $date = Carbon::parse($filterValue . '-01');
+                $q->whereMonth('expenses.date', $date->month)->whereYear('expenses.date', $date->year);
+            })
+            ->when($filterType == 'yearly', function ($q) use ($filterValue) {
+                $q->whereYear('expenses.date', $filterValue);
+            })
+            ->select('expense_categories.name as category', DB::raw('SUM(expense_items.total) as total'))
+            ->groupBy('expense_categories.name')
+            ->get();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+        // Recent transactions
+        $recentIncome = Intentform::orderBy('date', 'desc')->limit(5)->get();
+        $recentExpenses = Expense::with('items.category')->orderBy('date', 'desc')->limit(5)->get();
+
+        return view('dashboard::index', [
+            'totalIncome' => $totalIncome,
+            'totalExpense' => $totalExpense,
+            'netProfit' => $netProfit,
+            'incomeByPaymentMethod' => $incomeByPaymentMethod,
+            'expenseByCategory' => $expenseByCategory,
+            'recentIncome' => $recentIncome,
+            'recentExpenses' => $recentExpenses,
+            'filterType' => $filterType,
+            'filterValue' => $filterValue,
+        ]);
     }
 }

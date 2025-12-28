@@ -61,6 +61,12 @@
                                 <div class="font-semibold">วันที่: &nbsp;</div>
                                 <div class="ml-4">{{ \Carbon\Carbon::parse($expense->date)->format('d/m/Y') }}</div>
                             </div>
+                            @if($expense->due_date)
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="font-semibold">ครบกำหนด: &nbsp;</div>
+                                    <div class="ml-4">{{ \Carbon\Carbon::parse($expense->due_date)->format('d/m/Y') }}</div>
+                                </div>
+                            @endif
                             <div class="flex items-center justify-between">
                                 <div class="font-semibold">สถานะ:</div>
                                 <div class="ml-4">
@@ -83,16 +89,22 @@
                             <div class="text-lg font-semibold mb-3">ข้อมูล</div>
                             <div class="space-y-2">
                                 <div class="flex">
-                                    <div class="font-semibold w-1/3">หมวดหมู่:</div>
-                                    <div class="flex-1">{{ $expense->category ?? '-' }}</div>
-                                </div>
-                                <div class="flex">
                                     <div class="font-semibold w-1/3">ผู้รับเงิน:</div>
                                     <div class="flex-1">{{ $expense->payee }}</div>
                                 </div>
+                                @if($expense->vendor_name)
+                                <div class="flex">
+                                    <div class="font-semibold w-1/3">ชื่อผู้จำหน่าย:</div>
+                                    <div class="flex-1">{{ $expense->vendor_name }}</div>
+                                </div>
+                                @endif
                                 <div class="flex">
                                     <div class="font-semibold w-1/3">ช่องทางการชำระ:</div>
                                     <div class="flex-1">{{ $expense->payment_method }}</div>
+                                </div>
+                                <div class="flex">
+                                    <div class="font-semibold w-1/3">สกุลเงิน:</div>
+                                    <div class="flex-1">{{ $expense->currency }}</div>
                                 </div>
                             </div>
                         </div>
@@ -103,10 +115,6 @@
                                     <div class="font-semibold w-1/3">รายละเอียด:</div>
                                     <div class="flex-1">{{ $expense->description ?? '-' }}</div>
                                 </div>
-                                <div class="flex">
-                                    <div class="font-semibold w-1/3">จำนวนเงินรวม:</div>
-                                    <div class="flex-1">{{ number_format($expense->total, 2) }} บาท</div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,13 +123,15 @@
                 <div class="mt-8">
                     <div class="text-lg font-semibold mb-3 px-4">รายการค่าใช้จ่าย</div>
                     <div class="table-responsive">
-                        <table>
+                        <table class="table-hover">
                             <thead>
                                 <tr>
                                     <th>ลำดับ</th>
                                     <th>หมวดหมู่</th>
-                                    <th>จำนวน</th>
-                                    <th>ราคาต่อหน่วย</th>
+                                    <th>รายละเอียด</th>
+                                    <th class="text-right">จำนวน</th>
+                                    <th class="text-right">ราคาต่อหน่วย</th>
+                                    <th class="text-right">ส่วนลด (%)</th>
                                     <th class="text-right">รวม</th>
                                 </tr>
                             </thead>
@@ -129,32 +139,89 @@
                                 @forelse($expense->items as $index => $item)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>
-                                            <div class="font-semibold">{{ $item->category->name ?? '-' }}</div>
-                                            @if($item->description)
-                                                <div class="text-sm text-gray-500">{{ $item->description }}</div>
+                                        <td>{{ $item->category->name ?? '-' }}</td>
+                                        <td>{{ $item->description }}</td>
+                                        <td class="text-right">{{ number_format($item->quantity) }}</td>
+                                        <td class="text-right">{{ number_format($item->unit_price, 2) }}</td>
+                                        <td class="text-right">
+                                            @if($item->discount_percentage > 0)
+                                                {{ $item->discount_percentage }}%
+                                                <span
+                                                    class="text-xs text-gray-500">({{ number_format($item->discount_amount, 2) }})</span>
+                                            @else
+                                                -
                                             @endif
                                         </td>
-                                        <td>{{ number_format($item->quantity) }}</td>
-                                        <td>{{ number_format($item->unit_price, 2) }} บาท</td>
-                                        <td class="text-right">{{ number_format($item->sub_total, 2) }} บาท</td>
+                                        <td class="text-right">{{ number_format($item->total, 2) }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">ไม่มีรายการค่าใช้จ่าย</td>
+                                        <td colspan="7" class="text-center">ไม่มีรายการค่าใช้จ่าย</td>
                                     </tr>
                                 @endforelse
                             </tbody>
-                            <tfoot>
-                                <tr class="bg-gray-100 dark:bg-gray-700">
-                                    <td colspan="4" class="text-right font-semibold p-4">รวมทั้งสิ้น:</td>
-                                    <td class="text-right font-semibold p-4">{{ number_format($expense->total, 2) }} บาท
-                                    </td>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
+
+                <div class="mt-4 flex justify-end px-4">
+                    <div class="sm:w-2/5 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div>รวมมูลค่า</div>
+                            <div class="font-semibold">{{ number_format($expense->subtotal, 2) }}</div>
+                        </div>
+                        @if($expense->discount_amount > 0)
+                            <div class="flex items-center justify-between text-danger">
+                                <div>ส่วนลด ({{ $expense->discount_percentage }}%)</div>
+                                <div>-{{ number_format($expense->discount_amount, 2) }}</div>
+                            </div>
+                        @endif
+                        <div class="flex items-center justify-between">
+                            <div>รวมหลังหักส่วนลด</div>
+                            <div class="font-semibold">
+                                {{ number_format($expense->subtotal - $expense->discount_amount, 2) }}</div>
+                        </div>
+                        @if(!$expense->vat_exempt)
+                            <div class="flex items-center justify-between">
+                                <div>VAT ({{ $expense->vat_percentage }}%)</div>
+                                <div>{{ number_format($expense->vat_amount, 2) }}</div>
+                            </div>
+                        @endif
+                        @if($expense->withholding_tax_amount > 0)
+                            <div class="flex items-center justify-between text-danger">
+                                <div>หัก ณ ที่จ่าย ({{ $expense->withholding_tax_percentage }}%)</div>
+                                <div>-{{ number_format($expense->withholding_tax_amount, 2) }}</div>
+                            </div>
+                        @endif
+                        <hr class="border-[#e0e6ed] dark:border-[#1b2e4b] my-2" />
+                        <div class="flex items-center justify-between text-lg font-bold text-primary">
+                            <div>รวมราคาสุทธิ</div>
+                            <div>{{ number_format($expense->grand_total, 2) }} {{ $expense->currency }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                @if($expense->attachments->count() > 0)
+                    <div class="mt-8 px-4">
+                        <div class="text-lg font-semibold mb-3">ไฟล์แนบ</div>
+                        <div class="flex flex-col gap-2">
+                            @foreach($expense->attachments as $attachment)
+                                <div class="flex items-center gap-3">
+                                    <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13">
+                                        </path>
+                                    </svg>
+                                    <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank"
+                                        class="text-primary hover:underline flex items-center gap-2">
+                                        {{ $attachment->file_name }}
+                                        <span class="text-xs text-gray-500">({{ $attachment->formatted_size }})</span>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
                 @if($expense->notes)
                     <div class="mt-8 pt-2 pb-2">
