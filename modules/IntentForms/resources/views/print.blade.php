@@ -237,8 +237,7 @@
     </script>
 
 
-    @foreach(range(1, 2) as $copy_index)
-        <div class="container">
+    <div class="container">
 
             <div class="volume"
                 style="margin-top: 28mm;  margin-left: 46mm; position: absolute; font-size: 24px; font-weight: bold;">
@@ -376,8 +375,7 @@
 
             @endforeach
 
-        </div>
-    @endforeach
+    </div>
 </body>
 
 </html>
