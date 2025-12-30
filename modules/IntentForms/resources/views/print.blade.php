@@ -239,141 +239,141 @@
 
     <div class="container">
 
-            <div class="volume"
-                style="margin-top: 28mm;  margin-left: 46mm; position: absolute; font-size: 24px; font-weight: bold;">
-                เล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }}
-            </div>
-            <div class="number"
-                style="margin-top: 28mm; margin-left: 180mm; position: absolute; font-size: 24px; font-weight: bold;">
-                เลขที่ &nbsp; {{ $intentform->number }}
-            </div>
+        <div class="volume"
+            style="margin-top: 25mm;  margin-left: 41mm; position: absolute; font-size: 24px; font-weight: bold;">
+            <!-- เล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }} --> &nbsp;
+        </div>
+        <div class="number"
+            style="margin-top: 25mm; margin-left: 167mm; position: absolute; font-size: 24px; font-weight: bold;">
+            <!-- เลขที่ &nbsp; {{ $intentform->number }} --> &nbsp;
+        </div>
 
-            <div class="account_name" style="margin-top: 38mm;margin-left: 44mm;position: absolute; font-size: 22px;">
-                @if ($intentform->payment_methods == 'เงินโอน')
-                    {{ $intentform->account_name }}
-                @else
-                    &nbsp;
-                @endif
-            </div>
-            <div class="account_bank" style="margin-top: 38mm;margin-left: 140mm;position: absolute; font-size: 22px;">
-                @if ($intentform->payment_methods == 'เงินโอน')
-                    {{ $intentform->account_bank }}
-                @else
-                    &nbsp;
-                @endif
-            </div>
-            <div class="account_number" style="margin-top: 45mm;margin-left: 46mm;position: absolute; font-size: 22px;">
-                @if ($intentform->payment_methods == 'เงินโอน')
-                    {{ $intentform->account_number }}
-                @else
-                    &nbsp;
-                @endif
-            </div>
+        <div class="account_name" style="margin-top: 38mm;margin-left: 44mm;position: absolute; font-size: 22px;">
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->account_name }}
+            @else
+                &nbsp;
+            @endif
+        </div>
+        <div class="account_bank" style="margin-top: 38mm;margin-left: 140mm;position: absolute; font-size: 22px;">
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->account_bank }}
+            @else
+                &nbsp;
+            @endif
+        </div>
+        <div class="account_number" style="margin-top: 45mm;margin-left: 46mm;position: absolute; font-size: 22px;">
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->account_number }}
+            @else
+                &nbsp;
+            @endif
+        </div>
 
-            <div class="refer" style="margin-top: 45mm;margin-left: 136mm;position: absolute; font-size: 22px;">
-                @if ($intentform->payment_methods == 'เงินโอน')
-                    {{ $intentform->refer }}
-                @else
-                    &nbsp;
-                @endif
-            </div>
+        <div class="refer" style="margin-top: 45mm;margin-left: 136mm;position: absolute; font-size: 22px;">
+            @if ($intentform->payment_methods == 'เงินโอน')
+                {{ $intentform->refer }}
+            @else
+                &nbsp;
+            @endif
+        </div>
 
-            <div class="name" style="margin-top: 81mm;margin-left: 60mm;position: absolute;font-size: 24px;">
-                {{ $intentform->name }}
-            </div>
-
-
-            <div class="foundation" style="margin-top: 103mm;margin-left: 52mm;position: absolute; font-size: 22px;">
-                {{ number_format($intentform->total, 2) }}
-            </div>
-
-            <div class="foundation-province"
-                style="margin-top: 103mm;margin-left: 128mm;position: absolute; font-size: 22px;">
-                {{ baht_text($intentform->total) }}
-            </div>
+        <div class="name" style="margin-top: 81mm;margin-left: 60mm;position: absolute;font-size: 24px;">
+            {{ $intentform->name }}
+        </div>
 
 
-            @php
-                $date = \Carbon\Carbon::parse($intentform->date)->locale('th');
-                $day = $date->format('d');
-                $month = $date->monthName;
-                $year = $date->year + 543;
-            @endphp
-            <div class="date-day" style="margin-top: 117mm; margin-left: 124mm; position: absolute; font-size: 20px;">
-                {{ $day }}
-            </div>
-            <div class="date-month" style="margin-top: 117mm; margin-left: 141mm;position: absolute; font-size: 20px;">
-                {{ $month }}
-            </div>
-            <div class="date-year" style="margin-top: 121mm; margin-left: 169mm;position: absolute; font-size: 20px;">
-                {{ $year }}
-            </div>
-            <div class="payee" style="margin-top: 126mm;margin-left: 143mm;position: absolute; font-size: 22px;">
-                {{ $intentform->payee }}
-            </div>
+        <div class="foundation" style="margin-top: 103mm;margin-left: 52mm;position: absolute; font-size: 22px;">
+            {{ number_format($intentform->total, 2) }}
+        </div>
 
-            @foreach($intentform->donations as $index => $donation)
+        <div class="foundation-province"
+            style="margin-top: 103mm;margin-left: 128mm;position: absolute; font-size: 22px;">
+            {{ baht_text($intentform->total) }}
+        </div>
 
-                @if($donation->type->id == 1)
-                    <div style="margin-top: 90mm;margin-left: 73mm;position: absolute;">
-                        ✓
-                    </div>
-                @endif
 
-                @if($donation->type->id == 2)
-                    <div style="margin-top: 90mm;margin-left: 97mm;position: absolute;">
-                        ✓
-                    </div>
-                @endif
+        @php
+            $date = \Carbon\Carbon::parse($intentform->date)->locale('th');
+            $day = $date->format('d');
+            $month = $date->monthName;
+            $year = $date->year + 543;
+        @endphp
+        <div class="date-day" style="margin-top: 117mm; margin-left: 126mm; position: absolute; font-size: 20px;">
+            {{ $day }}
+        </div>
+        <div class="date-month" style="margin-top: 117mm; margin-left: 143mm;position: absolute; font-size: 20px;">
+            {{ $month }}
+        </div>
+        <div class="date-year" style="margin-top: 117mm; margin-left: 169mm;position: absolute; font-size: 20px;">
+            {{ $year }}
+        </div>
+        <div class="payee" style="margin-top: 126mm;margin-left: 143mm;position: absolute; font-size: 22px;">
+            {{ $intentform->payee }}
+        </div>
 
-                @if($donation->type->id == 3)
-                    <div style="margin-top: 90mm;margin-left: 118mm;position: absolute;">
-                        ✓
-                    </div>
-                @endif
+        @foreach($intentform->donations as $index => $donation)
 
-                @if($donation->type->id == 4)
-                    <div style="margin-top: 90mm;margin-left: 145mm;position: absolute;">
-                        ✓
-                    </div>
-                @endif
-                @if($donation->type->id == 5)
-                    <div style="margin-top: 90mm; margin-left: 180mm; position: absolute;">
-                        ✓
-                    </div>
-                @endif
-                @if($donation->type->id == 6 || $donation->type->id == 7 || $donation->type->id == 8)
-                    <div style="margin-top: 95mm;margin-left: 35mm;position: absolute;">
-                        ✓
-                    </div>
-                    <div style="margin-top: 95mm;margin-left: 51mm;position: absolute; font-size: 22px;">
-                        {{ $donation->description }}
-                    </div>
-                @endif
+            @if($donation->type->id == 1)
+                <div style="margin-top: 90mm;margin-left: 73mm;position: absolute;">
+                    ✓
+                </div>
+            @endif
 
-                @if($donation->type->id == 9)
-                    <div style="margin-top: 95mm;margin-left: 73mm;position: absolute;">
-                        ✓
-                    </div>
-                @endif
-                @if($donation->type->id == 10)
-                    <div style="margin-top: 95mm;margin-left: 96mm;position: absolute;">
-                        ✓
-                    </div>
-                    <div style="margin-top: 95mm;margin-left: 109mm;position: absolute; font-size: 22px;">
-                        {{ $donation->description }}
-                    </div>
-                @endif
-                @if($donation->type->id == 11)
-                    <div style="margin-top: 96mm;margin-left: 140mm;position: absolute;">
-                        ✓
-                    </div>
-                    <div style="margin-top: 96mm;margin-left: 156mm;position: absolute; font-size: 22px;">
-                        {{ $donation->description }}
-                    </div>
-                @endif
+            @if($donation->type->id == 2)
+                <div style="margin-top: 90mm;margin-left: 97mm;position: absolute;">
+                    ✓
+                </div>
+            @endif
 
-            @endforeach
+            @if($donation->type->id == 3)
+                <div style="margin-top: 90mm;margin-left: 118mm;position: absolute;">
+                    ✓
+                </div>
+            @endif
+
+            @if($donation->type->id == 4)
+                <div style="margin-top: 90mm;margin-left: 143mm;position: absolute;">
+                    ✓
+                </div>
+            @endif
+            @if($donation->type->id == 5)
+                <div style="margin-top: 90mm; margin-left: 178mm; position: absolute;">
+                    ✓
+                </div>
+            @endif
+            @if($donation->type->id == 6 || $donation->type->id == 7 || $donation->type->id == 8)
+                <div style="margin-top: 95mm;margin-left: 35mm;position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 95mm;margin-left: 51mm;position: absolute; font-size: 22px;">
+                    {{ $donation->description }}
+                </div>
+            @endif
+
+            @if($donation->type->id == 9)
+                <div style="margin-top: 95mm;margin-left: 73mm;position: absolute;">
+                    ✓
+                </div>
+            @endif
+            @if($donation->type->id == 10)
+                <div style="margin-top: 95mm;margin-left: 96mm;position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 95mm;margin-left: 109mm;position: absolute; font-size: 22px;">
+                    {{ $donation->description }}
+                </div>
+            @endif
+            @if($donation->type->id == 11)
+                <div style="margin-top: 96mm;margin-left: 140mm;position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 96mm;margin-left: 156mm;position: absolute; font-size: 22px;">
+                    {{ $donation->description }}
+                </div>
+            @endif
+
+        @endforeach
 
     </div>
 </body>
