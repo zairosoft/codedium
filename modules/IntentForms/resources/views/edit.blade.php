@@ -144,9 +144,8 @@
                                                     x-model="item.quantity" :name="'quantity['+i+']'" min="0" />
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01" class="form-input w-32"
-                                                    :readonly="!item.isOther" placeholder="ราคา" :name="'price['+i+']'"
-                                                    x-model="item.price" />
+                                                <input type="number" step="1" class="form-input w-32" placeholder="ราคา"
+                                                    :name="'price['+i+']'" x-model="item.price" />
                                             </td>
                                             <td x-text="formatNumber(item.price * item.quantity)"></td>
                                             <td>
@@ -279,8 +278,8 @@
                         });
                     @endforeach
 
-                                                        // Add one empty item if no items exist
-                                                        if (this.items.length === 0) {
+                                                                    // Add one empty item if no items exist
+                                                                    if (this.items.length === 0) {
                         this.items.push({
                             id: 1,
                             type_id: '',
