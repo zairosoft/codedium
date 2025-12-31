@@ -298,13 +298,6 @@
             $day = $date->format('d');
             $month = $date->monthName;
             $year = $date->year + 543;
-
-            $ids_11_17 = [11, 12, 13, 14, 15, 16, 17];
-            $otherNames = $intentform->donations
-                ->filter(fn($d) => in_array($d->type->id, $ids_11_17))
-                ->map(fn($d) => $d->type->name)
-                ->unique()
-                ->implode('&nbsp;');
         @endphp
         <div class="date-day" style="margin-top: 122mm; margin-left: 126mm; position: absolute; font-size: 20px;">
             {{ $day }}
@@ -371,15 +364,13 @@
                     {{ $donation->description }}
                 </div>
             @endif
-            @if (in_array($donation->type->id, $ids_11_17))
+            
+             @if($donation->type->id == 11 || $donation->type->id == 12 || $donation->type->id == 13 || $donation->type->id == 14 || $donation->type->id == 15 || $donation->type->id == 16 || $donation->type->id == 17)
                 <div style="margin-top: 101mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
-            @endif
-            {{-- The display of donation->type->name for 11-17 is moved outside the loop to prevent overlapping --}}
-            @if ($otherNames)
                 <div style="margin-top: 99mm;margin-left: 153mm;position: absolute; font-size: 22px;">
-                    {{ $otherNames }}
+                    {{ $donation->type->name }}
                 </div>
             @endif
 
