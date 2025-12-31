@@ -63,6 +63,8 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             $headers[] = $type->name;
         }
 
+        $headers[] = 'ช่องทางการชำระ';
+        $headers[] = 'ผู้รับเงิน';
         $headers[] = 'หมายเหตุ';
 
         return $headers;
@@ -78,7 +80,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
         $row = [
             $this->rowNumber,
             $intentform->name,
-            $intentform->volume . '/' . $intentform->number,
+            sprintf('%03d', $intentform->volume) . '/' . $intentform->number,
         ];
 
         // Add donation amounts for each type
@@ -87,6 +89,8 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             $row[] = $donation ? $donation->sub_total : '';
         }
 
+        $row[] = $intentform->payment_methods;
+        $row[] = $intentform->payee;
         $row[] = $intentform->notes ?? '';
 
         return $row;
@@ -110,6 +114,14 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             $column++;
         }
 
+        // Payment Method column
+        $widths[$column] = 15;
+        $column++;
+
+        // Payee column
+        $widths[$column] = 20;
+        $column++;
+
         // Notes column
         $widths[$column] = 20;
 
@@ -122,7 +134,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
     public function styles(Worksheet $sheet)
     {
         $lastRow = $this->intentforms->count() + 2; // +1 for header, +1 for 0-index
-        $lastColumn = chr(67 + $this->types->count() + 1); // C + types + notes
+        $lastColumn = chr(67 + $this->types->count() + 3); // C + types + payment + payee + notes
 
         // Header style
         $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray([
@@ -178,7 +190,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
                 $lastRow = $this->intentforms->count() + 2;
-                $lastColumn = chr(67 + $this->types->count() + 1);
+                $lastColumn = chr(67 + $this->types->count() + 3);
 
                 // Insert title row at top
                 $sheet->insertNewRowBefore(1, 1);

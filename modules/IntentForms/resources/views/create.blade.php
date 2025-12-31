@@ -260,7 +260,7 @@
             Alpine.data('invoiceAdd', () => ({
                 items: [],
                 paymentMethod: '{{ old('payment_methods', 'เงินสด') }}',
-                currentVolume: '{{ $nextVolumeCash }}',
+                currentVolume: '{{ sprintf('%03d', $nextVolumeCash) }}',
                 currentNumber: '{{ $nextNumberCash }}',
 
                 init() {

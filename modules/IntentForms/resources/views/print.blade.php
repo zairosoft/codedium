@@ -239,13 +239,11 @@
 
     <div class="container">
 
-        <div class="volume"
-            style="margin-top: 25mm;  margin-left: 41mm; position: absolute; font-size: 24px; font-weight: bold;">
-            <!-- เล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }} --> &nbsp;
+            {{ sprintf('%03d', $intentform->volume) }}
         </div>
         <div class="number"
             style="margin-top: 25mm; margin-left: 167mm; position: absolute; font-size: 24px; font-weight: bold;">
-            <!-- เลขที่ &nbsp; {{ $intentform->number }} --> &nbsp;
+            {{ $intentform->number }}
         </div>
 
         <div class="account_name" style="margin-top: 38mm;margin-left: 44mm;position: absolute; font-size: 22px;">
