@@ -67,6 +67,15 @@
                         placeholder="ปี ค.ศ." min="2000" max="2100" :value="filterType === 'yearly' ? filterValue : ''" />
                 </div>
 
+                <div>
+                    <label for="payment_method">ช่องทางการชำระ</label>
+                    <select id="payment_method" name="payment_method" class="form-select">
+                        <option value="all" {{ ($paymentMethod ?? '') == 'all' ? 'selected' : '' }}>ทั้งหมด</option>
+                        <option value="เงินสด" {{ ($paymentMethod ?? '') == 'เงินสด' ? 'selected' : '' }}>เงินสด</option>
+                        <option value="เงินโอน" {{ ($paymentMethod ?? '') == 'เงินโอน' ? 'selected' : '' }}>เงินโอน</option>
+                    </select>
+                </div>
+
                 <div class="flex items-end gap-2">
                     <button type="submit" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -122,7 +131,7 @@
                 </div>
 
                 <div class="flex items-center justify-end">
-                    <a href="{{ route('intentform.report.export', ['filter_type' => $filterType, 'filter_value' => $filterValue]) }}"
+                    <a href="{{ route('intentform.report.export', ['filter_type' => $filterType, 'filter_value' => $filterValue, 'payment_method' => $paymentMethod ?? 'all']) }}"
                         class="btn btn-success">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" class="mr-2">
@@ -151,7 +160,8 @@
                             <th>ชื่อผู้บริจาค</th>
                             <th>รายการบริจาค</th>
                             <th class="text-right">จำนวนเงิน</th>
-                            <th>ช่องทางชำระ</th>
+                            <th>ช่องทางการชำระ</th>
+                            <th>ผู้รับเงิน</th>
                             <th>จัดการ</th>
                         </tr>
                     </thead>
@@ -175,6 +185,7 @@
                                 </td>
                                 <td class="text-right font-semibold">{{ number_format($intentform->total, 2) }}</td>
                                 <td>{{ $intentform->payment_methods }}</td>
+                                <td>{{ $intentform->payee }}</td>
                                 <td>
                                     <div class="flex gap-2">
                                         <a href="{{ route('intentform.show', $intentform->id) }}" class="text-primary"
@@ -223,7 +234,7 @@
                             <tr class="bg-gray-100 dark:bg-gray-800 font-bold">
                                 <td colspan="5" class="text-right">รวมทั้งหมด:</td>
                                 <td class="text-right">{{ number_format($totalAmount, 2) }} บาท</td>
-                                <td colspan="2"></td>
+                                <td colspan="3"></td>
                             </tr>
                         </tfoot>
                     @endif

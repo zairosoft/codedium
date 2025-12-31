@@ -357,6 +357,11 @@ class IntentFormsController extends Controller
             }
         }
 
+        // Apply payment method filter
+        if ($request->has('payment_method') && $request->payment_method != 'all') {
+            $query->where('payment_methods', $request->payment_method);
+        }
+
         $intentforms = $query->get();
         $totalAmount = $intentforms->sum('total');
 
@@ -365,6 +370,7 @@ class IntentFormsController extends Controller
             'totalAmount' => $totalAmount,
             'filterType' => $request->filter_type ?? 'monthly',
             'filterValue' => $request->filter_value ?? Carbon::now()->format('Y-m'),
+            'paymentMethod' => $request->payment_method ?? 'all',
             'company' => $company,
         ]);
     }
@@ -449,6 +455,12 @@ class IntentFormsController extends Controller
             }
         } else {
             $filename = 'report_' . Carbon::now()->format('m-Y');
+        }
+
+        // Apply payment method filter for export
+        if ($request->has('payment_method') && $request->payment_method != 'all') {
+            $query->where('payment_methods', $request->payment_method);
+            $filename .= '_' . ($request->payment_method == 'เงินสด' ? 'cash' : 'transfer');
         }
 
         $intentforms = $query->get();
