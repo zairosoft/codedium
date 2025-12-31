@@ -239,11 +239,13 @@
 
     <div class="container">
 
-            {{ sprintf('%03d', $intentform->volume) }}
+        <div class="volume"
+            style="margin-top: 25mm;  margin-left: 41mm; position: absolute; font-size: 24px; font-weight: bold;">
+            <!-- เล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }} --> &nbsp;
         </div>
         <div class="number"
             style="margin-top: 25mm; margin-left: 167mm; position: absolute; font-size: 24px; font-weight: bold;">
-            {{ $intentform->number }}
+            <!-- เลขที่ &nbsp; {{ $intentform->number }} --> &nbsp;
         </div>
 
         <div class="account_name" style="margin-top: 38mm;margin-left: 44mm;position: absolute; font-size: 22px;">
@@ -296,6 +298,13 @@
             $day = $date->format('d');
             $month = $date->monthName;
             $year = $date->year + 543;
+
+            $ids_11_17 = [11, 12, 13, 14, 15, 16, 17];
+            $otherNames = $intentform->donations
+                ->filter(fn($d) => in_array($d->type->id, $ids_11_17))
+                ->map(fn($d) => $d->type->name)
+                ->unique()
+                ->implode('&nbsp;');
         @endphp
         <div class="date-day" style="margin-top: 122mm; margin-left: 126mm; position: absolute; font-size: 20px;">
             {{ $day }}
@@ -310,7 +319,7 @@
             {{ $intentform->payee }}
         </div>
 
-        @foreach($intentform->donations as $index => $donation)
+        @foreach ($intentform->donations as $index => $donation)
 
             @if($donation->type->id == 1)
                 <div style="margin-top: 94mm;margin-left: 70mm;position: absolute;">
@@ -355,23 +364,37 @@
                 </div>
             @endif
             @if($donation->type->id == 10)
-                <div style="margin-top: 101mm;margin-left: 93mm;position: absolute;">
+                <div style="margin-top: 101mm;margin-left: 95mm;position: absolute;">
                     ✓
                 </div>
-                <div style="margin-top: 101mm;margin-left: 106mm;position: absolute; font-size: 22px;">
+                <div style="margin-top: 100mm;margin-left: 108mm;position: absolute; font-size: 22px;">
                     {{ $donation->description }}
                 </div>
             @endif
-            @if($donation->type->id == 11)
-                <div style="margin-top: 101mm;margin-left: 137mm;position: absolute;">
+            @if (in_array($donation->type->id, $ids_11_17))
+                <div style="margin-top: 101mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
-                <div style="margin-top: 101mm;margin-left: 153mm;position: absolute; font-size: 22px;">
+            @endif
+            {{-- The display of donation->type->name for 11-17 is moved outside the loop to prevent overlapping --}}
+            @if ($otherNames)
+                <div style="margin-top: 99mm;margin-left: 153mm;position: absolute; font-size: 22px;">
+                    {{ $otherNames }}
+                </div>
+            @endif
+
+            @if($donation->type->id == 18)
+                <div style="margin-top: 101mm;margin-left: 140mm;position: absolute;">
+                    ✓
+                </div>
+                <div style="margin-top: 99mm;margin-left: 153mm;position: absolute; font-size: 22px;">
                     {{ $donation->description }}
                 </div>
             @endif
 
         @endforeach
+
+        
 
     </div>
 </body>

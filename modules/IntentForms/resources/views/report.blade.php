@@ -30,7 +30,7 @@
         <!-- Filter Panel -->
         <div class="panel mb-5">
             <h5 class="text-lg font-semibold mb-4">กรองข้อมูล</h5>
-            <form method="GET" action="{{ route('intentform.report') }}" class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <form method="GET" action="{{ route('intentform.report') }}" class="grid grid-cols-1 gap-4 sm:grid-cols-4">
                 <div>
                     <label for="filter_type">ประเภทการกรอง</label>
                     <select id="filter_type" name="filter_type" class="form-select" x-model="filterType"
@@ -51,20 +51,21 @@
                     </label>
 
                     <!-- Daily -->
-                    <input x-show="filterType === 'daily'" type="date" name="filter_value" class="form-input"
-                        :value="filterType === 'daily' ? filterValue : ''" />
+                    <input x-show="filterType === 'daily'" type="date"
+                        :name="filterType === 'daily' ? 'filter_value' : null" class="form-input" x-model="filterValue" />
 
                     <!-- Weekly -->
-                    <input x-show="filterType === 'weekly'" type="date" name="filter_value" class="form-input"
-                        :value="filterType === 'weekly' ? filterValue : ''" />
+                    <input x-show="filterType === 'weekly'" type="date"
+                        :name="filterType === 'weekly' ? 'filter_value' : null" class="form-input" x-model="filterValue" />
 
                     <!-- Monthly -->
-                    <input x-show="filterType === 'monthly'" type="month" name="filter_value" class="form-input"
-                        :value="filterType === 'monthly' ? filterValue : ''" />
+                    <input x-show="filterType === 'monthly'" type="month"
+                        :name="filterType === 'monthly' ? 'filter_value' : null" class="form-input" x-model="filterValue" />
 
                     <!-- Yearly -->
-                    <input x-show="filterType === 'yearly'" type="number" name="filter_value" class="form-input"
-                        placeholder="ปี ค.ศ." min="2000" max="2100" :value="filterType === 'yearly' ? filterValue : ''" />
+                    <input x-show="filterType === 'yearly'" type="number"
+                        :name="filterType === 'yearly' ? 'filter_value' : null" class="form-input" placeholder="ปี ค.ศ."
+                        min="2000" max="2100" x-model="filterValue" />
                 </div>
 
                 <div>
