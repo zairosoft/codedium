@@ -23,6 +23,7 @@ class DashboardController extends Controller
     {
         // Default to monthly view
         $filterType = $request->get('filter_type', 'monthly');
+        $paymentMethod = $request->get('payment_method', 'all');
 
         // Set default filter value based on filter type
         $defaultValue = match ($filterType) {
@@ -37,6 +38,17 @@ class DashboardController extends Controller
         // Initialize queries
         $incomeQuery = Intentform::query();
         $expenseQuery = Expense::query();
+
+        // Apply Payment Method Filters
+        if ($paymentMethod !== 'all') {
+            if ($paymentMethod === 'cash') {
+                $incomeQuery->where('payment_methods', 'เงินสด');
+                $expenseQuery->where('payment_method', 'เงินสด');
+            } elseif ($paymentMethod === 'transfer') {
+                $incomeQuery->where('payment_methods', 'เงินโอน');
+                $expenseQuery->where('payment_method', 'เงินโอน');
+            }
+        }
 
         // Apply date filters
         switch ($filterType) {
@@ -126,6 +138,7 @@ class DashboardController extends Controller
             'recentExpenses' => $recentExpenses,
             'filterType' => $filterType,
             'filterValue' => $filterValue,
+            'paymentMethod' => $paymentMethod,
         ]);
     }
 }

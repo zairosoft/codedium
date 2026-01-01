@@ -87,32 +87,41 @@
         </div>
 
         <!-- Filter Section -->
+        <!-- Filter Section -->
         <div class="panel mb-5" x-data="{
-                            filterType: '{{ $filterType }}',
-                            filterValue: '{{ $filterValue }}',
-                            setFilter(type) {
-                                this.filterType = type;
-                                const now = new Date();
-                                if (type === 'daily' || type === 'weekly') {
-                                    this.filterValue = now.toISOString().split('T')[0];
-                                } else if (type === 'monthly') {
-                                    const year = now.getFullYear();
-                                    const month = String(now.getMonth() + 1).padStart(2, '0');
-                                    this.filterValue = `${year}-${month}`;
-                                } else if (type === 'yearly') {
-                                    this.filterValue = now.getFullYear().toString();
-                                }
-                                this.$nextTick(() => {
-                                    document.getElementById('filterForm').submit();
-                                });
-                            },
-                            submitForm() {
-                                document.getElementById('filterForm').submit();
-                            }
-                        }">
+                                        filterType: '{{ $filterType }}',
+                                        filterValue: '{{ $filterValue }}',
+                                        paymentMethod: '{{ $paymentMethod ?? 'all' }}',
+                                        setFilter(type) {
+                                            this.filterType = type;
+                                            const now = new Date();
+                                            if (type === 'daily' || type === 'weekly') {
+                                                this.filterValue = now.toISOString().split('T')[0];
+                                            } else if (type === 'monthly') {
+                                                const year = now.getFullYear();
+                                                const month = String(now.getMonth() + 1).padStart(2, '0');
+                                                this.filterValue = `${year}-${month}`;
+                                            } else if (type === 'yearly') {
+                                                this.filterValue = now.getFullYear().toString();
+                                            }
+                                            this.$nextTick(() => {
+                                                document.getElementById('filterForm').submit();
+                                            });
+                                        },
+                                        setPaymentMethod(method) {
+                                            this.paymentMethod = method;
+                                            this.$nextTick(() => {
+                                                document.getElementById('filterForm').submit();
+                                            });
+                                        },
+                                        submitForm() {
+                                            document.getElementById('filterForm').submit();
+                                        }
+                                    }">
             <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                    <div class="col-span-2">
+                <input type="hidden" name="payment_method" x-model="paymentMethod">
+                <div class="flex flex-wrap items-end gap-8 mb-4">
+                    <div>
                         <label class="block text-sm font-medium mb-2">ประเภทการดู</label>
                         <div class="flex gap-2 flex-wrap">
                             <button type="button" @click="setFilter('daily')" class="filter-btn px-4 py-2 rounded-lg border"
@@ -128,17 +137,35 @@
                                 :class="filterType === 'yearly' ? 'active' : 'border-gray-300'">รายปี</button>
                         </div>
                     </div>
-                    <div class="col-span-2">
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">ช่องทางการชำระ</label>
+                        <div class="flex gap-2 flex-wrap">
+                            <button type="button" @click="setPaymentMethod('all')"
+                                class="filter-btn px-3 py-2 rounded-lg border text-sm"
+                                :class="paymentMethod === 'all' ? 'active' : 'border-gray-300'">ทั้งหมด</button>
+                            <button type="button" @click="setPaymentMethod('cash')"
+                                class="filter-btn px-3 py-2 rounded-lg border text-sm"
+                                :class="paymentMethod === 'cash' ? 'active' : 'border-gray-300'">เงินสด</button>
+                            <button type="button" @click="setPaymentMethod('transfer')"
+                                class="filter-btn px-3 py-2 rounded-lg border text-sm"
+                                :class="paymentMethod === 'transfer' ? 'active' : 'border-gray-300'">เงินโอน</button>
+                        </div>
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium mb-2">เลือกวันที่</label>
                         <input type="hidden" name="filter_type" x-model="filterType">
                         <input type="date" name="filter_value" x-model="filterValue" @change="submitForm()"
                             x-show="filterType === 'daily' || filterType === 'weekly'"
-                            :disabled="filterType !== 'daily' && filterType !== 'weekly'" class="form-input">
+                            :disabled="filterType !== 'daily' && filterType !== 'weekly'" class="form-input"
+                            style="width: 350px;">
                         <input type="month" name="filter_value" x-model="filterValue" @change="submitForm()"
-                            x-show="filterType === 'monthly'" :disabled="filterType !== 'monthly'" class="form-input">
+                            x-show="filterType === 'monthly'" :disabled="filterType !== 'monthly'" class="form-input"
+                            style="width: 350px;">
                         <input type="number" name="filter_value" x-model="filterValue" @change="submitForm()"
                             x-show="filterType === 'yearly'" :disabled="filterType !== 'yearly'" class="form-input"
-                            min="2000" max="2100" placeholder="ปี ค.ศ.">
+                            min="2000" max="2100" placeholder="ปี ค.ศ." style="width: 350px;">
                     </div>
                 </div>
             </form>
@@ -200,7 +227,7 @@
             <!-- Income by Payment Method -->
             <div class="panel">
                 <div class="mb-4 flex items-center justify-between">
-                    <h5 class="text-lg font-semibold dark:text-white-light">รายรับตามวิธีการชำระเงิน</h5>
+                    <h5 class="text-lg font-semibold dark:text-white-light">รายรับตามช่องทางการชำระ</h5>
                 </div>
                 <div class="chart-container">
                     <canvas id="incomeChart"></canvas>
@@ -289,14 +316,14 @@
                 @foreach ($incomeByPaymentMethod as $item)
                     '{{ $item->payment_methods }}',
                 @endforeach
-                                    ],
+                                                    ],
             datasets: [{
                 label: 'รายรับ (บาท)',
                 data: [
                     @foreach ($incomeByPaymentMethod as $item)
                         {{ $item->total }},
                     @endforeach
-                                        ],
+                                                        ],
                 backgroundColor: [
                     'rgba(17, 153, 142, 0.8)',
                     'rgba(56, 239, 125, 0.8)',
@@ -332,14 +359,14 @@
                 @foreach ($expenseByCategory as $item)
                     '{{ $item->category }}',
                 @endforeach
-                                    ],
+                                                    ],
             datasets: [{
                 label: 'รายจ่าย (บาท)',
                 data: [
                     @foreach ($expenseByCategory as $item)
                         {{ $item->total }},
                     @endforeach
-                                        ],
+                                                        ],
                 backgroundColor: [
                     'rgba(238, 9, 121, 0.8)',
                     'rgba(255, 106, 0, 0.8)',
