@@ -88,28 +88,28 @@
 
         <!-- Filter Section -->
         <div class="panel mb-5" x-data="{
-                        filterType: '{{ $filterType }}',
-                        filterValue: '{{ $filterValue }}',
-                        setFilter(type) {
-                            this.filterType = type;
-                            const now = new Date();
-                            if (type === 'daily' || type === 'weekly') {
-                                this.filterValue = now.toISOString().split('T')[0];
-                            } else if (type === 'monthly') {
-                                const year = now.getFullYear();
-                                const month = String(now.getMonth() + 1).padStart(2, '0');
-                                this.filterValue = `${year}-${month}`;
-                            } else if (type === 'yearly') {
-                                this.filterValue = now.getFullYear().toString();
-                            }
-                            this.$nextTick(() => {
+                            filterType: '{{ $filterType }}',
+                            filterValue: '{{ $filterValue }}',
+                            setFilter(type) {
+                                this.filterType = type;
+                                const now = new Date();
+                                if (type === 'daily' || type === 'weekly') {
+                                    this.filterValue = now.toISOString().split('T')[0];
+                                } else if (type === 'monthly') {
+                                    const year = now.getFullYear();
+                                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                                    this.filterValue = `${year}-${month}`;
+                                } else if (type === 'yearly') {
+                                    this.filterValue = now.getFullYear().toString();
+                                }
+                                this.$nextTick(() => {
+                                    document.getElementById('filterForm').submit();
+                                });
+                            },
+                            submitForm() {
                                 document.getElementById('filterForm').submit();
-                            });
-                        },
-                        submitForm() {
-                            document.getElementById('filterForm').submit();
-                        }
-                    }">
+                            }
+                        }">
             <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <div class="col-span-2">
@@ -132,11 +132,13 @@
                         <label class="block text-sm font-medium mb-2">เลือกวันที่</label>
                         <input type="hidden" name="filter_type" x-model="filterType">
                         <input type="date" name="filter_value" x-model="filterValue" @change="submitForm()"
-                            x-show="filterType === 'daily' || filterType === 'weekly'" class="form-input">
+                            x-show="filterType === 'daily' || filterType === 'weekly'"
+                            :disabled="filterType !== 'daily' && filterType !== 'weekly'" class="form-input">
                         <input type="month" name="filter_value" x-model="filterValue" @change="submitForm()"
-                            x-show="filterType === 'monthly'" class="form-input">
+                            x-show="filterType === 'monthly'" :disabled="filterType !== 'monthly'" class="form-input">
                         <input type="number" name="filter_value" x-model="filterValue" @change="submitForm()"
-                            x-show="filterType === 'yearly'" class="form-input" min="2000" max="2100" placeholder="ปี ค.ศ.">
+                            x-show="filterType === 'yearly'" :disabled="filterType !== 'yearly'" class="form-input"
+                            min="2000" max="2100" placeholder="ปี ค.ศ.">
                     </div>
                 </div>
             </form>
@@ -287,14 +289,14 @@
                 @foreach ($incomeByPaymentMethod as $item)
                     '{{ $item->payment_methods }}',
                 @endforeach
-                                ],
+                                    ],
             datasets: [{
                 label: 'รายรับ (บาท)',
                 data: [
                     @foreach ($incomeByPaymentMethod as $item)
                         {{ $item->total }},
                     @endforeach
-                                    ],
+                                        ],
                 backgroundColor: [
                     'rgba(17, 153, 142, 0.8)',
                     'rgba(56, 239, 125, 0.8)',
@@ -330,14 +332,14 @@
                 @foreach ($expenseByCategory as $item)
                     '{{ $item->category }}',
                 @endforeach
-                                ],
+                                    ],
             datasets: [{
                 label: 'รายจ่าย (บาท)',
                 data: [
                     @foreach ($expenseByCategory as $item)
                         {{ $item->total }},
                     @endforeach
-                                    ],
+                                        ],
                 backgroundColor: [
                     'rgba(238, 9, 121, 0.8)',
                     'rgba(255, 106, 0, 0.8)',

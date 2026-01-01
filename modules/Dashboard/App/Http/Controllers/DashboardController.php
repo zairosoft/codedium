@@ -23,7 +23,16 @@ class DashboardController extends Controller
     {
         // Default to monthly view
         $filterType = $request->get('filter_type', 'monthly');
-        $filterValue = $request->get('filter_value', Carbon::now()->format('Y-m'));
+
+        // Set default filter value based on filter type
+        $defaultValue = match ($filterType) {
+            'daily', 'weekly' => Carbon::now()->format('Y-m-d'),
+            'monthly' => Carbon::now()->format('Y-m'),
+            'yearly' => Carbon::now()->format('Y'),
+            default => Carbon::now()->format('Y-m')
+        };
+
+        $filterValue = $request->get('filter_value', $defaultValue);
 
         // Initialize queries
         $incomeQuery = Intentform::query();
