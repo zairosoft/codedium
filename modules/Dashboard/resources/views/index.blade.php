@@ -89,35 +89,35 @@
         <!-- Filter Section -->
         <!-- Filter Section -->
         <div class="panel mb-5" x-data="{
-                                        filterType: '{{ $filterType }}',
-                                        filterValue: '{{ $filterValue }}',
-                                        paymentMethod: '{{ $paymentMethod ?? 'all' }}',
-                                        setFilter(type) {
-                                            this.filterType = type;
-                                            const now = new Date();
-                                            if (type === 'daily' || type === 'weekly') {
-                                                this.filterValue = now.toISOString().split('T')[0];
-                                            } else if (type === 'monthly') {
-                                                const year = now.getFullYear();
-                                                const month = String(now.getMonth() + 1).padStart(2, '0');
-                                                this.filterValue = `${year}-${month}`;
-                                            } else if (type === 'yearly') {
-                                                this.filterValue = now.getFullYear().toString();
+                                            filterType: '{{ $filterType }}',
+                                            filterValue: '{{ $filterValue }}',
+                                            paymentMethod: '{{ $paymentMethod ?? 'all' }}',
+                                            setFilter(type) {
+                                                this.filterType = type;
+                                                const now = new Date();
+                                                if (type === 'daily' || type === 'weekly') {
+                                                    this.filterValue = now.toISOString().split('T')[0];
+                                                } else if (type === 'monthly') {
+                                                    const year = now.getFullYear();
+                                                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                                                    this.filterValue = `${year}-${month}`;
+                                                } else if (type === 'yearly') {
+                                                    this.filterValue = now.getFullYear().toString();
+                                                }
+                                                this.$nextTick(() => {
+                                                    document.getElementById('filterForm').submit();
+                                                });
+                                            },
+                                            setPaymentMethod(method) {
+                                                this.paymentMethod = method;
+                                                this.$nextTick(() => {
+                                                    document.getElementById('filterForm').submit();
+                                                });
+                                            },
+                                            submitForm() {
+                                                document.getElementById('filterForm').submit();
                                             }
-                                            this.$nextTick(() => {
-                                                document.getElementById('filterForm').submit();
-                                            });
-                                        },
-                                        setPaymentMethod(method) {
-                                            this.paymentMethod = method;
-                                            this.$nextTick(() => {
-                                                document.getElementById('filterForm').submit();
-                                            });
-                                        },
-                                        submitForm() {
-                                            document.getElementById('filterForm').submit();
-                                        }
-                                    }">
+                                        }">
             <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
                 <input type="hidden" name="payment_method" x-model="paymentMethod">
                 <div class="flex flex-wrap items-end gap-8 mb-4">
@@ -316,14 +316,14 @@
                 @foreach ($incomeByPaymentMethod as $item)
                     '{{ $item->payment_methods }}',
                 @endforeach
-                                                    ],
+                                                        ],
             datasets: [{
                 label: 'รายรับ (บาท)',
                 data: [
                     @foreach ($incomeByPaymentMethod as $item)
                         {{ $item->total }},
                     @endforeach
-                                                        ],
+                                                            ],
                 backgroundColor: [
                     'rgba(17, 153, 142, 0.8)',
                     'rgba(56, 239, 125, 0.8)',
@@ -359,14 +359,14 @@
                 @foreach ($expenseByCategory as $item)
                     '{{ $item->category }}',
                 @endforeach
-                                                    ],
+                                                        ],
             datasets: [{
                 label: 'รายจ่าย (บาท)',
                 data: [
                     @foreach ($expenseByCategory as $item)
                         {{ $item->total }},
                     @endforeach
-                                                        ],
+                                                            ],
                 backgroundColor: [
                     'rgba(238, 9, 121, 0.8)',
                     'rgba(255, 106, 0, 0.8)',
