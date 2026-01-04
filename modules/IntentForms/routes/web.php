@@ -19,6 +19,7 @@ Route::prefix('intentform')->group(function () {
     Route::get('/', 'IntentFormsController@index')->name('intentform');
     Route::get('/report', 'IntentFormsController@report')->name('intentform.report');
     Route::get('/report/export', 'IntentFormsController@exportReport')->name('intentform.report.export');
+    Route::get('/report/export-dated', 'IntentFormsController@exportReport')->name('intentform.report.export.dated');
     Route::get('/create', 'IntentFormsController@create')->name('intentform.create');
     Route::post('/store', 'IntentFormsController@store')->name('intentform.store');
     Route::get('/{id}/edit', 'IntentFormsController@edit')->name('intentform.edit');

@@ -132,7 +132,7 @@
                 </div>
 
                 <div class="flex items-center justify-end">
-                    <a href="{{ route('intentform.report.export', ['filter_type' => $filterType, 'filter_value' => $filterValue, 'payment_method' => $paymentMethod ?? 'all']) }}"
+                    <a href="{{ route('intentform.report.export.dated', ['filter_type' => $filterType, 'filter_value' => $filterValue, 'payment_method' => $paymentMethod ?? 'all']) }}"
                         class="btn btn-success">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" class="mr-2">

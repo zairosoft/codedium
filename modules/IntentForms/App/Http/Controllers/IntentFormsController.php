@@ -441,7 +441,7 @@ class IntentFormsController extends Controller
                     $year = $date->year;
                     // Use Thai Buddhist year
                     $thaiYear = $date->year + 543;
-                    $filename = 'report_' . $date->month . ':' . $thaiYear;
+                    $filename = 'report_' . $date->month . '_' . $thaiYear;
                     break;
                 case 'yearly':
                     $query->whereYear('date', $filterValue);
@@ -462,6 +462,9 @@ class IntentFormsController extends Controller
             $query->where('payment_methods', $request->payment_method);
             $filename .= '_' . ($request->payment_method == 'เงินสด' ? 'cash' : 'transfer');
         }
+
+        // Add current date in dmY format to filename
+        $filename .= '_' . Carbon::now()->format('dmY');
 
         $intentforms = $query->get();
 
