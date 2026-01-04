@@ -241,11 +241,15 @@
 
         <div class="volume"
             style="margin-top: 25mm;  margin-left: 41mm; position: absolute; font-size: 24px; font-weight: bold;">
-            <!-- เล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }} --> &nbsp;
+            @if ($intentform->payment_methods == 'เงินโอน')
+                โอนเล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }}
+            @else
+                เล่มที่ &nbsp; {{ sprintf('%03d', $intentform->volume) }}
+            @endif
         </div>
         <div class="number"
             style="margin-top: 25mm; margin-left: 167mm; position: absolute; font-size: 24px; font-weight: bold;">
-            <!-- เลขที่ &nbsp; {{ $intentform->number }} --> &nbsp;
+            เลขที่ &nbsp; {{ sprintf('%02d', $intentform->number) }}
         </div>
 
         <div class="account_name" style="margin-top: 38mm;margin-left: 44mm;position: absolute; font-size: 22px;">
@@ -364,13 +368,13 @@
                     {{ $donation->description }}
                 </div>
             @endif
-            
-             @if($donation->type->id == 11 || $donation->type->id == 12 || $donation->type->id == 13 || $donation->type->id == 14 || $donation->type->id == 15 || $donation->type->id == 16 || $donation->type->id == 17)
+
+            @if($donation->type->id == 11 || $donation->type->id == 12 || $donation->type->id == 13 || $donation->type->id == 14 || $donation->type->id == 15 || $donation->type->id == 16 || $donation->type->id == 17)
                 <div style="margin-top: 101mm;margin-left: 140mm;position: absolute;">
                     ✓
                 </div>
                 <div style="margin-top: 99mm;margin-left: 153mm;position: absolute; font-size: 22px;">
-                    {{ $donation->type->name }}
+                    {{ $donation->description }}
                 </div>
             @endif
 
@@ -385,7 +389,7 @@
 
         @endforeach
 
-        
+
 
     </div>
 </body>

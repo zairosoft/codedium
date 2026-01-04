@@ -170,7 +170,7 @@
                         @forelse($intentforms as $index => $intentform)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ sprintf('%03d', $intentform->volume) }}/{{ $intentform->number }}</td>
+                                <td>{{ sprintf('%03d', $intentform->volume) }}/{{ sprintf('%02d', $intentform->number) }}</td>
                                 <td>{{ \Carbon\Carbon::parse($intentform->date)->format('d/m/Y') }}</td>
                                 <td>{{ $intentform->name }}</td>
                                 <td>

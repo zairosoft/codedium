@@ -56,7 +56,7 @@ class IntentFormsController extends Controller
         // Logic next volume / number for Cash
         $runCash = RunningNumber::where('type', 'เงินสด')->first();
         if ($runCash) {
-            if ($runCash->number >= 99) {
+            if ($runCash->number >= 100) {
                 $nextVolumeCash = $runCash->volume + 1;
                 if ($nextVolumeCash > 999)
                     $nextVolumeCash = 1;
@@ -74,7 +74,7 @@ class IntentFormsController extends Controller
         // Logic next volume / number for Transfer
         $runTransfer = RunningNumber::where('type', 'เงินโอน')->first();
         if ($runTransfer) {
-            if ($runTransfer->number >= 99) {
+            if ($runTransfer->number >= 100) {
                 $nextVolumeTransfer = $runTransfer->volume + 1;
                 if ($nextVolumeTransfer > 999)
                     $nextVolumeTransfer = 1;
@@ -147,7 +147,7 @@ class IntentFormsController extends Controller
             $nextNumber = $runningNumber->number + 1;
             $nextVolume = $runningNumber->volume;
 
-            if ($nextNumber >= 100) { // Reset after 99
+            if ($nextNumber > 100) { // Reset after 100
                 $nextNumber = 1;
                 $nextVolume++;
                 if ($nextVolume > 999) {

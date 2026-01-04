@@ -63,6 +63,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             $headers[] = $type->name;
         }
 
+        $headers[] = 'รวมเงินทำบุญ';
         $headers[] = 'ช่องทางการชำระ';
         $headers[] = 'ผู้รับเงิน';
         $headers[] = 'หมายเหตุ';
@@ -80,7 +81,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
         $row = [
             $this->rowNumber,
             $intentform->name,
-            sprintf('%03d', $intentform->volume) . '/' . $intentform->number,
+            sprintf('%03d', $intentform->volume) . '/' . sprintf('%02d', $intentform->number),
         ];
 
         // Add donation amounts for each type
@@ -89,6 +90,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             $row[] = $donation ? $donation->sub_total : '';
         }
 
+        $row[] = number_format($intentform->total, 2);
         $row[] = $intentform->payment_methods;
         $row[] = $intentform->payee;
         $row[] = $intentform->notes ?? '';
@@ -114,6 +116,10 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             $column++;
         }
 
+        // Total Amount column
+        $widths[$column] = 15;
+        $column++;
+
         // Payment Method column
         $widths[$column] = 15;
         $column++;
@@ -134,7 +140,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
     public function styles(Worksheet $sheet)
     {
         $lastRow = $this->intentforms->count() + 2; // +1 for header, +1 for 0-index
-        $lastColumn = chr(67 + $this->types->count() + 3); // C + types + payment + payee + notes
+        $lastColumn = chr(67 + $this->types->count() + 4); // C + types + total + payment + payee + notes
 
         // Header style
         $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray([
@@ -170,9 +176,9 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
         $sheet->getStyle('A2:A' . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('C2:C' . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        // Right alignment for number columns (type amounts)
+        // Right alignment for number columns (type amounts + total)
         $typeStartCol = 'D';
-        $typeEndCol = chr(67 + $this->types->count()); // C + count
+        $typeEndCol = chr(67 + $this->types->count() + 1); // C + count + 1 (Total)
         $sheet->getStyle($typeStartCol . '2:' . $typeEndCol . $lastRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
 
         // Set row height for header
@@ -190,7 +196,7 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
                 $lastRow = $this->intentforms->count() + 2;
-                $lastColumn = chr(67 + $this->types->count() + 3);
+                $lastColumn = chr(67 + $this->types->count() + 4);
 
                 // Insert title row at top
                 $sheet->insertNewRowBefore(1, 1);
@@ -244,8 +250,14 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
                     $typeCol++;
                 }
 
-                // Grand total in notes column
-                $sheet->setCellValue($lastColumn . $totalRow, number_format($grandTotal));
+                // Total Amount Column Sum (The new column we added)
+                // We sum the 'total' field directly to ensure it matches the web report and includes all donations
+                $grandTotal = $this->intentforms->sum('total');
+                $sheet->setCellValue($typeCol . $totalRow, $grandTotal);
+
+                // Apply number format to the grand total cell
+                $sheet->getStyle($typeCol . $totalRow)->getNumberFormat()->setFormatCode('#,##0.00');
+
 
                 // Style total row
                 $sheet->getStyle('A' . $totalRow . ':' . $lastColumn . $totalRow)->applyFromArray([
@@ -263,3 +275,4 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
         ];
     }
 }
+
