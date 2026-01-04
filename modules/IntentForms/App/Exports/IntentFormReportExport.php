@@ -86,8 +86,14 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
 
         // Add donation amounts for each type
         foreach ($this->types as $type) {
-            $donation = $intentform->donations->where('type_id', $type->id)->first();
-            $row[] = $donation ? $donation->sub_total : '';
+            // NUCLEAR OPTION: Direct DB Query per cell to guarantee accuracy
+            // This bypasses any eager loading issues or object caching
+            $amount = \DB::table('intentform_donations')
+                ->where('intentform_id', $intentform->id)
+                ->where('type_id', $type->id)
+                ->sum('sub_total');
+
+            $row[] = $amount > 0 ? $amount : '';
         }
 
         $row[] = number_format($intentform->total, 2);
@@ -237,19 +243,21 @@ class IntentFormReportExport implements FromCollection, WithHeadings, WithStyles
                 $totalRow = $lastRow + 1;
                 $sheet->setCellValue('B' . $totalRow, 'รวม');
 
-                // Calculate totals for each type column
+                // Calculate totals for each type column using direct database queries
+                // This ensures accuracy and consistency with the actual database values
+                // Fix: Using direct DB query to include duplicate donations (e.g. #725)
                 $typeCol = 'D';
-                $grandTotal = 0;
                 foreach ($this->types as $type) {
-                    $sum = $this->intentforms->sum(function ($intentform) use ($type) {
-                        $donation = $intentform->donations->where('type_id', $type->id)->first();
-                        return $donation ? $donation->sub_total : 0;
-                    });
+                    // Use direct database query instead of eager-loaded collection
+                    // to avoid potential filtering or missing data issues
+                    $sum = \DB::table('intentform_donations')
+                        ->whereIn('intentform_id', $this->intentforms->pluck('id'))
+                        ->where('type_id', $type->id)
+                        ->sum('sub_total');
+
                     $sheet->setCellValue($typeCol . $totalRow, $sum);
-                    $grandTotal += $sum;
                     $typeCol++;
                 }
-
                 // Total Amount Column Sum (The new column we added)
                 // We sum the 'total' field directly to ensure it matches the web report and includes all donations
                 $grandTotal = $this->intentforms->sum('total');

@@ -34,4 +34,5 @@ Route::prefix('intentform')->group(function () {
     Route::get('/types/{id}/edit', 'TypeController@edit')->name('intentform.types.edit');
     Route::put('/types/{id}/update', 'TypeController@update')->name('intentform.types.update');
     Route::delete('/types/delete', 'TypeController@destroy')->name('intentform.types.delete');
+
 });
