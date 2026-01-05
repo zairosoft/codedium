@@ -249,7 +249,7 @@
         </div>
         <div class="number"
             style="margin-top: 25mm; margin-left: 167mm; position: absolute; font-size: 24px; font-weight: bold;">
-            เลขที่ &nbsp; {{ sprintf('%02d', $intentform->number) }}
+            เลขที่ &nbsp; {{ sprintf('%03d', $intentform->number) }}
         </div>
 
         <div class="account_name" style="margin-top: 38mm;margin-left: 44mm;position: absolute; font-size: 22px;">

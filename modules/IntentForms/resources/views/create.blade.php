@@ -279,10 +279,10 @@
                 updateRunningNumber() {
                     if (this.paymentMethod === 'เงินสด') {
                         this.currentVolume = '{{ $nextVolumeCash }}'.padStart(3, '0');
-                        this.currentNumber = '{{ $nextNumberCash }}';
+                        this.currentNumber = '{{ $nextNumberCash }}'.padStart(3, '0');
                     } else if (this.paymentMethod === 'เงินโอน') {
                         this.currentVolume = '{{ $nextVolumeTransfer }}'.padStart(3, '0');
-                        this.currentNumber = '{{ $nextNumberTransfer }}';
+                        this.currentNumber = '{{ $nextNumberTransfer }}'.padStart(3, '0');
                     }
                 },
 

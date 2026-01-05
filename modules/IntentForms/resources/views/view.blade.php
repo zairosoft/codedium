@@ -76,7 +76,8 @@
                             <div class="flex items-center justify-between mb-2">
                                 <div class="font-semibold">เล่มที่ / เลขที่: &nbsp;</div>
                                 <div class="ml-4">{{ sprintf('%03d', $intentform->volume) }} /
-                                    {{ sprintf('%02d', $intentform->number) }}</div>
+                                    {{ sprintf('%03d', $intentform->number) }}
+                                </div>
                             </div>
                             <div class="flex items-center justify-between mb-2">
                                 <div class="font-semibold">วันที่: &nbsp;</div>
