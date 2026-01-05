@@ -345,18 +345,22 @@
             }, "500");
         @endif
 
+        @php
+            $mappedItems = $expense->items->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'category_id' => $item->category_id,
+                    'description' => $item->description,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'discount_percentage' => $item->discount_percentage ?? 0,
+                ];
+            });
+        @endphp
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('expenseEdit', () => ({
-                items: @json($expense->items->map(function ($item) {
-                    return [
-                        'id' => $item->id,
-                        'category_id' => $item->category_id,
-                        'description' => $item->description,
-                        'quantity' => $item->quantity,
-                        'unit_price' => $item->unit_price,
-                        'discount_percentage' => $item->discount_percentage ?? 0,
-                    ];
-                })),
+                items: @json($mappedItems),
                 currency: '{{ old('currency', $expense->currency ?? 'THB') }}',
                 discountPercentage: {{ old('discount_percentage', $expense->discount_percentage ?? 0) }},
                 vatExempt: {{ old('vat_exempt', $expense->vat_exempt ?? 0) ? 'true' : 'false' }},

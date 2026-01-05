@@ -24,6 +24,7 @@ Route::prefix('expenses')->group(function () {
     Route::get('/{id}/edit', 'ExpensesController@edit')->name('expenses.edit');
     Route::put('/{id}/update', 'ExpensesController@update')->name('expenses.update');
     Route::get('/{id}/show', 'ExpensesController@show')->name('expenses.show');
+    Route::get('/{id}/print', 'ExpensesController@print')->name('expenses.print');
     Route::delete('/delete', 'ExpensesController@destroy')->name('expenses.delete');
 
     // Category management routes

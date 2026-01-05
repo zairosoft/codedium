@@ -488,4 +488,18 @@ class ExpensesController extends Controller
             $filename . '.xlsx'
         );
     }
+
+    /**
+     * Display print view for expense
+     */
+    public function print($id)
+    {
+        $expense = Expense::with('items.category')->findOrFail($id);
+        $company = \App\Models\CompanyLang::first();
+
+        return view('expenses::print', [
+            'expense' => $expense,
+            'company' => $company,
+        ]);
+    }
 }
