@@ -453,7 +453,7 @@
             <div class="company-details">
                 <div class="company-name">{{ $company->name ?? 'บริษัท ตัวอย่าง จำกัด' }}</div>
                 <div class="company-address">
-                    {{ $company->address ?? '123/45 ถนนสาทร แขวงสีลม เขตบางรัก กทม. 10500' }}<br>
+                    {{ $company->address }}<br>
                     @if($company->tax_id) เลขประจำตัวผู้เสียภาษี: {{ $company->tax_id }} @endif
                     @if($company->tel_no) โทร: {{ $company->tel_no }} @endif
                 </div>
@@ -475,7 +475,7 @@
                 @endif
                 <div class="meta-row">
                     <span class="meta-label">ผู้จัดทำ/Preparer:</span>
-                    <span class="meta-value">{{ $expense->created_by ?? '-' }}</span>
+                    <span class="meta-value">{{ Auth::user()->name }}</span>
                 </div>
             </div>
         </div>
@@ -630,7 +630,7 @@
             <div class="sig-box">
                 <div class="sig-label">ผู้จัดทำ/Prepared by</div>
                 <div class="sig-line"></div>
-                <!-- <div style="margin-top:5px;">{{ $expense->created_by ?? '.........................' }}</div> -->
+                <div style="margin-top: -20px; margin-bottom: 5px;">{{ Auth::user()->name }}</div>
                 <div class="sig-label">วันที่/Date: _____/_____/_____</div>
             </div>
             <div class="sig-box">
