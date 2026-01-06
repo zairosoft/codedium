@@ -19,6 +19,8 @@ class Expense extends Model
         'payee',
         'vendor_name',
         'payment_method',
+        'account_name',
+        'account_number',
         'currency',
         'vat_exempt',
         'subtotal',

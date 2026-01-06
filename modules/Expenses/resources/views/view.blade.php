@@ -108,15 +108,27 @@
                                     <div class="flex-1">{{ $expense->payee }}</div>
                                 </div>
                                 @if($expense->vendor_name)
-                                <div class="flex">
-                                    <div class="font-semibold w-1/3">ชื่อผู้จำหน่าย:</div>
-                                    <div class="flex-1">{{ $expense->vendor_name }}</div>
-                                </div>
+                                    <div class="flex">
+                                        <div class="font-semibold w-1/3">ชื่อผู้จำหน่าย:</div>
+                                        <div class="flex-1">{{ $expense->vendor_name }}</div>
+                                    </div>
                                 @endif
                                 <div class="flex">
                                     <div class="font-semibold w-1/3">ช่องทางการชำระ:</div>
                                     <div class="flex-1">{{ $expense->payment_method }}</div>
                                 </div>
+                                @if($expense->account_name)
+                                    <div class="flex">
+                                        <div class="font-semibold w-1/3">ชื่อบัญชี:</div>
+                                        <div class="flex-1">{{ $expense->account_name }}</div>
+                                    </div>
+                                @endif
+                                @if($expense->account_number)
+                                    <div class="flex">
+                                        <div class="font-semibold w-1/3">หมายเลขบัญชี:</div>
+                                        <div class="flex-1">{{ $expense->account_number }}</div>
+                                    </div>
+                                @endif
                                 <div class="flex">
                                     <div class="font-semibold w-1/3">สกุลเงิน:</div>
                                     <div class="flex-1">{{ $expense->currency }}</div>
@@ -194,7 +206,8 @@
                         <div class="flex items-center justify-between">
                             <div>รวมหลังหักส่วนลด</div>
                             <div class="font-semibold">
-                                {{ number_format($expense->subtotal - $expense->discount_amount, 2) }}</div>
+                                {{ number_format($expense->subtotal - $expense->discount_amount, 2) }}
+                            </div>
                         </div>
                         @if(!$expense->vat_exempt)
                             <div class="flex items-center justify-between">

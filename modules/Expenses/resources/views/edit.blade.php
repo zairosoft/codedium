@@ -101,6 +101,16 @@
                                     </select>
                                 </div>
                                 <div class="mt-4 flex items-center">
+                                    <label for="account_name" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">ชื่อบัญชี</label>
+                                    <input id="account_name" type="text" name="account_name" class="form-input flex-1"
+                                        placeholder="กรอกชื่อบัญชี" value="{{ old('account_name', $expense->account_name) }}" />
+                                </div>
+                                <div class="mt-4 flex items-center">
+                                    <label for="account_number" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">หมายเลขบัญชี</label>
+                                    <input id="account_number" type="text" name="account_number" class="form-input flex-1"
+                                        placeholder="กรอกหมายเลขบัญชี" value="{{ old('account_number', $expense->account_number) }}" />
+                                </div>
+                                <div class="mt-4 flex items-center">
                                     <label for="description" class="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">รายละเอียด</label>
                                     <input id="description" type="text" name="description" class="form-input flex-1"
                                         placeholder="กรอกรายละเอียด"

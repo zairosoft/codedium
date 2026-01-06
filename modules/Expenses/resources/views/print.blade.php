@@ -307,19 +307,24 @@
 
         /* Signatures */
         .signatures {
-            margin-top: 30px; /* Reduced from 50px */
+            margin-top: 30px;
+            /* Reduced from 50px */
             display: flex;
             justify-content: space-between;
         }
+
         .sig-box {
             width: 30%;
             text-align: center;
         }
+
         .sig-line {
             border-bottom: 1px solid #aaa;
-            margin: 25px 10px 5px; /* Reduced margin */
+            margin: 25px 10px 5px;
+            /* Reduced margin */
             height: 1px;
         }
+
         .sig-label {
             font-size: 11px;
             color: #666;
@@ -572,14 +577,28 @@
             </div>
             <div class="payment-info-line">
                 <div class="info-group">
-                    <span>ธนาคาร/Bank:</span>
-                    <span
-                        style="min-width: 150px; border-bottom: 1px dotted #ccc;">{{ $expense->payment_method == 'เงินสด' ? '-' : '................................................' }}</span>
+                    <span>ชื่อบัญชี/Account Name:</span>
+                    <span style="min-width: 150px; border-bottom: 1px dotted #ccc;">
+                        @if($expense->account_name)
+                            {{ $expense->account_name }}
+                        @elseif($expense->payment_method == 'เงินสด')
+                            -
+                        @else
+                            ................................................
+                        @endif
+                    </span>
                 </div>
                 <div class="info-group">
                     <span>เลขที่/No.:</span>
-                    <span
-                        style="min-width: 100px; border-bottom: 1px dotted #ccc;">{{ $expense->payment_method == 'เงินสด' ? '-' : '................................' }}</span>
+                    <span style="min-width: 100px; border-bottom: 1px dotted #ccc;">
+                        @if($expense->account_number)
+                            {{ $expense->account_number }}
+                        @elseif($expense->payment_method == 'เงินสด')
+                            -
+                        @else
+                            ................................
+                        @endif
+                    </span>
                 </div>
                 <div class="info-group">
                     <span>วันที่/Date:</span>
