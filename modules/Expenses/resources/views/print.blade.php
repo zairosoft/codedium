@@ -475,7 +475,7 @@
                 @endif
                 <div class="meta-row">
                     <span class="meta-label">ผู้จัดทำ/Preparer:</span>
-                    <span class="meta-value">{{ Auth::user()->name }}</span>
+                    <span class="meta-value">{{ $expense->creator->name ?? '-' }}</span>
                 </div>
             </div>
         </div>
@@ -630,7 +630,7 @@
             <div class="sig-box">
                 <div class="sig-label">ผู้จัดทำ/Prepared by</div>
                 <div class="sig-line"></div>
-                <div style="margin-top: -20px; margin-bottom: 5px;">{{ Auth::user()->name }}</div>
+                <div style="margin-top: -20px; margin-bottom: 5px;">{{ $expense->creator->name ?? '-' }}</div>
                 <div class="sig-label">วันที่/Date: _____/_____/_____</div>
             </div>
             <div class="sig-box">
