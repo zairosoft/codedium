@@ -92,6 +92,10 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <div class="font-semibold">สกุลเงิน:</div>
+                                <div class="ml-4">{{ $expense->currency }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -113,6 +117,11 @@
                                         <div class="flex-1">{{ $expense->vendor_name }}</div>
                                     </div>
                                 @endif
+                            </div>
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <div class="text-lg font-semibold mb-3">&nbsp;</div>
+                            <div class="space-y-2">
                                 <div class="flex">
                                     <div class="font-semibold w-1/3">ช่องทางการชำระ:</div>
                                     <div class="flex-1">{{ $expense->payment_method }}</div>
@@ -129,15 +138,7 @@
                                         <div class="flex-1">{{ $expense->account_number }}</div>
                                     </div>
                                 @endif
-                                <div class="flex">
-                                    <div class="font-semibold w-1/3">สกุลเงิน:</div>
-                                    <div class="flex-1">{{ $expense->currency }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-1/2">
-                            <div class="text-lg font-semibold mb-3">&nbsp;</div>
-                            <div class="space-y-2">
+
                                 <div class="flex">
                                     <div class="font-semibold w-1/3">รายละเอียด:</div>
                                     <div class="flex-1">{{ $expense->description ?? '-' }}</div>
