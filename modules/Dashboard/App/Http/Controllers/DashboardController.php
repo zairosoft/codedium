@@ -36,7 +36,7 @@ class DashboardController extends Controller
         $filterValue = $request->get('filter_value', $defaultValue);
 
         // Initialize queries
-        $incomeQuery = Intentform::query();
+        $incomeQuery = Intentform::query()->where('status', '!=', 0);
         $expenseQuery = Expense::query();
 
         // Apply Payment Method Filters
@@ -82,6 +82,7 @@ class DashboardController extends Controller
 
         // Income by payment method
         $incomeByPaymentMethod = Intentform::query()
+            ->where('status', '!=', 0)
             ->when($filterType == 'daily', function ($q) use ($filterValue) {
                 $q->whereDate('date', $filterValue);
             })
@@ -125,7 +126,7 @@ class DashboardController extends Controller
             ->get();
 
         // Recent transactions
-        $recentIncome = Intentform::orderBy('date', 'desc')->limit(5)->get();
+        $recentIncome = Intentform::where('status', '!=', 0)->orderBy('date', 'desc')->limit(5)->get();
         $recentExpenses = Expense::with('items.category')->orderBy('date', 'desc')->limit(5)->get();
 
         return view('dashboard::index', [

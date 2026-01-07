@@ -101,7 +101,7 @@
                         number_runding: ' {{ sprintf('%03d', $value->volume) }} / {{ sprintf('%03d', $value->number) }}',
                         payment_methods: '{{ $value->payment_methods }}',
                         total: '{{ $value->total }}',
-                        status: '{{ $value->status == 1 ? "ใช้งาน" : "ไม่ใช้งาน" }}',
+                        status: '{!! $value->status == 1 ? '<div class="group relative flex items-center py-1.5"><div class="h-1.5 w-1.5 rounded-full bg-success ltr:mr-1 rtl:ml-1.5"></div> <div class="flex-1">ใช้งาน</div></div>' : '<div class="group relative flex items-center py-1.5"><div class="h-1.5 w-1.5 rounded-full bg-danger ltr:mr-1 rtl:ml-1.5"></div> <div class="flex-1 text-danger">ไม่ใช้งาน</div></div>' !!}',
                         date: '{{ $value->date }}',
                         actions: {{ $value->id }}
                                         },

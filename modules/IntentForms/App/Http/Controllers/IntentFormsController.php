@@ -329,7 +329,7 @@ class IntentFormsController extends Controller
      */
     public function report(Request $request)
     {
-        $query = Intentform::with('donations.type')->orderBy('date', 'desc');
+        $query = Intentform::with('donations.type')->where('status', '!=', 0)->orderBy('date', 'desc');
         $company = CompanyLang::first();
 
         // Apply filters
@@ -380,19 +380,35 @@ class IntentFormsController extends Controller
      */
     public function destroy(Request $request)
     {
+        /*
+        try {
+            $id = $request->input('id');
+            $intentform = Intentform::findOrFail($id);
+            Donation::where('intentform_id', $intentform->id)->delete();
+            $intentform->delete();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'ลบข้อมูลสำเร็จ'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()
+            ], 500);
+        }
+        */
+
+
         try {
             $id = $request->input('id');
             $intentform = Intentform::findOrFail($id);
 
-            // Delete associated donations first
-            Donation::where('intentform_id', $intentform->id)->delete();
-
-            // Delete the intentform
-            $intentform->delete();
+            // Soft delete: update status to 0
+            $intentform->update(['status' => 0]);
 
             return response()->json([
                 'type' => 'success',
-                'message' => 'ลบข้อมูลสำเร็จ'
+                'message' => 'ยกเลิกข้อมูลสำเร็จ'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -408,7 +424,7 @@ class IntentFormsController extends Controller
      */
     public function exportReport(Request $request)
     {
-        $query = Intentform::with('donations.type')->orderBy('date', 'asc');
+        $query = Intentform::with('donations.type')->where('status', '!=', 0)->orderBy('date', 'asc');
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
 
