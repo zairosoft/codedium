@@ -1,7 +1,49 @@
 @extends('layouts.layout')
 @section('title', 'แก้ไขค่าใช้จ่าย')
 @section('style')
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            padding: 6px 12px;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+        .dark .select2-container--default .select2-selection--single {
+            background-color: #0e1726;
+            border-color: #1b2e4b;
+            color: #888ea8;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 26px;
+            padding-left: 0;
+            color: inherit;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+        .select2-dropdown {
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+        .dark .select2-dropdown {
+            background-color: #0e1726;
+            border-color: #1b2e4b;
+        }
+        .dark .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #4361ee;
+        }
+        .dark .select2-container--default .select2-search--dropdown .select2-search__field {
+            background-color: #0e1726;
+            border-color: #1b2e4b;
+            color: #888ea8;
+        }
+        .dark .select2-container--default .select2-results__option {
+            color: #888ea8;
+        }
+    </style>
 @endsection
 @section('content')
     <div>
@@ -142,7 +184,7 @@
                                     <template x-for="(item, i) in items" :key="i">
                                         <tr class="border-b border-[#e0e6ed] align-top dark:border-[#1b2e4b]">
                                             <td>
-                                                <select :name="'category_id['+i+']'" class="form-select min-w-[200px]"
+                                                <select :name="'category_id['+i+']'" class="form-select min-w-[200px] category-select"
                                                     x-model="item.category_id">
                                                     <option value="เลือก">เลือกหมวดหมู่</option>
                                                     @foreach ($categories as $category)
@@ -431,6 +473,63 @@
                     return parseFloat(num || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                 }
             }));
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        // Function to initialize Select2 on category selects
+        function initializeCategorySelects() {
+            $('.category-select').each(function() {
+                // Check if Select2 is already initialized
+                if (!$(this).hasClass('select2-hidden-accessible')) {
+                    $(this).select2({
+                        placeholder: 'เลือกหมวดหมู่',
+                        allowClear: true,
+                        width: '100%',
+                        language: {
+                            noResults: function() {
+                                return "ไม่พบข้อมูล";
+                            },
+                            searching: function() {
+                                return "กำลังค้นหา...";
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        // Initialize on page load
+        $(document).ready(function() {
+            // Wait for Alpine to render initial items
+            setTimeout(function() {
+                initializeCategorySelects();
+            }, 100);
+        });
+
+        // Re-initialize when new items are added
+        document.addEventListener('DOMContentLoaded', function() {
+            // Watch for changes in the table
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes.length) {
+                        setTimeout(function() {
+                            initializeCategorySelects();
+                        }, 50);
+                    }
+                });
+            });
+
+            // Start observing the table body
+            const tbody = document.querySelector('tbody');
+            if (tbody) {
+                observer.observe(tbody, {
+                    childList: true,
+                    subtree: true
+                });
+            }
         });
     </script>
 @endsection
