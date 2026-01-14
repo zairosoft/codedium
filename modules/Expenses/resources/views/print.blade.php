@@ -525,12 +525,8 @@
         <!-- Summary & Totals -->
         <div class="footer-grid">
             <div class="baht-text-area">
-                @php
-                    $vat = $expense->total * 0.07;
-                    $grandTotal = $expense->total + $vat;
-                @endphp
                 <div class="baht-text">
-                    ({{ baht_text($grandTotal) }})
+                    ({{ baht_text($expense->grand_total) }})
                 </div>
                 @if($expense->notes)
                     <div style="margin-top: 15px; font-size: 11px; color: #666;">
@@ -543,13 +539,39 @@
                     <span class="total-label">รวมเป็นเงิน:</span>
                     <span class="total-value">{{ number_format($expense->total, 2) }} บาท</span>
                 </div>
+                @if($expense->discount_amount > 0)
                 <div class="total-row">
-                    <span class="total-label">ภาษีมูลค่าเพิ่ม 7%:</span>
-                    <span class="total-value">{{ number_format($vat, 2) }} บาท</span>
+                    <span class="total-label">ส่วนลด {{ number_format($expense->discount_percentage) }}%:</span>
+                    <span class="total-value">{{ number_format($expense->discount_amount, 2) }} บาท</span>
                 </div>
+                <div class="total-row">
+                    <span class="total-label">หลังหักส่วนลด:</span>
+                    <span class="total-value">{{ number_format($expense->total - $expense->discount_amount, 2) }} บาท</span>
+                </div>
+                @endif
+                
+                @if(!$expense->vat_exempt)
+                <div class="total-row">
+                    <span class="total-label">ภาษีมูลค่าเพิ่ม {{ number_format($expense->vat_percentage) }}%:</span>
+                    <span class="total-value">{{ number_format($expense->vat_amount, 2) }} บาท</span>
+                </div>
+                @else
+                <div class="total-row">
+                    <span class="total-label">ภาษีมูลค่าเพิ่ม (ยกเว้น):</span>
+                    <span class="total-value">0.00 บาท</span>
+                </div>
+                @endif
+
+                @if($expense->withholding_tax_amount > 0)
+                <div class="total-row">
+                    <span class="total-label">หัก ณ ที่จ่าย {{ number_format($expense->withholding_tax_percentage) }}%:</span>
+                    <span class="total-value">{{ number_format($expense->withholding_tax_amount, 2) }} บาท</span>
+                </div>
+                @endif
+
                 <div class="total-row grand-total">
                     <span class="total-label">จำนวนเงินรวมทั้งสิ้น:</span>
-                    <span class="total-value">{{ number_format($grandTotal, 2) }} บาท</span>
+                    <span class="total-value">{{ number_format($expense->grand_total, 2) }} บาท</span>
                 </div>
             </div>
         </div>
@@ -610,11 +632,11 @@
                 <div class="info-group" style="width: 100%; justify-content: space-between;">
                     <div>
                         <span>ยอดชำระ/Amount Paid:</span>
-                        <strong>{{ number_format($grandTotal, 2) }}</strong>
+                        <strong>{{ number_format($expense->grand_total, 2) }}</strong>
                     </div>
                     <div>
                         <span>หัก ณ ที่จ่าย/WHT:</span>
-                        <strong>0.00</strong>
+                        <strong>{{ number_format($expense->withholding_tax_amount, 2) }}</strong>
                     </div>
                 </div>
             </div>

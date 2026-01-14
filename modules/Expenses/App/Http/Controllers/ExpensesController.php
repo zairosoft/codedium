@@ -48,7 +48,7 @@ class ExpensesController extends Controller
 
         // Generate next reference number
         $lastExpense = Expense::orderBy('id', 'desc')->first();
-        $nextRefNumber = $lastExpense ? 'EXP-' . str_pad($lastExpense->id + 1, 5, '0', STR_PAD_LEFT) : 'EXP-00001';
+        $nextRefNumber = $lastExpense ? 'DP' . str_pad($lastExpense->id + 1, 4, '0', STR_PAD_LEFT) : 'DP0001';
 
         return view('expenses::create', [
             'categories' => $categories,
@@ -103,7 +103,7 @@ class ExpensesController extends Controller
             $afterDiscount = $subtotal - $discountAmount;
 
             // Calculate VAT
-            $vatExempt = $request->has('vat_exempt');
+            $vatExempt = $request->vat_exempt == 1;
             $vatPercentage = $vatExempt ? 0 : ($request->vat_percentage ?? 7);
             $vatAmount = $afterDiscount * ($vatPercentage / 100);
 
@@ -265,7 +265,7 @@ class ExpensesController extends Controller
             $afterDiscount = $subtotal - $discountAmount;
 
             // Calculate VAT
-            $vatExempt = $request->has('vat_exempt');
+            $vatExempt = $request->vat_exempt == 1;
             $vatPercentage = $vatExempt ? 0 : ($request->vat_percentage ?? 7);
             $vatAmount = $afterDiscount * ($vatPercentage / 100);
 

@@ -52,19 +52,20 @@
 
                     <!-- Daily -->
                     <input x-show="filterType === 'daily'" type="date" name="filter_value" class="form-input"
-                        :value="filterType === 'daily' ? filterValue : ''" />
+                        :value="filterType === 'daily' ? filterValue : ''" :disabled="filterType !== 'daily'" />
 
                     <!-- Weekly -->
                     <input x-show="filterType === 'weekly'" type="date" name="filter_value" class="form-input"
-                        :value="filterType === 'weekly' ? filterValue : ''" />
+                        :value="filterType === 'weekly' ? filterValue : ''" :disabled="filterType !== 'weekly'" />
 
                     <!-- Monthly -->
                     <input x-show="filterType === 'monthly'" type="month" name="filter_value" class="form-input"
-                        :value="filterType === 'monthly' ? filterValue : ''" />
+                        :value="filterType === 'monthly' ? filterValue : ''" :disabled="filterType !== 'monthly'" />
 
                     <!-- Yearly -->
                     <input x-show="filterType === 'yearly'" type="number" name="filter_value" class="form-input"
-                        placeholder="ปี ค.ศ." min="2000" max="2100" :value="filterType === 'yearly' ? filterValue : ''" />
+                        placeholder="ปี ค.ศ." min="2000" max="2100" :value="filterType === 'yearly' ? filterValue : ''"
+                        :disabled="filterType !== 'yearly'" />
                 </div>
 
                 <div class="flex items-end gap-2">

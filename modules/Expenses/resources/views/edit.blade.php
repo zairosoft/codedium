@@ -262,11 +262,12 @@
                                 <div class="mt-4 flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <label class="inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" name="vat_exempt" class="form-checkbox"
+                                            <input type="checkbox" class="form-checkbox"
                                                 x-model="vatExempt" />
                                             <span class="ltr:ml-2 rtl:mr-2">ยกเว้น VAT</span>
                                         </label>
-                                        <input type="hidden" name="vat_percentage" :value="vatPercentage" />
+                                        <input type="hidden" name="vat_exempt" :value="vatExempt ? 1 : 0" />
+                                        <input type="hidden" name="vat_percentage" :value="vatExempt ? 0 : vatPercentage" />
                                     </div>
                                     <div x-text="formatNumber(getVatAmount())"></div>
                                 </div>
@@ -416,7 +417,7 @@
                 currency: '{{ old('currency', $expense->currency ?? 'THB') }}',
                 discountPercentage: {{ old('discount_percentage', $expense->discount_percentage ?? 0) }},
                 vatExempt: {{ old('vat_exempt', $expense->vat_exempt ?? 0) ? 'true' : 'false' }},
-                vatPercentage: {{ old('vat_percentage', $expense->vat_percentage ?? 7) }},
+                vatPercentage: 7,
                 whtPercentage: {{ old('withholding_tax_percentage', $expense->withholding_tax_percentage ?? 0) }},
 
                 addItem() {
