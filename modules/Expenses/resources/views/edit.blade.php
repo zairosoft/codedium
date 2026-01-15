@@ -300,7 +300,7 @@
                             @if($expense->attachments->count() > 0)
                                 <div class="mt-2 space-y-2">
                                     @foreach($expense->attachments as $attachment)
-                                        <div
+                                        <div id="attachment-{{ $attachment->id }}"
                                             class="flex items-center justify-between rounded border border-gray-200 p-2 dark:border-gray-700">
                                             <div class="flex items-center gap-2">
                                                 <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor"
@@ -315,6 +315,15 @@
                                                 </a>
                                                 <span class="text-xs text-gray-500">({{ $attachment->formatted_size }})</span>
                                             </div>
+                                            <button type="button" onclick="deleteAttachment({{ $attachment->id }})"
+                                                class="text-danger hover:text-danger/80">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                            </button>
                                         </div>
                                     @endforeach
                                 </div>
@@ -509,6 +518,60 @@
                 initializeCategorySelects();
             }, 100);
         });
+
+        // Delete Attachment Function
+        function deleteAttachment(id) {
+            Swal.fire({
+                title: 'ยืนยันการลบ?',
+                text: "คุณต้องการลบไฟล์แนบนี้หรือไม่ การกระทำนี้ไม่สามารถย้อนกลับได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('expenses.attachment.delete', ':id') }}".replace(':id', id),
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.type == 'success') {
+                                Swal.fire(
+                                    'ลบสำเร็จ!',
+                                    response.message,
+                                    'success'
+                                );
+                                $('#attachment-' + id).remove();
+                            } else {
+                                Swal.fire(
+                                    'เกิดข้อผิดพลาด!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            let errorMessage = 'ไม่สามารถลบไฟล์ได้';
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message;
+                            } else if (xhr.responseText) {
+                                errorMessage = xhr.responseText;
+                            }
+                            
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                errorMessage,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            })
+        }
 
         // Re-initialize when new items are added
         document.addEventListener('DOMContentLoaded', function() {

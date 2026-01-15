@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Expenses\App\Exports\ExpenseReportExport;
 use Carbon\Carbon;
+use Modules\Expenses\App\Models\Attachment;
+use Illuminate\Support\Facades\Storage;
 
 class ExpensesController extends Controller
 {
@@ -501,5 +503,29 @@ class ExpensesController extends Controller
             'expense' => $expense,
             'company' => $company,
         ]);
+    }
+    public function deleteAttachment($id)
+    {
+        try {
+            $attachment = Attachment::findOrFail($id);
+
+            // Delete file from storage
+            if (Storage::disk('public')->exists($attachment->file_path)) {
+                Storage::disk('public')->delete($attachment->file_path);
+            }
+
+            // Delete record
+            $attachment->delete();
+
+            return response()->json([
+                'type' => 'success',
+                'message' => 'ลบไฟล์แนบสำเร็จ'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
