@@ -34,3 +34,6 @@ Thumbs.db
 # Local Docker runtime data
 .docker/db/data/
 .docker/logs/
+
+# GitHub directory local noise
+.github/
