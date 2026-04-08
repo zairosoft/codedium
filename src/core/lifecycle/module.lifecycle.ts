@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CacheService } from '../../infrastructure/cache/cache.service';
 import { EventBusService } from '../events/event-bus.service';
@@ -22,8 +22,14 @@ export class ModuleLifecycleService {
 
   async install(name: string) {
     const definition = this.getDefinitionOrFail(name);
+    const currentState = await this.moduleRegistry.getOrFail(name);
     const context = this.createContext();
 
+    if (currentState.enabled) {
+      return currentState;
+    }
+
+    await this.ensureDependenciesEnabled(definition.metadata.dependencies);
     this.logger.log(`Installing module "${name}"`);
     await definition.instance.install(context);
     const result = await this.moduleRegistry.markInstalled(name, definition.metadata.version);
@@ -36,8 +42,14 @@ export class ModuleLifecycleService {
 
   async uninstall(name: string) {
     const definition = this.getDefinitionOrFail(name);
+    const currentState = await this.moduleRegistry.getOrFail(name);
     const context = this.createContext();
 
+    if (currentState.status === 'uninstalled') {
+      return currentState;
+    }
+
+    await this.ensureNoEnabledDependents(name);
     this.logger.log(`Uninstalling module "${name}"`);
     await definition.instance.uninstall(context);
     await this.moduleRegistry.markDisabled(name);
@@ -80,5 +92,34 @@ export class ModuleLifecycleService {
       hookService: this.hookService,
       moduleRegistry: this.moduleRegistry,
     };
+  }
+
+  private async ensureDependenciesEnabled(dependencies: string[]): Promise<void> {
+    for (const dependencyName of dependencies) {
+      const enabled = await this.moduleRegistry.isEnabled(dependencyName);
+      if (!enabled) {
+        throw new ConflictException(
+          `Module dependency "${dependencyName}" must be installed and enabled first.`,
+        );
+      }
+    }
+  }
+
+  private async ensureNoEnabledDependents(name: string): Promise<void> {
+    const registeredModules = await this.moduleRegistry.list();
+    const enabledDependents = registeredModules.filter(
+      (record) =>
+        record.enabled &&
+        record.status === 'installed' &&
+        (record.dependencies ?? []).includes(name),
+    );
+
+    if (enabledDependents.length > 0) {
+      throw new ConflictException(
+        `Module "${name}" cannot be uninstalled while dependents are enabled: ${enabledDependents
+          .map((record) => record.name)
+          .join(', ')}`,
+      );
+    }
   }
 }
