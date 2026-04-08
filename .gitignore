@@ -1,4 +1,5 @@
 # dependencies
+.github/
 node_modules/
 
 # build output
@@ -43,3 +44,15 @@ package-lock.json
 # Editor backups
 *~
 *.swp
+.github/ISSUE_TEMPLATE.md
+.gitignore
+.github/ISSUE_TEMPLATE/custom.md
+.gitignore
+/.github
+/.github
+/.github
+/.github
+/.github
+/.github/ISSUE_TEMPLATE
+/.github/ISSUE_TEMPLATE
+/.github/ISSUE_TEMPLATE
