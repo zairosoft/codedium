@@ -1,3 +1,6 @@
+# GitHub directory local noise
+.github/
+
 # Dependencies
 node_modules/
 
@@ -35,5 +38,3 @@ Thumbs.db
 .docker/db/data/
 .docker/logs/
 
-# GitHub directory local noise
-.github/
