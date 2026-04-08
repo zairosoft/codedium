@@ -1,5 +1,5 @@
-# GitHub directory local noise
-# .github/
+# GitHub metadata
+.github/
 
 # Dependencies
 node_modules/
@@ -37,4 +37,3 @@ Thumbs.db
 # Local Docker runtime data
 .docker/db/data/
 .docker/logs/
-
