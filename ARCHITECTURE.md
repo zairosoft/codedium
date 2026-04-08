@@ -7,7 +7,7 @@ This refactor keeps the application as a NestJS monolith, but changes the runtim
 Implemented layers:
 
 - `src/core`: module registry, module lifecycle, hook/event system, module enable/disable guard, HTML cache headers
-- `src/modules`: self-contained business modules with `controllers`, `services`, `models`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`
+- `src/modules`: self-contained business modules with `controllers`, `services`, `models`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`, `views`
 - `src/infrastructure/database`: TypeORM bootstrap and lifecycle seeding entrypoint
 - `src/infrastructure/cache`: centralized Redis-backed cache service with in-memory fallback
 - `src/views`: server-rendered page builders for cacheable HTML pages
