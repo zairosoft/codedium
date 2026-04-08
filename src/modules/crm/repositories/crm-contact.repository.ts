@@ -6,6 +6,7 @@ import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
+import { CrmContactModel } from '../models/crm-contact.model';
 
 export type CrmDashboardSummary = {
   tenantId: string;
@@ -24,7 +25,10 @@ export class CrmContactRepository {
   ) {}
 
   async create(dto: CreateContactDto): Promise<CrmContactEntity> {
-    const entity = CrmContactEntity.createForTenant(this.tenantContext.getTenantId(), dto);
+    const entity = CrmContactModel.createForTenant(
+      this.tenantContext.getTenantId(),
+      dto,
+    ).toEntity();
     return this.repository.save(entity);
   }
 
@@ -71,8 +75,9 @@ export class CrmContactRepository {
 
   async update(id: string, dto: UpdateContactDto): Promise<CrmContactEntity> {
     const found = await this.findById(id);
-    found.applyProfile(dto);
-    return this.repository.save(found);
+    const model = CrmContactModel.fromEntity(found);
+    model.applyProfile(dto);
+    return this.repository.save(model.toEntity(found));
   }
 
   async remove(id: string): Promise<void> {

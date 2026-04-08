@@ -1,7 +1,7 @@
 import {
   CrmContactEntity,
-  ContactStatus,
 } from '../entities/crm-contact.entity';
+import { ContactStatus } from '../models/crm-contact.model';
 import { CrmDashboardSummary } from '../repositories/crm-contact.repository';
 
 export type CrmContactView = {
@@ -55,4 +55,3 @@ export class CrmContactViewMapper {
     };
   }
 }
-

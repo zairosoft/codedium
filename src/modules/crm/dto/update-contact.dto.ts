@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { ContactStatus } from '../entities/crm-contact.entity';
+import { ContactStatus } from '../models/crm-contact.model';
 
 export class UpdateContactDto {
   @IsOptional()
