@@ -1,10 +1,6 @@
 ---
 name: modules
 description: "Workless module architecture skill for creating, refactoring, and validating self-contained modules under src/modules with system registry, lifecycle, hooks, tenant scope, and cache integration."
-category: architecture
-risk: medium
-source: project
-date_added: "2026-04-03"
 ---
 
 # Modules
