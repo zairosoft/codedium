@@ -121,6 +121,8 @@ These are the project-relevant skills currently present:
 
 - `nestjs`
   NestJS skill tuned for Workless runtime layout, tenant flow, registry/lifecycle wiring, and cache integration
+- `cache-redis`
+  Redis-backed cache and invalidation skill aligned to `CacheService`, tenant-aware keys, TTL policy, and HTML cache coordination
 - `modules`
   module architecture skill for `src/modules/*`
 - `theme`
