@@ -1,287 +1,198 @@
-# Antigravity Kit Architecture
+# Workless Agent Architecture
 
-> Comprehensive AI Agent Capability Expansion Toolkit
+This document is the agent-facing architecture note for the `workless` repository. It replaces the generic Antigravity description that was previously copied into `.agent`.
 
----
+## Purpose
 
-## 📋 Overview
+Use `.agent` in this repo for three things:
 
-Antigravity Kit is a modular system consisting of:
+1. keep project-specific operating context for AI agents
+2. provide reusable skills and workflows for repeated tasks
+3. reduce incorrect assumptions from generic web or frontend templates
 
-- **20 Specialist Agents** - Role-based AI personas
-- **36 Skills** - Domain-specific knowledge modules
-- **11 Workflows** - Slash command procedures
+This file should describe the current reality of Workless, not an idealized toolkit.
 
----
+## Project Reality
 
-## 🏗️ Directory Structure
+Workless is a NestJS monolith with modular ERP-style runtime behavior.
 
-```plaintext
+Current stack and architecture:
+
+- NestJS 11
+- TypeORM + PostgreSQL
+- Redis-backed cache support under `src/infrastructure/cache`
+- tenant context via middleware + async local storage
+- server-side MVC/views plus static assets in `public`
+- Vite + Tailwind CSS for asset compilation
+- module registry + lifecycle + hooks under `src/core`
+
+This repo is not a React app and should not be treated like a SPA-first codebase unless the code changes in that direction later.
+
+## Runtime Layout
+
+Main application wiring:
+
+- `src/app.module.ts`
+- `src/main.ts`
+
+Core runtime:
+
+- `src/core/core.module.ts`
+- `src/core/system/*`
+- `src/core/registry/*`
+- `src/core/lifecycle/*`
+- `src/core/events/*`
+
+Infrastructure:
+
+- `src/infrastructure/database/*`
+- `src/infrastructure/cache/*`
+- `src/infrastructure/redis/*` as older/legacy support code
+- `src/infrastructure/queue/*`
+
+Tenant flow:
+
+- `src/common/tenant/tenant-context.middleware.ts`
+- `src/common/tenant/tenant-context.service.ts`
+
+Business modules:
+
+- `src/modules/auth`
+- `src/modules/users`
+- `src/modules/org`
+- `src/modules/crm`
+- `src/modules/helpdesk`
+- `src/modules/permissions`
+- `src/modules/apps`
+- `src/modules/notifications`
+
+Frontend asset flow:
+
+- source CSS: `src/styles/app.css`
+- build config: `vite.config.ts`
+- generated assets: `public/assets/*`
+- tests/config for Vite tooling: `vitest.config.ts`
+
+## Important Codebase Rules
+
+Agents working in this repo should assume:
+
+- controllers stay thin
+- services orchestrate
+- repositories own persistence
+- module-to-module coupling should prefer hooks/events
+- tenant awareness is mandatory for entity access and cache keys
+- cache invalidation must happen on create/update/delete paths
+- generated files in `public/assets` are not the source of truth
+
+If you are changing module runtime behavior, read `src/core` before editing a feature module.
+
+## Known Repository Edges
+
+The repo contains some mixed-age structure. Do not assume every duplicate file is active.
+
+Examples:
+
+- `src/modules/crm` contains the newer runtime-oriented structure
+- some CRM legacy duplicates still exist beside the newer files
+- `.agent/workflows/*` includes many generic templates copied from other contexts
+- `.agent/scripts/*` still contain Antigravity-era wording and references to skills that are not present in this repo
+
+Treat copied generic material as optional scaffolding, not authoritative truth.
+
+## .agent Layout
+
+Current `.agent` structure:
+
+```text
 .agent/
-├── ARCHITECTURE.md          # This file
-├── skills/                  # 36 Skills
-├── workflows/               # 11 Slash Commands
-├── rules/                   # Global Rules
-└── scripts/                 # Master Validation Scripts
+  ARCHITECTURE.md
+  mcp_config.json
+  rules/
+  scripts/
+  skills/
+  workflows/
+  .shared/
 ```
 
----
+### `skills/`
 
-## 🤖 Agents (20)
+These are the project-relevant skills currently present:
 
-Specialist AI personas for different domains.
+- `nestjs`
+  NestJS skill tuned for Workless runtime layout, tenant flow, registry/lifecycle wiring, and cache integration
+- `modules`
+  module architecture skill for `src/modules/*`
+- `theme`
+  theme/view adaptation skill aligned to Vite + Tailwind + server-rendered output
+- `tailwind`
+  Tailwind usage guidance
+- `qa-testing`
+  testing and verification guidance for this repo
+- `i18n-localization`
+  localization-related guidance and helper script
 
-| Agent                    | Focus                      | Skills Used                                              |
-| ------------------------ | -------------------------- | -------------------------------------------------------- |
-| `orchestrator`           | Multi-agent coordination   | parallel-agents, behavioral-modes                        |
-| `project-planner`        | Discovery, task planning   | brainstorming, plan-writing, architecture                |
-| `frontend-specialist`    | Web UI/UX                  | frontend-design, react-best-practices, tailwind-patterns |
-| `backend-specialist`     | API, business logic        | api-patterns, nodejs-best-practices, database-design     |
-| `database-architect`     | Schema, SQL                | database-design, prisma-expert                           |
-| `mobile-developer`       | iOS, Android, RN           | mobile-design                                            |
-| `game-developer`         | Game logic, mechanics      | game-development                                         |
-| `devops-engineer`        | CI/CD, Docker              | deployment-procedures, docker-expert                     |
-| `security-auditor`       | Security compliance        | vulnerability-scanner, red-team-tactics                  |
-| `penetration-tester`     | Offensive security         | red-team-tactics                                         |
-| `test-engineer`          | Testing strategies         | testing-patterns, tdd-workflow, webapp-testing           |
-| `debugger`               | Root cause analysis        | systematic-debugging                                     |
-| `performance-optimizer`  | Speed, Web Vitals          | performance-profiling                                    |
-| `seo-specialist`         | Ranking, visibility        | seo-fundamentals, geo-fundamentals                       |
-| `documentation-writer`   | Manuals, docs              | documentation-templates                                  |
-| `product-manager`        | Requirements, user stories | plan-writing, brainstorming                              |
-| `product-owner`          | Strategy, backlog, MVP     | plan-writing, brainstorming                              |
-| `qa-automation-engineer` | E2E testing, CI pipelines  | webapp-testing, testing-patterns                         |
-| `code-archaeologist`     | Legacy code, refactoring   | clean-code, code-review-checklist                        |
-| `explorer-agent`         | Codebase analysis          | -                                                        |
+Skills should be small, repo-aware, and practical. They should not read like generic framework encyclopedias.
 
----
+### `workflows/`
 
-## 🧩 Skills (36)
+The workflow directory contains reusable markdown procedures such as:
 
-Modular knowledge domains that agents can load on-demand. based on task context.
+- `architecture.md`
+- `api-docs.md`
+- `refactor.md`
+- `status.md`
+- `test.md`
+- `deploy.md`
 
-### Frontend & UI
+Many of these were imported from a broader template set. Use them as task prompts and checklists, but verify them against the actual Workless codebase before following them literally.
 
-| Skill                   | Description                                                           |
-| ----------------------- | --------------------------------------------------------------------- |
-| `react-best-practices`  | React & Next.js performance optimization (Vercel - 57 rules)          |
-| `web-design-guidelines` | Web UI audit - 100+ rules for accessibility, UX, performance (Vercel) |
-| `tailwind-patterns`     | Tailwind CSS v4 utilities                                             |
-| `frontend-design`       | UI/UX patterns, design systems                                        |
-| `ui-ux-pro-max`         | 50 styles, 21 palettes, 50 fonts                                      |
+### `scripts/`
 
-### Backend & API
+Current scripts:
 
-| Skill                   | Description                    |
-| ----------------------- | ------------------------------ |
-| `api-patterns`          | REST, GraphQL, tRPC            |
-| `nestjs-expert`         | NestJS modules, DI, decorators |
-| `nodejs-best-practices` | Node.js async, modules         |
-| `python-patterns`       | Python standards, FastAPI      |
+- `checklist.py`
+- `verify_all.py`
+- `auto_preview.py`
+- `session_manager.py`
 
-### Database
+These scripts are not yet fully aligned with the current skill set in this repo. Some still reference missing skills or older Antigravity conventions. Before relying on them for automation, inspect the referenced paths.
 
-| Skill             | Description                 |
-| ----------------- | --------------------------- |
-| `database-design` | Schema design, optimization |
-| `prisma-expert`   | Prisma ORM, migrations      |
+### `.shared/`
 
-### TypeScript/JavaScript
+`.agent/.shared/ui-ux-pro-max` is shared reference material. It is useful as inspiration or pattern data, but it is not the architecture source of truth for Workless.
 
-| Skill               | Description                         |
-| ------------------- | ----------------------------------- |
-| `typescript-expert` | Type-level programming, performance |
+## How Agents Should Use `.agent`
 
-### Cloud & Infrastructure
+Recommended order for most tasks:
 
-| Skill                   | Description               |
-| ----------------------- | ------------------------- |
-| `docker-expert`         | Containerization, Compose |
-| `deployment-procedures` | CI/CD, deploy workflows   |
-| `server-management`     | Infrastructure management |
+1. read this file
+2. inspect the real code paths in `src/`
+3. load the smallest relevant skill from `.agent/skills`
+4. use a workflow from `.agent/workflows` only if it matches the real repo
+5. verify against current scripts, package commands, and runtime structure
 
-### Testing & Quality
+Do not let `.agent` override what the codebase actually does.
 
-| Skill                   | Description              |
-| ----------------------- | ------------------------ |
-| `testing-patterns`      | Jest, Vitest, strategies |
-| `webapp-testing`        | E2E, Playwright          |
-| `tdd-workflow`          | Test-driven development  |
-| `code-review-checklist` | Code review standards    |
-| `lint-and-validate`     | Linting, validation      |
+## Verification Baseline
 
-### Security
+For this repository, the safest baseline checks are:
 
-| Skill                   | Description              |
-| ----------------------- | ------------------------ |
-| `vulnerability-scanner` | Security auditing, OWASP |
-| `red-team-tactics`      | Offensive security       |
+- `npm run build`
+- inspect relevant Nest module wiring
+- inspect Vite/Tailwind paths when frontend assets are involved
 
-### Architecture & Planning
+Do not assume a complete automated test suite exists. At the time of writing, `npm test` is a placeholder command.
 
-| Skill           | Description                |
-| --------------- | -------------------------- |
-| `app-builder`   | Full-stack app scaffolding |
-| `architecture`  | System design patterns     |
-| `plan-writing`  | Task planning, breakdown   |
-| `brainstorming` | Socratic questioning       |
+## Maintenance Rules
 
-### Mobile
+Update this file when any of the following changes:
 
-| Skill           | Description           |
-| --------------- | --------------------- |
-| `mobile-design` | Mobile UI/UX patterns |
+- core runtime paths under `src/core`
+- module inventory under `src/modules`
+- asset pipeline layout
+- tenant or cache architecture
+- `.agent/skills` inventory
+- `.agent/scripts` that become project-specific and reliable
 
-### Game Development
-
-| Skill              | Description           |
-| ------------------ | --------------------- |
-| `game-development` | Game logic, mechanics |
-
-### SEO & Growth
-
-| Skill              | Description                   |
-| ------------------ | ----------------------------- |
-| `seo-fundamentals` | SEO, E-E-A-T, Core Web Vitals |
-| `geo-fundamentals` | GenAI optimization            |
-
-### Shell/CLI
-
-| Skill                | Description               |
-| -------------------- | ------------------------- |
-| `bash-linux`         | Linux commands, scripting |
-| `powershell-windows` | Windows PowerShell        |
-
-### Other
-
-| Skill                     | Description               |
-| ------------------------- | ------------------------- |
-| `clean-code`              | Coding standards (Global) |
-| `behavioral-modes`        | Agent personas            |
-| `parallel-agents`         | Multi-agent patterns      |
-| `mcp-builder`             | Model Context Protocol    |
-| `documentation-templates` | Doc formats               |
-| `i18n-localization`       | Internationalization      |
-| `performance-profiling`   | Web Vitals, optimization  |
-| `systematic-debugging`    | Troubleshooting           |
-
----
-
-## 🔄 Workflows (11)
-
-Slash command procedures. Invoke with `/command`.
-
-| Command          | Description              |
-| ---------------- | ------------------------ |
-| `/brainstorm`    | Socratic discovery       |
-| `/create`        | Create new features      |
-| `/debug`         | Debug issues             |
-| `/deploy`        | Deploy application       |
-| `/enhance`       | Improve existing code    |
-| `/orchestrate`   | Multi-agent coordination |
-| `/plan`          | Task breakdown           |
-| `/preview`       | Preview changes          |
-| `/status`        | Check project status     |
-| `/test`          | Run tests                |
-| `/ui-ux-pro-max` | Design with 50 styles    |
-
----
-
-## 🎯 Skill Loading Protocol
-
-```plaintext
-User Request → Skill Description Match → Load SKILL.md
-                                            ↓
-                                    Read references/
-                                            ↓
-                                    Read scripts/
-```
-
-### Skill Structure
-
-```plaintext
-skill-name/
-├── SKILL.md           # (Required) Metadata & instructions
-├── scripts/           # (Optional) Python/Bash scripts
-├── references/        # (Optional) Templates, docs
-└── assets/            # (Optional) Images, logos
-```
-
-### Enhanced Skills (with scripts/references)
-
-| Skill               | Files | Coverage                            |
-| ------------------- | ----- | ----------------------------------- |
-| `ui-ux-pro-max`     | 27    | 50 styles, 21 palettes, 50 fonts    |
-| `app-builder`       | 20    | Full-stack scaffolding              |
-
----
-
-## � Scripts (2)
-
-Master validation scripts that orchestrate skill-level scripts.
-
-### Master Scripts
-
-| Script          | Purpose                                 | When to Use              |
-| --------------- | --------------------------------------- | ------------------------ |
-| `checklist.py`  | Priority-based validation (Core checks) | Development, pre-commit  |
-| `verify_all.py` | Comprehensive verification (All checks) | Pre-deployment, releases |
-
-### Usage
-
-```bash
-# Quick validation during development
-python .agent/scripts/checklist.py .
-
-# Full verification before deployment
-python .agent/scripts/verify_all.py . --url http://localhost:3000
-```
-
-### What They Check
-
-**checklist.py** (Core checks):
-
-- Security (vulnerabilities, secrets)
-- Code Quality (lint, types)
-- Schema Validation
-- Test Suite
-- UX Audit
-- SEO Check
-
-**verify_all.py** (Full suite):
-
-- Everything in checklist.py PLUS:
-- Lighthouse (Core Web Vitals)
-- Playwright E2E
-- Bundle Analysis
-- Mobile Audit
-- i18n Check
-
-For details, see [scripts/README.md](scripts/README.md)
-
----
-
-## 📊 Statistics
-
-| Metric              | Value                         |
-| ------------------- | ----------------------------- |
-| **Total Agents**    | 20                            |
-| **Total Skills**    | 36                            |
-| **Total Workflows** | 11                            |
-| **Total Scripts**   | 2 (master) + 18 (skill-level) |
-| **Coverage**        | ~90% web/mobile development   |
-
----
-
-## 🔗 Quick Reference
-
-| Need     | Agent                 | Skills                                |
-| -------- | --------------------- | ------------------------------------- |
-| Web App  | `frontend-specialist` | react-best-practices, frontend-design |
-| API      | `backend-specialist`  | api-patterns, nodejs-best-practices   |
-| Mobile   | `mobile-developer`    | mobile-design                         |
-| Database | `database-architect`  | database-design, prisma-expert        |
-| Security | `security-auditor`    | vulnerability-scanner                 |
-| Testing  | `test-engineer`       | testing-patterns, webapp-testing      |
-| Debug    | `debugger`            | systematic-debugging                  |
-| Plan     | `project-planner`     | brainstorming, plan-writing           |
+Keep this file concise, factual, and tied to the repository as it exists now.
