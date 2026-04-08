@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { OrgModuleLifecycleService } from './lifecycle/org-module.lifecycle';
 
-@Module({})
+@Module({
+  providers: [OrgModuleLifecycleService],
+})
 export class OrgModule {}
-

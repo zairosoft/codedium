@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ModuleSeeder } from '../../../common/interfaces/module-seeder.interface';
-import { ContactStatus, CrmContactEntity } from '../models/crm-contact.entity';
+import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
 
 @Injectable()
 export class CrmContactSeeder implements ModuleSeeder {
@@ -40,4 +40,3 @@ export class CrmContactSeeder implements ModuleSeeder {
     await this.repository.save(seedContacts);
   }
 }
-

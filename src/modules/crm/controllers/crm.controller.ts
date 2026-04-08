@@ -8,11 +8,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { RequiresModule } from '../../../core/system/module-enabled.decorator';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 import { CrmService } from '../services/crm.service';
 
+@RequiresModule('crm')
 @Controller('crm/contacts')
 export class CrmController {
   constructor(private readonly crmService: CrmService) {}
@@ -42,4 +44,3 @@ export class CrmController {
     return this.crmService.removeContact(id);
   }
 }
-

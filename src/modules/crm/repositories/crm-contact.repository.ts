@@ -5,7 +5,7 @@ import { TenantContextService } from '../../../common/tenant/tenant-context.serv
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
-import { ContactStatus, CrmContactEntity } from '../models/crm-contact.entity';
+import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
 
 export type CrmDashboardSummary = {
   tenantId: string;

@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { ContactStatus } from '../models/crm-contact.entity';
+import { ContactStatus } from '../entities/crm-contact.entity';
 
 export class CreateContactDto {
   @IsUUID()
@@ -21,5 +21,4 @@ export class CreateContactDto {
   @IsEnum(ContactStatus)
   status?: ContactStatus;
 }
-
 
