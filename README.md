@@ -126,6 +126,7 @@ src/
     org/
     permissions/
     users/
+  views/
 public/
 ```
 
