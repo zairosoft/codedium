@@ -1,0 +1,50 @@
+{
+  "name": "nestjs",
+  "version": "1.0.0",
+  "description": "Zairosoft Platform - CRM and Helpdesk modular monolith backend",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
+    "seed": "ts-node src/infrastructure/database/seeder.runner.ts",
+    "module:list": "ts-node src/core/lifecycle/module-lifecycle.runner.ts list",
+    "module:install": "ts-node src/core/lifecycle/module-lifecycle.runner.ts install",
+    "module:upgrade": "ts-node src/core/lifecycle/module-lifecycle.runner.ts upgrade",
+    "module:uninstall": "ts-node src/core/lifecycle/module-lifecycle.runner.ts uninstall",
+    "test": "echo \"No tests configured yet\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@nestjs/cache-manager": "^3.1.0",
+    "@nestjs/common": "^11.1.16",
+    "@nestjs/config": "^4.0.3",
+    "@nestjs/core": "^11.1.16",
+    "@nestjs/event-emitter": "^3.0.1",
+    "@nestjs/platform-express": "^11.1.16",
+    "@nestjs/typeorm": "^11.0.0",
+    "bullmq": "^5.70.4",
+    "cache-manager": "^7.2.8",
+    "cache-manager-redis-yet": "^5.1.5",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "ioredis": "^5.10.0",
+    "pg": "^8.20.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "typeorm": "^0.3.28"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^25.3.5",
+    "tailwindcss": "^4.2.2",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1",
+    "vitest": "^4.1.2"
+  }
+}
