@@ -1,46 +1,36 @@
-# dependencies
-/.github
-/node_modules
-/.fleet
-/.idea
-/.vscode
+# Dependencies
+node_modules/
 
-# build output
+# Build output
 dist/
+coverage/
+*.tsbuildinfo
+*.tgz
 
-# environment
+# Environment files
 .env
 .env.local
 .env.*.local
 
-# logs
-logs
+# Logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
-# OS
+# Editor and IDE files
+.fleet/
+.idea/
+.vscode/
+*~
+*.swp
+
+# OS files
 .DS_Store
 Thumbs.db
 
-# VS Code
-.vscode/
-
-# TypeScript
-*.tsbuildinfo
-
-# Misc
-coverage/
-*.tgz
-
-# Optional tooling
-.idea/
-
-
-# Docker
-# .docker/
-
-# Editor backups
-*~
-*.swp
+# Local Docker runtime data
+.docker/db/data/
+.docker/logs/
