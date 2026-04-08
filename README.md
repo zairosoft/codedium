@@ -128,7 +128,6 @@ src/
     users/
   views/
 public/
-theme html/
 ```
 
 ## Module Layout
