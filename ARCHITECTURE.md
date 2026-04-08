@@ -10,7 +10,6 @@ Implemented layers:
 - `src/modules`: self-contained business modules with `controllers`, `services`, `models`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`, `views`
 - `src/infrastructure/database`: TypeORM bootstrap and lifecycle seeding entrypoint
 - `src/infrastructure/cache`: centralized Redis-backed cache service with in-memory fallback
-- `src/views`: server-rendered page builders for cacheable HTML pages
 - `public`: static asset output target for Vite or other frontend builds
 
 ## Runtime Flow
@@ -176,7 +175,7 @@ Implemented example:
 
 - endpoint: `GET /api/v1/crm/dashboard/page`
 - decorator: `@HtmlCacheable({ maxAgeSeconds: 60, scope: 'public', vary: ['Accept-Encoding', 'X-Tenant-Id'] })`
-- renderer: `src/views/crm/crm-dashboard.page.ts`
+- renderer: `src/modules/crm/views/crm-dashboard.page.ts`
 
 Guidelines:
 
@@ -239,5 +238,4 @@ Not runtime-verified in this workspace:
 - HTTP endpoints against a running Nest process
 
 Those require the target Postgres and optional Redis environment to be available.
-
 

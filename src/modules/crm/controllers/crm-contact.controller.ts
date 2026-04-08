@@ -17,7 +17,7 @@ import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 import { CrmContactService } from '../services/crm-contact.service';
-import { renderCrmDashboardPage } from '../../../views/crm/crm-dashboard.page';
+import { renderCrmDashboardPage } from '../views/crm-dashboard.page';
 
 @RequiresModule('crm')
 @Controller('crm')
@@ -68,4 +68,3 @@ export class CrmContactController {
     return renderCrmDashboardPage(summary);
   }
 }
-

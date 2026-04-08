@@ -126,7 +126,6 @@ src/
     org/
     permissions/
     users/
-  views/
 public/
 ```
 
@@ -194,6 +193,7 @@ Relevant files:
 - `src/modules/crm/controllers/crm-contact.controller.ts`
 - `src/modules/crm/services/crm-contact.service.ts`
 - `src/modules/crm/services/crm-module.lifecycle.ts`
+- `src/modules/crm/views/crm-dashboard.page.ts`
 
 ## Caching
 
