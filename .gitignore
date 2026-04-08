@@ -1,6 +1,9 @@
 # dependencies
-.github/
-node_modules/
+/.github
+/node_modules
+/.fleet
+/.idea
+/.vscode
 
 # build output
 dist/
@@ -35,24 +38,9 @@ coverage/
 .idea/
 
 
-# Lock files
-package-lock.json
-
 # Docker
 # .docker/
 
 # Editor backups
 *~
 *.swp
-.github/ISSUE_TEMPLATE.md
-.gitignore
-.github/ISSUE_TEMPLATE/custom.md
-.gitignore
-/.github
-/.github
-/.github
-/.github
-/.github
-/.github/ISSUE_TEMPLATE
-/.github/ISSUE_TEMPLATE
-/.github/ISSUE_TEMPLATE
