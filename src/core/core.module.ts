@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR, DiscoveryModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HtmlCacheInterceptor } from './http/html-cache.interceptor';
+import { EventBusService } from './events/event-bus.service';
 import { HookService } from './events/hook.service';
 import { ModuleLifecycleController } from './lifecycle/module-lifecycle.controller';
 import { ModuleLifecycleService } from './lifecycle/module.lifecycle';
@@ -15,6 +16,7 @@ import { ModuleRegistryService } from './registry/module.registry';
   imports: [DiscoveryModule, TypeOrmModule.forFeature([ModuleRegistryEntity])],
   controllers: [ModuleLifecycleController],
   providers: [
+    EventBusService,
     HookService,
     SystemModuleExplorer,
     ModuleRegistryService,
@@ -28,7 +30,12 @@ import { ModuleRegistryService } from './registry/module.registry';
       useClass: HtmlCacheInterceptor,
     },
   ],
-  exports: [HookService, SystemModuleExplorer, ModuleRegistryService, ModuleLifecycleService],
+  exports: [
+    EventBusService,
+    HookService,
+    SystemModuleExplorer,
+    ModuleRegistryService,
+    ModuleLifecycleService,
+  ],
 })
 export class CoreModule {}
-

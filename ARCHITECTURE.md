@@ -10,15 +10,17 @@ Implemented layers:
 - `src/modules`: self-contained business modules with `controllers`, `services`, `models`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`, `views`
 - `src/infrastructure/database`: TypeORM bootstrap and lifecycle seeding entrypoint
 - `src/infrastructure/cache`: centralized Redis-backed cache service with in-memory fallback
+- `src/infrastructure/redis`: older Redis support code still present for legacy paths
 - `public`: static asset output target for Vite or other frontend builds
 
 ## Runtime Flow
 
 1. `CoreModule` discovers System modules through `@SystemModule(...)` metadata.
-2. `ModuleRegistryService` syncs discovered modules into `system_module_registry`.
-3. `ModuleLifecycleService` executes `install`, `uninstall`, and `upgrade`.
+2. `ModuleRegistryService` syncs discovered modules into `system_module_registry` and keeps a runtime in-memory snapshot for fast enablement checks.
+3. `ModuleLifecycleService` executes `install`, `uninstall`, and `upgrade`, logs actions, and emits lifecycle events.
 4. `ModuleEnabledGuard` blocks controllers decorated with `@RequiresModule('module_name')` when the module is not installed and enabled.
-5. `HookService` resolves `@Hook('event.name')` handlers and emits the same event through `EventEmitter2` for loose coupling.
+5. `HookService` resolves `@Hook('event.name')` handlers for payload transformation flows.
+6. `EventBusService` emits post-action and lifecycle events for loose coupling.
 
 ## Module Registry
 
@@ -34,6 +36,12 @@ Tracked state:
 - `dependencies`
 - `installedAt`
 - `upgradedAt`
+
+Current runtime behavior:
+
+- registry metadata is synchronized on bootstrap
+- enable/disable checks prefer the in-memory snapshot over repeated database reads
+- persistence is only updated when module metadata or lifecycle state actually changes
 
 API endpoints:
 
@@ -85,6 +93,11 @@ Upgrade flow:
 3. clear cache namespaces
 4. mark the new version as installed
 
+Lifecycle side effects:
+
+- log install / uninstall / upgrade actions
+- emit lifecycle events after state changes
+
 ## CRM Example Module
 
 Implemented CRM module structure:
@@ -99,6 +112,7 @@ Implemented CRM module structure:
 - `src/modules/crm/seeders/crm-contact.seeder.ts`
 - `src/modules/crm/migrations/crm-contact-index.migration.ts`
 - `src/modules/crm/views/crm-contact.view.ts`
+- `src/modules/crm/views/crm-dashboard.page.ts`
 
 Design choices:
 
@@ -106,7 +120,13 @@ Design choices:
 - entity methods own contact state mutation rules via `applyProfile`, `promoteToCustomer`, and `isCustomer`
 - repository stays tenant-aware and hides persistence concerns from services
 - hooks sanitize inbound DTOs before persistence
+- event bus handles post-write notifications such as `customer.afterCreate`
 - module enablement is enforced centrally with `@RequiresModule('crm')`
+
+Known edge:
+
+- older CRM duplicates such as `crm.controller.ts` and `crm.service.ts` still exist in the tree
+- the active wired path is `crm-contact.*` via `src/modules/crm/module.ts`
 
 ## Cache Layer
 
@@ -121,6 +141,7 @@ Public contract:
 - `cacheService.get(key)`
 - `cacheService.set(key, value, ttl)`
 - `cacheService.del(key)`
+- `cacheService.remember(key, ttl, resolver)`
 
 ### Cache Strategy
 
@@ -162,7 +183,12 @@ Pattern:
 Why both hooks and events are kept:
 
 - hooks support sequential payload transformation before domain work
-- the same hook name is emitted through `EventEmitter2`, so other modules can react without direct imports
+- events let other modules react after domain work without direct imports
+
+Recommended split:
+
+- `HookService` for `before*` flows that may transform payloads
+- `EventBusService` for `after*` and lifecycle notifications
 
 Current example:
 
@@ -228,8 +254,8 @@ For future database-per-tenant evolution:
 
 Verified locally:
 
-- `npm.cmd install`
-- `npm.cmd run build`
+- `npm install`
+- `npm run build`
 
 Not runtime-verified in this workspace:
 
@@ -238,4 +264,3 @@ Not runtime-verified in this workspace:
 - HTTP endpoints against a running Nest process
 
 Those require the target Postgres and optional Redis environment to be available.
-

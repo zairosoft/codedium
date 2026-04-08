@@ -41,6 +41,14 @@ export class CrmContactRepository {
       : { tenantId };
 
     return this.repository.findAndCount({
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        phone: true,
+        status: true,
+        createdAt: true,
+      },
       where,
       order: { createdAt: 'DESC' },
       skip: (page - 1) * limit,
@@ -87,6 +95,14 @@ export class CrmContactRepository {
           where: { tenantId, status: ContactStatus.LEAD },
         }),
         this.repository.find({
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            status: true,
+            createdAt: true,
+          },
           where: { tenantId },
           order: { createdAt: 'DESC' },
           take: 5,
@@ -106,4 +122,3 @@ export class CrmContactRepository {
     return this.tenantContext.getTenantId();
   }
 }
-

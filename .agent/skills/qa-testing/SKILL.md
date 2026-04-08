@@ -52,10 +52,16 @@ Before validating behavior:
 
 Frontend-related checks must distinguish:
 
-- source CSS: `src/styles/app.css`
+- real source files currently wired from the repo
 - generated assets: `public/assets/*`
 
 Do not treat generated output as the source of truth when validating theme changes.
+
+Current repo edge:
+
+- `vite.config.ts` references `src/styles/app.css`
+- that file is currently missing in this workspace
+- verify the actual source path before claiming a frontend asset change was fully validated
 
 ### Environment Validation
 

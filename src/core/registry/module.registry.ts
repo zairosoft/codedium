@@ -12,6 +12,8 @@ import { ModuleRegistryEntity, ModuleStatus } from './module-registry.entity';
 @Injectable()
 export class ModuleRegistryService implements OnApplicationBootstrap {
   private readonly logger = new Logger(ModuleRegistryService.name);
+  private readonly runtimeRegistry = new Map<string, ModuleRegistryEntity>();
+  private isCodebaseSynced = false;
 
   constructor(
     @InjectRepository(ModuleRegistryEntity)
@@ -24,6 +26,10 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
   }
 
   async syncWithCodebase(): Promise<ModuleRegistryEntity[]> {
+    if (this.isCodebaseSynced) {
+      return [...this.runtimeRegistry.values()];
+    }
+
     const discoveredModules = this.moduleExplorer.getModules();
     const syncedRecords: ModuleRegistryEntity[] = [];
 
@@ -33,10 +39,22 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
       });
 
       if (existing) {
-        existing.version = definition.metadata.version;
-        existing.description = definition.metadata.description ?? null;
-        existing.dependencies = definition.metadata.dependencies;
-        syncedRecords.push(await this.moduleRegistryRepository.save(existing));
+        const nextDescription = definition.metadata.description ?? null;
+        const nextDependencies = definition.metadata.dependencies ?? [];
+        const needsUpdate =
+          existing.version !== definition.metadata.version ||
+          existing.description !== nextDescription ||
+          JSON.stringify(existing.dependencies ?? []) !== JSON.stringify(nextDependencies);
+
+        if (needsUpdate) {
+          existing.version = definition.metadata.version;
+          existing.description = nextDescription;
+          existing.dependencies = nextDependencies;
+          syncedRecords.push(this.remember(await this.moduleRegistryRepository.save(existing)));
+        } else {
+          syncedRecords.push(this.remember(existing));
+        }
+
         continue;
       }
 
@@ -49,22 +67,40 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
         enabled: false,
       });
 
-      syncedRecords.push(await this.moduleRegistryRepository.save(created));
+      syncedRecords.push(this.remember(await this.moduleRegistryRepository.save(created)));
       this.logger.log(`Registered System module definition "${created.name}"`);
     }
 
+    this.isCodebaseSynced = true;
     return syncedRecords;
   }
 
   async list(): Promise<ModuleRegistryEntity[]> {
     await this.syncWithCodebase();
-    return this.moduleRegistryRepository.find({
+    if (this.runtimeRegistry.size > 0) {
+      return [...this.runtimeRegistry.values()].sort((left, right) =>
+        left.name.localeCompare(right.name),
+      );
+    }
+
+    const records = await this.moduleRegistryRepository.find({
       order: { name: 'ASC' },
     });
+
+    for (const record of records) {
+      this.remember(record);
+    }
+
+    return records;
   }
 
   async getOrFail(name: string): Promise<ModuleRegistryEntity> {
     await this.syncWithCodebase();
+    const cached = this.runtimeRegistry.get(name);
+    if (cached) {
+      return cached;
+    }
+
     const record = await this.moduleRegistryRepository.findOne({
       where: { name },
     });
@@ -73,11 +109,11 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
       throw new NotFoundException(`System module "${name}" is not registered.`);
     }
 
-    return record;
+    return this.remember(record);
   }
 
   async isEnabled(name: string): Promise<boolean> {
-    const record = await this.getOrFail(name);
+    const record = this.runtimeRegistry.get(name) ?? (await this.getOrFail(name));
     return record.enabled && record.status === ModuleStatus.INSTALLED;
   }
 
@@ -88,21 +124,25 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
     record.enabled = true;
     record.installedAt = record.installedAt ?? new Date();
     record.upgradedAt = new Date();
-    return this.moduleRegistryRepository.save(record);
+    return this.remember(await this.moduleRegistryRepository.save(record));
   }
 
   async markDisabled(name: string): Promise<ModuleRegistryEntity> {
     const record = await this.getOrFail(name);
     record.status = ModuleStatus.DISABLED;
     record.enabled = false;
-    return this.moduleRegistryRepository.save(record);
+    return this.remember(await this.moduleRegistryRepository.save(record));
   }
 
   async markUninstalled(name: string): Promise<ModuleRegistryEntity> {
     const record = await this.getOrFail(name);
     record.status = ModuleStatus.UNINSTALLED;
     record.enabled = false;
-    return this.moduleRegistryRepository.save(record);
+    return this.remember(await this.moduleRegistryRepository.save(record));
+  }
+
+  private remember(record: ModuleRegistryEntity): ModuleRegistryEntity {
+    this.runtimeRegistry.set(record.name, record);
+    return record;
   }
 }
-

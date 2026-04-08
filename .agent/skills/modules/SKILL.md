@@ -16,6 +16,7 @@ This skill focuses on the project-specific module structure and runtime conventi
 - cross-module communication should prefer hooks/events over direct coupling
 - module state is managed through the system registry and lifecycle services
 - tenant-awareness and cache invalidation are part of the design, not an afterthought
+- rendered pages/helpers should live under the owning module's `views/` directory
 
 ## When to Use
 
@@ -62,6 +63,8 @@ Not every folder must exist for every module, but the structure should remain co
 3. Keep business behavior close to entities/models where practical.
 4. Repositories own persistence concerns.
 5. Use hooks/events for extension points instead of direct module-to-module calls.
+   - use `HookService` for `before*` payload transformation flows
+   - use `EventBusService` for `after*` and lifecycle/domain notifications
 6. Respect tenant scoping on entities, queries, and cache keys.
 7. Invalidate cache on create/update/delete paths.
 8. Match the repository naming and file layout already used in `src/modules/crm`.
@@ -91,6 +94,7 @@ When creating or refactoring a module:
 4. Add DTO validation with `class-validator`.
 5. Add repositories for TypeORM access.
 6. Add service-level cache read/write behavior where needed.
+   - prefer `CacheService.remember(...)` for cache-aside reads
 7. Add hooks for extensibility before/after critical operations.
 8. Add lifecycle wiring only if the module needs install/upgrade/uninstall behavior.
 9. Verify imports do not create unnecessary direct dependencies across modules.
@@ -125,6 +129,7 @@ Use `src/modules/crm` as the primary reference for:
 - controller/service split
 - repository pattern
 - hook integration
+- event bus usage for post-write notifications
 - module lifecycle service
 - cache key patterns
 

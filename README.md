@@ -2,7 +2,7 @@
 
 > NestJS modular monolith for CRM, helpdesk, and tenant-aware SaaS backends.
 
-Workless is a NestJS MVC-style backend organized as a modular monolith. The project keeps a module-first structure under `src/modules`, adds a central system registry and lifecycle layer under `src/core`, and supports PostgreSQL, Redis, tenant scoping, hooks, and server-rendered HTML endpoints.
+Workless is a NestJS MVC-style backend organized as a modular monolith. The project keeps a module-first structure under `src/modules`, adds a central system registry and lifecycle layer under `src/core`, and supports PostgreSQL, Redis, tenant scoping, hooks, events, and server-rendered HTML endpoints.
 
 ![Screen](https://www.zairosoft.com/assets/2025/04/codedium.webp "Dashboards")
 
@@ -126,7 +126,6 @@ src/
     org/
     permissions/
     users/
-  views/
 public/
 ```
 
@@ -156,15 +155,15 @@ src/modules/crm/
 ### Core
 
 - `src/core/system`: system module discovery and enable/disable rules
-- `src/core/registry`: persistent module registry state
-- `src/core/lifecycle`: install / uninstall / upgrade flows
-- `src/core/events`: hook and event dispatch
+- `src/core/registry`: persistent module registry state plus in-memory runtime snapshot
+- `src/core/lifecycle`: install / uninstall / upgrade flows and lifecycle event emission
+- `src/core/events`: hook transformation flow and event bus dispatch
 - `src/core/http`: HTML cache metadata and interceptor
 
 ### Infrastructure
 
 - `src/infrastructure/database`: TypeORM bootstrap and seed runner
-- `src/infrastructure/cache`: centralized cache service and Redis provider
+- `src/infrastructure/cache`: centralized cache service, `remember(...)` helper, and Redis provider
 - `src/infrastructure/redis`: legacy Redis-related adapters still present in the repo
 
 ### Multi-Tenant
@@ -184,9 +183,11 @@ Included concerns:
 - entity/domain methods
 - repository persistence
 - hooks before create/update
+- event-driven notifications after writes
 - tenant-aware caching
 - module lifecycle support
 - HTML-cacheable dashboard endpoint
+- module-local rendered views
 
 Relevant files:
 
@@ -194,7 +195,13 @@ Relevant files:
 - `src/modules/crm/controllers/crm-contact.controller.ts`
 - `src/modules/crm/services/crm-contact.service.ts`
 - `src/modules/crm/services/crm-module.lifecycle.ts`
+- `src/modules/crm/views/crm-contact.view.ts`
 - `src/modules/crm/views/crm-dashboard.page.ts`
+
+Known repository edge:
+
+- `src/modules/crm/crm.controller.ts` and `src/modules/crm/crm.service.ts` still exist as older duplicates
+- the active wired CRM path is the `crm-contact.*` set above
 
 ## Caching
 
@@ -210,6 +217,12 @@ Used for:
 - dashboard summaries
 - list endpoints
 - profile/detail endpoints
+
+Preferred service pattern:
+
+- build tenant-aware key
+- use `CacheService.remember(...)`
+- invalidate detail and collection version keys on writes
 
 ### HTML Cache
 
@@ -244,6 +257,7 @@ This currently installs discovered modules through the lifecycle service and run
 - This repository is now NestJS-based, not Laravel/PHP-based.
 - Some directories still exist as placeholders to preserve the original modular layout across features.
 - `theme html/` contains design/template assets and is not the NestJS runtime source directory.
+- `src/infrastructure/redis` remains in the repo for older support paths, but new cache work should prefer `src/infrastructure/cache`.
 
 ## Security
 

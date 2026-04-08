@@ -26,6 +26,8 @@ Assume the following unless the code proves otherwise:
 - module lifecycle, registry, hooks, and cache live under `src/core` and `src/infrastructure`
 - Vite + Tailwind are used for asset compilation
 - generated assets in `public/assets` are not the primary source files
+- module-owned views are preferred over a shared `src/views` path
+- legacy Redis scaffolding should not be used for new cache work by default
 
 ## Editing Rules
 

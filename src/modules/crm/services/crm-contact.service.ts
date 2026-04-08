@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { createHash } from 'node:crypto';
+import { EventBusService } from '../../../core/events/event-bus.service';
 import { HookService } from '../../../core/events/hook.service';
 import { CacheService } from '../../../infrastructure/cache/cache.service';
 import { CreateContactDto } from '../dto/create-contact.dto';
@@ -22,6 +23,7 @@ export class CrmContactService {
     private readonly crmContactRepository: CrmContactRepository,
     private readonly crmContactPolicy: CrmContactPolicy,
     private readonly hookService: HookService,
+    private readonly eventBus: EventBusService,
     private readonly cacheService: CacheService,
   ) {}
 
@@ -30,7 +32,7 @@ export class CrmContactService {
     const contact = await this.crmContactRepository.create(payload);
 
     await this.invalidateCollectionCache(contact.id);
-    await this.hookService.emit('customer.afterCreate', {
+    await this.eventBus.emit('customer.afterCreate', {
       contactId: contact.id,
       tenantId: contact.tenantId,
       orgId: contact.orgId,
@@ -45,51 +47,44 @@ export class CrmContactService {
     const tenantId = this.crmContactRepository.getTenantId();
     const version = await this.getCollectionVersion(tenantId);
     const cacheKey = this.buildListCacheKey(tenantId, version, normalizedQuery);
-    const cached = await this.cacheService.get<{
-      data: ReturnType<typeof CrmContactViewMapper.toList>;
-      total: number;
-      page: number;
-      limit: number;
-    }>(cacheKey);
-
-    if (cached) {
-      return cached;
-    }
-
-    const [contacts, total] = await this.crmContactRepository.findAll(normalizedQuery);
-    const response = {
-      data: CrmContactViewMapper.toList(contacts),
-      total,
-      page: normalizedQuery.page ?? 1,
-      limit: normalizedQuery.limit ?? 20,
-    };
-
-    await this.cacheService.set(cacheKey, response, LIST_TTL_SECONDS);
-    return response;
+    return this.cacheService.remember(
+      cacheKey,
+      LIST_TTL_SECONDS,
+      async (): Promise<{
+        data: ReturnType<typeof CrmContactViewMapper.toList>;
+        total: number;
+        page: number;
+        limit: number;
+      }> => {
+        const [contacts, total] = await this.crmContactRepository.findAll(normalizedQuery);
+        return {
+          data: CrmContactViewMapper.toList(contacts),
+          total,
+          page: normalizedQuery.page ?? 1,
+          limit: normalizedQuery.limit ?? 20,
+        };
+      },
+    );
   }
 
   async getContactById(id: string) {
     const tenantId = this.crmContactRepository.getTenantId();
     const cacheKey = this.buildDetailCacheKey(tenantId, id);
-    const cached = await this.cacheService.get<ReturnType<typeof CrmContactViewMapper.toView>>(
+    return this.cacheService.remember(
       cacheKey,
+      CONTACT_TTL_SECONDS,
+      async (): Promise<ReturnType<typeof CrmContactViewMapper.toView>> => {
+        const contact = await this.crmContactRepository.findById(id);
+        return CrmContactViewMapper.toView(contact);
+      },
     );
-
-    if (cached) {
-      return cached;
-    }
-
-    const contact = await this.crmContactRepository.findById(id);
-    const response = CrmContactViewMapper.toView(contact);
-    await this.cacheService.set(cacheKey, response, CONTACT_TTL_SECONDS);
-    return response;
   }
 
   async updateContact(id: string, dto: UpdateContactDto) {
     const payload = await this.hookService.emit('customer.beforeUpdate', dto);
     const updated = await this.crmContactRepository.update(id, payload);
     await this.invalidateCollectionCache(updated.id);
-    await this.hookService.emit('customer.afterUpdate', {
+    await this.eventBus.emit('customer.afterUpdate', {
       contactId: updated.id,
       tenantId: updated.tenantId,
       orgId: updated.orgId,
@@ -103,7 +98,7 @@ export class CrmContactService {
     await this.crmContactRepository.remove(id);
     await this.cacheService.del(this.buildDetailCacheKey(tenantId, id));
     await this.cacheService.del(this.buildCollectionVersionKey(tenantId));
-    await this.hookService.emit('customer.afterDelete', {
+    await this.eventBus.emit('customer.afterDelete', {
       contactId: id,
       tenantId,
     });
@@ -113,18 +108,14 @@ export class CrmContactService {
     const tenantId = this.crmContactRepository.getTenantId();
     const version = await this.getCollectionVersion(tenantId);
     const cacheKey = this.buildDashboardCacheKey(tenantId, version);
-    const cached = await this.cacheService.get<ReturnType<typeof CrmContactViewMapper.toDashboard>>(
+    return this.cacheService.remember(
       cacheKey,
+      DASHBOARD_TTL_SECONDS,
+      async (): Promise<ReturnType<typeof CrmContactViewMapper.toDashboard>> => {
+        const summary = await this.crmContactRepository.getDashboardSummary();
+        return CrmContactViewMapper.toDashboard(summary);
+      },
     );
-
-    if (cached) {
-      return cached;
-    }
-
-    const summary = await this.crmContactRepository.getDashboardSummary();
-    const response = CrmContactViewMapper.toDashboard(summary);
-    await this.cacheService.set(cacheKey, response, DASHBOARD_TTL_SECONDS);
-    return response;
   }
 
   private async invalidateCollectionCache(contactId?: string): Promise<void> {
@@ -165,4 +156,3 @@ export class CrmContactService {
     return `crm:${tenantId}:dashboard:${version}`;
   }
 }
-

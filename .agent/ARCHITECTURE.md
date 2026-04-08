@@ -24,7 +24,7 @@ Current stack and architecture:
 - tenant context via middleware + async local storage
 - server-side MVC/views plus static assets in `public`
 - Vite + Tailwind CSS for asset compilation
-- module registry + lifecycle + hooks under `src/core`
+- module registry + lifecycle + hooks/events under `src/core`
 
 This repo is not a React app and should not be treated like a SPA-first codebase unless the code changes in that direction later.
 
@@ -43,12 +43,18 @@ Core runtime:
 - `src/core/lifecycle/*`
 - `src/core/events/*`
 
+Important active runtime details:
+
+- `ModuleRegistryService` keeps an in-memory runtime snapshot and only persists when registry metadata/state changes
+- `ModuleLifecycleService` logs install/uninstall/upgrade actions and emits lifecycle events
+- `EventBusService` is the preferred wrapper for post-action domain events
+- `HookService` remains the payload transformation path for `before*` style hooks
+
 Infrastructure:
 
 - `src/infrastructure/database/*`
 - `src/infrastructure/cache/*`
 - `src/infrastructure/redis/*` as older/legacy support code
-- `src/infrastructure/queue/*`
 
 Tenant flow:
 
@@ -68,10 +74,17 @@ Business modules:
 
 Frontend asset flow:
 
-- source CSS: `src/styles/app.css`
 - build config: `vite.config.ts`
 - generated assets: `public/assets/*`
+- server-rendered layout shell: `src/components/layouts/main.view.ts`
+- module-local rendered pages: `src/modules/<module>/views/*`
 - tests/config for Vite tooling: `vitest.config.ts`
+
+Current frontend edge:
+
+- `vite.config.ts` still points to `src/styles/app.css`
+- that file is currently missing in this workspace
+- agents should verify the real asset source path before making frontend build claims
 
 ## Important Codebase Rules
 
@@ -84,6 +97,7 @@ Agents working in this repo should assume:
 - tenant awareness is mandatory for entity access and cache keys
 - cache invalidation must happen on create/update/delete paths
 - generated files in `public/assets` are not the source of truth
+- rendered pages should live under the owning module when possible, not under a shared `src/views` bucket
 
 If you are changing module runtime behavior, read `src/core` before editing a feature module.
 
@@ -95,6 +109,7 @@ Examples:
 
 - `src/modules/crm` contains the newer runtime-oriented structure
 - some CRM legacy duplicates still exist beside the newer files
+- the active CRM service path is `crm-contact.*`; older `crm.*` files still exist as legacy duplicates
 - `.agent/workflows/*` includes many generic templates copied from other contexts
 - `.agent/scripts/*` still contain Antigravity-era wording and references to skills that are not present in this repo
 
@@ -183,6 +198,7 @@ For this repository, the safest baseline checks are:
 - `npm run build`
 - inspect relevant Nest module wiring
 - inspect Vite/Tailwind paths when frontend assets are involved
+- confirm that any edited view path is module-local and actually wired from an active controller/service
 
 Do not assume a complete automated test suite exists. At the time of writing, `npm test` is a placeholder command.
 

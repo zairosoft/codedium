@@ -22,5 +22,15 @@ export class CacheService {
   del(key: string): Promise<void> {
     return this.store.del(key);
   }
-}
 
+  async remember<T>(key: string, ttlSeconds: number, resolver: () => Promise<T>): Promise<T> {
+    const cached = await this.get<T>(key);
+    if (cached !== null) {
+      return cached;
+    }
+
+    const value = await resolver();
+    await this.set(key, value, ttlSeconds);
+    return value;
+  }
+}

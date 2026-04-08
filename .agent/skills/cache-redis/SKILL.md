@@ -63,9 +63,9 @@ Cache orchestration belongs in services, not controllers.
 Preferred pattern:
 
 - service builds the key
-- service checks cache
-- service fetches from repository on miss
-- service writes back to cache
+- service uses `CacheService.remember(...)` or equivalent cache-aside flow
+- repository is called only on cache miss
+- writes explicitly invalidate related keys/version namespaces
 
 ### 2. Keep Keys Tenant-Aware
 
@@ -163,6 +163,7 @@ Avoid these in Workless:
 - cache logic in controllers
 - caching raw request objects
 - using generated HTML asset paths as cache keys
+- using legacy `src/infrastructure/redis/*` cache abstractions for new feature work
 - claiming Redis behavior was verified when `REDIS_ENABLED=false`
 
 ## Verification

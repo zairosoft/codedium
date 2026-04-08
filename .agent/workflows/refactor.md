@@ -4,22 +4,22 @@ description: Improve code quality, extract functions, reduce duplication
 
 # Refactor
 
-I will help you refactor code to improve quality while preserving functionality.
+Use this workflow to refactor Workless incrementally while preserving behavior.
 
 ## Guardrails
 - Never change behavior, only structure
 - Make small, incremental changes
-- Ensure tests pass after each change
+- Ensure the active verification baseline passes after each change
 - Preserve public APIs unless explicitly asked
+- Confirm active wiring first when duplicate legacy files exist
 
 ## Steps
 
 ### 1. Understand Scope
-Ask clarifying questions:
-- Which files or functions to refactor?
-- What problems are you seeing? (duplication, complexity, etc.)
-- Are there tests covering this code?
-- Any constraints to be aware of?
+Identify:
+- active files vs legacy duplicates
+- current verification path, usually `npm run build`
+- coupling, duplication, or stale abstractions
 
 ### 2. Analyze Code
 Identify issues:
@@ -36,17 +36,19 @@ Common patterns:
 - **Inline**: Remove unnecessary abstractions
 - **Move**: Relocate to better location
 - **Simplify Conditionals**: Reduce complexity
+- **Unify Active Path**: remove divergence between active and legacy module paths
 
 ### 4. Execute Refactoring
 Make changes incrementally:
 - One refactoring at a time
-- Run tests after each change
-- Commit frequently
+- Run `npm run build` after each meaningful step
+- Re-check module wiring if Nest providers/controllers changed
 
 ### 5. Verify
-- All tests still pass
+- Build still passes
 - Code is more readable
 - No behavior changes
+- Tenant/cache/lifecycle behavior is still coherent when those paths were touched
 
 ## Principles
 - Refactor in small steps

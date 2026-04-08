@@ -17,6 +17,8 @@ Use these rules when operating in the `workless` repository.
 - cache lives under `src/infrastructure/cache`
 - tenant context is part of normal request handling
 - Vite and Tailwind compile source assets into `public/assets`
+- server-rendered pages should usually live under `src/modules/<module>/views`
+- `src/infrastructure/redis/*` is legacy unless the task explicitly targets it
 
 ## Editing Expectations
 

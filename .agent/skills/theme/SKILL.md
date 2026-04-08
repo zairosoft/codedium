@@ -14,16 +14,21 @@ Workless is not a React app.
 Current frontend assumptions:
 
 - Tailwind is compiled through `vite.config.ts`
-- source CSS entry is `src/styles/app.css`
 - generated assets go to `public/assets`
 - HTML may be server-rendered from Nest views
 - backend routes and rendered pages matter more than SPA conventions
+
+Current repo edge:
+
+- `vite.config.ts` references `src/styles/app.css`
+- that file is currently missing in this workspace
+- verify the real asset source path before claiming a frontend build path is active
 
 ## Use This Skill For
 
 - adapting HTML/theme snippets into Workless-compatible pages
 - shaping dashboard or admin-style views
-- deciding what belongs in `src/styles`, `public/assets`, or `src/views`
+- deciding what belongs in module `views/`, `src/components/layouts/`, or generated `public/assets`
 - keeping visual work aligned with Tailwind + Vite in this repo
 - cleaning up template-heavy UI into reusable Workless-friendly structure
 
@@ -41,23 +46,21 @@ If the user explicitly asks for React, treat that as a new requirement and confi
 Before editing UI/theme files, inspect:
 
 1. `vite.config.ts`
-2. `src/styles/app.css`
-3. `public/assets/`
-4. related files under `src/views/`
-5. related layout helpers under `src/components/layouts/`
+2. `src/components/layouts/`
+3. related files under `src/modules/<module>/views/`
+4. `public/assets/`
+5. any theme HTML source referenced by layout helpers
 
 ## Workless Placement Rules
 
 Use these destinations consistently:
 
-- `src/styles/app.css`
-  Source-of-truth Tailwind entry and shared CSS source
-- `public/assets/`
-  Generated/build output only
-- `src/views/`
-  Server-rendered page builders or view helpers
+- `src/modules/<module>/views/`
+  Module-owned page builders or view helpers
 - `src/components/layouts/`
   Shared layout fragments or page shell helpers
+- `public/assets/`
+  Generated/build output only
 
 Do not edit generated CSS in `public/assets` unless the user explicitly asks to patch the built artifact.
 

@@ -18,6 +18,7 @@ Workless is a NestJS modular monolith with:
 - cache services under `src/infrastructure/cache`
 - tenant scoping through `TenantContextMiddleware` and `TenantContextService`
 - runtime module discovery/registry/lifecycle under `src/core`
+- domain event wrapper under `src/core/events/event-bus.service.ts`
 
 This repo is backend-first. Do not assume React, Passport auth, or microservices unless the code for them exists.
 
@@ -59,6 +60,12 @@ When a module participates in lifecycle management, inspect:
 - `src/core/registry/module.registry.ts`
 - `src/core/lifecycle/module.lifecycle.ts`
 
+Current low-risk runtime pattern:
+
+- registry reads should prefer the in-memory runtime snapshot
+- lifecycle operations should emit events through `EventBusService`
+- `HookService` should stay focused on transformation/extensibility hooks
+
 ### Tenant Model
 
 Tenant flow is:
@@ -79,6 +86,7 @@ Use this for new cache work:
 - `CacheModule`
 - `CacheService`
 - `redis.provider.ts`
+- `CacheService.remember(...)` for cache-aside reads
 
 Be careful not to drift into older Redis scaffolding under `src/infrastructure/redis/*` unless the task explicitly targets it.
 
@@ -94,6 +102,7 @@ The active CRM path currently uses:
 - `services/crm-contact.service.ts`
 - `models/crm-contact.entity.ts`
 - `seeders/crm-contact.seeder.ts`
+- `views/crm-dashboard.page.ts`
 
 Do not patch older duplicates by accident unless cleanup is part of the task.
 
