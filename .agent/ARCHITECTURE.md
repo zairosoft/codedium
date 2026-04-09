@@ -164,9 +164,11 @@ Server-rendered layout and shared UI live under:
 
 - `src/app/components/layouts/*`
 
-Module-owned pages and mappers live under:
+Module view files still live under:
 
 - `src/modules/<module>/views/*`
+
+For backend architecture work, treat module `views/` as secondary and change them only when the response contract or page rendering behavior actually needs to move.
 
 Do not invent a shared `src/views` layer unless the codebase moves in that direction later.
 
