@@ -1,6 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR, DiscoveryModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EVENT_BUS_PORT } from '../app/interfaces/event-bus.interface';
+import { HOOK_PORT } from '../app/interfaces/hook.interface';
 import { HtmlCacheInterceptor } from './http/html-cache.interceptor';
 import { EventBusService } from './events/event-bus.service';
 import { HookService } from './events/hook.service';
@@ -18,6 +20,14 @@ import { ModuleRegistryService } from './registry/module.registry';
   providers: [
     EventBusService,
     HookService,
+    {
+      provide: EVENT_BUS_PORT,
+      useExisting: EventBusService,
+    },
+    {
+      provide: HOOK_PORT,
+      useExisting: HookService,
+    },
     SystemModuleExplorer,
     ModuleRegistryService,
     ModuleLifecycleService,
@@ -33,6 +43,8 @@ import { ModuleRegistryService } from './registry/module.registry';
   exports: [
     EventBusService,
     HookService,
+    EVENT_BUS_PORT,
+    HOOK_PORT,
     SystemModuleExplorer,
     ModuleRegistryService,
     ModuleLifecycleService,

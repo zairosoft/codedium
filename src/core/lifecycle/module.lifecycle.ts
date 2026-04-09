@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { CacheService } from '../../infrastructure/cache/cache.service';
+import { CacheService } from '../../app/infrastructure/cache/cache.service';
 import { EventBusService } from '../events/event-bus.service';
 import { HookService } from '../events/hook.service';
 import { SystemModuleExplorer } from '../system/system-module.explorer';

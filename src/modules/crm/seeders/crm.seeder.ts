@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ModuleSeeder } from '../../../common/interfaces/module-seeder.interface';
+import { ModuleSeeder } from '../../../app/common/interfaces/module-seeder.interface';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
 
 @Injectable()

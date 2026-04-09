@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { EventBusService } from '../../../core/events/event-bus.service';
-import { HookService } from '../../../core/events/hook.service';
-import { CacheService } from '../../../infrastructure/cache/cache.service';
+import { CACHE_PORT, CachePort } from '../../../app/interfaces/cache.interface';
+import { EVENT_BUS_PORT, EventBusPort } from '../../../app/interfaces/event-bus.interface';
+import { HOOK_PORT, HookPort } from '../../../app/interfaces/hook.interface';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
@@ -22,9 +22,12 @@ export class CrmContactService {
   constructor(
     private readonly crmContactRepository: CrmContactRepository,
     private readonly crmContactPolicy: CrmContactPolicy,
-    private readonly hookService: HookService,
-    private readonly eventBus: EventBusService,
-    private readonly cacheService: CacheService,
+    @Inject(HOOK_PORT)
+    private readonly hookService: HookPort,
+    @Inject(EVENT_BUS_PORT)
+    private readonly eventBus: EventBusPort,
+    @Inject(CACHE_PORT)
+    private readonly cacheService: CachePort,
   ) {}
 
   async createContact(dto: CreateContactDto) {
