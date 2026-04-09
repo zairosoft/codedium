@@ -5,7 +5,7 @@ import {
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { SystemModuleExplorer } from '../system/system-module.explorer';
 import { ModuleRegistryEntity, ModuleStatus } from './module-registry.entity';
 
@@ -31,6 +31,7 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
     }
 
     const discoveredModules = this.moduleExplorer.getModules();
+    const discoveredNames = new Set(discoveredModules.map((definition) => definition.metadata.name));
     const syncedRecords: ModuleRegistryEntity[] = [];
 
     for (const definition of discoveredModules) {
@@ -71,6 +72,12 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
       this.logger.log(`Registered System module definition "${created.name}"`);
     }
 
+    for (const cachedName of [...this.runtimeRegistry.keys()]) {
+      if (!discoveredNames.has(cachedName)) {
+        this.runtimeRegistry.delete(cachedName);
+      }
+    }
+
     this.isCodebaseSynced = true;
     return syncedRecords;
   }
@@ -83,7 +90,16 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
       );
     }
 
+    const discoveredNames = this.moduleExplorer
+      .getModules()
+      .map((definition) => definition.metadata.name);
+
+    if (discoveredNames.length === 0) {
+      return [];
+    }
+
     const records = await this.moduleRegistryRepository.find({
+      where: { name: In(discoveredNames) },
       order: { name: 'ASC' },
     });
 
@@ -96,6 +112,10 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
 
   async getOrFail(name: string): Promise<ModuleRegistryEntity> {
     await this.syncWithCodebase();
+    if (!this.moduleExplorer.getModule(name)) {
+      throw new NotFoundException(`System module "${name}" is not discoverable in the current codebase.`);
+    }
+
     const cached = this.runtimeRegistry.get(name);
     if (cached) {
       return cached;
