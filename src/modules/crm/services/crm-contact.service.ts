@@ -1,21 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { CACHE_PORT, CachePort } from '../../../app/interfaces/cache.interface';
-import { EVENT_BUS_PORT, EventBusPort } from '../../../app/interfaces/event-bus.interface';
-import { HOOK_PORT, HookPort } from '../../../app/interfaces/hook.interface';
+import { CACHE_PORT, CachePort } from '../../../core/interfaces/cache.interface';
+import { EVENT_BUS_PORT, EventBusPort } from '../../../core/interfaces/event-bus.interface';
+import { HOOK_PORT, HookPort } from '../../../core/interfaces/hook.interface';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 import { CrmContactPolicy } from '../policies/crm-contact.policy';
-import {
-  CrmContactRepository,
-  CrmDashboardSummary,
-} from '../repositories/crm-contact.repository';
+import { CrmContactRepository } from '../repositories/crm-contact.repository';
 import { CrmContactViewMapper } from '../views/crm-contact.view';
 
 const LIST_TTL_SECONDS = 120;
 const DASHBOARD_TTL_SECONDS = 60;
 const CONTACT_TTL_SECONDS = 300;
+const MODULE_CACHE_VERSION_KEY = 'crm:module:version';
 
 @Injectable()
 export class CrmContactService {
@@ -31,15 +29,25 @@ export class CrmContactService {
   ) {}
 
   async createContact(dto: CreateContactDto) {
-    const payload = await this.hookService.emit('customer.beforeCreate', dto);
+    const payload = await this.hookService.emit('crm.contact.creating', dto);
     const contact = await this.crmContactRepository.create(payload);
 
     await this.invalidateCollectionCache(contact.id);
-    await this.eventBus.emit('customer.afterCreate', {
+    await this.eventBus.emit('crm.contact.created', {
       contactId: contact.id,
       tenantId: contact.tenantId,
       orgId: contact.orgId,
       email: contact.email,
+    });
+    await this.eventBus.emit('notification.send', {
+      name: 'crm.contact.created',
+      payload: {
+        contactId: contact.id,
+        tenantId: contact.tenantId,
+        orgId: contact.orgId,
+        email: contact.email,
+      },
+      receivedAt: new Date().toISOString(),
     });
 
     return CrmContactViewMapper.toView(contact);
@@ -48,8 +56,16 @@ export class CrmContactService {
   async getContacts(query: ListContactsDto) {
     const normalizedQuery = this.crmContactPolicy.normalizeListQuery(query);
     const tenantId = this.crmContactRepository.getTenantId();
-    const version = await this.getCollectionVersion(tenantId);
-    const cacheKey = this.buildListCacheKey(tenantId, version, normalizedQuery);
+    const [moduleVersion, collectionVersion] = await Promise.all([
+      this.getModuleCacheVersion(),
+      this.getCollectionVersion(tenantId),
+    ]);
+    const cacheKey = this.buildListCacheKey(
+      tenantId,
+      moduleVersion,
+      collectionVersion,
+      normalizedQuery,
+    );
     return this.cacheService.remember(
       cacheKey,
       LIST_TTL_SECONDS,
@@ -72,7 +88,8 @@ export class CrmContactService {
 
   async getContactById(id: string) {
     const tenantId = this.crmContactRepository.getTenantId();
-    const cacheKey = this.buildDetailCacheKey(tenantId, id);
+    const moduleVersion = await this.getModuleCacheVersion();
+    const cacheKey = this.buildDetailCacheKey(tenantId, moduleVersion, id);
     return this.cacheService.remember(
       cacheKey,
       CONTACT_TTL_SECONDS,
@@ -84,33 +101,55 @@ export class CrmContactService {
   }
 
   async updateContact(id: string, dto: UpdateContactDto) {
-    const payload = await this.hookService.emit('customer.beforeUpdate', dto);
+    const payload = await this.hookService.emit('crm.contact.updating', dto);
     const updated = await this.crmContactRepository.update(id, payload);
     await this.invalidateCollectionCache(updated.id);
-    await this.eventBus.emit('customer.afterUpdate', {
+    await this.eventBus.emit('crm.contact.updated', {
       contactId: updated.id,
       tenantId: updated.tenantId,
       orgId: updated.orgId,
       email: updated.email,
+    });
+    await this.eventBus.emit('notification.send', {
+      name: 'crm.contact.updated',
+      payload: {
+        contactId: updated.id,
+        tenantId: updated.tenantId,
+        orgId: updated.orgId,
+        email: updated.email,
+      },
+      receivedAt: new Date().toISOString(),
     });
     return CrmContactViewMapper.toView(updated);
   }
 
   async removeContact(id: string) {
     const tenantId = this.crmContactRepository.getTenantId();
+    const moduleVersion = await this.getModuleCacheVersion();
     await this.crmContactRepository.remove(id);
-    await this.cacheService.del(this.buildDetailCacheKey(tenantId, id));
+    await this.cacheService.del(this.buildDetailCacheKey(tenantId, moduleVersion, id));
     await this.cacheService.del(this.buildCollectionVersionKey(tenantId));
-    await this.eventBus.emit('customer.afterDelete', {
+    await this.eventBus.emit('crm.contact.deleted', {
       contactId: id,
       tenantId,
+    });
+    await this.eventBus.emit('notification.send', {
+      name: 'crm.contact.deleted',
+      payload: {
+        contactId: id,
+        tenantId,
+      },
+      receivedAt: new Date().toISOString(),
     });
   }
 
   async getDashboardSummary() {
     const tenantId = this.crmContactRepository.getTenantId();
-    const version = await this.getCollectionVersion(tenantId);
-    const cacheKey = this.buildDashboardCacheKey(tenantId, version);
+    const [moduleVersion, collectionVersion] = await Promise.all([
+      this.getModuleCacheVersion(),
+      this.getCollectionVersion(tenantId),
+    ]);
+    const cacheKey = this.buildDashboardCacheKey(tenantId, moduleVersion, collectionVersion);
     return this.cacheService.remember(
       cacheKey,
       DASHBOARD_TTL_SECONDS,
@@ -123,11 +162,23 @@ export class CrmContactService {
 
   private async invalidateCollectionCache(contactId?: string): Promise<void> {
     const tenantId = this.crmContactRepository.getTenantId();
+    const moduleVersion = await this.getModuleCacheVersion();
     await this.cacheService.del(this.buildCollectionVersionKey(tenantId));
 
     if (contactId) {
-      await this.cacheService.del(this.buildDetailCacheKey(tenantId, contactId));
+      await this.cacheService.del(this.buildDetailCacheKey(tenantId, moduleVersion, contactId));
     }
+  }
+
+  private async getModuleCacheVersion(): Promise<string> {
+    const cachedVersion = await this.cacheService.get<string>(MODULE_CACHE_VERSION_KEY);
+    if (cachedVersion) {
+      return cachedVersion;
+    }
+
+    const version = '1';
+    await this.cacheService.set(MODULE_CACHE_VERSION_KEY, version);
+    return version;
   }
 
   private async getCollectionVersion(tenantId: string): Promise<string> {
@@ -146,16 +197,25 @@ export class CrmContactService {
     return `crm:${tenantId}:contacts:version`;
   }
 
-  private buildListCacheKey(tenantId: string, version: string, query: ListContactsDto): string {
+  private buildListCacheKey(
+    tenantId: string,
+    moduleVersion: string,
+    collectionVersion: string,
+    query: ListContactsDto,
+  ): string {
     const digest = createHash('sha1').update(JSON.stringify(query)).digest('hex');
-    return `crm:${tenantId}:contacts:list:${version}:${digest}`;
+    return `crm:${tenantId}:contacts:list:${moduleVersion}:${collectionVersion}:${digest}`;
   }
 
-  private buildDetailCacheKey(tenantId: string, id: string): string {
-    return `crm:${tenantId}:contacts:${id}`;
+  private buildDetailCacheKey(tenantId: string, moduleVersion: string, id: string): string {
+    return `crm:${tenantId}:contacts:${moduleVersion}:${id}`;
   }
 
-  private buildDashboardCacheKey(tenantId: string, version: string): string {
-    return `crm:${tenantId}:dashboard:${version}`;
+  private buildDashboardCacheKey(
+    tenantId: string,
+    moduleVersion: string,
+    collectionVersion: string,
+  ): string {
+    return `crm:${tenantId}:dashboard:${moduleVersion}:${collectionVersion}`;
   }
 }

@@ -1,9 +1,10 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { USER_SERVICE, UserServicePort } from '../../interfaces/user.interface';
+import { AuthServicePort } from '../../../core/interfaces/auth.interface';
+import { USER_SERVICE, UserServicePort } from '../../../core/interfaces/user.interface';
 import { AuthSessionModel } from '../models/auth-session.model';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements AuthServicePort {
   constructor(@Inject(USER_SERVICE) private readonly users: UserServicePort) {}
 
   async createSession(userId: string, tenantId?: string): Promise<AuthSessionModel> {

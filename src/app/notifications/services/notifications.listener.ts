@@ -6,55 +6,16 @@ import { NotificationsService } from './notifications.service';
 export class NotificationsListener {
   constructor(private readonly notifications: NotificationsService) {}
 
-  @OnEvent('customer.afterCreate')
-  async handleCrmContactCreated(payload: {
-    contactId: string;
-    tenantId: string;
-    orgId: string;
-    email: string;
-  }): Promise<void> {
-    await this.notifications.record({
-      name: 'customer.afterCreate',
-      payload,
-      receivedAt: new Date(),
-    });
-  }
-
-  @OnEvent('customer.afterUpdate')
-  async handleCrmContactUpdated(payload: {
-    contactId: string;
-    tenantId: string;
-    orgId: string;
-    email: string;
-  }): Promise<void> {
-    await this.notifications.record({
-      name: 'customer.afterUpdate',
-      payload,
-      receivedAt: new Date(),
-    });
-  }
-
-  @OnEvent('customer.afterDelete')
-  async handleCrmContactDeleted(payload: {
-    contactId: string;
-    tenantId: string;
-  }): Promise<void> {
-    await this.notifications.record({
-      name: 'customer.afterDelete',
-      payload,
-      receivedAt: new Date(),
-    });
-  }
-
-  @OnEvent('system.module.installed')
-  async handleModuleInstalled(payload: {
+  @OnEvent('notification.send')
+  async handleNotificationSend(payload: {
     name: string;
-    version: string;
+    payload: Record<string, unknown>;
+    receivedAt?: string;
   }): Promise<void> {
     await this.notifications.record({
-      name: 'system.module.installed',
-      payload,
-      receivedAt: new Date(),
+      name: payload.name,
+      payload: payload.payload,
+      receivedAt: payload.receivedAt ? new Date(payload.receivedAt) : new Date(),
     });
   }
 }

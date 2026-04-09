@@ -1,18 +1,13 @@
 import {
-  Column,
-  CreateDateColumn,
   Entity,
   Index,
-  PrimaryColumn,
-  UpdateDateColumn,
+  Column,
 } from 'typeorm';
+import { TenantScopedEntity } from '../../../core/tenant/tenant-scoped.entity';
 
 @Entity({ name: 'platform_users' })
-export class PlatformUserEntity {
-  @PrimaryColumn({ type: 'uuid' })
-  id: string;
-
-  @Index({ unique: true })
+@Index(['tenantId', 'email'], { unique: true })
+export class PlatformUserEntity extends TenantScopedEntity {
   @Column({ type: 'varchar', length: 160 })
   email: string;
 
@@ -24,10 +19,4 @@ export class PlatformUserEntity {
 
   @Column({ type: 'jsonb', default: () => "'[]'::jsonb" })
   roles: string[];
-
-  @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: Date;
 }

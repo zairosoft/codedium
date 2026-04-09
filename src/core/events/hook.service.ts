@@ -6,11 +6,12 @@ import {
   Reflector,
 } from '@nestjs/core';
 import { HOOK_METADATA } from './hook.decorator';
+import { HookPort } from '../interfaces/hook.interface';
 
 type HookHandler = (payload: unknown) => Promise<unknown> | unknown;
 
 @Injectable()
-export class HookService {
+export class HookService implements HookPort {
   private readonly handlers = new Map<string, HookHandler[]>();
   private isScanned = false;
 

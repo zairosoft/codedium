@@ -1,86 +1,31 @@
 ---
-description: Display agent and project status. Progress tracking and status board.
+description: Summarize current Workless project status from the real repository state
 ---
 
-# /status - Show Status
+# Status
 
-$ARGUMENTS
+Use this workflow to summarize current repository status without inventing product metadata.
 
----
+## Include
 
-## Task
+1. project path and current branch if checked
+2. active architecture summary
+3. changed files or worktree status if relevant
+4. verification status
+5. blocked items such as missing dependencies or services
 
-Show current project and agent status.
+## Workless Reality
 
-### What It Shows
+When reporting status, prefer facts such as:
 
-1. **Project Info**
-   - Project name and path
-   - Tech stack
-   - Current features
+- platform layer under `src/app`
+- core engine under `src/core`
+- runtime plugin modules under `src/modules`
+- current verification command: `npm run build`
+- current setup helpers: `npm run db:platform`, `npm run seed`
 
-2. **Agent Status Board**
-   - Which agents are running
-   - Which tasks are completed
-   - Pending work
+## Avoid
 
-3. **File Statistics**
-   - Files created count
-   - Files modified count
-
-4. **Preview Status**
-   - Is server running
-   - URL
-   - Health check
-
----
-
-## Example Output
-
-```
-=== Project Status ===
-
-📁 Project: my-ecommerce
-📂 Path: C:/projects/my-ecommerce
-🏷️ Type: nextjs-ecommerce
-📊 Status: active
-
-🔧 Tech Stack:
-   Framework: next.js
-   Database: postgresql
-   Auth: clerk
-   Payment: stripe
-
-✅ Features (5):
-   • product-listing
-   • cart
-   • checkout
-   • user-auth
-   • order-history
-
-⏳ Pending (2):
-   • admin-panel
-   • email-notifications
-
-📄 Files: 73 created, 12 modified
-
-=== Agent Status ===
-
-✅ database-architect → Completed
-✅ backend-specialist → Completed
-🔄 frontend-specialist → Dashboard components (60%)
-⏳ test-engineer → Waiting
-
-=== Preview ===
-
-🌐 URL: http://localhost:3000
-💚 Health: OK
-```
-
----
-
-## Technical
-
-Status uses these scripts:
-- `python .agent/scripts/session_manager.py status`
-- `python .agent/scripts/auto_preview.py status`
+- generic ecommerce or SaaS boilerplate
+- invented feature lists
+- claiming preview or tests work unless they were actually checked

@@ -8,13 +8,11 @@ import { CrmContactPolicy } from './policies/crm-contact.policy';
 import { CrmContactRepository } from './repositories/crm-contact.repository';
 import { CrmContactSeeder } from './seeders/crm-contact.seeder';
 import { CrmContactService } from './services/crm-contact.service';
-import { CrmService } from './services/crm.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CrmContactEntity])],
   controllers: [CrmContactController],
   providers: [
-    CrmService,
     CrmContactService,
     CrmContactRepository,
     CrmContactPolicy,

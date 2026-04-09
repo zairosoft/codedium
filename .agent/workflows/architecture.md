@@ -1,58 +1,49 @@
 ---
-description: Create architecture diagrams with Mermaid or C4
+description: Review or document Workless architecture from the active codebase
 ---
 
 # Architecture
 
-I will help you create architecture diagrams for your project.
+Use this workflow to inspect or explain Workless architecture without drifting into generic diagrams.
 
 ## Guardrails
-- Base diagrams on actual code structure
-- Keep diagrams simple and focused
-- Use consistent notation
-- Update when architecture changes
 
-## Steps
+- base everything on active code paths
+- identify platform, core, and module boundaries first
+- call out optional or scaffold-only paths explicitly
+- prefer one focused diagram over one giant diagram
 
-### 1. Understand Scope
-Ask clarifying questions:
-- What level of detail? (high-level, component, class)
-- What aspects? (data flow, deployment, etc.)
-- Who is the audience?
-- What format? (Mermaid, C4, etc.)
+## Read Order
 
-### 2. Analyze Architecture
-Examine the codebase:
-- Main components/services
-- Data flow between them
-- External dependencies
-- Deployment structure
+1. `src/app.module.ts`
+2. `src/app/platform.module.ts`
+3. `src/core/core.module.ts`
+4. `src/modules/runtime-modules.ts`
+5. target files under `src/app`, `src/core`, or `src/modules`
 
-### 3. Choose Diagram Type
-Select appropriate format:
-- **Context**: System in its environment
-- **Container**: High-level components
-- **Component**: Internal structure
-- **Sequence**: Flow over time
-- **ER Diagram**: Data relationships
+## What To Capture
 
-### 4. Create Diagram
-Using Mermaid or similar:
-```mermaid
-graph TD
-    A[Client] --> B[API Gateway]
-    B --> C[Service A]
-    B --> D[Service B]
-    C --> E[Database]
-```
+- platform services under `src/app`
+- core engine responsibilities under `src/core`
+- plugin modules under `src/modules`
+- tenant flow through `src/core/tenant`
+- registry and lifecycle flow through `src/core/registry` and `src/core/lifecycle`
+- cache flow through `src/core/infrastructure/cache` and `src/core/http`
 
-### 5. Document
-Add explanations:
-- What each component does
-- Key decisions and tradeoffs
-- Links to detailed docs
+## Diagram Guidance
 
-## Principles
-- Don't try to show everything in one diagram
-- Use consistent colors and shapes
-- Keep text labels short
+Prefer Mermaid when needed.
+
+Examples:
+
+- high-level container diagram
+- module lifecycle flow
+- tenant and cache flow
+- CRM request path from controller to repository
+
+## Output Checklist
+
+- names match active files
+- deprecated paths are not shown as active
+- optional runtime modules are marked optional
+- module boundaries are explicit

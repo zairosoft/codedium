@@ -7,6 +7,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { HTML_CACHE_METADATA, HtmlCacheOptions } from './html-cache.decorator';
+import { MODULE_ENABLED_METADATA } from '../system/module-enabled.decorator';
+import { DEFAULT_TENANT_ID, normalizeTenantId } from '../tenant/tenant.constants';
 
 @Injectable()
 export class HtmlCacheInterceptor implements NestInterceptor {
@@ -27,13 +29,27 @@ export class HtmlCacheInterceptor implements NestInterceptor {
     }
 
     const response = context.switchToHttp().getResponse();
+    const request = context.switchToHttp().getRequest();
     const scope = options.scope ?? 'public';
+    const moduleName =
+      this.reflector.getAllAndOverride<string | undefined>(MODULE_ENABLED_METADATA, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? 'platform';
+    const route = request.originalUrl ?? request.url ?? 'unknown-route';
+    const rawTenantId = request.headers?.['x-tenant-id'];
+    const tenantHeader = Array.isArray(rawTenantId) ? rawTenantId[0] : rawTenantId;
+    const tenantId = tenantHeader ? normalizeTenantId(tenantHeader) : DEFAULT_TENANT_ID;
+    const cacheKey = `${moduleName}:${tenantId}:${route}`;
 
     response.setHeader('Cache-Control', `${scope}, max-age=${options.maxAgeSeconds}`);
     response.setHeader('Vary', (options.vary ?? ['Accept-Encoding']).join(', '));
+    response.setHeader('X-HTML-Cache-Key', cacheKey);
 
     if (options.surrogateKey) {
-      response.setHeader('Surrogate-Key', options.surrogateKey);
+      response.setHeader('Surrogate-Key', `${options.surrogateKey} ${cacheKey}`);
+    } else {
+      response.setHeader('Surrogate-Key', cacheKey);
     }
 
     return next.handle();

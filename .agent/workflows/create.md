@@ -1,59 +1,42 @@
 ---
-description: Create new application command. Triggers App Builder skill and starts interactive dialogue with user.
+description: Create a new feature area in the existing Workless repository
 ---
 
-# /create - Create Application
+# Create
 
-$ARGUMENTS
+Use this workflow when the user wants something new added to this repo.
 
----
+## Guardrails
 
-## Task
+- create within the existing Workless architecture
+- do not assume greenfield app creation
+- decide first whether the work belongs in platform, core, or modules
 
-This command starts a new application creation process.
+## Decision Order
 
-### Steps:
+1. platform work goes under `src/app`
+2. runtime engine work goes under `src/core`
+3. plugin feature work goes under `src/modules`
 
-1. **Request Analysis**
-   - Understand what the user wants
-   - If information is missing, use `conversation-manager` skill to ask
+## Typical Create Tasks
 
-2. **Project Planning**
-   - Use `project-planner` agent for task breakdown
-   - Determine tech stack
-   - Plan file structure
-   - Create plan file and proceed to building
+- new platform service
+- new plugin module
+- new controller or repository
+- new lifecycle integration
+- new tenant-aware cache flow
 
-3. **Application Building (After Approval)**
-   - Orchestrate with `app-builder` skill
-   - Coordinate expert agents:
-     - `database-architect` → Schema
-     - `backend-specialist` → API
-     - `frontend-specialist` → UI
+## Before Building
 
-4. **Preview**
-   - Start with `auto_preview.py` when complete
-   - Present URL to user
+Clarify only what is necessary:
 
----
+- target layer
+- business goal
+- affected domain
+- verification expectations
 
-## Usage Examples
+## Verification
 
-```
-/create blog site
-/create e-commerce app with product listing and cart
-/create todo app
-/create Instagram clone
-/create crm system with customer management
-```
-
----
-
-## Before Starting
-
-If request is unclear, ask these questions:
-- What type of application?
-- What are the basic features?
-- Who will use it?
-
-Use defaults, add details later.
+- `npm run build`
+- `npm run db:platform` when schema setup changes
+- `npm run seed` when lifecycle or seed data changes

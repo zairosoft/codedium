@@ -11,16 +11,17 @@ Use this skill for NestJS-specific work in Workless.
 
 Workless is a NestJS modular monolith with:
 
-- NestJS 11
+- platform layer under `src/app`
+- core engine under `src/core`
+- plugin modules under `src/modules`
 - `ConfigModule.forRoot(...)` in `src/app.module.ts`
 - global validation pipe in `src/main.ts`
 - TypeORM + PostgreSQL
-- cache services under `src/infrastructure/cache`
-- tenant scoping through `TenantContextMiddleware` and `TenantContextService`
-- runtime module discovery/registry/lifecycle under `src/core`
-- domain event wrapper under `src/core/events/event-bus.service.ts`
+- optional Redis-backed cache under `src/core/infrastructure/cache`
+- tenant scoping through `src/core/tenant/*`
+- runtime module registry and lifecycle under `src/core/lifecycle` and `src/core/registry`
 
-This repo is backend-first. Do not assume React, Passport auth, or microservices unless the code for them exists.
+This repo is backend-first. Do not assume React, Passport auth, or microservices unless the code exists.
 
 ## Read First
 
@@ -28,18 +29,25 @@ Before structural changes, inspect in this order:
 
 1. `src/app.module.ts`
 2. `src/core/core.module.ts`
-3. target module `src/modules/<name>/module.ts`
-4. related runtime files under:
+3. `src/modules/runtime-modules.ts`
+4. target module `src/modules/<name>/module.ts` or target platform module under `src/app/<name>`
+5. related runtime files under:
    - `src/core/system`
    - `src/core/registry`
    - `src/core/lifecycle`
    - `src/core/events`
+   - `src/core/interfaces`
+   - `src/core/tenant`
 
 ## Active Patterns In Workless
 
-### Module Wiring
+### Layering
 
-Feature modules are organized under `src/modules/<name>`.
+- `src/app` is stable platform code
+- `src/core` is shared runtime engine
+- `src/modules` contains optional plugin modules
+
+### Module Wiring
 
 Expected responsibilities:
 
@@ -47,10 +55,10 @@ Expected responsibilities:
 - services orchestrate
 - repositories own persistence
 - DTOs validate public input
-- hooks/events are used for extension points
-- lifecycle services are added only when a module needs install/upgrade/uninstall behavior
+- hooks and events are used for extension points
+- lifecycle services are added only when a module needs install, upgrade, or uninstall behavior
 
-### System Module Runtime
+### Runtime System
 
 When a module participates in lifecycle management, inspect:
 
@@ -59,66 +67,76 @@ When a module participates in lifecycle management, inspect:
 - `src/core/system/system-module.explorer.ts`
 - `src/core/registry/module.registry.ts`
 - `src/core/lifecycle/module.lifecycle.ts`
+- `src/core/lifecycle/module-lifecycle.runner.ts`
 
 Current low-risk runtime pattern:
 
-- registry reads should prefer the in-memory runtime snapshot
-- lifecycle operations should emit events through `EventBusService`
-- `HookService` should stay focused on transformation/extensibility hooks
+- registry reads should prefer discoverable modules only
+- lifecycle operations emit domain events
+- module loading should tolerate missing plugin directories
 
 ### Tenant Model
 
 Tenant flow is:
 
 1. `TenantContextMiddleware` reads `x-tenant-id`
-2. `TenantContextService` stores it in async local storage
-3. repositories/entities use `tenantId`
+2. `TenantContextService` stores normalized state in async local storage
+3. repositories and entities use `tenantId`
 4. cache keys must remain tenant-aware
 
 ### Cache Model
 
 Preferred cache path:
 
-- `src/infrastructure/cache/*`
+- `src/core/infrastructure/cache/*`
 
 Use this for new cache work:
 
 - `CacheModule`
 - `CacheService`
 - `redis.provider.ts`
-- `CacheService.remember(...)` for cache-aside reads
+- `CacheService.remember(...)`
 
-Be careful not to drift into older Redis scaffolding under `src/infrastructure/redis/*` unless the task explicitly targets it.
+Page cache headers live under:
+
+- `src/core/http/html-cache.interceptor.ts`
 
 ## Workless-Specific Hazards
 
-### CRM Has Legacy Duplicates
+### Runtime vs Scaffold
 
-There are old and new CRM files side by side. Always check `src/modules/crm/module.ts` first to see what is active.
+`src/modules/apps` exists as scaffold only. Do not treat it as an active runtime module unless the code changes.
 
-The active CRM path currently uses:
+### CRM Reference Path
 
-- `controllers/crm-contact.controller.ts`
-- `services/crm-contact.service.ts`
-- `models/crm-contact.entity.ts`
-- `seeders/crm-contact.seeder.ts`
-- `views/crm-dashboard.page.ts`
+Use `src/modules/crm` as the main reference for:
 
-Do not patch older duplicates by accident unless cleanup is part of the task.
+- controller and service wiring
+- repository pattern
+- hook and event usage
+- lifecycle integration
+- tenant-aware cache keys
 
-### Validation Reality
+### Verification Reality
 
-Current reliable verification:
+Current reliable baseline:
 
 ```bash
 npm run build
+```
+
+Useful setup commands:
+
+```bash
+npm run db:platform
+npm run seed
 ```
 
 Important:
 
 - `npm test` is still a placeholder
 - runtime checks need Postgres, and optional Redis
-- do not claim tests passed unless you actually ran them
+- do not claim tests passed unless they actually ran
 
 ## When Solving Problems
 
@@ -126,10 +144,10 @@ Important:
 
 Check:
 
-1. provider is registered in the target module
+1. provider is registered in the active module
 2. provider is exported only when needed externally
-3. imports/exports match actual active files
-4. duplicate legacy files are not confusing the dependency graph
+3. imports and exports match current paths
+4. modules depend on core interfaces, not app services
 
 ### TypeORM Issues
 
@@ -137,8 +155,8 @@ Check:
 
 1. entity path is the active one
 2. `TypeOrmModule.forFeature(...)` includes the correct entity
-3. env variables in `.env.example` match actual code usage
-4. database config aligns with `src/infrastructure/database/typeorm.config.ts`
+3. schema preparation paths align with `src/core/infrastructure/database/*`
+4. database config aligns with `src/core/infrastructure/database/typeorm.config.ts`
 
 ### Lifecycle Issues
 
@@ -146,30 +164,21 @@ Check:
 
 1. module lifecycle service implements `SystemModuleLifecycle`
 2. module metadata and registry names match
-3. install/upgrade/uninstall flows are idempotent where possible
-4. cache invalidation is included when lifecycle changes affect stale data
+3. install, upgrade, and uninstall flows are idempotent where possible
+4. lifecycle changes invalidate stale cache correctly
 
-### Tenant / Cache Bugs
+### Tenant and Cache Bugs
 
 Check:
 
 1. repositories filter by `tenantId`
-2. service cache keys include tenant scope where needed
-3. write paths invalidate or roll namespace-version keys
-
-## Work Style
-
-When editing this repo:
-
-1. confirm the active file path first
-2. follow the existing module shape
-3. preserve tenant-awareness
-4. prefer current runtime paths over legacy scaffolding
-5. verify with `npm run build`
+2. service cache keys include tenant scope
+3. write paths invalidate detail and collection or version keys
+4. HTML cache keys remain module and tenant aware
 
 ## Success Criteria
 
-- changes match the active NestJS wiring
-- no accidental edits to stale duplicate files
-- tenant/cache/lifecycle behavior remains coherent
-- the project still builds cleanly
+- changes match active NestJS wiring
+- no accidental edits to stale or scaffold-only paths
+- tenant, cache, and lifecycle behavior remain coherent
+- the project still builds cleanly when the environment is ready

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ModuleSeeder } from '../../../app/common/interfaces/module-seeder.interface';
+import { ModuleSeeder } from '../../../core/lifecycle/module-seeder.interface';
+import { DEFAULT_TENANT_ID } from '../../../core/tenant/tenant.constants';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
 
 @Injectable()
@@ -12,7 +13,7 @@ export class CrmContactSeeder implements ModuleSeeder {
   ) {}
 
   async seed(): Promise<void> {
-    const tenantId = 'public';
+    const tenantId = DEFAULT_TENANT_ID;
     const existing = await this.repository.count({ where: { tenantId } });
     if (existing > 0) {
       return;

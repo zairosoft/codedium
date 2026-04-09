@@ -1,6 +1,6 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { CacheService } from '../../app/infrastructure/cache/cache.service';
+import { CacheService } from '../infrastructure/cache/cache.service';
 import { EventBusService } from '../events/event-bus.service';
 import { HookService } from '../events/hook.service';
 import { SystemModuleExplorer } from '../system/system-module.explorer';
@@ -37,6 +37,14 @@ export class ModuleLifecycleService {
       name,
       version: definition.metadata.version,
     });
+    await this.eventBus.emit('notification.send', {
+      name: 'system.module.installed',
+      payload: {
+        name,
+        version: definition.metadata.version,
+      },
+      receivedAt: new Date().toISOString(),
+    });
     return result;
   }
 
@@ -55,6 +63,11 @@ export class ModuleLifecycleService {
     await this.moduleRegistry.markDisabled(name);
     const result = await this.moduleRegistry.markUninstalled(name);
     await this.eventBus.emit('system.module.uninstalled', { name });
+    await this.eventBus.emit('notification.send', {
+      name: 'system.module.uninstalled',
+      payload: { name },
+      receivedAt: new Date().toISOString(),
+    });
     return result;
   }
 
@@ -73,13 +86,22 @@ export class ModuleLifecycleService {
       fromVersion: currentState.version,
       toVersion: definition.metadata.version,
     });
+    await this.eventBus.emit('notification.send', {
+      name: 'system.module.upgraded',
+      payload: {
+        name,
+        fromVersion: currentState.version,
+        toVersion: definition.metadata.version,
+      },
+      receivedAt: new Date().toISOString(),
+    });
     return result;
   }
 
   private getDefinitionOrFail(name: string) {
     const definition = this.moduleExplorer.getModule(name);
     if (!definition) {
-      throw new Error(`System module "${name}" has no lifecycle provider.`);
+      throw new NotFoundException(`System module "${name}" has no lifecycle provider.`);
     }
 
     return definition;

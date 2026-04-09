@@ -1,32 +1,35 @@
 # Workless Agent Architecture
 
-This document is the agent-facing architecture note for the `workless` repository. It replaces the generic Antigravity description that was previously copied into `.agent`.
+This file is the agent-facing architecture note for the `workless` repository.
 
 ## Purpose
 
-Use `.agent` in this repo for three things:
+Use `.agent` in this repo to:
 
-1. keep project-specific operating context for AI agents
-2. provide reusable skills and workflows for repeated tasks
-3. reduce incorrect assumptions from generic web or frontend templates
+1. keep project-specific context for AI agents
+2. document the active architecture and commands
+3. reduce mistakes from generic templates copied from other projects
 
-This file should describe the current reality of Workless, not an idealized toolkit.
+If `.agent` and `src/` disagree, follow the codebase.
 
-## Project Reality
+## Current Repository Reality
 
-Workless is a NestJS monolith with modular ERP-style runtime behavior.
+Workless is a NestJS modular monolith with three active layers:
 
-Current stack and architecture:
+1. platform layer under `src/app`
+2. core engine under `src/core`
+3. plugin modules under `src/modules`
+
+Current stack:
 
 - NestJS 11
 - TypeORM + PostgreSQL
-- Redis-backed cache support under `src/infrastructure/cache`
+- optional Redis via `ioredis`
 - tenant context via middleware + async local storage
-- server-side MVC/views plus static assets in `public`
-- Vite + Tailwind CSS for asset compilation
-- module registry + lifecycle + hooks/events under `src/core`
+- server-rendered HTML views for module pages
+- Vite + Tailwind for frontend assets
 
-This repo is not a React app and should not be treated like a SPA-first codebase unless the code changes in that direction later.
+This repo is not a React SPA and should not be treated like one.
 
 ## Runtime Layout
 
@@ -35,182 +38,146 @@ Main application wiring:
 - `src/app.module.ts`
 - `src/main.ts`
 
-Core runtime:
+Platform layer:
+
+- `src/app/platform.module.ts`
+- `src/app/auth/*`
+- `src/app/users/*`
+- `src/app/roles/*`
+- `src/app/permissions/*`
+- `src/app/notifications/*`
+
+Core engine:
 
 - `src/core/core.module.ts`
 - `src/core/system/*`
 - `src/core/registry/*`
 - `src/core/lifecycle/*`
 - `src/core/events/*`
+- `src/core/interfaces/*`
+- `src/core/tenant/*`
+- `src/core/http/*`
+- `src/core/infrastructure/*`
 
-Important active runtime details:
+Plugin modules:
 
-- `ModuleRegistryService` keeps an in-memory runtime snapshot and only persists when registry metadata/state changes
-- `ModuleLifecycleService` logs install/uninstall/upgrade actions and emits lifecycle events
-- `EventBusService` is the preferred wrapper for post-action domain events
-- `HookService` remains the payload transformation path for `before*` style hooks
+- `src/modules/runtime-modules.ts`
+- `src/modules/crm/*`
+- `src/modules/helpdesk/*`
+- `src/modules/org/*`
 
-Infrastructure:
+`src/modules/apps` is scaffold-only right now and is not part of runtime loading.
 
-- `src/infrastructure/database/*`
-- `src/infrastructure/cache/*`
-- `src/infrastructure/redis/*` as older/legacy support code
+## Dependency Rules
+
+Assume these boundaries are intentional:
+
+- `src/app` must not depend on `src/modules`
+- modules must not import other modules directly
+- modules must not import app services directly
+- modules may depend on `src/core/interfaces/*`
+- cross-domain communication should use hooks or emitted events
+
+## Active Infrastructure Paths
+
+Database and cache infrastructure now live under:
+
+- `src/core/infrastructure/database/*`
+- `src/core/infrastructure/cache/*`
+
+Tenant logic now lives only under:
+
+- `src/core/tenant/*`
+
+System contracts now live only under:
+
+- `src/core/interfaces/*`
+
+Do not reintroduce older paths such as:
+
+- `src/infrastructure/*`
+- `src/common/tenant/*`
+- `src/app/interfaces/*`
+
+## Runtime Module Behavior
+
+Runtime modules are loaded through:
+
+- `src/modules/runtime-modules.ts`
+
+This is intentionally resilient. If a plugin module is missing from disk, the app should skip it instead of crashing on a static import.
+
+Lifecycle and registry behavior:
+
+- lifecycle service: `src/core/lifecycle/module.lifecycle.ts`
+- lifecycle CLI: `src/core/lifecycle/module-lifecycle.runner.ts`
+- registry service: `src/core/registry/module.registry.ts`
+
+Registry should only track discoverable plugin modules.
+
+## Tenant and Cache Reality
 
 Tenant flow:
 
-- `src/common/tenant/tenant-context.middleware.ts`
-- `src/common/tenant/tenant-context.service.ts`
+1. `TenantContextMiddleware` reads `x-tenant-id`
+2. `TenantContextService` stores normalized tenant state in async local storage
+3. repositories must query by `tenantId`
+4. cache keys must include tenant scope
 
-Business modules:
+Current cache conventions:
 
-- `src/modules/auth`
-- `src/modules/users`
-- `src/modules/org`
-- `src/modules/crm`
-- `src/modules/helpdesk`
-- `src/modules/permissions`
-- `src/modules/apps`
-- `src/modules/notifications`
+- cache abstraction: `src/core/infrastructure/cache/cache.service.ts`
+- HTML cache headers: `src/core/http/html-cache.interceptor.ts`
+- module cache keys should include module name and tenant ID
+- CRM currently uses both tenant-level collection versions and a module-level cache version
 
-Frontend asset flow:
+## Views and UI
 
-- build config: `vite.config.ts`
-- generated assets: `public/assets/*`
-- server-rendered layout shell: `src/components/layouts/main.view.ts`
-- module-local rendered pages: `src/modules/<module>/views/*`
-- tests/config for Vite tooling: `vitest.config.ts`
+Server-rendered layout and shared UI live under:
 
-Current frontend edge:
+- `src/app/components/layouts/*`
 
-- `vite.config.ts` still points to `src/styles/app.css`
-- that file is currently missing in this workspace
-- agents should verify the real asset source path before making frontend build claims
+Module-owned pages and mappers live under:
 
-## Important Codebase Rules
+- `src/modules/<module>/views/*`
 
-Agents working in this repo should assume:
+Do not invent a shared `src/views` layer unless the codebase moves in that direction later.
 
-- controllers stay thin
-- services orchestrate
-- repositories own persistence
-- module-to-module coupling should prefer hooks/events
-- tenant awareness is mandatory for entity access and cache keys
-- cache invalidation must happen on create/update/delete paths
-- generated files in `public/assets` are not the source of truth
-- rendered pages should live under the owning module when possible, not under a shared `src/views` bucket
+## Commands That Matter
 
-If you are changing module runtime behavior, read `src/core` before editing a feature module.
+Current useful commands from `package.json`:
 
-## Known Repository Edges
+- `npm run build`
+- `npm run db:platform`
+- `npm run seed`
+- `npm run module:list`
+- `npm run module:install -- <name>`
+- `npm run module:upgrade -- <name>`
+- `npm run module:uninstall -- <name>`
 
-The repo contains some mixed-age structure. Do not assume every duplicate file is active.
+Notes:
 
-Examples:
+- `npm test` is still a placeholder
+- `db:platform` prepares platform IAM schema
+- `seed` prepares platform schema and installs discovered modules
 
-- `src/modules/crm` contains the newer runtime-oriented structure
-- some CRM legacy duplicates still exist beside the newer files
-- the active CRM service path is `crm-contact.*`; older `crm.*` files still exist as legacy duplicates
-- `.agent/workflows/*` includes many generic templates copied from other contexts
-- `.agent/scripts/*` still contain Antigravity-era wording and references to skills that are not present in this repo
-
-Treat copied generic material as optional scaffolding, not authoritative truth.
-
-## .agent Layout
-
-Current `.agent` structure:
-
-```text
-.agent/
-  ARCHITECTURE.md
-  mcp_config.json
-  rules/
-  scripts/
-  skills/
-  workflows/
-  .shared/
-```
-
-### `skills/`
-
-These are the project-relevant skills currently present:
-
-- `nestjs`
-  NestJS skill tuned for Workless runtime layout, tenant flow, registry/lifecycle wiring, and cache integration
-- `cache-redis`
-  Redis-backed cache and invalidation skill aligned to `CacheService`, tenant-aware keys, TTL policy, and HTML cache coordination
-- `modules`
-  module architecture skill for `src/modules/*`
-- `theme`
-  theme/view adaptation skill aligned to Vite + Tailwind + server-rendered output
-- `tailwind`
-  Tailwind usage guidance
-- `qa-testing`
-  testing and verification guidance for this repo
-- `i18n-localization`
-  localization-related guidance and helper script
-
-Skills should be small, repo-aware, and practical. They should not read like generic framework encyclopedias.
-
-### `workflows/`
-
-The workflow directory contains reusable markdown procedures such as:
-
-- `architecture.md`
-- `api-docs.md`
-- `refactor.md`
-- `status.md`
-- `test.md`
-- `deploy.md`
-
-Many of these were imported from a broader template set. Use them as task prompts and checklists, but verify them against the actual Workless codebase before following them literally.
-
-### `scripts/`
-
-Current scripts:
-
-- `checklist.py`
-- `verify_all.py`
-- `auto_preview.py`
-- `session_manager.py`
-
-These scripts are not yet fully aligned with the current skill set in this repo. Some still reference missing skills or older Antigravity conventions. Before relying on them for automation, inspect the referenced paths.
-
-### `.shared/`
-
-`.agent/.shared/ui-ux-pro-max` is shared reference material. It is useful as inspiration or pattern data, but it is not the architecture source of truth for Workless.
-
-## How Agents Should Use `.agent`
+## Agent Guidance
 
 Recommended order for most tasks:
 
 1. read this file
-2. inspect the real code paths in `src/`
+2. inspect active code paths in `src/`
 3. load the smallest relevant skill from `.agent/skills`
-4. use a workflow from `.agent/workflows` only if it matches the real repo
-5. verify against current scripts, package commands, and runtime structure
-
-Do not let `.agent` override what the codebase actually does.
-
-## Verification Baseline
-
-For this repository, the safest baseline checks are:
-
-- `npm run build`
-- inspect relevant Nest module wiring
-- inspect Vite/Tailwind paths when frontend assets are involved
-- confirm that any edited view path is module-local and actually wired from an active controller/service
-
-Do not assume a complete automated test suite exists. At the time of writing, `npm test` is a placeholder command.
+4. use workflows only when they match the real repo
+5. verify with the lightest command that proves the change
 
 ## Maintenance Rules
 
-Update this file when any of the following changes:
+Update `.agent` whenever any of these change:
 
-- core runtime paths under `src/core`
-- module inventory under `src/modules`
-- asset pipeline layout
+- active paths under `src/core`
+- platform/module boundaries
+- runtime module loading behavior
 - tenant or cache architecture
-- `.agent/skills` inventory
-- `.agent/scripts` that become project-specific and reliable
-
-Keep this file concise, factual, and tied to the repository as it exists now.
+- package scripts used for verification or data setup
+- skill or workflow guidance that points at moved files

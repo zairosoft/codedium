@@ -1,42 +1,43 @@
 import { randomUUID } from 'node:crypto';
 import {
   ConflictException,
+  Inject,
   Injectable,
-  Logger,
   NotFoundException,
-  OnApplicationBootstrap,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserInput, UpdateUserInput, UserServicePort } from '../../interfaces/user.interface';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  UserServicePort,
+} from '../../../core/interfaces/user.interface';
+import { TENANT_CONTEXT, TenantContextPort } from '../../../core/tenant/tenant-context.interface';
 import { PlatformUserEntity } from '../entities/platform-user.entity';
 import { UserModel } from '../models/user.model';
-import { DataSource, Repository, Table, TableIndex } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class UsersService implements UserServicePort, OnApplicationBootstrap {
-  private readonly logger = new Logger(UsersService.name);
-
+export class UsersService implements UserServicePort {
   constructor(
     @InjectRepository(PlatformUserEntity)
     private readonly usersRepository: Repository<PlatformUserEntity>,
-    private readonly dataSource: DataSource,
+    @Inject(TENANT_CONTEXT)
+    private readonly tenantContext: TenantContextPort,
   ) {}
 
-  async onApplicationBootstrap(): Promise<void> {
-    await this.ensureUsersTable();
-  }
-
   async findById(id: string): Promise<UserModel | null> {
+    const tenantId = this.tenantContext.getTenantId();
     const entity = await this.usersRepository.findOne({
-      where: { id },
+      where: { id, tenantId },
     });
     return entity ? this.toModel(entity) : null;
   }
 
   async createUser(input: CreateUserInput): Promise<UserModel> {
+    const tenantId = this.tenantContext.getTenantId();
     const email = input.email.trim().toLowerCase();
     const existing = await this.usersRepository.findOne({
-      where: { email },
+      where: { tenantId, email },
     });
 
     if (existing) {
@@ -46,6 +47,7 @@ export class UsersService implements UserServicePort, OnApplicationBootstrap {
     const now = new Date();
     const user = this.usersRepository.create({
       id: randomUUID(),
+      tenantId,
       email,
       displayName: input.displayName.trim(),
       active: true,
@@ -58,8 +60,9 @@ export class UsersService implements UserServicePort, OnApplicationBootstrap {
   }
 
   async updateUser(id: string, input: UpdateUserInput): Promise<UserModel> {
+    const tenantId = this.tenantContext.getTenantId();
     const existing = await this.usersRepository.findOne({
-      where: { id },
+      where: { id, tenantId },
     });
 
     if (!existing) {
@@ -69,7 +72,7 @@ export class UsersService implements UserServicePort, OnApplicationBootstrap {
     const nextEmail = input.email?.trim().toLowerCase();
     if (nextEmail && nextEmail !== existing.email) {
       const duplicate = await this.usersRepository.findOne({
-        where: { email: nextEmail },
+        where: { tenantId, email: nextEmail },
       });
 
       if (duplicate) {
@@ -99,81 +102,5 @@ export class UsersService implements UserServicePort, OnApplicationBootstrap {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };
-  }
-
-  private async ensureUsersTable(): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-
-    try {
-      const hasTable = await queryRunner.hasTable('platform_users');
-      if (!hasTable) {
-        await queryRunner.createTable(
-          new Table({
-            name: 'platform_users',
-            columns: [
-              {
-                name: 'id',
-                type: 'uuid',
-                isPrimary: true,
-                isNullable: false,
-              },
-              {
-                name: 'email',
-                type: 'varchar',
-                length: '160',
-                isNullable: false,
-              },
-              {
-                name: 'displayName',
-                type: 'varchar',
-                length: '120',
-                isNullable: false,
-              },
-              {
-                name: 'active',
-                type: 'boolean',
-                default: true,
-                isNullable: false,
-              },
-              {
-                name: 'roles',
-                type: 'jsonb',
-                default: "'[]'::jsonb",
-                isNullable: false,
-              },
-              {
-                name: 'createdAt',
-                type: 'timestamptz',
-                default: 'now()',
-                isNullable: false,
-              },
-              {
-                name: 'updatedAt',
-                type: 'timestamptz',
-                default: 'now()',
-                isNullable: false,
-              },
-            ],
-          }),
-          true,
-        );
-        this.logger.log('Created platform_users table for platform IAM persistence.');
-      }
-
-      const hasEmailIndex = await queryRunner.hasIndex('platform_users', 'uq_platform_users_email');
-      if (!hasEmailIndex) {
-        await queryRunner.createIndex(
-          'platform_users',
-          new TableIndex({
-            name: 'uq_platform_users_email',
-            columnNames: ['email'],
-            isUnique: true,
-          }),
-        );
-      }
-    } finally {
-      await queryRunner.release();
-    }
   }
 }

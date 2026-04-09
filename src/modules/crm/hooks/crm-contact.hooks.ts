@@ -5,7 +5,7 @@ import { UpdateContactDto } from '../dto/update-contact.dto';
 
 @Injectable()
 export class CrmContactHooks {
-  @Hook('customer.beforeCreate')
+  @Hook('crm.contact.creating')
   beforeCreate(payload: CreateContactDto): CreateContactDto {
     return {
       ...payload,
@@ -15,7 +15,7 @@ export class CrmContactHooks {
     };
   }
 
-  @Hook('customer.beforeUpdate')
+  @Hook('crm.contact.updating')
   beforeUpdate(payload: UpdateContactDto): UpdateContactDto {
     return {
       ...payload,

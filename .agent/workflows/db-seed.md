@@ -1,59 +1,38 @@
 ---
-description: Generate seed and test data for databases
+description: Seed Workless platform and module data using the active runners
 ---
 
 # Database Seeding
 
-I will help you generate realistic seed data for your database.
+Use this workflow when preparing local data for Workless.
 
 ## Guardrails
-- Never seed production databases without explicit confirmation
-- Detect existing seed patterns before creating new ones
-- Use realistic but fake data (no real PII)
-- Make seeds idempotent when possible
 
-## Steps
+- never seed production without explicit confirmation
+- inspect existing seed patterns before adding new ones
+- keep seeds idempotent where possible
+- preserve tenant-safe defaults
 
-### 1. Understand Requirements
-Ask clarifying questions:
-- What tables need seeding?
-- How much data is needed?
-- Should data be realistic or simple?
-- Any specific relationships to maintain?
+## Active Paths
 
-### 2. Analyze Seed Setup
-Detect existing configuration:
-- Prisma: `prisma/seed.ts`
-- Drizzle: seed scripts
-- Django: fixtures or management commands
-- Rails: `db/seeds.rb`
+Read these first:
 
-### 3. Design Seed Data
-Plan the data structure:
-- Required entities in dependency order
-- Relationships between entities
-- Realistic field values
-- Edge cases for testing
+1. `src/core/infrastructure/database/seeder.runner.ts`
+2. `src/core/infrastructure/database/platform-user-schema.migration.ts`
+3. module seeders such as `src/modules/crm/seeders/*`
+4. target lifecycle services under `src/modules/*/lifecycle/*`
 
-### 4. Generate Data
-Create seed scripts that:
-- Clear existing data (optional, with warning)
-- Create records in correct order
-- Maintain referential integrity
-- Use faker/chance for realistic data
+## Current Reality
 
-### 5. Run Seeds
-Execute in development:
-- Verify no errors
-- Check data in database
-- Test application with seeded data
+- `npm run db:platform` prepares platform IAM schema
+- `npm run seed` prepares platform schema and installs discovered modules
+- CRM ships with the active seeder example
+- helpdesk and org are lifecycle placeholders right now
 
-## Principles
-- Seed in dependency order (users before posts)
-- Use consistent IDs for testing
-- Include edge cases (empty strings, nulls)
-- Make seeds repeatable
+## Checklist
 
-## Reference
-- Check existing seed files
-- Look at schema for required fields
+- seed order matches module dependencies
+- tenant defaults are explicit
+- seed logic is idempotent
+- lifecycle install still remains safe to rerun
+- final instructions mention the correct command to run

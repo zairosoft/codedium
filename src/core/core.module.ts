@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR, DiscoveryModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EVENT_BUS_PORT } from '../app/interfaces/event-bus.interface';
-import { HOOK_PORT } from '../app/interfaces/hook.interface';
+import { EVENT_BUS_PORT } from './interfaces/event-bus.interface';
+import { HOOK_PORT } from './interfaces/hook.interface';
 import { HtmlCacheInterceptor } from './http/html-cache.interceptor';
 import { EventBusService } from './events/event-bus.service';
 import { HookService } from './events/hook.service';

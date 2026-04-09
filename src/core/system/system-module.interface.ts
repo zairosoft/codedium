@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
-import { HookService } from '../events/hook.service';
+import { CachePort } from '../interfaces/cache.interface';
+import { HookPort } from '../interfaces/hook.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
-import { CacheService } from '../../app/infrastructure/cache/cache.service';
 
 export type ModuleLifecycleContext = {
   dataSource: DataSource;
-  cacheService: CacheService;
-  hookService: HookService;
+  cacheService: CachePort;
+  hookService: HookPort;
   moduleRegistry: ModuleRegistryService;
 };
 

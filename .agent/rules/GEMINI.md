@@ -4,55 +4,51 @@ trigger: always_on
 
 # Workless Gemini Rules
 
-These rules exist to keep agent behavior aligned with the actual Workless repository.
+These rules keep agent behavior aligned with the actual Workless repository.
 
 ## Read Order
 
 Before substantial work:
 
 1. read `.agent/ARCHITECTURE.md`
-2. inspect the real code under `src/`
+2. inspect the active code under `src/`
 3. load only the smallest relevant skill from `.agent/skills`
-
-Do not treat copied workflow templates or legacy scripts as source of truth.
 
 ## Repository Reality
 
 Assume the following unless the code proves otherwise:
 
-- Workless is a NestJS monolith
-- it is not a React app
-- tenant handling matters
-- module lifecycle, registry, hooks, and cache live under `src/core` and `src/infrastructure`
-- Vite + Tailwind are used for asset compilation
-- generated assets in `public/assets` are not the primary source files
+- Workless is a NestJS modular monolith
+- platform code lives in `src/app`
+- core runtime, contracts, tenant, and infrastructure live in `src/core`
+- plugin modules live in `src/modules`
+- module loading is resilient and driven through `src/modules/runtime-modules.ts`
+- generated assets are not the source of truth
 - module-owned views are preferred over a shared `src/views` path
-- legacy Redis scaffolding should not be used for new cache work by default
 
 ## Editing Rules
 
 - prefer repo-specific patterns over generic framework advice
-- keep controllers thin and business orchestration in services/models/repositories
-- prefer hook/event-driven extension over direct module-to-module coupling
-- keep cache keys and data access tenant-aware
-- invalidate cache on create/update/delete paths
-- do not edit build output unless the task explicitly targets generated files
+- keep controllers thin and orchestration in services
+- keep persistence concerns in repositories and entities
+- prefer event-driven or hook-driven extension over direct module coupling
+- keep queries and cache keys tenant-aware
+- do not reintroduce deprecated paths under `src/infrastructure` or `src/common`
 
 ## Verification Rules
 
 Use the lightest verification that matches the change.
 
-Default baseline for this repo:
+Default baseline:
 
 - `npm run build`
 
-Do not claim tests were run unless they were actually run. Do not assume `.agent/scripts/*` are valid end-to-end without checking their referenced paths first.
+Setup commands when needed:
 
-## Documentation Rules
+- `npm run db:platform`
+- `npm run seed`
 
-- keep `.agent` content concise and repository-specific
-- remove or call out generic template language when found
-- prefer factual guidance over aspirational process language
+Do not claim tests ran unless they actually ran.
 
 ## Conflict Rule
 

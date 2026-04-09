@@ -1,56 +1,66 @@
 ---
-description: Improve code quality, extract functions, reduce duplication
+description: Refactor Workless incrementally while preserving active behavior
 ---
 
 # Refactor
 
-Use this workflow to refactor Workless incrementally while preserving behavior.
+Use this workflow to refactor Workless incrementally.
 
 ## Guardrails
-- Never change behavior, only structure
-- Make small, incremental changes
-- Ensure the active verification baseline passes after each change
-- Preserve public APIs unless explicitly asked
-- Confirm active wiring first when duplicate legacy files exist
+
+- never redesign from scratch unless explicitly asked
+- preserve active behavior
+- confirm the active path before editing when duplicate or scaffold files exist
+- keep platform, core, and module boundaries intact
+- do not reintroduce removed architecture paths
 
 ## Steps
 
-### 1. Understand Scope
+### 1. Confirm Scope
+
 Identify:
-- active files vs legacy duplicates
-- current verification path, usually `npm run build`
+
+- active files vs scaffold or legacy files
+- relevant layer: `src/app`, `src/core`, or `src/modules`
+- current verification path
 - coupling, duplication, or stale abstractions
 
-### 2. Analyze Code
-Identify issues:
-- Code duplication
-- Long functions/methods
-- Deep nesting
-- Unclear naming
-- Mixed responsibilities
+### 2. Analyze Risks
 
-### 3. Plan Refactoring
+Look for:
+
+- mixed responsibilities
+- direct cross-module coupling
+- module imports into app services
+- tenant leaks in queries or cache keys
+- lifecycle or registry drift
+
+### 3. Plan Small Changes
+
 Common patterns:
-- **Extract Function**: Pull out reusable logic
-- **Rename**: Improve clarity of names
-- **Inline**: Remove unnecessary abstractions
-- **Move**: Relocate to better location
-- **Simplify Conditionals**: Reduce complexity
-- **Unify Active Path**: remove divergence between active and legacy module paths
 
-### 4. Execute Refactoring
-Make changes incrementally:
-- One refactoring at a time
-- Run `npm run build` after each meaningful step
-- Re-check module wiring if Nest providers/controllers changed
+- extract function
+- move code to the right layer
+- replace direct coupling with hooks or events
+- normalize cache key construction
+- remove stale path references
+
+### 4. Execute Incrementally
+
+- make one coherent change at a time
+- re-check Nest wiring when providers or modules change
+- keep runtime module loading resilient
 
 ### 5. Verify
-- Build still passes
-- Code is more readable
-- No behavior changes
-- Tenant/cache/lifecycle behavior is still coherent when those paths were touched
 
-## Principles
-- Refactor in small steps
-- Make the change easy, then make the easy change
-- If it hurts, do it more often
+Use the lightest useful check:
+
+- `npm run build`
+- inspect module wiring
+- inspect lifecycle and registry flow
+- inspect tenant and cache behavior when touched
+
+Setup commands when relevant:
+
+- `npm run db:platform`
+- `npm run seed`

@@ -1,119 +1,40 @@
 ---
-description: Create a new Next.js application with TypeScript, Tailwind CSS, ESLint, and modern best practices
+description: Work on the existing Workless NestJS monolith, not a generic starter app
 ---
 
-# New Next.js Application
+# NestJS Workflow
 
-I will help you create a new Next.js application with the latest best practices and a solid foundation.
+Use this workflow when the task is NestJS-specific inside Workless.
 
 ## Guardrails
-- Always use TypeScript for type safety
-- Use App Router (not Pages Router) unless explicitly requested otherwise
-- Prefer server components where possible
-- Keep dependencies minimal and purposeful
 
-## Steps
+- do not scaffold a new app unless explicitly asked
+- inspect active module wiring before editing
+- preserve platform, core, and plugin boundaries
+- verify tenant and cache behavior when those paths are touched
 
-### 1. Initialize Project
-// turbo
-```bash
-npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
-```
+## Read Order
 
-If the project already exists, skip this step.
+1. `src/app.module.ts`
+2. `src/core/core.module.ts`
+3. target module or platform path
+4. related files under `src/core/interfaces`, `src/core/tenant`, and `src/core/infrastructure`
 
-### 2. Install Essential Dependencies
-// turbo
-```bash
-npm install clsx tailwind-merge lucide-react
-```
+## Common Tasks
 
-Optional but recommended:
-```bash
-npm install @tanstack/react-query zod
-```
+- add or refactor controllers
+- adjust providers and DI wiring
+- update TypeORM entities or repositories
+- fix registry, lifecycle, hook, or event flows
+- enforce tenant-aware queries and cache keys
 
-### 3. Set Up Utilities
+## Verification
 
-Create `src/lib/utils.ts`:
-```typescript
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+Default:
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-```
+- `npm run build`
 
-### 4. Configure Tailwind (Optional Enhancements)
+When setup is relevant:
 
-Update `tailwind.config.ts` with custom theme extensions:
-```typescript
-import type { Config } from "tailwindcss"
-
-const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ["var(--font-geist-sans)"],
-        mono: ["var(--font-geist-mono)"],
-      },
-    },
-  },
-  plugins: [],
-}
-export default config
-```
-
-### 5. Clean Up Default Page
-
-Replace `src/app/page.tsx` content with:
-```tsx
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Hello, World!</h1>
-    </main>
-  )
-}
-```
-
-### 6. Create Folder Structure
-
-```
-src/
-├── app/
-│   ├── layout.tsx
-│   ├── page.tsx
-│   └── globals.css
-├── components/
-│   └── ui/           # Reusable UI components
-├── lib/
-│   └── utils.ts      # Utility functions
-├── hooks/            # Custom React hooks
-└── types/            # TypeScript type definitions
-```
-
-### 7. Verify Setup
-// turbo
-```bash
-npm run dev
-```
-
-Open http://localhost:3000 to verify the app is running.
-
-## Guidelines
-- Use `@/` import alias for clean imports
-- Keep components small and focused
-- Use TypeScript strict mode
-- Prefer CSS Modules or Tailwind over CSS-in-JS
-- Use Next.js built-in features (Image, Link, Font optimization)
-
-## Reference
-- [Next.js Docs](https://nextjs.org/docs)
-- [Tailwind CSS Docs](https://tailwindcss.com/docs)
+- `npm run db:platform`
+- `npm run seed`

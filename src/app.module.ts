@@ -2,15 +2,14 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PlatformModule } from './app/platform.module';
-import { TenantContextMiddleware } from './app/common/tenant/tenant-context.middleware';
-import { TenantModule } from './app/common/tenant/tenant.module';
-import { CacheModule } from './app/infrastructure/cache/cache.module';
-import { DatabaseModule } from './app/infrastructure/database/database.module';
 import { CoreModule } from './core/core.module';
-import { AppsModule } from './modules/apps/module';
-import { CrmModule } from './modules/crm/module';
-import { HelpdeskModule } from './modules/helpdesk/module';
-import { OrgModule } from './modules/org/module';
+import { CacheModule } from './core/infrastructure/cache/cache.module';
+import { DatabaseModule } from './core/infrastructure/database/database.module';
+import { TenantContextMiddleware } from './core/tenant/tenant-context.middleware';
+import { TenantModule } from './core/tenant/tenant.module';
+import { loadRuntimeModules } from './modules/runtime-modules';
+
+const runtimeModules = loadRuntimeModules();
 
 @Module({
   imports: [
@@ -24,10 +23,7 @@ import { OrgModule } from './modules/org/module';
     CacheModule,
     PlatformModule,
     CoreModule,
-    OrgModule,
-    CrmModule,
-    HelpdeskModule,
-    AppsModule,
+    ...runtimeModules,
   ],
 })
 export class AppModule implements NestModule {

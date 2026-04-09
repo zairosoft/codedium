@@ -1,62 +1,38 @@
 ---
-description: Create and run database migrations safely
+description: Update Workless database schema safely using the active TypeORM-based setup
 ---
 
 # Database Migrations
 
-I will help you create and manage database migrations for your project.
+Use this workflow when schema work touches Workless persistence.
 
 ## Guardrails
-- Never run destructive migrations without confirmation
-- Detect existing migration setup before creating new ones
-- Always backup before major schema changes
-- Test migrations in development first
 
-## Steps
+- do not run destructive schema changes without confirmation
+- inspect the active TypeORM setup first
+- keep tenant columns and indexes intact
+- prefer idempotent migration-style code for existing tables
 
-### 1. Understand the Change
-Ask clarifying questions:
-- What schema change is needed?
-- Is this adding, modifying, or removing?
-- Any data that needs to be preserved/migrated?
+## Active Paths
 
-### 2. Analyze Migration Setup
-Detect the existing configuration:
-- Prisma: `npx prisma migrate`
-- Drizzle: `drizzle-kit`
-- TypeORM: migration files
-- Django: `python manage.py makemigrations`
-- Rails: `rails db:migrate`
+Read these first:
 
-### 3. Create Migration
-Generate the migration file:
-- Use the ORM's migration command
-- Name descriptively (e.g., `add_user_email_column`)
-- Review the generated SQL
+1. `src/core/infrastructure/database/typeorm.config.ts`
+2. `src/core/infrastructure/database/platform-user-schema.migration.ts`
+3. module-local migrations such as `src/modules/crm/migrations/*`
+4. affected entities under `src/app/**/entities` or `src/modules/**/entities`
 
-### 4. Review Changes
-Before applying:
-- Check the up migration
-- Check the down migration (rollback)
-- Verify data preservation logic
+## Current Reality
 
-### 5. Apply Migration
-Run in appropriate environment:
-- Development first
-- Then staging
-- Finally production
+- Workless uses TypeORM
+- platform IAM schema preparation exists at `npm run db:platform`
+- module installation and seeding run through `npm run seed`
+- CRM currently uses explicit migration-style classes during lifecycle install and upgrade
 
-### 6. Verify
-- Check database state
-- Test affected queries
-- Verify application works
+## Checklist
 
-## Principles
-- Migrations should be reversible when possible
-- Never edit already-applied migrations
-- Use transactions for safety
-- Document breaking changes
-
-## Reference
-- Check migration history
-- Review existing migration patterns
+- entity shape matches intended table shape
+- tenant-aware indexes are preserved
+- schema setup remains idempotent
+- affected module lifecycle code still makes sense
+- any required setup command is documented in the final response

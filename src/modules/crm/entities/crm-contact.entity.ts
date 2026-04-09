@@ -1,5 +1,5 @@
 import { Column, Entity, Index } from 'typeorm';
-import { TenantScopedEntity } from '../../../app/common/database/tenant-scoped.entity';
+import { TenantScopedEntity } from '../../../core/tenant/tenant-scoped.entity';
 
 export enum ContactStatus {
   LEAD = 'lead',

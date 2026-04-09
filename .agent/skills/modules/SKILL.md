@@ -1,38 +1,38 @@
 ---
 name: modules
-description: "Workless module architecture skill for creating, refactoring, and validating self-contained modules under src/modules with system registry, lifecycle, hooks, tenant scope, and cache integration."
+description: "Workless module architecture skill for creating, refactoring, and validating self-contained plugin modules under src/modules with registry, lifecycle, hooks, tenant scope, and cache integration."
 ---
 
 # Modules
 
-Use this skill when working on module-oriented changes in the Workless NestJS monolith.
+Use this skill when working on plugin-oriented changes in the Workless NestJS monolith.
 
 ## Purpose
 
 This skill focuses on the project-specific module structure and runtime conventions used in this repository:
 
-- feature modules live under `src/modules/<module-name>`
+- plugin modules live under `src/modules/<module-name>`
 - modules should stay self-contained
-- cross-module communication should prefer hooks/events over direct coupling
+- cross-module communication should prefer hooks or emitted events
+- modules may depend on `src/core/interfaces/*`
 - module state is managed through the system registry and lifecycle services
-- tenant-awareness and cache invalidation are part of the design, not an afterthought
-- rendered pages/helpers should live under the owning module's `views/` directory
+- tenant-awareness and cache invalidation are part of the design
 
 ## When to Use
 
 Use this skill for tasks such as:
 
-- creating a new module under `src/modules`
-- refactoring an existing feature into the module structure
+- creating a new plugin module under `src/modules`
+- refactoring an existing feature into the plugin structure
 - adding controllers, services, repositories, hooks, policies, seeders, or migrations to a module
-- wiring a module into the system registry/lifecycle flow
+- wiring a module into registry and lifecycle flow
 - reviewing whether a module violates isolation boundaries
-- adding tenant-aware cache keys and invalidation to module read/write flows
+- adding tenant-aware cache keys and invalidation
 
 Do not use this skill for:
 
-- generic NestJS framework issues that are not module-architecture specific
-- frontend styling work
+- generic NestJS issues with no module architecture impact
+- platform-layer work under `src/app`
 - isolated TypeScript typing problems with no module design impact
 
 ## Expected Module Shape
@@ -43,8 +43,9 @@ Typical layout:
 src/modules/<module-name>/
   controllers/
   dto/
+  entities/
   hooks/
-  migrations/
+  lifecycle/
   models/
   policies/
   repositories/
@@ -54,25 +55,25 @@ src/modules/<module-name>/
   module.ts
 ```
 
-Not every folder must exist for every module, but the structure should remain consistent.
+Not every folder must be fully implemented, but active modules should stay consistent.
 
 ## Project Rules
 
 1. Keep controllers thin.
 2. Put orchestration in services.
-3. Keep business behavior close to entities/models where practical.
+3. Keep business behavior in models, policies, or services as appropriate.
 4. Repositories own persistence concerns.
-5. Use hooks/events for extension points instead of direct module-to-module calls.
-   - use `HookService` for `before*` payload transformation flows
-   - use `EventBusService` for `after*` and lifecycle/domain notifications
-6. Respect tenant scoping on entities, queries, and cache keys.
-7. Invalidate cache on create/update/delete paths.
-8. Match the repository naming and file layout already used in `src/modules/crm`.
+5. Use hooks and events for extension points instead of direct module-to-module calls.
+6. Modules must not import app services directly.
+7. Repository methods and cache keys must stay tenant-aware.
+8. Invalidate cache on create, update, and delete paths.
+9. Match the structure already used in `src/modules/crm`.
 
 ## Runtime Integration
 
 When a module participates in runtime lifecycle management, check and update:
 
+- `src/modules/runtime-modules.ts`
 - `src/core/system/system-module.decorator.ts`
 - `src/core/system/system-module.interface.ts`
 - `src/core/registry/module.registry.ts`
@@ -84,59 +85,43 @@ Typical lifecycle responsibilities:
 - `uninstall(context)`
 - `upgrade(context, fromVersion)`
 
-## Implementation Pattern
-
-When creating or refactoring a module:
-
-1. Inspect an existing module first, especially `src/modules/crm`.
-2. Create the directory structure under `src/modules/<module-name>`.
-3. Add `module.ts` and register controllers/providers clearly.
-4. Add DTO validation with `class-validator`.
-5. Add repositories for TypeORM access.
-6. Add service-level cache read/write behavior where needed.
-   - prefer `CacheService.remember(...)` for cache-aside reads
-7. Add hooks for extensibility before/after critical operations.
-8. Add lifecycle wiring only if the module needs install/upgrade/uninstall behavior.
-9. Verify imports do not create unnecessary direct dependencies across modules.
-10. Run a build after changes.
-
 ## Cache Guidance
 
 Prefer tenant-aware keys such as:
 
 - `<module>:<tenantId>:entity:<id>`
-- `<module>:<tenantId>:list:<version>:<queryHash>`
-- `<module>:<tenantId>:dashboard:<version>`
+- `<module>:<tenantId>:list:<moduleVersion>:<collectionVersion>:<queryHash>`
+- `<module>:<tenantId>:dashboard:<moduleVersion>:<collectionVersion>`
 
-For invalidation, prefer deleting namespace-version keys over scanning Redis keys.
+Prefer version-key invalidation over wildcard key scans.
 
 ## Review Checklist
 
 - [ ] Module files stay under `src/modules/<module-name>`
-- [ ] No direct cross-module dependency was introduced without a strong reason
+- [ ] No direct module-to-module dependency was introduced
+- [ ] No direct app service import was introduced
 - [ ] DTO validation exists for public input
 - [ ] Repository methods are tenant-aware
 - [ ] Cache invalidation exists for write operations
-- [ ] Hooks/events are used for extension points
-- [ ] Lifecycle wiring is added only when needed
-- [ ] `npm run build` passes
+- [ ] Hooks or events are used for extension points
+- [ ] Lifecycle wiring is explicit when needed
+- [ ] `npm run build` still makes sense as the verification baseline
 
 ## Reference Module
 
 Use `src/modules/crm` as the primary reference for:
 
 - directory shape
-- controller/service split
+- controller and service split
 - repository pattern
 - hook integration
-- event bus usage for post-write notifications
-- module lifecycle service
+- event bus usage
+- lifecycle service
 - cache key patterns
 
 ## Success Criteria
 
-- The module matches the existing repository conventions.
+- The module matches repository conventions.
 - The module is isolated and maintainable.
 - Runtime lifecycle behavior is explicit when required.
 - Tenant and cache behavior are correct.
-- The application still builds cleanly.

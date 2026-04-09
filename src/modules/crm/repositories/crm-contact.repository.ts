@@ -1,27 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { TenantContextService } from '../../../app/common/tenant/tenant-context.service';
+import { TENANT_CONTEXT, TenantContextPort } from '../../../core/tenant/tenant-context.interface';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
+import { CrmDashboardSummary } from '../models/crm-dashboard.model';
 import { CrmContactModel } from '../models/crm-contact.model';
-
-export type CrmDashboardSummary = {
-  tenantId: string;
-  totalContacts: number;
-  totalCustomers: number;
-  totalLeads: number;
-  recentContacts: CrmContactEntity[];
-};
 
 @Injectable()
 export class CrmContactRepository {
   constructor(
     @InjectRepository(CrmContactEntity)
     private readonly repository: Repository<CrmContactEntity>,
-    private readonly tenantContext: TenantContextService,
+    @Inject(TENANT_CONTEXT)
+    private readonly tenantContext: TenantContextPort,
   ) {}
 
   async create(dto: CreateContactDto): Promise<CrmContactEntity> {

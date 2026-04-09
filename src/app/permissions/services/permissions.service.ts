@@ -1,19 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { PermissionServicePort } from '../../../core/interfaces/permission.interface';
 import { PermissionModel } from '../models/permission.model';
 
 @Injectable()
-export class PermissionsService {
+export class PermissionsService implements PermissionServicePort {
   private readonly grants = new Map<string, PermissionModel[]>([
     [
       'admin',
       [
         { resource: 'system.modules', actions: ['install', 'uninstall', 'upgrade'] },
-        { resource: 'crm.contacts', actions: ['create', 'read', 'update', 'delete'] },
+        { resource: 'system.users', actions: ['create', 'read', 'update', 'delete'] },
+        { resource: 'system.roles', actions: ['read'] },
+        { resource: 'system.permissions', actions: ['read'] },
       ],
     ],
     [
       'manager',
-      [{ resource: 'crm.contacts', actions: ['create', 'read', 'update'] }],
+      [
+        { resource: 'system.users', actions: ['read', 'update'] },
+        { resource: 'system.permissions', actions: ['read'] },
+      ],
     ],
   ]);
 
