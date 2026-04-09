@@ -2,12 +2,9 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { TENANT_CONTEXT, TenantContextPort } from '../../../core/tenant/tenant-context.interface';
-import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
-import { UpdateContactDto } from '../dto/update-contact.dto';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
-import { CrmDashboardSummary } from '../models/crm-dashboard.model';
-import { CrmContactModel } from '../models/crm-contact.model';
+import { CrmDashboardSummary } from './crm-dashboard.summary';
 
 @Injectable()
 export class CrmContactRepository {
@@ -17,14 +14,6 @@ export class CrmContactRepository {
     @Inject(TENANT_CONTEXT)
     private readonly tenantContext: TenantContextPort,
   ) {}
-
-  async create(dto: CreateContactDto): Promise<CrmContactEntity> {
-    const entity = CrmContactModel.createForTenant(
-      this.tenantContext.getTenantId(),
-      dto,
-    ).toEntity();
-    return this.repository.save(entity);
-  }
 
   async findAll(query: ListContactsDto): Promise<[CrmContactEntity[], number]> {
     const tenantId = this.tenantContext.getTenantId();
@@ -54,7 +43,7 @@ export class CrmContactRepository {
     });
   }
 
-  async findById(id: string): Promise<CrmContactEntity> {
+  async findByIdOrFail(id: string): Promise<CrmContactEntity> {
     const tenantId = this.tenantContext.getTenantId();
     const found = await this.repository.findOne({
       where: { id, tenantId },
@@ -67,19 +56,25 @@ export class CrmContactRepository {
     return found;
   }
 
-  async update(id: string, dto: UpdateContactDto): Promise<CrmContactEntity> {
-    const found = await this.findById(id);
-    const model = CrmContactModel.fromEntity(found);
-    model.applyProfile(dto);
-    return this.repository.save(model.toEntity(found));
+  async save(entity: CrmContactEntity): Promise<CrmContactEntity> {
+    return this.repository.save(entity);
   }
 
-  async remove(id: string): Promise<void> {
+  async saveMany(entities: CrmContactEntity[]): Promise<CrmContactEntity[]> {
+    return this.repository.save(entities);
+  }
+
+  async deleteById(id: string): Promise<void> {
     const tenantId = this.tenantContext.getTenantId();
     const result = await this.repository.softDelete({ id, tenantId });
     if (!result.affected) {
       throw new NotFoundException('CRM contact not found');
     }
+  }
+
+  async countAll(): Promise<number> {
+    const tenantId = this.tenantContext.getTenantId();
+    return this.repository.count({ where: { tenantId } });
   }
 
   async getDashboardSummary(): Promise<CrmDashboardSummary> {

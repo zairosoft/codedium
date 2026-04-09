@@ -1,9 +1,16 @@
+export type MembershipRecord = {
+  organizationId: string;
+  roleCode: string;
+  isDefault?: boolean;
+};
+
 export type UserRecord = {
   id: string;
   email: string;
   displayName: string;
   active: boolean;
   roles: string[];
+  memberships: MembershipRecord[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -12,6 +19,7 @@ export type CreateUserInput = {
   email: string;
   displayName: string;
   roles?: string[];
+  memberships?: MembershipRecord[];
 };
 
 export type UpdateUserInput = Partial<{
@@ -19,6 +27,7 @@ export type UpdateUserInput = Partial<{
   displayName: string;
   active: boolean;
   roles: string[];
+  memberships: MembershipRecord[];
 }>;
 
 export interface UserServicePort {

@@ -1,5 +1,5 @@
 import { DEFAULT_TENANT_ID } from '../../tenant/tenant.constants';
-import { DataSource, Table, TableColumn, TableIndex } from 'typeorm';
+import { DataSource, Table, TableColumn, TableForeignKey, TableIndex } from 'typeorm';
 
 export class PlatformUserSchemaMigration {
   async run(dataSource: DataSource): Promise<void> {
@@ -115,6 +115,92 @@ export class PlatformUserSchemaMigration {
           new TableIndex({
             name: 'uq_platform_users_tenant_email',
             columnNames: ['tenantId', 'email'],
+            isUnique: true,
+          }),
+        );
+      }
+
+      const hasMembershipsTable = await queryRunner.hasTable('platform_user_memberships');
+      if (!hasMembershipsTable) {
+        await queryRunner.createTable(
+          new Table({
+            name: 'platform_user_memberships',
+            columns: [
+              {
+                name: 'id',
+                type: 'uuid',
+                isPrimary: true,
+                isNullable: false,
+              },
+              {
+                name: 'tenantId',
+                type: 'uuid',
+                isNullable: false,
+                default: `'${DEFAULT_TENANT_ID}'`,
+              },
+              {
+                name: 'userId',
+                type: 'uuid',
+                isNullable: false,
+              },
+              {
+                name: 'organizationId',
+                type: 'uuid',
+                isNullable: false,
+              },
+              {
+                name: 'roleCode',
+                type: 'varchar',
+                length: '80',
+                isNullable: false,
+              },
+              {
+                name: 'isDefault',
+                type: 'boolean',
+                default: false,
+                isNullable: false,
+              },
+              {
+                name: 'createdAt',
+                type: 'timestamptz',
+                default: 'now()',
+                isNullable: false,
+              },
+              {
+                name: 'updatedAt',
+                type: 'timestamptz',
+                default: 'now()',
+                isNullable: false,
+              },
+              {
+                name: 'deletedAt',
+                type: 'timestamptz',
+                isNullable: true,
+              },
+            ],
+            foreignKeys: [
+              new TableForeignKey({
+                columnNames: ['userId'],
+                referencedTableName: 'platform_users',
+                referencedColumnNames: ['id'],
+                onDelete: 'CASCADE',
+              }),
+            ],
+          }),
+          true,
+        );
+      }
+
+      const hasMembershipIndex = await queryRunner.hasIndex(
+        'platform_user_memberships',
+        'uq_platform_user_memberships_tenant_user_org',
+      );
+      if (!hasMembershipIndex) {
+        await queryRunner.createIndex(
+          'platform_user_memberships',
+          new TableIndex({
+            name: 'uq_platform_user_memberships_tenant_user_org',
+            columnNames: ['tenantId', 'userId', 'organizationId'],
             isUnique: true,
           }),
         );

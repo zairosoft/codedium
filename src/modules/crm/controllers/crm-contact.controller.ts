@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Req,
   Header,
   Param,
   Patch,
@@ -10,14 +11,16 @@ import {
   Query,
   Res,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { HtmlCacheable } from '../../../core/http/html-cache.decorator';
 import { RequiresModule } from '../../../core/system/module-enabled.decorator';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
+import { resolveCrmActor } from '../policies/crm-actor.policy';
 import { CrmContactService } from '../services/crm-contact.service';
 import { renderCrmDashboardPage } from '../views/crm-dashboard.page';
+import { CrmContactViewMapper } from '../views/crm-contact.view';
 
 @RequiresModule('crm')
 @Controller('crm')
@@ -25,33 +28,38 @@ export class CrmContactController {
   constructor(private readonly crmContactService: CrmContactService) {}
 
   @Post('contacts')
-  create(@Body() dto: CreateContactDto) {
-    return this.crmContactService.createContact(dto);
+  async create(@Body() dto: CreateContactDto, @Req() request: Request) {
+    return this.crmContactService.createContact(dto, resolveCrmActor(request));
   }
 
   @Get('contacts')
-  findAll(@Query() query: ListContactsDto) {
-    return this.crmContactService.getContacts(query);
+  async findAll(@Query() query: ListContactsDto, @Req() request: Request) {
+    return this.crmContactService.getContacts(query, resolveCrmActor(request));
   }
 
   @Get('contacts/:id')
-  findOne(@Param('id') id: string) {
-    return this.crmContactService.getContactById(id);
+  async findOne(@Param('id') id: string, @Req() request: Request) {
+    return this.crmContactService.getContactById(id, resolveCrmActor(request));
   }
 
   @Patch('contacts/:id')
-  update(@Param('id') id: string, @Body() dto: UpdateContactDto) {
-    return this.crmContactService.updateContact(id, dto);
+  async update(@Param('id') id: string, @Body() dto: UpdateContactDto, @Req() request: Request) {
+    return this.crmContactService.updateContact(id, dto, resolveCrmActor(request));
   }
 
   @Delete('contacts/:id')
-  remove(@Param('id') id: string) {
-    return this.crmContactService.removeContact(id);
+  async remove(@Param('id') id: string, @Req() request: Request) {
+    await this.crmContactService.removeContact(id, resolveCrmActor(request));
+    return {
+      type: 'result',
+      resource: 'crm.contact',
+      success: true,
+    };
   }
 
   @Get('dashboard')
-  getDashboard() {
-    return this.crmContactService.getDashboardSummary();
+  async getDashboard(@Req() request: Request) {
+    return this.crmContactService.getDashboardSummary(resolveCrmActor(request));
   }
 
   @Get('dashboard/page')
@@ -62,9 +70,9 @@ export class CrmContactController {
     vary: ['Accept-Encoding', 'X-Tenant-Id'],
     surrogateKey: 'crm-dashboard',
   })
-  async renderDashboard(@Res({ passthrough: true }) response: Response) {
+  async renderDashboard(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     response.type('html');
-    const summary = await this.crmContactService.getDashboardSummary();
-    return renderCrmDashboardPage(summary);
+    const summary = await this.crmContactService.getDashboardSummary(resolveCrmActor(request));
+    return renderCrmDashboardPage(CrmContactViewMapper.toDashboard(summary));
   }
 }

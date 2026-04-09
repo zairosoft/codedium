@@ -6,9 +6,10 @@ import { HOOK_PORT, HookPort } from '../../../core/interfaces/hook.interface';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
+import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
+import { CrmActor } from '../policies/crm-actor.policy';
 import { CrmContactPolicy } from '../policies/crm-contact.policy';
 import { CrmContactRepository } from '../repositories/crm-contact.repository';
-import { CrmContactViewMapper } from '../views/crm-contact.view';
 
 const LIST_TTL_SECONDS = 120;
 const DASHBOARD_TTL_SECONDS = 60;
@@ -28,32 +29,19 @@ export class CrmContactService {
     private readonly cacheService: CachePort,
   ) {}
 
-  async createContact(dto: CreateContactDto) {
+  async createContact(dto: CreateContactDto, actor: CrmActor): Promise<CrmContactEntity> {
+    this.crmContactPolicy.assertCanWrite(actor);
     const payload = await this.hookService.emit('crm.contact.creating', dto);
-    const contact = await this.crmContactRepository.create(payload);
+    const contact = this.createContactEntity(payload);
+    const saved = await this.crmContactRepository.save(contact);
 
-    await this.invalidateCollectionCache(contact.id);
-    await this.eventBus.emit('crm.contact.created', {
-      contactId: contact.id,
-      tenantId: contact.tenantId,
-      orgId: contact.orgId,
-      email: contact.email,
-    });
-    await this.eventBus.emit('notification.send', {
-      name: 'crm.contact.created',
-      payload: {
-        contactId: contact.id,
-        tenantId: contact.tenantId,
-        orgId: contact.orgId,
-        email: contact.email,
-      },
-      receivedAt: new Date().toISOString(),
-    });
-
-    return CrmContactViewMapper.toView(contact);
+    await this.invalidateCollectionCache(saved.id);
+    await this.emitMutationEvents('crm.contact.created', saved);
+    return saved;
   }
 
-  async getContacts(query: ListContactsDto) {
+  async getContacts(query: ListContactsDto, actor: CrmActor) {
+    this.crmContactPolicy.assertCanRead(actor);
     const normalizedQuery = this.crmContactPolicy.normalizeListQuery(query);
     const tenantId = this.crmContactRepository.getTenantId();
     const [moduleVersion, collectionVersion] = await Promise.all([
@@ -66,18 +54,14 @@ export class CrmContactService {
       collectionVersion,
       normalizedQuery,
     );
+
     return this.cacheService.remember(
       cacheKey,
       LIST_TTL_SECONDS,
-      async (): Promise<{
-        data: ReturnType<typeof CrmContactViewMapper.toList>;
-        total: number;
-        page: number;
-        limit: number;
-      }> => {
+      async () => {
         const [contacts, total] = await this.crmContactRepository.findAll(normalizedQuery);
         return {
-          data: CrmContactViewMapper.toList(contacts),
+          contacts,
           total,
           page: normalizedQuery.page ?? 1,
           limit: normalizedQuery.limit ?? 20,
@@ -86,47 +70,43 @@ export class CrmContactService {
     );
   }
 
-  async getContactById(id: string) {
+  async getContactById(id: string, actor: CrmActor): Promise<CrmContactEntity> {
+    this.crmContactPolicy.assertCanRead(actor);
     const tenantId = this.crmContactRepository.getTenantId();
     const moduleVersion = await this.getModuleCacheVersion();
     const cacheKey = this.buildDetailCacheKey(tenantId, moduleVersion, id);
+
     return this.cacheService.remember(
       cacheKey,
       CONTACT_TTL_SECONDS,
-      async (): Promise<ReturnType<typeof CrmContactViewMapper.toView>> => {
-        const contact = await this.crmContactRepository.findById(id);
-        return CrmContactViewMapper.toView(contact);
-      },
+      async () => this.crmContactRepository.findByIdOrFail(id),
     );
   }
 
-  async updateContact(id: string, dto: UpdateContactDto) {
+  async updateContact(
+    id: string,
+    dto: UpdateContactDto,
+    actor: CrmActor,
+  ): Promise<CrmContactEntity> {
+    this.crmContactPolicy.assertCanWrite(actor);
     const payload = await this.hookService.emit('crm.contact.updating', dto);
-    const updated = await this.crmContactRepository.update(id, payload);
+    const current = await this.crmContactRepository.findByIdOrFail(id);
+
+    this.crmContactPolicy.assertCanChangeStatus(current.status, payload.status);
+    const updatedEntity = this.applyContactPatch(current, payload);
+    const updated = await this.crmContactRepository.save(updatedEntity);
+
     await this.invalidateCollectionCache(updated.id);
-    await this.eventBus.emit('crm.contact.updated', {
-      contactId: updated.id,
-      tenantId: updated.tenantId,
-      orgId: updated.orgId,
-      email: updated.email,
-    });
-    await this.eventBus.emit('notification.send', {
-      name: 'crm.contact.updated',
-      payload: {
-        contactId: updated.id,
-        tenantId: updated.tenantId,
-        orgId: updated.orgId,
-        email: updated.email,
-      },
-      receivedAt: new Date().toISOString(),
-    });
-    return CrmContactViewMapper.toView(updated);
+    await this.emitMutationEvents('crm.contact.updated', updated);
+    return updated;
   }
 
-  async removeContact(id: string) {
+  async removeContact(id: string, actor: CrmActor): Promise<void> {
+    this.crmContactPolicy.assertCanWrite(actor);
     const tenantId = this.crmContactRepository.getTenantId();
     const moduleVersion = await this.getModuleCacheVersion();
-    await this.crmContactRepository.remove(id);
+
+    await this.crmContactRepository.deleteById(id);
     await this.cacheService.del(this.buildDetailCacheKey(tenantId, moduleVersion, id));
     await this.cacheService.del(this.buildCollectionVersionKey(tenantId));
     await this.eventBus.emit('crm.contact.deleted', {
@@ -143,21 +123,74 @@ export class CrmContactService {
     });
   }
 
-  async getDashboardSummary() {
+  async getDashboardSummary(actor: CrmActor) {
+    this.crmContactPolicy.assertCanRead(actor);
     const tenantId = this.crmContactRepository.getTenantId();
     const [moduleVersion, collectionVersion] = await Promise.all([
       this.getModuleCacheVersion(),
       this.getCollectionVersion(tenantId),
     ]);
     const cacheKey = this.buildDashboardCacheKey(tenantId, moduleVersion, collectionVersion);
+
     return this.cacheService.remember(
       cacheKey,
       DASHBOARD_TTL_SECONDS,
-      async (): Promise<ReturnType<typeof CrmContactViewMapper.toDashboard>> => {
-        const summary = await this.crmContactRepository.getDashboardSummary();
-        return CrmContactViewMapper.toDashboard(summary);
-      },
+      async () => this.crmContactRepository.getDashboardSummary(),
     );
+  }
+
+  private createContactEntity(dto: CreateContactDto): CrmContactEntity {
+    const entity = new CrmContactEntity();
+    entity.tenantId = this.crmContactRepository.getTenantId();
+    entity.orgId = dto.orgId;
+    entity.fullName = dto.fullName.trim();
+    entity.email = dto.email.trim().toLowerCase();
+    entity.phone = dto.phone?.trim() || null;
+    entity.status = dto.status ?? ContactStatus.LEAD;
+    return entity;
+  }
+
+  private applyContactPatch(entity: CrmContactEntity, patch: UpdateContactDto): CrmContactEntity {
+    if (patch.orgId !== undefined) {
+      entity.orgId = patch.orgId;
+    }
+
+    if (patch.fullName !== undefined) {
+      entity.fullName = patch.fullName.trim();
+    }
+
+    if (patch.email !== undefined) {
+      entity.email = patch.email.trim().toLowerCase();
+    }
+
+    if (patch.phone !== undefined) {
+      entity.phone = patch.phone?.trim() || null;
+    }
+
+    if (patch.status !== undefined) {
+      entity.status = patch.status;
+    }
+
+    return entity;
+  }
+
+  private async emitMutationEvents(eventName: string, contact: CrmContactEntity): Promise<void> {
+    await this.eventBus.emit(eventName, {
+      contactId: contact.id,
+      tenantId: contact.tenantId,
+      orgId: contact.orgId,
+      email: contact.email,
+    });
+    await this.eventBus.emit('notification.send', {
+      name: eventName,
+      payload: {
+        contactId: contact.id,
+        tenantId: contact.tenantId,
+        orgId: contact.orgId,
+        email: contact.email,
+      },
+      receivedAt: new Date().toISOString(),
+    });
   }
 
   private async invalidateCollectionCache(contactId?: string): Promise<void> {

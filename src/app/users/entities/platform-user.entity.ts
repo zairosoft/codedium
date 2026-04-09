@@ -2,8 +2,10 @@ import {
   Entity,
   Index,
   Column,
+  OneToMany,
 } from 'typeorm';
 import { TenantScopedEntity } from '../../../core/tenant/tenant-scoped.entity';
+import { PlatformMembershipEntity } from './platform-membership.entity';
 
 @Entity({ name: 'platform_users' })
 @Index(['tenantId', 'email'], { unique: true })
@@ -19,4 +21,7 @@ export class PlatformUserEntity extends TenantScopedEntity {
 
   @Column({ type: 'jsonb', default: () => "'[]'::jsonb" })
   roles: string[];
+
+  @OneToMany(() => PlatformMembershipEntity, (membership) => membership.user)
+  memberships?: PlatformMembershipEntity[];
 }

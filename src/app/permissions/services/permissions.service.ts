@@ -4,26 +4,71 @@ import { PermissionModel } from '../models/permission.model';
 
 @Injectable()
 export class PermissionsService implements PermissionServicePort {
-  private readonly grants = new Map<string, PermissionModel[]>([
+  private readonly roleAliases = new Map<string, string>([
+    ['admin', 'platform.admin'],
+    ['manager', 'platform.manager'],
+    ['user', 'org.member'],
+  ]);
+
+  private readonly grants = new Map<string, string[]>([
     [
-      'admin',
+      'platform.admin',
       [
-        { resource: 'system.modules', actions: ['install', 'uninstall', 'upgrade'] },
-        { resource: 'system.users', actions: ['create', 'read', 'update', 'delete'] },
-        { resource: 'system.roles', actions: ['read'] },
-        { resource: 'system.permissions', actions: ['read'] },
+        'platform.user.read',
+        'platform.user.write',
+        'platform.membership.assign',
+        'platform.role.read',
+        'platform.permission.read',
+        'system.module.install',
+        'system.module.uninstall',
+        'system.module.upgrade',
       ],
     ],
     [
-      'manager',
-      [
-        { resource: 'system.users', actions: ['read', 'update'] },
-        { resource: 'system.permissions', actions: ['read'] },
-      ],
+      'platform.manager',
+      ['platform.user.read', 'platform.user.write', 'platform.membership.assign'],
     ],
+    ['org.admin', ['platform.user.read', 'platform.membership.assign']],
+    ['org.member', ['platform.user.read']],
   ]);
 
   listForRole(roleCode: string): PermissionModel[] {
-    return [...(this.grants.get(roleCode) ?? [])];
+    const normalizedRoleCode = this.normalizeRoleCode(roleCode);
+    return (this.grants.get(normalizedRoleCode) ?? []).map((permissionCode) =>
+      this.toPermission(permissionCode),
+    );
+  }
+
+  expand(roleCodes: string[]): PermissionModel[] {
+    const permissions = new Map<string, PermissionModel>();
+    for (const roleCode of roleCodes) {
+      for (const permission of this.listForRole(roleCode)) {
+        permissions.set(permission.code, permission);
+      }
+    }
+
+    return [...permissions.values()];
+  }
+
+  hasPermissions(roleCodes: string[], requiredPermissions: string[]): boolean {
+    const availablePermissions = new Set(this.expand(roleCodes).map((permission) => permission.code));
+    return requiredPermissions.every((permission) => availablePermissions.has(permission));
+  }
+
+  private normalizeRoleCode(roleCode: string): string {
+    return this.roleAliases.get(roleCode) ?? roleCode;
+  }
+
+  private toPermission(permissionCode: string): PermissionModel {
+    const segments = permissionCode.split('.');
+    const action = segments.at(-1) ?? 'read';
+    const resource = segments.slice(0, -1).join('.');
+
+    return {
+      code: permissionCode,
+      resource,
+      action,
+      description: `${resource} ${action}`.trim(),
+    };
   }
 }

@@ -1,8 +1,8 @@
 import {
   CrmContactEntity,
 } from '../entities/crm-contact.entity';
-import { CrmDashboardSummary } from '../models/crm-dashboard.model';
-import { ContactStatus } from '../models/crm-contact.model';
+import { ContactStatus } from '../entities/crm-contact.entity';
+import { CrmDashboardSummary } from '../repositories/crm-dashboard.summary';
 
 export type CrmContactView = {
   id: string;
@@ -14,6 +14,8 @@ export type CrmContactView = {
 };
 
 export type CrmDashboardView = {
+  type: 'dashboard';
+  resource: 'crm.contact';
   tenantId: string;
   metrics: {
     totalContacts: number;
@@ -21,6 +23,24 @@ export type CrmDashboardView = {
     totalLeads: number;
   };
   recentContacts: CrmContactView[];
+};
+
+export type CrmContactsTableView = {
+  type: 'table';
+  resource: 'crm.contact';
+  columns: { key: string; label: string }[];
+  data: CrmContactView[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+};
+
+export type CrmContactDetailView = {
+  type: 'detail';
+  resource: 'crm.contact';
+  data: CrmContactView;
 };
 
 export class CrmContactViewMapper {
@@ -31,7 +51,7 @@ export class CrmContactViewMapper {
       email: entity.email,
       phone: entity.phone,
       status: entity.status,
-      createdAt: entity.createdAt.toISOString(),
+      createdAt: this.serializeDate(entity.createdAt),
     };
   }
 
@@ -39,8 +59,43 @@ export class CrmContactViewMapper {
     return entities.map((entity) => this.toView(entity));
   }
 
+  static toTableSchema(input: {
+    contacts: CrmContactEntity[];
+    total: number;
+    page: number;
+    limit: number;
+  }): CrmContactsTableView {
+    return {
+      type: 'table',
+      resource: 'crm.contact',
+      columns: [
+        { key: 'fullName', label: 'Full Name' },
+        { key: 'email', label: 'Email' },
+        { key: 'phone', label: 'Phone' },
+        { key: 'status', label: 'Status' },
+        { key: 'createdAt', label: 'Created At' },
+      ],
+      data: this.toList(input.contacts),
+      meta: {
+        total: input.total,
+        page: input.page,
+        limit: input.limit,
+      },
+    };
+  }
+
+  static toDetailSchema(entity: CrmContactEntity): CrmContactDetailView {
+    return {
+      type: 'detail',
+      resource: 'crm.contact',
+      data: this.toView(entity),
+    };
+  }
+
   static toDashboard(summary: CrmDashboardSummary): CrmDashboardView {
     return {
+      type: 'dashboard',
+      resource: 'crm.contact',
       tenantId: summary.tenantId,
       metrics: {
         totalContacts: summary.totalContacts,
@@ -53,5 +108,9 @@ export class CrmContactViewMapper {
           contact.status === ContactStatus.CUSTOMER ? 'customer' : 'lead',
       })),
     };
+  }
+
+  private static serializeDate(value: Date | string): string {
+    return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
   }
 }
