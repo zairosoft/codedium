@@ -18,7 +18,8 @@ Use these rules when operating in the `workless` repository.
 - contracts live under `src/core/interfaces`
 - tenant context lives under `src/core/tenant`
 - cache and database infrastructure live under `src/core/infrastructure`
-- server-rendered module views should usually live under `src/modules/<module>/views`
+- backend module work should target `controllers/services/entities/repositories/dto/policies/hooks/lifecycle/seeders`
+- do not introduce `models/` under `src/modules/*`
 
 ## Architecture Rules
 
@@ -30,6 +31,7 @@ Use these rules when operating in the `workless` repository.
 - services orchestrate
 - repositories own persistence
 - entities stay persistence-focused
+- policies own authorization and rule checks
 - cache behavior and tenant scope must be explicit
 
 ## Verification Expectations

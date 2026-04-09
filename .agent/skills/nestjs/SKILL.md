@@ -55,8 +55,10 @@ Expected responsibilities:
 - services orchestrate
 - repositories own persistence
 - DTOs validate public input
+- policies own permission and rule checks
 - hooks and events are used for extension points
 - lifecycle services are added only when a module needs install, upgrade, or uninstall behavior
+- backend modules should not rely on `models/`
 
 ### Runtime System
 
@@ -116,6 +118,7 @@ Use `src/modules/crm` as the main reference for:
 - hook and event usage
 - lifecycle integration
 - tenant-aware cache keys
+- backend module structure without `models/`
 
 ### Verification Reality
 

@@ -78,6 +78,33 @@ Assume these boundaries are intentional:
 - modules may depend on `src/core/interfaces/*`
 - cross-domain communication should use hooks or emitted events
 
+## Module Backend Shape
+
+For backend work inside `src/modules/*`, assume the strict module shape is:
+
+```text
+src/modules/<module>/
+  controllers/
+  services/
+  entities/
+  repositories/
+  dto/
+  policies/
+  hooks/
+  lifecycle/
+  seeders/
+  views/
+  module.ts
+```
+
+Important:
+
+- backend logic should not rely on `models/` under modules
+- services own use-case and domain orchestration
+- policies own permission and rule checks
+- repositories own data access
+- `views/` exists, but backend-only refactors should usually ignore it unless the response contract itself must change
+
 ## Active Infrastructure Paths
 
 Database and cache infrastructure now live under:

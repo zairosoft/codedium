@@ -25,6 +25,7 @@ Use this skill for tasks such as:
 - creating a new plugin module under `src/modules`
 - refactoring an existing feature into the plugin structure
 - adding controllers, services, repositories, hooks, policies, seeders, or migrations to a module
+- removing legacy `models/` usage from a module
 - wiring a module into registry and lifecycle flow
 - reviewing whether a module violates isolation boundaries
 - adding tenant-aware cache keys and invalidation
@@ -46,7 +47,6 @@ src/modules/<module-name>/
   entities/
   hooks/
   lifecycle/
-  models/
   policies/
   repositories/
   seeders/
@@ -57,11 +57,16 @@ src/modules/<module-name>/
 
 Not every folder must be fully implemented, but active modules should stay consistent.
 
+Important:
+
+- do not introduce `models/` under `src/modules/*`
+- for backend-only work, treat `views/` as out of scope unless the response contract itself must change
+
 ## Project Rules
 
 1. Keep controllers thin.
 2. Put orchestration in services.
-3. Keep business behavior in models, policies, or services as appropriate.
+3. Keep business behavior in services and policies.
 4. Repositories own persistence concerns.
 5. Use hooks and events for extension points instead of direct module-to-module calls.
 6. Modules must not import app services directly.
@@ -118,6 +123,7 @@ Use `src/modules/crm` as the primary reference for:
 - event bus usage
 - lifecycle service
 - cache key patterns
+- no `models/` usage in active backend paths
 
 ## Success Criteria
 
