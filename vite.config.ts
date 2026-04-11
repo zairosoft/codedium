@@ -2,10 +2,10 @@ import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
-const stylesEntry = path.resolve(__dirname, 'src/styles/app.css');
+const stylesEntry = path.resolve(__dirname, 'public/assets/css/app.css');
 
 export default defineConfig({
-  publicDir: path.resolve(__dirname, 'public'),
+  publicDir: false,
   plugins: [tailwindcss()],
   resolve: {
     alias: {

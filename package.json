@@ -13,7 +13,9 @@
     "module:install": "ts-node src/core/lifecycle/module-lifecycle.runner.ts install",
     "module:upgrade": "ts-node src/core/lifecycle/module-lifecycle.runner.ts upgrade",
     "module:uninstall": "ts-node src/core/lifecycle/module-lifecycle.runner.ts uninstall",
-    "test": "echo \"No tests configured yet\" && exit 0"
+    "test": "echo \"No tests configured yet\" && exit 0",
+    "build:css": "vite build",
+    "dev:css": "vite build --watch"
   },
   "keywords": [],
   "author": "",

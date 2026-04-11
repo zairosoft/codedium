@@ -2,7 +2,7 @@ import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ModuleLifecycleService } from './module.lifecycle';
 import { ModuleRegistryService } from '../registry/module.registry';
 
-@Controller('system/modules')
+@Controller('modules')
 export class ModuleLifecycleController {
   constructor(
     private readonly moduleRegistry: ModuleRegistryService,
