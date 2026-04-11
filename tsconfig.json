@@ -14,8 +14,15 @@
     "skipLibCheck": true,
     "strict": false,
     "moduleResolution": "node",
+    "jsx": "react",
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment",
+    "plugins": [
+      { "name": "@kitajs/ts-html-plugin" }
+    ],
     "types": [
-      "node"
+      "node",
+      "@kitajs/html"
     ]
   },
   "include": [

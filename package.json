@@ -22,6 +22,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@kitajs/html": "^4.2.13",
     "@nestjs/cache-manager": "^3.1.0",
     "@nestjs/common": "^11.1.16",
     "@nestjs/config": "^4.0.3",
@@ -41,6 +42,7 @@
     "typeorm": "^0.3.28"
   },
   "devDependencies": {
+    "@kitajs/ts-html-plugin": "^4.1.4",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.3.5",
     "tailwindcss": "^4.2.2",
