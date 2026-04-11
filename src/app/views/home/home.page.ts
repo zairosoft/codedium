@@ -1,10 +1,10 @@
-export function renderLandingPage(): string {
+export function renderHomePage(): string {
   return `<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Workless Landing</title>
+      <title>Workless Home</title>
       <style>
         :root {
           color-scheme: light;
@@ -140,7 +140,7 @@ export function renderLandingPage(): string {
       <main>
         <section class="hero">
           <span class="eyebrow">Workless Platform</span>
-          <h1>Landing page is live.</h1>
+          <h1>Home page is live.</h1>
           <p class="lead">
             The root route now serves a real HTML page. Your API stays under
             <code>/api/v1</code>, and the app is connected to the local PostgreSQL instance from ServBay.
