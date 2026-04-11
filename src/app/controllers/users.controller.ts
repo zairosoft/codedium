@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { PermissionAwareRequest } from '../helpers/request-actor';
+import type { PermissionAwareRequest } from '../helpers/request-actor';
 import { PermissionGuard } from '../providers/permission.guard';
 import { RequirePermissions } from '../providers/require-permissions.decorator';
 import { UsersService } from '../services/users.service';

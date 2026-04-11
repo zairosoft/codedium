@@ -5,6 +5,7 @@ import { NOTIFICATION_SERVICE } from '../core/interfaces/notification.interface'
 import { PERMISSION_SERVICE } from '../core/interfaces/permission.interface';
 import { ROLE_SERVICE } from '../core/interfaces/role.interface';
 import { USER_SERVICE } from '../core/interfaces/user.interface';
+import { LandingController } from './controllers/landing.controller';
 import { UsersController } from './controllers/users.controller';
 import { PlatformMembershipEntity } from './entities/platform-membership.entity';
 import { PlatformUserEntity } from './entities/platform-user.entity';
@@ -20,7 +21,7 @@ import { UsersService } from './services/users.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PlatformUserEntity, PlatformMembershipEntity])],
-  controllers: [UsersController],
+  controllers: [LandingController, UsersController],
   providers: [
     AuthService,
     NotificationsService,
