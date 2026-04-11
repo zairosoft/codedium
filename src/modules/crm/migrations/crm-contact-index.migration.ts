@@ -1,4 +1,4 @@
-import { ModuleLifecycleContext, ModuleMigration } from '../../../core/system/system-module.interface';
+import { ModuleLifecycleContext, ModuleMigration } from '../../../core/module/module.interface';
 
 export class CrmContactIndexMigration implements ModuleMigration {
   name = 'crm-contact-index-tenant-status';

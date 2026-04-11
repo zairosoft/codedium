@@ -8,8 +8,8 @@ import { EventBusService } from './events/event-bus.service';
 import { HookService } from './events/hook.service';
 import { ModuleLifecycleController } from './lifecycle/module-lifecycle.controller';
 import { ModuleLifecycleService } from './lifecycle/module.lifecycle';
-import { SystemModuleExplorer } from './system/system-module.explorer';
-import { ModuleEnabledGuard } from './system/module-enabled.guard';
+import { SystemModuleExplorer } from './module/module.explorer';
+import { ModuleEnabledGuard } from './module/module-enabled.guard';
 import { ModuleRegistryEntity } from './registry/module-registry.entity';
 import { ModuleRegistryService } from './registry/module.registry';
 

@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { HTML_CACHE_METADATA, HtmlCacheOptions } from './html-cache.decorator';
-import { MODULE_ENABLED_METADATA } from '../system/module-enabled.decorator';
+import { MODULE_ENABLED_METADATA } from '../module/module-enabled.decorator';
 import { DEFAULT_TENANT_ID, normalizeTenantId } from '../tenant/tenant.constants';
 
 @Injectable()

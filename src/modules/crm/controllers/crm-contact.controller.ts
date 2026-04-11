@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { HtmlCacheable } from '../../../core/http/html-cache.decorator';
-import { RequiresModule } from '../../../core/system/module-enabled.decorator';
+import { RequiresModule } from '../../../core/module/module-enabled.decorator';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';

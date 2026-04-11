@@ -3,8 +3,8 @@ import { DataSource } from 'typeorm';
 import { CacheService } from '../infrastructure/cache/cache.service';
 import { EventBusService } from '../events/event-bus.service';
 import { HookService } from '../events/hook.service';
-import { SystemModuleExplorer } from '../system/system-module.explorer';
-import { ModuleLifecycleContext } from '../system/system-module.interface';
+import { SystemModuleExplorer } from '../module/module.explorer';
+import { ModuleLifecycleContext } from '../module/module.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
 
 @Injectable()

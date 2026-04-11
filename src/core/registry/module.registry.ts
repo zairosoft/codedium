@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { SystemModuleExplorer } from '../system/system-module.explorer';
+import { SystemModuleExplorer } from '../module/module.explorer';
 import { ModuleRegistryEntity, ModuleStatus } from './module-registry.entity';
 
 @Injectable()

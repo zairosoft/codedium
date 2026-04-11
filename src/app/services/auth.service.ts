@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthServicePort, AuthSession } from '../../../core/interfaces/auth.interface';
-import { USER_SERVICE, UserServicePort } from '../../../core/interfaces/user.interface';
+import { AuthServicePort, AuthSession } from '../../core/interfaces/auth.interface';
+import { USER_SERVICE, UserServicePort } from '../../core/interfaces/user.interface';
 
 @Injectable()
 export class AuthService implements AuthServicePort {

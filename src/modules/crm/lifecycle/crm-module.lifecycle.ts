@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { SystemModule } from '../../../core/system/system-module.decorator';
+import { SystemModule } from '../../../core/module/module.decorator';
 import {
   ModuleLifecycleContext,
   SystemModuleLifecycle,
-} from '../../../core/system/system-module.interface';
+} from '../../../core/module/module.interface';
 import { CrmContactIndexMigration } from '../migrations/crm-contact-index.migration';
 import { CrmContactSeeder } from '../seeders/crm-contact.seeder';
 
