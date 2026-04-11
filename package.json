@@ -1,7 +1,7 @@
 {
   "name": "nestjs",
   "version": "1.0.0",
-  "description": "Zairosoft Platform - CRM and Helpdesk modular monolith backend",
+  "description": "Platform - Modular monolith backend",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
