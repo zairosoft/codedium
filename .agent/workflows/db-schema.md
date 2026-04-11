@@ -25,14 +25,14 @@ Ask clarifying questions:
 Detect the existing configuration:
 - Check for `prisma/schema.prisma`
 - Check for `drizzle.config.ts`
-- Check for SQLAlchemy models, TypeORM entities
-- Look at existing tables/models for patterns
+- Check for SQLAlchemy models, TypeORM entities, or equivalent schema definitions
+- Look at existing tables and entity definitions for patterns
 
 If no existing setup, ask which ORM/database they prefer.
 
 ### 3. Design Schema
 For each entity, define:
-- Table/model name (follow naming conventions)
+- Table/entity name (follow naming conventions)
 - Fields with appropriate types
 - Primary keys and unique constraints
 - Foreign keys and relationships

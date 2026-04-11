@@ -17,8 +17,8 @@ Use this workflow when preparing local data for Workless.
 
 Read these first:
 
-1. `src/core/infrastructure/database/seeder.runner.ts`
-2. `src/core/infrastructure/database/platform-user-schema.migration.ts`
+1. `src/database/seeder.runner.ts`
+2. `src/database/platform-user-schema.migration.ts`
 3. module seeders such as `src/modules/crm/seeders/*`
 4. target lifecycle services under `src/modules/*/lifecycle/*`
 

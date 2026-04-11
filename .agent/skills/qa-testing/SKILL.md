@@ -113,7 +113,7 @@ Example structure:
 
 Recommend the smallest useful next step:
 
-1. unit tests for pure service or model logic
+1. unit tests for pure service, policy, or utility logic
 2. repository tests only when a test DB setup exists
 3. integration/e2e only after the project establishes a real test harness
 

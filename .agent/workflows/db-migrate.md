@@ -17,8 +17,8 @@ Use this workflow when schema work touches Workless persistence.
 
 Read these first:
 
-1. `src/core/infrastructure/database/typeorm.config.ts`
-2. `src/core/infrastructure/database/platform-user-schema.migration.ts`
+1. `src/database/typeorm.config.ts`
+2. `src/database/platform-user-schema.migration.ts`
 3. module-local migrations such as `src/modules/crm/migrations/*`
 4. affected entities under `src/app/**/entities` or `src/modules/**/entities`
 

@@ -19,7 +19,7 @@ Use these rules when operating in the `workless` repository.
 - tenant context lives under `src/core/tenant`
 - cache and database infrastructure live under `src/core/infrastructure`
 - backend module work should target `controllers/services/entities/repositories/dto/policies/hooks/lifecycle/seeders`
-- do not introduce `models/` under `src/modules/*`
+- do not introduce `models/` under backend paths; prefer `entities`, `dto`, and `src/core/interfaces`
 
 ## Architecture Rules
 

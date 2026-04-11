@@ -17,8 +17,9 @@ Use this workflow when the task is NestJS-specific inside Workless.
 
 1. `src/app.module.ts`
 2. `src/core/core.module.ts`
-3. target module or platform path
-4. related files under `src/core/interfaces`, `src/core/tenant`, and `src/core/infrastructure`
+3. `src/database/*` when persistence bootstrapping or TypeORM config is involved
+4. target module or platform path
+5. related files under `src/core/interfaces`, `src/core/tenant`, and `src/core/infrastructure/cache`
 
 ## Common Tasks
 

@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
-import { AppModule } from '../../../app.module';
-import { ModuleLifecycleService } from '../../lifecycle/module.lifecycle';
-import { ModuleRegistryService } from '../../registry/module.registry';
-import { PlatformUserSchemaMigration } from './platform-user-schema.migration';
+import { AppModule } from '../app.module';
+import { ModuleLifecycleService } from '../core/lifecycle/module.lifecycle';
+import { ModuleRegistryService } from '../core/registry/module.registry';
+import { PlatformUserSchemaMigration } from './migrations/platform-user-schema.migration';
 
 async function runSeeders() {
   const app = await NestFactory.createApplicationContext(AppModule);

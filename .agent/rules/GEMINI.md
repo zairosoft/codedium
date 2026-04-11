@@ -20,7 +20,8 @@ Assume the following unless the code proves otherwise:
 
 - Workless is a NestJS modular monolith
 - platform code lives in `src/app`
-- core runtime, contracts, tenant, and infrastructure live in `src/core`
+- core runtime, contracts, tenant, and cache infrastructure live in `src/core`
+- database bootstrap and TypeORM config live in `src/database`
 - plugin modules live in `src/modules`
 - module loading is resilient and driven through `src/modules/runtime-modules.ts`
 - generated assets are not the source of truth

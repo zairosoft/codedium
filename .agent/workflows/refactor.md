@@ -32,7 +32,7 @@ Look for:
 - mixed responsibilities
 - direct cross-module coupling
 - module imports into app services
-- legacy `models/` usage inside `src/modules/*`
+- legacy `models/` usage inside backend paths
 - tenant leaks in queries or cache keys
 - lifecycle or registry drift
 
@@ -43,7 +43,7 @@ Common patterns:
 - extract function
 - move code to the right layer
 - replace direct coupling with hooks or events
-- remove backend logic from `models/` in modules when strict module rules forbid them
+- remove backend `models/` usage and move shared contracts to `src/core/interfaces`, persistence shapes to `entities`, and request validation to `dto`
 - normalize cache key construction
 - remove stale path references
 

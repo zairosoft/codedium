@@ -25,6 +25,7 @@ Use this workflow to inspect or explain Workless architecture without drifting i
 
 - platform services under `src/app`
 - core engine responsibilities under `src/core`
+- database bootstrap and config under `src/database`
 - plugin modules under `src/modules`
 - tenant flow through `src/core/tenant`
 - registry and lifecycle flow through `src/core/registry` and `src/core/lifecycle`

@@ -6,11 +6,10 @@ This refactor keeps the application as a NestJS monolith, but changes the runtim
 
 Implemented layers:
 
-- `src/core`: module registry, module lifecycle, hook/event system, module enable/disable guard, HTML cache headers
-- `src/modules`: self-contained business modules with `controllers`, `services`, `models`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`, `views`
-- `src/infrastructure/database`: TypeORM bootstrap and lifecycle seeding entrypoint
-- `src/infrastructure/cache`: centralized Redis-backed cache service with in-memory fallback
-- `src/infrastructure/redis`: older Redis support code still present for legacy paths
+- `src/app`: platform services and IAM-style controllers/modules
+- `src/core`: module registry, module lifecycle, hook/event system, module enable/disable guard, HTML cache headers, cache infrastructure
+- `src/database`: TypeORM bootstrap and lifecycle seeding entrypoint
+- `src/modules`: self-contained business modules with `controllers`, `services`, `entities`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`, `lifecycle`, `views`
 - `public`: static asset output target for Vite or other frontend builds
 
 ## Runtime Flow
@@ -69,7 +68,7 @@ Each System module implements:
 
 Current CRM example:
 
-- lifecycle provider: `src/modules/crm/services/crm-module.lifecycle.ts`
+- lifecycle provider: `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
 - migration: `src/modules/crm/migrations/crm-contact-index.migration.ts`
 - seeder: `src/modules/crm/seeders/crm-contact.seeder.ts`
 
@@ -104,8 +103,8 @@ Implemented CRM module structure:
 
 - `src/modules/crm/controllers/crm-contact.controller.ts`
 - `src/modules/crm/services/crm-contact.service.ts`
-- `src/modules/crm/services/crm-module.lifecycle.ts`
-- `src/modules/crm/models/crm-contact.entity.ts`
+- `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
+- `src/modules/crm/entities/crm-contact.entity.ts`
 - `src/modules/crm/repositories/crm-contact.repository.ts`
 - `src/modules/crm/hooks/crm-contact.hooks.ts`
 - `src/modules/crm/policies/crm-contact.policy.ts`
@@ -117,7 +116,7 @@ Implemented CRM module structure:
 Design choices:
 
 - controllers stay thin and delegate orchestration to services
-- entity methods own contact state mutation rules via `applyProfile`, `promoteToCustomer`, and `isCustomer`
+- entities stay persistence-focused and services coordinate contact workflows
 - repository stays tenant-aware and hides persistence concerns from services
 - hooks sanitize inbound DTOs before persistence
 - event bus handles post-write notifications such as `customer.afterCreate`
@@ -132,9 +131,9 @@ Known edge:
 
 Implementation:
 
-- `src/infrastructure/cache/cache.module.ts`
-- `src/infrastructure/cache/cache.service.ts`
-- `src/infrastructure/cache/redis.provider.ts`
+- `src/core/infrastructure/cache/cache.module.ts`
+- `src/core/infrastructure/cache/cache.service.ts`
+- `src/core/infrastructure/cache/redis.provider.ts`
 
 Public contract:
 

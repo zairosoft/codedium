@@ -101,31 +101,24 @@ The project keeps its original module-oriented structure and expands it with cor
 src/
   app.module.ts
   main.ts
-  common/
-    database/
-    interfaces/
-    tenant/
-  components/
-    layouts/
+  app/
   core/
     events/
     http/
+    interfaces/
     lifecycle/
     registry/
     system/
-  infrastructure/
-    cache/
-    database/
-    redis/
+    tenant/
+    infrastructure/
+      cache/
+  database/
+  core/
   modules/
     apps/
-    auth/
     crm/
     helpdesk/
-    notifications/
     org/
-    permissions/
-    users/
 public/
 ```
 
@@ -139,9 +132,10 @@ Typical module layout:
 src/modules/crm/
   controllers/
   dto/
+  entities/
   hooks/
+  lifecycle/
   migrations/
-  models/
   policies/
   repositories/
   seeders/
@@ -162,9 +156,8 @@ src/modules/crm/
 
 ### Infrastructure
 
-- `src/infrastructure/database`: TypeORM bootstrap and seed runner
-- `src/infrastructure/cache`: centralized cache service, `remember(...)` helper, and Redis provider
-- `src/infrastructure/redis`: legacy Redis-related adapters still present in the repo
+- `src/database`: TypeORM bootstrap, platform schema runner, and seed runner
+- `src/core/infrastructure/cache`: centralized cache service, `remember(...)` helper, and Redis provider
 
 ### Multi-Tenant
 
@@ -180,7 +173,7 @@ Included concerns:
 
 - thin controller layer
 - service orchestration
-- entity/domain methods
+- entity-backed persistence
 - repository persistence
 - hooks before create/update
 - event-driven notifications after writes
@@ -194,13 +187,14 @@ Relevant files:
 - `src/modules/crm/module.ts`
 - `src/modules/crm/controllers/crm-contact.controller.ts`
 - `src/modules/crm/services/crm-contact.service.ts`
-- `src/modules/crm/services/crm-module.lifecycle.ts`
+- `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
+- `src/modules/crm/entities/crm-contact.entity.ts`
 - `src/modules/crm/views/crm-contact.view.ts`
 - `src/modules/crm/views/crm-dashboard.page.ts`
 
 Known repository edge:
 
-- `src/modules/crm/crm.controller.ts` and `src/modules/crm/crm.service.ts` still exist as older duplicates
+- `src/modules/crm/controllers/crm.controller.ts` and `src/modules/crm/services/crm.service.ts` still exist as older duplicates
 - the active wired CRM path is the `crm-contact.*` set above
 
 ## Caching
@@ -209,8 +203,8 @@ Known repository edge:
 
 Redis-backed caching is exposed through:
 
-- `src/infrastructure/cache/cache.module.ts`
-- `src/infrastructure/cache/cache.service.ts`
+- `src/core/infrastructure/cache/cache.module.ts`
+- `src/core/infrastructure/cache/cache.service.ts`
 
 Used for:
 
@@ -257,7 +251,7 @@ This currently installs discovered modules through the lifecycle service and run
 - This repository is now NestJS-based, not Laravel/PHP-based.
 - Some directories still exist as placeholders to preserve the original modular layout across features.
 - `theme html/` contains design/template assets and is not the NestJS runtime source directory.
-- `src/infrastructure/redis` remains in the repo for older support paths, but new cache work should prefer `src/infrastructure/cache`.
+- New cache work should stay under `src/core/infrastructure/cache`.
 
 ## Security
 

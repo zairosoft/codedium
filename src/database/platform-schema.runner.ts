@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
-import { AppModule } from '../../../app.module';
-import { PlatformUserSchemaMigration } from './platform-user-schema.migration';
+import { AppModule } from '../app.module';
+import { PlatformUserSchemaMigration } from './migrations/platform-user-schema.migration';
 
 async function runPlatformSchema(): Promise<void> {
   const app = await NestFactory.createApplicationContext(AppModule);

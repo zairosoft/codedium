@@ -58,7 +58,7 @@ Expected responsibilities:
 - policies own permission and rule checks
 - hooks and events are used for extension points
 - lifecycle services are added only when a module needs install, upgrade, or uninstall behavior
-- backend modules should not rely on `models/`
+- backend code should avoid a separate `models/` layer and instead use `entities/`, `dto/`, and `src/core/interfaces/*`
 
 ### Runtime System
 
@@ -158,8 +158,8 @@ Check:
 
 1. entity path is the active one
 2. `TypeOrmModule.forFeature(...)` includes the correct entity
-3. schema preparation paths align with `src/core/infrastructure/database/*`
-4. database config aligns with `src/core/infrastructure/database/typeorm.config.ts`
+3. schema preparation paths align with `src/database/*`
+4. database config aligns with `src/database/typeorm.config.ts`
 
 ### Lifecycle Issues
 

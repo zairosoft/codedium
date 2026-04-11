@@ -25,7 +25,7 @@ Use this skill for tasks such as:
 - creating a new plugin module under `src/modules`
 - refactoring an existing feature into the plugin structure
 - adding controllers, services, repositories, hooks, policies, seeders, or migrations to a module
-- removing legacy `models/` usage from a module
+- removing legacy `models/` usage from a module and replacing it with `entities`, `dto`, or `src/core/interfaces`
 - wiring a module into registry and lifecycle flow
 - reviewing whether a module violates isolation boundaries
 - adding tenant-aware cache keys and invalidation
@@ -73,6 +73,7 @@ Important:
 7. Repository methods and cache keys must stay tenant-aware.
 8. Invalidate cache on create, update, and delete paths.
 9. Match the structure already used in `src/modules/crm`.
+10. Prefer NestJS-native layering: `entities/`, `dto/`, `repositories/`, `services/`, `policies/`, `hooks/`, `lifecycle/`.
 
 ## Runtime Integration
 

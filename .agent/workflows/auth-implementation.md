@@ -37,7 +37,7 @@ Based on requirements:
 
 ### 4. Implement
 Core components:
-- User model/table
+- User entity/table
 - Login/register flows
 - Session/token management
 - Protected routes

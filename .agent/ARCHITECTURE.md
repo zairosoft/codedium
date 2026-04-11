@@ -57,7 +57,11 @@ Core engine:
 - `src/core/interfaces/*`
 - `src/core/tenant/*`
 - `src/core/http/*`
-- `src/core/infrastructure/*`
+- `src/core/infrastructure/cache/*`
+
+Database layer:
+
+- `src/database/*`
 
 Plugin modules:
 
@@ -99,7 +103,8 @@ src/modules/<module>/
 
 Important:
 
-- backend logic should not rely on `models/` under modules
+- do not introduce a `models/` layer in backend paths under `src/app` or `src/modules`
+- use `entities/` for persistence shapes, `dto/` for IO contracts, and `src/core/interfaces/*` for shared service contracts
 - services own use-case and domain orchestration
 - policies own permission and rule checks
 - repositories own data access
@@ -109,7 +114,7 @@ Important:
 
 Database and cache infrastructure now live under:
 
-- `src/core/infrastructure/database/*`
+- `src/database/*`
 - `src/core/infrastructure/cache/*`
 
 Tenant logic now lives only under:
