@@ -5,16 +5,16 @@ import {
   CreateUserInput,
   MembershipRecord,
   UpdateUserInput,
+  UserRecord,
   UserServicePort,
 } from '../../../core/interfaces/user.interface';
 import { EVENT_BUS_PORT, EventBusPort } from '../../../core/interfaces/event-bus.interface';
 import { HOOK_PORT, HookPort } from '../../../core/interfaces/hook.interface';
 import { TENANT_CONTEXT, TenantContextPort } from '../../../core/tenant/tenant-context.interface';
-import { RequestActor } from '../../permissions/models/request-actor.model';
+import { RequestActor } from '../../permissions/request-actor';
 import { ListUsersDto } from '../controllers/list-users.dto';
 import { PlatformMembershipEntity } from '../entities/platform-membership.entity';
 import { PlatformUserEntity } from '../entities/platform-user.entity';
-import { UserModel } from '../models/user.model';
 import { UsersPolicy } from '../policies/users.policy';
 import { DataSource, ILike, Repository } from 'typeorm';
 
@@ -33,16 +33,16 @@ export class UsersService implements UserServicePort {
     private readonly tenantContext: TenantContextPort,
   ) {}
 
-  async findById(id: string): Promise<UserModel | null> {
+  async findById(id: string): Promise<UserRecord | null> {
     const tenantId = this.tenantContext.getTenantId();
     const entity = await this.usersRepository.findOne({
       where: { id, tenantId },
       relations: { memberships: true },
     });
-    return entity ? this.toModel(entity) : null;
+    return entity ? this.toRecord(entity) : null;
   }
 
-  async getUserById(id: string, actor?: RequestActor): Promise<UserModel> {
+  async getUserById(id: string, actor?: RequestActor): Promise<UserRecord> {
     if (actor) {
       this.usersPolicy.assertCanReadDirectory(actor);
     }
@@ -80,7 +80,7 @@ export class UsersService implements UserServicePort {
     });
 
     return {
-      data: entities.map((entity) => this.toModel(entity)),
+      data: entities.map((entity) => this.toRecord(entity)),
       meta: {
         page,
         limit,
@@ -89,7 +89,7 @@ export class UsersService implements UserServicePort {
     };
   }
 
-  async createUser(input: CreateUserInput, actor?: RequestActor): Promise<UserModel> {
+  async createUser(input: CreateUserInput, actor?: RequestActor): Promise<UserRecord> {
     if (actor) {
       this.usersPolicy.assertCanCreate(actor);
       if ((input.memberships?.length ?? 0) > 0) {
@@ -141,7 +141,7 @@ export class UsersService implements UserServicePort {
         throw new NotFoundException(`User "${user.id}" was not found after creation.`);
       }
 
-      return this.toModel(persisted);
+      return this.toRecord(persisted);
     });
 
     await this.eventBus.emit('user.created', {
@@ -154,7 +154,7 @@ export class UsersService implements UserServicePort {
     return created;
   }
 
-  async updateUser(id: string, input: UpdateUserInput, actor?: RequestActor): Promise<UserModel> {
+  async updateUser(id: string, input: UpdateUserInput, actor?: RequestActor): Promise<UserRecord> {
     const tenantId = this.tenantContext.getTenantId();
     const payload = await this.hookService.emit('user.updating', input);
     const existing = await this.usersRepository.findOne({
@@ -166,7 +166,7 @@ export class UsersService implements UserServicePort {
       throw new NotFoundException(`User "${id}" was not found.`);
     }
 
-    const current = this.toModel(existing);
+    const current = this.toRecord(existing);
     if (actor) {
       this.usersPolicy.assertCanUpdate(actor, current);
       if (payload.memberships !== undefined) {
@@ -216,7 +216,7 @@ export class UsersService implements UserServicePort {
         throw new NotFoundException(`User "${existing.id}" was not found after update.`);
       }
 
-      return this.toModel(persisted);
+      return this.toRecord(persisted);
     });
 
     await this.eventBus.emit('user.updated', {
@@ -229,7 +229,7 @@ export class UsersService implements UserServicePort {
     return updated;
   }
 
-  private toModel(entity: PlatformUserEntity): UserModel {
+  private toRecord(entity: PlatformUserEntity): UserRecord {
     return {
       id: entity.id,
       email: entity.email,
@@ -237,12 +237,9 @@ export class UsersService implements UserServicePort {
       active: entity.active,
       roles: [...(entity.roles ?? [])],
       memberships: (entity.memberships ?? []).map((membership) => ({
-        id: membership.id,
         organizationId: membership.organizationId,
         roleCode: membership.roleCode,
         isDefault: membership.isDefault,
-        createdAt: membership.createdAt,
-        updatedAt: membership.updatedAt,
       })),
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { RoleServicePort } from '../../../core/interfaces/role.interface';
-import { RoleModel } from '../models/role.model';
+import { RoleRecord, RoleServicePort } from '../../../core/interfaces/role.interface';
 
 @Injectable()
 export class RolesService implements RoleServicePort {
-  private readonly roles: RoleModel[] = [
+  private readonly roles: RoleRecord[] = [
     { code: 'platform.admin', description: 'Platform administrator' },
     { code: 'platform.manager', description: 'Operational manager' },
     { code: 'org.admin', description: 'Organization administrator' },
@@ -14,7 +13,7 @@ export class RolesService implements RoleServicePort {
     { code: 'user', description: 'Legacy alias for organization member' },
   ];
 
-  list(): RoleModel[] {
+  list(): RoleRecord[] {
     return [...this.roles];
   }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PermissionServicePort } from '../../../core/interfaces/permission.interface';
-import { PermissionModel } from '../models/permission.model';
+import {
+  PermissionRecord,
+  PermissionServicePort,
+} from '../../../core/interfaces/permission.interface';
 
 @Injectable()
 export class PermissionsService implements PermissionServicePort {
@@ -32,15 +34,15 @@ export class PermissionsService implements PermissionServicePort {
     ['org.member', ['platform.user.read']],
   ]);
 
-  listForRole(roleCode: string): PermissionModel[] {
+  listForRole(roleCode: string): PermissionRecord[] {
     const normalizedRoleCode = this.normalizeRoleCode(roleCode);
     return (this.grants.get(normalizedRoleCode) ?? []).map((permissionCode) =>
       this.toPermission(permissionCode),
     );
   }
 
-  expand(roleCodes: string[]): PermissionModel[] {
-    const permissions = new Map<string, PermissionModel>();
+  expand(roleCodes: string[]): PermissionRecord[] {
+    const permissions = new Map<string, PermissionRecord>();
     for (const roleCode of roleCodes) {
       for (const permission of this.listForRole(roleCode)) {
         permissions.set(permission.code, permission);
@@ -59,9 +61,9 @@ export class PermissionsService implements PermissionServicePort {
     return this.roleAliases.get(roleCode) ?? roleCode;
   }
 
-  private toPermission(permissionCode: string): PermissionModel {
+  private toPermission(permissionCode: string): PermissionRecord {
     const segments = permissionCode.split('.');
-    const action = segments.at(-1) ?? 'read';
+    const action = segments[segments.length - 1] ?? 'read';
     const resource = segments.slice(0, -1).join('.');
 
     return {

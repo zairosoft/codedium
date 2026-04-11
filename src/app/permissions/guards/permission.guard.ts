@@ -11,7 +11,7 @@ import {
   PERMISSION_SERVICE,
   PermissionServicePort,
 } from '../../../core/interfaces/permission.interface';
-import { PermissionAwareRequest, resolveRequestActor } from '../models/request-actor.model';
+import { PermissionAwareRequest, resolveRequestActor } from '../request-actor';
 import { REQUIRED_PERMISSIONS_METADATA } from './require-permissions.decorator';
 
 @Injectable()

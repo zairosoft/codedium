@@ -3,8 +3,8 @@ import {
   PERMISSION_SERVICE,
   PermissionServicePort,
 } from '../../../core/interfaces/permission.interface';
-import { RequestActor } from '../../permissions/models/request-actor.model';
-import { UserModel } from '../models/user.model';
+import { UserRecord } from '../../../core/interfaces/user.interface';
+import { RequestActor } from '../../permissions/request-actor';
 
 @Injectable()
 export class UsersPolicy {
@@ -25,7 +25,7 @@ export class UsersPolicy {
     this.assertPermissions(actor, [UsersPolicy.WRITE_PERMISSION], 'User creation is forbidden.');
   }
 
-  assertCanUpdate(actor: RequestActor, target: UserModel): void {
+  assertCanUpdate(actor: RequestActor, target: UserRecord): void {
     if (actor.userId && actor.userId === target.id) {
       this.assertPermissions(
         actor,

@@ -1,4 +1,4 @@
-import { MembershipModel, UserModel } from '../models/user.model';
+import { MembershipRecord, UserRecord } from '../../../core/interfaces/user.interface';
 
 export type UserItemView = {
   id: string;
@@ -15,7 +15,7 @@ export type UserItemView = {
 };
 
 export class UsersViewMapper {
-  static toItem(user: UserModel): UserItemView {
+  static toItem(user: UserRecord): UserItemView {
     return {
       id: user.id,
       email: user.email,
@@ -27,7 +27,7 @@ export class UsersViewMapper {
     };
   }
 
-  static toTableSchema(users: UserModel[], meta: { page: number; limit: number; total: number }) {
+  static toTableSchema(users: UserRecord[], meta: { page: number; limit: number; total: number }) {
     return {
       type: 'table',
       resource: 'platform.user',
@@ -43,7 +43,7 @@ export class UsersViewMapper {
     };
   }
 
-  static toDetailSchema(user: UserModel) {
+  static toDetailSchema(user: UserRecord) {
     return {
       type: 'detail',
       resource: 'platform.user',
@@ -63,7 +63,7 @@ export class UsersViewMapper {
     };
   }
 
-  private static toMembership(membership: MembershipModel) {
+  private static toMembership(membership: MembershipRecord) {
     return {
       organizationId: membership.organizationId,
       roleCode: membership.roleCode,

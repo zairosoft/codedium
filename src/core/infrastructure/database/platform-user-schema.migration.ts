@@ -1,5 +1,21 @@
 import { DEFAULT_TENANT_ID } from '../../tenant/tenant.constants';
-import { DataSource, Table, TableColumn, TableForeignKey, TableIndex } from 'typeorm';
+import {
+  DataSource,
+  QueryRunner,
+  Table,
+  TableColumn,
+  TableForeignKey,
+  TableIndex,
+} from 'typeorm';
+
+async function tableHasIndex(
+  queryRunner: QueryRunner,
+  tableName: string,
+  indexName: string,
+): Promise<boolean> {
+  const table = await queryRunner.getTable(tableName);
+  return table?.indices.some((index) => index.name === indexName) ?? false;
+}
 
 export class PlatformUserSchemaMigration {
   async run(dataSource: DataSource): Promise<void> {
@@ -97,7 +113,8 @@ export class PlatformUserSchemaMigration {
         );
       }
 
-      const hasLegacyEmailIndex = await queryRunner.hasIndex(
+      const hasLegacyEmailIndex = await tableHasIndex(
+        queryRunner,
         'platform_users',
         'uq_platform_users_email',
       );
@@ -105,7 +122,8 @@ export class PlatformUserSchemaMigration {
         await queryRunner.dropIndex('platform_users', 'uq_platform_users_email');
       }
 
-      const hasTenantEmailIndex = await queryRunner.hasIndex(
+      const hasTenantEmailIndex = await tableHasIndex(
+        queryRunner,
         'platform_users',
         'uq_platform_users_tenant_email',
       );
@@ -191,7 +209,8 @@ export class PlatformUserSchemaMigration {
         );
       }
 
-      const hasMembershipIndex = await queryRunner.hasIndex(
+      const hasMembershipIndex = await tableHasIndex(
+        queryRunner,
         'platform_user_memberships',
         'uq_platform_user_memberships_tenant_user_org',
       );
