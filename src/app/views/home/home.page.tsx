@@ -21,7 +21,7 @@ export function renderHomePage(): string {
           <div class="mt-6 flex flex-wrap gap-3">
             <a
               class="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-teal-800 px-5 py-3 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5"
-              href="/api/v1/auth/login"
+              href="/auth/login"
             >
               Sign In
             </a>

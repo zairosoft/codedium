@@ -26,7 +26,10 @@ async function bootstrap() {
 
   app.useStaticAssets(join(process.cwd(), 'public'));
   app.setGlobalPrefix('api/v1', {
-    exclude: [{ path: '/', method: RequestMethod.GET }],
+    exclude: [
+      { path: '/', method: RequestMethod.GET },
+      { path: 'auth/login', method: RequestMethod.GET },
+    ],
   });
   app.useGlobalPipes(
     new ValidationPipe({
