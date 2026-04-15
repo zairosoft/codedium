@@ -20,7 +20,7 @@ export function html(options: HtmlOptions): string {
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{options.title}</title>
-        <link rel="stylesheet" href="/assets/css/app.css" />
+        <link rel="stylesheet" href="/assets/css/app.build.css" />
       </head>
       <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
         {options.children}

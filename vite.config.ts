@@ -39,7 +39,7 @@ export default defineConfig({
       output: {
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.css')) {
-            return 'css/[name][extname]';
+            return 'css/[name].build[extname]';
           }
 
           return 'assets/[name]-[hash][extname]';
@@ -50,4 +50,3 @@ export default defineConfig({
     },
   },
 });
-
