@@ -1,11 +1,9 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { PermissionGuard } from '../../app/providers/permission.guard';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { RequirePermissions } from '../../app/providers/require-permissions.decorator';
 import { ModuleLifecycleService } from './module.lifecycle';
 import { ModuleRegistryService } from '../registry/module.registry';
 
 @Controller('modules')
-@UseGuards(PermissionGuard)
 export class ModuleLifecycleController {
   constructor(
     private readonly moduleRegistry: ModuleRegistryService,

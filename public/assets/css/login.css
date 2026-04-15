@@ -1,0 +1,205 @@
+/*
+ * Login page styles
+ * Requires: app.min.css (provides --color-primary, .page-wrap, .page-inner)
+ */
+
+/* Logo + heading */
+.heading {
+  text-align: center;
+}
+.heading svg {
+  margin: 0 auto;
+  display: block;
+}
+.heading h1 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #475569;
+  font-family: "Poppins", sans-serif;
+}
+.heading p {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .card {
+    padding: 1.75rem;
+  }
+}
+
+/* Field label */
+label.field {
+  display: block;
+  font-size: 0.875rem;
+  color: #334155;
+}
+label.field + label.field {
+  margin-top: 1rem;
+}
+label.field > span:first-child {
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+/* Input with icon */
+.input-wrap {
+  position: relative;
+  display: flex;
+}
+.input-icon {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+.form-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #cbd5e1;
+  background: transparent;
+  padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+  font-size: 0.875rem;
+  color: #334155;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input::placeholder {
+  color: rgb(148 163 184 / 0.7);
+}
+.form-input:hover {
+  border-color: #94a3b8;
+}
+.form-input:focus {
+  border-color: var(--color-primary);
+}
+.form-input:focus + .input-icon {
+  color: var(--color-primary);
+}
+
+/* Checkbox row */
+.check-row {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.form-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.125rem;
+  border: 1px solid rgb(148 163 184 / 0.7);
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+}
+
+/* Forgot password */
+.forgot-link {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.forgot-link:hover {
+  color: #1e293b;
+}
+
+/* Sign up row */
+.signup-row {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.8125rem;
+}
+.link-primary {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.link-primary:hover {
+  color: var(--color-primary-focus);
+}
+
+/* OR divider */
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.75rem 0;
+}
+.or-line {
+  height: 1px;
+  flex: 1;
+  background: #e2e8f0;
+}
+
+/* Social buttons */
+.social-row {
+  display: flex;
+  gap: 1rem;
+}
+.social-row .btn {
+  flex: 1;
+  gap: 0.75rem;
+}
+
+/* Footer */
+.footer-links {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+.footer-links a {
+  color: #94a3b8;
+  text-decoration: none;
+}
+.footer-links a:hover {
+  color: #475569;
+}
+.footer-divider {
+  width: 1px;
+  height: 1rem;
+  background: #e2e8f0;
+  margin: 0 0.75rem;
+}
+
+/* Error alert */
+.alert-error {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.375rem;
+  color: #dc2626;
+  font-size: 0.8125rem;
+}

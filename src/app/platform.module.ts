@@ -57,6 +57,10 @@ import { UsersService } from './services/users.service';
     UsersPolicy,
     UsersEventsListener,
     {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+    {
       provide: AUTH_SERVICE,
       useExisting: AuthService,
     },

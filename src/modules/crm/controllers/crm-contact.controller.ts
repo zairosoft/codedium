@@ -8,16 +8,12 @@ import {
   Patch,
   Post,
   Query,
-  Req,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { HtmlCacheable } from '../../../core/http/html-cache.decorator';
 import { RequiresModule } from '../../../core/module/module-enabled.decorator';
-import { PermissionGuard } from '../../../app/providers/permission.guard';
 import { RequirePermissions } from '../../../app/providers/require-permissions.decorator';
-import type { PermissionAwareRequest } from '../../../app/helpers/request-actor';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
@@ -27,7 +23,6 @@ import { CrmContactViewMapper } from '../views/crm-contact.view';
 
 @RequiresModule('crm')
 @Controller('crm')
-@UseGuards(PermissionGuard)
 export class CrmContactController {
   constructor(private readonly crmContactService: CrmContactService) {}
 
