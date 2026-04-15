@@ -3,10 +3,27 @@ import { join } from 'node:path';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Security headers
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // Disable CSP for server-rendered HTML pages
+    }),
+  );
+
+  // CORS — restrict in production
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN ?? '*',
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-Id'],
+    credentials: true,
+  });
+
   app.useStaticAssets(join(process.cwd(), 'public'));
   app.setGlobalPrefix('api/v1', {
     exclude: [{ path: '/', method: RequestMethod.GET }],
@@ -16,9 +33,6 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
     }),
   );
 
@@ -27,4 +41,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-

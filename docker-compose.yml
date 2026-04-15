@@ -23,6 +23,8 @@ services:
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       REDIS_DB: ${REDIS_DB:-0}
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-change-me}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
     volumes:
       - ./:/usr/src/app
       - node_modules:/usr/src/app/node_modules
@@ -80,6 +82,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    # WARNING: Remove these port mappings in production. Use internal Docker network only.
     ports:
       - "${DB_FORWARD_PORT:-5432}:5432"
     networks:
@@ -88,7 +91,7 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"]
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-}"]
     volumes:
       - redis_data:/data
     healthcheck:
@@ -97,6 +100,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5s
+    # WARNING: Remove these port mappings in production. Use internal Docker network only.
     ports:
       - "${REDIS_FORWARD_PORT:-6379}:6379"
     networks:

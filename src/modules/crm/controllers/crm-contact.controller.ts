@@ -3,53 +3,62 @@ import {
   Controller,
   Delete,
   Get,
-  Req,
   Header,
   Param,
   Patch,
   Post,
   Query,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { HtmlCacheable } from '../../../core/http/html-cache.decorator';
 import { RequiresModule } from '../../../core/module/module-enabled.decorator';
+import { PermissionGuard } from '../../../app/providers/permission.guard';
+import { RequirePermissions } from '../../../app/providers/require-permissions.decorator';
+import type { PermissionAwareRequest } from '../../../app/helpers/request-actor';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
-import { resolveCrmActor } from '../policies/crm-actor.policy';
 import { CrmContactService } from '../services/crm-contact.service';
 import { renderCrmDashboardPage } from '../views/crm-dashboard.page';
 import { CrmContactViewMapper } from '../views/crm-contact.view';
 
 @RequiresModule('crm')
 @Controller('crm')
+@UseGuards(PermissionGuard)
 export class CrmContactController {
   constructor(private readonly crmContactService: CrmContactService) {}
 
   @Post('contacts')
-  async create(@Body() dto: CreateContactDto, @Req() request: Request) {
-    return this.crmContactService.createContact(dto, resolveCrmActor(request));
+  @RequirePermissions('crm.contact.write')
+  async create(@Body() dto: CreateContactDto) {
+    return this.crmContactService.createContact(dto);
   }
 
   @Get('contacts')
-  async findAll(@Query() query: ListContactsDto, @Req() request: Request) {
-    return this.crmContactService.getContacts(query, resolveCrmActor(request));
+  @RequirePermissions('crm.contact.read')
+  async findAll(@Query() query: ListContactsDto) {
+    return this.crmContactService.getContacts(query);
   }
 
   @Get('contacts/:id')
-  async findOne(@Param('id') id: string, @Req() request: Request) {
-    return this.crmContactService.getContactById(id, resolveCrmActor(request));
+  @RequirePermissions('crm.contact.read')
+  async findOne(@Param('id') id: string) {
+    return this.crmContactService.getContactById(id);
   }
 
   @Patch('contacts/:id')
-  async update(@Param('id') id: string, @Body() dto: UpdateContactDto, @Req() request: Request) {
-    return this.crmContactService.updateContact(id, dto, resolveCrmActor(request));
+  @RequirePermissions('crm.contact.write')
+  async update(@Param('id') id: string, @Body() dto: UpdateContactDto) {
+    return this.crmContactService.updateContact(id, dto);
   }
 
   @Delete('contacts/:id')
-  async remove(@Param('id') id: string, @Req() request: Request) {
-    await this.crmContactService.removeContact(id, resolveCrmActor(request));
+  @RequirePermissions('crm.contact.write')
+  async remove(@Param('id') id: string) {
+    await this.crmContactService.removeContact(id);
     return {
       type: 'result',
       resource: 'crm.contact',
@@ -58,11 +67,13 @@ export class CrmContactController {
   }
 
   @Get('dashboard')
-  async getDashboard(@Req() request: Request) {
-    return this.crmContactService.getDashboardSummary(resolveCrmActor(request));
+  @RequirePermissions('crm.contact.read')
+  async getDashboard() {
+    return this.crmContactService.getDashboardSummary();
   }
 
   @Get('dashboard/page')
+  @RequirePermissions('crm.contact.read')
   @Header('Content-Type', 'text/html; charset=utf-8')
   @HtmlCacheable({
     maxAgeSeconds: 60,
@@ -70,9 +81,9 @@ export class CrmContactController {
     vary: ['Accept-Encoding', 'X-Tenant-Id'],
     surrogateKey: 'crm-dashboard',
   })
-  async renderDashboard(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+  async renderDashboard(@Res({ passthrough: true }) response: Response) {
     response.type('html');
-    const summary = await this.crmContactService.getDashboardSummary(resolveCrmActor(request));
+    const summary = await this.crmContactService.getDashboardSummary();
     return renderCrmDashboardPage(CrmContactViewMapper.toDashboard(summary));
   }
 }

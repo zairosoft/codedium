@@ -1,9 +1,11 @@
 import { Controller, Get, Header, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { Public } from '../auth/public.decorator';
 import { renderHomePage } from '../views/home/home.page';
 
 @Controller()
 export class HomeController {
+  @Public()
   @Get()
   @Header('Content-Type', 'text/html; charset=utf-8')
   renderRoot(@Res({ passthrough: true }) response: Response) {

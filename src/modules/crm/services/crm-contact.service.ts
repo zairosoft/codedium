@@ -7,7 +7,6 @@ import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
-import { CrmActor } from '../policies/crm-actor.policy';
 import { CrmContactPolicy } from '../policies/crm-contact.policy';
 import { CrmContactRepository } from '../repositories/crm-contact.repository';
 
@@ -29,8 +28,7 @@ export class CrmContactService {
     private readonly cacheService: CachePort,
   ) {}
 
-  async createContact(dto: CreateContactDto, actor: CrmActor): Promise<CrmContactEntity> {
-    this.crmContactPolicy.assertCanWrite(actor);
+  async createContact(dto: CreateContactDto): Promise<CrmContactEntity> {
     const payload = await this.hookService.emit('crm.contact.creating', dto);
     const contact = this.createContactEntity(payload);
     const saved = await this.crmContactRepository.save(contact);
@@ -40,8 +38,7 @@ export class CrmContactService {
     return saved;
   }
 
-  async getContacts(query: ListContactsDto, actor: CrmActor) {
-    this.crmContactPolicy.assertCanRead(actor);
+  async getContacts(query: ListContactsDto) {
     const normalizedQuery = this.crmContactPolicy.normalizeListQuery(query);
     const tenantId = this.crmContactRepository.getTenantId();
     const [moduleVersion, collectionVersion] = await Promise.all([
@@ -70,8 +67,7 @@ export class CrmContactService {
     );
   }
 
-  async getContactById(id: string, actor: CrmActor): Promise<CrmContactEntity> {
-    this.crmContactPolicy.assertCanRead(actor);
+  async getContactById(id: string): Promise<CrmContactEntity> {
     const tenantId = this.crmContactRepository.getTenantId();
     const moduleVersion = await this.getModuleCacheVersion();
     const cacheKey = this.buildDetailCacheKey(tenantId, moduleVersion, id);
@@ -86,9 +82,7 @@ export class CrmContactService {
   async updateContact(
     id: string,
     dto: UpdateContactDto,
-    actor: CrmActor,
   ): Promise<CrmContactEntity> {
-    this.crmContactPolicy.assertCanWrite(actor);
     const payload = await this.hookService.emit('crm.contact.updating', dto);
     const current = await this.crmContactRepository.findByIdOrFail(id);
 
@@ -101,8 +95,7 @@ export class CrmContactService {
     return updated;
   }
 
-  async removeContact(id: string, actor: CrmActor): Promise<void> {
-    this.crmContactPolicy.assertCanWrite(actor);
+  async removeContact(id: string): Promise<void> {
     const tenantId = this.crmContactRepository.getTenantId();
     const moduleVersion = await this.getModuleCacheVersion();
 
@@ -123,8 +116,7 @@ export class CrmContactService {
     });
   }
 
-  async getDashboardSummary(actor: CrmActor) {
-    this.crmContactPolicy.assertCanRead(actor);
+  async getDashboardSummary() {
     const tenantId = this.crmContactRepository.getTenantId();
     const [moduleVersion, collectionVersion] = await Promise.all([
       this.getModuleCacheVersion(),

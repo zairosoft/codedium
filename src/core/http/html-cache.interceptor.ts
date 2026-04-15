@@ -44,7 +44,11 @@ export class HtmlCacheInterceptor implements NestInterceptor {
 
     response.setHeader('Cache-Control', `${scope}, max-age=${options.maxAgeSeconds}`);
     response.setHeader('Vary', (options.vary ?? ['Accept-Encoding']).join(', '));
-    response.setHeader('X-HTML-Cache-Key', cacheKey);
+
+    // SECURITY: Only expose internal cache key in non-production environments
+    if (process.env.NODE_ENV !== 'production') {
+      response.setHeader('X-HTML-Cache-Key', cacheKey);
+    }
 
     if (options.surrogateKey) {
       response.setHeader('Surrogate-Key', `${options.surrogateKey} ${cacheKey}`);

@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import type { AuthenticatedUser } from '../../core/interfaces/auth.interface';
 
 export type RequestActor = {
   userId?: string;
@@ -8,37 +9,29 @@ export type RequestActor = {
 
 export type PermissionAwareRequest = Request & {
   actor?: RequestActor;
+  user?: AuthenticatedUser;
 };
 
-export function resolveRequestActor(request: Request): RequestActor {
-  const rawRoles = request.headers['x-user-roles'];
-  const rawOrganizationRole = request.headers['x-organization-role'];
-  const rawUserId = request.headers['x-user-id'];
-  const rawOrganizationId = request.headers['x-organization-id'];
+/**
+ * Resolves the request actor from the authenticated JWT user attached
+ * to the request by Passport. Falls back to empty actor if no user
+ * is present (public routes).
+ */
+export function resolveRequestActor(request: PermissionAwareRequest): RequestActor {
+  const authenticatedUser = request.user;
 
-  const roleCodes = parseHeaderList(rawRoles);
-  const organizationRoleCodes = parseHeaderList(rawOrganizationRole);
-  const userId = extractHeaderValue(rawUserId);
-  const organizationId = extractHeaderValue(rawOrganizationId);
-
-  return {
-    userId: userId || undefined,
-    organizationId: organizationId || undefined,
-    roleCodes: [...new Set([...roleCodes, ...organizationRoleCodes])],
-  };
-}
-
-function parseHeaderList(value: string | string[] | undefined): string[] {
-  return extractHeaderValue(value)
-    .split(',')
-    .map((segment) => segment.trim())
-    .filter(Boolean);
-}
-
-function extractHeaderValue(value: string | string[] | undefined): string {
-  if (Array.isArray(value)) {
-    return value[0] ?? '';
+  if (authenticatedUser) {
+    return {
+      userId: authenticatedUser.userId,
+      organizationId: authenticatedUser.memberships?.[0]?.organizationId,
+      roleCodes: [...new Set(authenticatedUser.roles ?? [])],
+    };
   }
 
-  return value ?? '';
+  // Fallback for public routes — no identity
+  return {
+    userId: undefined,
+    organizationId: undefined,
+    roleCodes: [],
+  };
 }

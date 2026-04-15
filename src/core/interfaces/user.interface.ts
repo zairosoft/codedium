@@ -32,6 +32,7 @@ export type UpdateUserInput = Partial<{
 
 export interface UserServicePort {
   findById(id: string): Promise<UserRecord | null>;
+  findByEmail(email: string): Promise<UserRecord | null>;
   createUser(input: CreateUserInput): Promise<UserRecord>;
   updateUser(id: string, input: UpdateUserInput): Promise<UserRecord>;
 }

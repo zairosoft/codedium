@@ -42,6 +42,15 @@ export class UsersService implements UserServicePort {
     return entity ? this.toRecord(entity) : null;
   }
 
+  async findByEmail(email: string): Promise<UserRecord | null> {
+    const tenantId = this.tenantContext.getTenantId();
+    const entity = await this.usersRepository.findOne({
+      where: { tenantId, email: email.trim().toLowerCase() },
+      relations: { memberships: true },
+    });
+    return entity ? this.toRecord(entity) : null;
+  }
+
   async getUserById(id: string, actor?: RequestActor): Promise<UserRecord> {
     if (actor) {
       this.usersPolicy.assertCanReadDirectory(actor);
