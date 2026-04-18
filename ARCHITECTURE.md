@@ -166,10 +166,10 @@ Current lifecycle surface:
 
 Current HTTP endpoints:
 
-- `GET /api/v1/system/modules`
-- `POST /api/v1/system/modules/:name/install`
-- `POST /api/v1/system/modules/:name/uninstall`
-- `POST /api/v1/system/modules/:name/upgrade`
+- `GET /api/v1/modules`
+- `POST /api/v1/modules/:name/install`
+- `POST /api/v1/modules/:name/uninstall`
+- `POST /api/v1/modules/:name/upgrade`
 
 Current CLI commands:
 

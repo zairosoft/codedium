@@ -52,7 +52,7 @@ Examples:
 - `GET /` -> landing page
 - `GET /auth/login` -> login page
 - `POST /api/v1/auth/login` -> JSON login endpoint
-- `GET /api/v1/system/modules` -> module registry endpoint
+- `GET /api/v1/modules` -> module registry endpoint
 
 ## Requirements
 
