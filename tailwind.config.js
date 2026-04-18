@@ -11,6 +11,7 @@
 const path = require('path');
 
 module.exports = {
+  darkMode: 'class',
   content: [
     path.join(__dirname, 'src/**/*.tsx'),
     path.join(__dirname, 'src/**/*.ts'),
@@ -24,9 +25,30 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#4361ee",
+          DEFAULT: "#4f46e5",
           light: "#eaf1ff",
+          focus: "#4338ca",
           "dark-light": "rgba(67,97,238,.15)",
+        },
+        accent: {
+          light: "#818cf8",
+          DEFAULT: "#5f5af6",
+          focus: "#4d47f5",
+        },
+        slate: {
+          150: "#e9eef5",
+        },
+        navy: {
+          50: "#e7e9ef",
+          100: "#c2c9d6",
+          200: "#a3adc2",
+          300: "#697a9b",
+          400: "#5c6b8a",
+          450: "#465675",
+          500: "#384766",
+          700: "#26334d",
+          800: "#202b40",
+          900: "#192132",
         },
         secondary: {
           DEFAULT: "#805dca",
@@ -70,10 +92,19 @@ module.exports = {
         },
       },
       fontFamily: {
+        sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+        inter: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
         nunito: ["Nunito", "sans-serif"],
+      },
+      fontSize: {
+        "xs-plus": ["0.8125rem", { lineHeight: "1.125rem" }],
       },
       spacing: {
         4.5: "18px",
+        5.5: "1.375rem",
+      },
+      minHeight: {
+        "100vh": "100vh",
       },
       boxShadow: {
         "3xl": "0 2px 2px rgb(224 230 237 / 46%), 1px 6px 7px rgb(224 230 237 / 46%)",

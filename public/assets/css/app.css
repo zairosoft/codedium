@@ -5,14 +5,35 @@
 
 @layer base {
   :root {
-    --color-primary: #4361ee;
-    --color-primary-focus: #3451c7;
+    --color-primary: #4f46e5;
+    --color-primary-focus: #4338ca;
     --color-primary-light: #eaf1ff;
     --color-primary-text: #fff;
+    --color-accent: #5f5af6;
+    --color-accent-light: #818cf8;
+    --color-accent-focus: #4d47f5;
+    --color-navy-50: #e7e9ef;
+    --color-navy-100: #c2c9d6;
+    --color-navy-200: #a3adc2;
+    --color-navy-300: #697a9b;
+    --color-navy-400: #5c6b8a;
+    --color-navy-450: #465675;
+    --color-navy-500: #384766;
+    --color-navy-700: #26334d;
+    --color-navy-800: #202b40;
+    --color-navy-900: #192132;
+    --color-slate-150: #e9eef5;
     --color-success: #00ab55;
     --color-danger: #e7515a;
     --color-warning: #e2a03f;
     --color-info: #2196f3;
+    --font-sans: Poppins, ui-sans-serif, system-ui, sans-serif;
+    --font-inter: Inter, ui-sans-serif, system-ui, sans-serif;
+    --text-xs-plus: 0.8125rem;
+    --radius-sm: 0.25rem;
+    --radius-lg: 0.5rem;
+    --tracking-wide: 0.025em;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   *,
@@ -31,7 +52,7 @@
   body {
     background-color: #f8fafc;
     color: #334155;
-    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -74,24 +95,125 @@
 
 
 @layer components {
-  .page-wrap {
-    display: grid;
-    min-height: 100vh;
-    place-items: center;
-    grid-template-columns: 1fr;
-    background-color: #f8fafc;
+  .card {
+    background-color: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 3px 10px 0 rgb(48 46 56 / 0.06);
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    min-width: 1px;
+    overflow-wrap: break-word;
+    position: relative;
   }
 
-  .page-inner {
+  html.dark .card {
+    background-color: var(--color-navy-700);
+    box-shadow: none;
+    color: var(--color-navy-200);
+  }
+
+  .btn {
+    align-items: center;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    letter-spacing: var(--tracking-wide);
+    padding: 0.5rem 1.25rem;
+    text-align: center;
+    text-decoration: none;
+    transition:
+      background-color 0.2s var(--default-transition-timing-function),
+      border-color 0.2s var(--default-transition-timing-function),
+      color 0.2s var(--default-transition-timing-function),
+      opacity 0.2s var(--default-transition-timing-function);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+
+  .form-input,
+  .form-checkbox,
+  .form-checkbox::before {
+    transition:
+      all 0.2s var(--default-transition-timing-function);
+  }
+
+  .form-input {
+    appearance: none;
+    contain: paint;
+    letter-spacing: var(--tracking-wide);
+    outline: none;
+  }
+
+  .form-input::placeholder {
+    font-weight: 300;
+  }
+
+  .form-checkbox {
+    --tw-ease: var(--default-transition-timing-function);
+    background-color: transparent;
+    background-image: none;
+    border-style: solid;
+    border-width: 1px;
+    appearance: none;
+    cursor: pointer;
+    display: inline-block;
+    flex-shrink: 0;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    transition-timing-function: var(--tw-ease);
+  }
+
+  input.form-checkbox {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  input.form-checkbox:focus {
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: transparent;
+    --tw-ring-color: transparent;
+    --tw-ring-shadow: 0 0 #0000;
+    box-shadow: none;
+    outline: none;
+  }
+
+  .form-checkbox::before {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
+    background-origin: border-box;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    content: "";
+    height: 100%;
+    inset: 0;
+    opacity: 0;
+    position: absolute;
+    scale: 0 0;
+    transform-origin: bottom;
     width: 100%;
-    max-width: 26rem;
-    padding: 1rem;
   }
 
-  @media (min-width: 640px) {
-    .page-inner {
-      padding-left: 1.25rem;
-      padding-right: 1.25rem;
+  .form-checkbox.is-basic {
+    background-origin: border-box;
+  }
+
+  .form-checkbox:checked::before {
+    opacity: 1;
+    scale: 1 1;
+  }
+
+  @media (hover: hover) {
+    .form-checkbox:hover {
+      box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
     }
   }
 }

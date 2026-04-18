@@ -9,7 +9,7 @@
     "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
     "dev": "npm run build:css && (npm run dev:css & npm run dev:nest)",
     "dev:nest": "ts-node-dev --respawn --transpile-only src/main.ts",
-    "dev:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/app.build.css --watch",
+    "dev:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/tailwindcss.css --watch",
     "db:platform": "ts-node src/database/platform-schema.runner.ts",
     "seed": "ts-node src/database/seeder.runner.ts",
     "module:list": "ts-node src/core/lifecycle/module-lifecycle.runner.ts list",
@@ -17,7 +17,7 @@
     "module:upgrade": "ts-node src/core/lifecycle/module-lifecycle.runner.ts upgrade",
     "module:uninstall": "ts-node src/core/lifecycle/module-lifecycle.runner.ts uninstall",
     "test": "echo \"No tests configured yet\" && exit 0",
-    "build:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/app.build.css --minify"
+    "build:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/tailwindcss.css --minify"
   },
   "keywords": [],
   "author": "",
