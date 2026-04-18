@@ -150,6 +150,24 @@
     outline: none;
   }
 
+  input.form-input:focus,
+  input.form-input:focus-visible,
+  textarea.form-input:focus,
+  textarea.form-input:focus-visible,
+  select.form-input:focus,
+  select.form-input:focus-visible {
+    --tw-ring-inset: initial !important;
+    --tw-ring-offset-width: 0px !important;
+    --tw-ring-offset-color: transparent !important;
+    --tw-ring-offset-shadow: 0 0 #0000 !important;
+    --tw-ring-color: transparent !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    --tw-shadow: 0 0 #0000 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    outline-offset: 0 !important;
+  }
+
   .form-input::placeholder {
     font-weight: 300;
   }
@@ -175,13 +193,20 @@
     background-image: none !important;
   }
 
-  input.form-checkbox:focus {
-    --tw-ring-offset-width: 0px;
-    --tw-ring-offset-color: transparent;
-    --tw-ring-color: transparent;
-    --tw-ring-shadow: 0 0 #0000;
-    box-shadow: none;
-    outline: none;
+  input.form-checkbox:focus,
+  input.form-checkbox:focus-visible,
+  input.form-checkbox:checked:focus,
+  input.form-checkbox:checked:focus-visible {
+    --tw-ring-inset: initial !important;
+    --tw-ring-offset-width: 0px !important;
+    --tw-ring-offset-color: transparent !important;
+    --tw-ring-offset-shadow: 0 0 #0000 !important;
+    --tw-ring-color: transparent !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    --tw-shadow: 0 0 #0000 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    outline-offset: 0 !important;
   }
 
   .form-checkbox::before {
