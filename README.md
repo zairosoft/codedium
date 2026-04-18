@@ -1,10 +1,19 @@
 # Workless
 
-> NestJS modular monolith for CRM, helpdesk, and tenant-aware SaaS backends.
-
-Workless is a NestJS MVC-style backend organized as a modular monolith. The project keeps a module-first structure under `src/modules`, adds a central system registry and lifecycle layer under `src/core`, and supports PostgreSQL, Redis, tenant scoping, hooks, events, and server-rendered HTML endpoints.
+NestJS modular monolith for platform services, tenant-aware business modules, and server-rendered HTML pages.
 
 ![Screen](https://www.zairosoft.com/assets/2025/04/codedium.webp "Dashboards")
+
+## Overview
+
+Workless is organized around four top-level runtime areas:
+
+- `src/app`: platform-level auth, users, roles, notifications, home page, and HTML views
+- `src/core`: module registry, lifecycle, hook/event bus, tenant context, and HTML cache support
+- `src/database`: TypeORM bootstrap, schema runner, and seeder runner
+- `src/modules`: runtime business modules such as `crm`, `helpdesk`, and `org`
+
+The application is a single NestJS process. Business modules are discovered from `src/modules/runtime-modules.ts` and then mounted into `AppModule`.
 
 ## Stack
 
@@ -13,15 +22,44 @@ Workless is a NestJS MVC-style backend organized as a modular monolith. The proj
 - PostgreSQL
 - Redis / ioredis
 - BullMQ
-- class-validator / class-transformer
-- Server-rendered HTML endpoints with reverse-proxy cache support
+- KITA JSX/TSX server-rendered views
+- Tailwind CSS 4
+
+## Runtime Entry Points
+
+- `src/main.ts`: Nest bootstrap, CORS, Helmet, static assets, global prefix
+- `src/app.module.ts`: root module composition
+- `src/app/platform.module.ts`: platform controllers, auth, users, permissions, notifications
+- `src/core/core.module.ts`: module lifecycle, module enablement guard, hook/event bus, HTML cache interceptor
+- `src/database/database.module.ts`: TypeORM integration
+- `src/modules/runtime-modules.ts`: list of business modules to load at runtime
+
+## URL Structure
+
+Most HTTP endpoints are prefixed with:
+
+```text
+/api/v1
+```
+
+Current public routes excluded from the prefix:
+
+- `GET /`
+- `GET /auth/login`
+
+Examples:
+
+- `GET /` -> landing page
+- `GET /auth/login` -> login page
+- `POST /api/v1/auth/login` -> JSON login endpoint
+- `GET /api/v1/system/modules` -> module registry endpoint
 
 ## Requirements
 
-- Node.js 20+ recommended
+- Node.js 20+
 - npm 10+
 - PostgreSQL 14+ recommended
-- Redis 6+ optional but recommended for cache/queue workloads
+- Redis 6+ optional
 
 ## Installation
 
@@ -38,45 +76,34 @@ cd workless
 npm install
 ```
 
-3. Create your environment file
+3. Create environment file
 
 ```bash
 cp .env.example .env
 ```
 
-4. Configure environment values in `.env`
+4. Configure `.env`
 
-Base application settings:
+Required:
 
-- `NODE_ENV=development`
-- `PORT=3000`
-
-Required database settings:
-
+- `PORT`
 - `DB_HOST`
 - `DB_PORT`
 - `DB_USERNAME`
 - `DB_PASSWORD`
 - `DB_NAME`
+- `JWT_SECRET`
 
-Optional Redis settings:
+Useful defaults from `.env.example`:
 
-- `REDIS_ENABLED=true`
-- `REDIS_HOST`
-- `REDIS_PORT`
-- `REDIS_PASSWORD`
-- `REDIS_DB`
+- `DB_SYNC=true` for local development only
+- `REDIS_ENABLED=false` if Redis is not running
+- `JWT_EXPIRES_IN=1h`
 
-5. Run the application in development mode
+5. Start the app
 
 ```bash
 npm run start:dev
-```
-
-The API starts with the global prefix:
-
-```text
-/api/v1
 ```
 
 ## Available Scripts
@@ -85,7 +112,9 @@ The API starts with the global prefix:
 npm run start:dev
 npm run build
 npm run start
-npm run test
+npm run dev
+npm run build:css
+npm run db:platform
 npm run seed
 npm run module:list
 npm run module:install -- crm
@@ -93,165 +122,88 @@ npm run module:upgrade -- crm
 npm run module:uninstall -- crm
 ```
 
-## Project Structure
+Notes:
 
-The project keeps its original module-oriented structure and expands it with core runtime services:
+- `npm run dev` starts Nest dev mode and Tailwind watch mode together
+- `npm run build:css` compiles `public/assets/css/app.css` to `public/assets/css/tailwindcss.css`
+- `npm run test` is currently a placeholder and does not run a real test suite yet
+
+## Project Structure
 
 ```text
 src/
   app.module.ts
   main.ts
   app/
+    auth/
+    controllers/
+    dto/
+    entities/
+    helpers/
+    providers/
+    services/
+    views/
   core/
     events/
     http/
-    interfaces/
-    lifecycle/
-    registry/
-    system/
-    tenant/
     infrastructure/
       cache/
+      database/
+    interfaces/
+    lifecycle/
+    module/
+    registry/
+    tenant/
   database/
-  core/
+    migrations/
+    seeders/
   modules/
     apps/
     crm/
     helpdesk/
     org/
+    runtime-modules.ts
 public/
+  assets/
+    css/
 ```
 
-## Module Layout
+## Module Status
 
-Business modules live in `src/modules/<module-name>` and stay self-contained.
+Runtime-loaded modules from `src/modules/runtime-modules.ts`:
 
-Typical module layout:
+- `crm`
+- `helpdesk`
+- `org`
 
-```text
-src/modules/crm/
-  controllers/
-  dto/
-  entities/
-  hooks/
-  lifecycle/
-  migrations/
-  policies/
-  repositories/
-  seeders/
-  services/
-  views/
-  module.ts
-```
+Current state:
 
-## Current Architecture
+- `crm` is the most complete reference module
+- `helpdesk` and `org` have module/lifecycle scaffolding in place
+- `apps` is a reserved scaffold and is not currently loaded at runtime
 
-### Core
+## Frontend Asset Pipeline
 
-- `src/core/system`: system module discovery and enable/disable rules
-- `src/core/registry`: persistent module registry state plus in-memory runtime snapshot
-- `src/core/lifecycle`: install / uninstall / upgrade flows and lifecycle event emission
-- `src/core/events`: hook transformation flow and event bus dispatch
-- `src/core/http`: HTML cache metadata and interceptor
+Workless serves static files from `public/`.
 
-### Infrastructure
+Current CSS pipeline:
 
-- `src/database`: TypeORM bootstrap, platform schema runner, and seed runner
-- `src/core/infrastructure/cache`: centralized cache service, `remember(...)` helper, and Redis provider
+- source: `public/assets/css/app.css`
+- output: `public/assets/css/tailwindcss.css`
+- Tailwind config: `tailwind.config.js`
 
-### Multi-Tenant
+Optional tooling present in the repo:
 
-- Tenant context is resolved from `x-tenant-id`
-- Shared-database tenancy is implemented through `tenantId` on entities
-- Cache keys are tenant-aware
+- `vite.config.ts`
+- `vitest.config.ts`
 
-## CRM Example
+These exist for frontend tooling and local build workflows, but the primary runtime remains the Nest app serving static assets from `public/`.
 
-The CRM module is the current reference implementation for the modular monolith approach.
+## Important Notes
 
-Included concerns:
-
-- thin controller layer
-- service orchestration
-- entity-backed persistence
-- repository persistence
-- hooks before create/update
-- event-driven notifications after writes
-- tenant-aware caching
-- module lifecycle support
-- HTML-cacheable dashboard endpoint
-- module-local rendered views
-
-Relevant files:
-
-- `src/modules/crm/module.ts`
-- `src/modules/crm/controllers/crm-contact.controller.ts`
-- `src/modules/crm/services/crm-contact.service.ts`
-- `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
-- `src/modules/crm/entities/crm-contact.entity.ts`
-- `src/modules/crm/views/crm-contact.view.ts`
-- `src/modules/crm/views/crm-dashboard.page.ts`
-
-Known repository edge:
-
-- `src/modules/crm/controllers/crm.controller.ts` and `src/modules/crm/services/crm.service.ts` still exist as older duplicates
-- the active wired CRM path is the `crm-contact.*` set above
-
-## Caching
-
-### Data Cache
-
-Redis-backed caching is exposed through:
-
-- `src/core/infrastructure/cache/cache.module.ts`
-- `src/core/infrastructure/cache/cache.service.ts`
-
-Used for:
-
-- dashboard summaries
-- list endpoints
-- profile/detail endpoints
-
-Preferred service pattern:
-
-- build tenant-aware key
-- use `CacheService.remember(...)`
-- invalidate detail and collection version keys on writes
-
-### HTML Cache
-
-The application can emit cache headers for reverse proxies such as NGINX.
-
-Current example:
-
-- `GET /api/v1/crm/dashboard/page`
-
-Headers are managed through the HTML cache interceptor in `src/core/http`.
-
-## Build
-
-```bash
-npm run build
-```
-
-Build output is written to `dist/`.
-
-## Seed Data
-
-To run module installation/seed flows:
-
-```bash
-npm run seed
-```
-
-This currently installs discovered modules through the lifecycle service and runs their seeders where defined.
-
-## Notes
-
-- This repository is now NestJS-based, not Laravel/PHP-based.
-- Some directories still exist as placeholders to preserve the original modular layout across features.
-- `theme html/` contains design/template assets and is not the NestJS runtime source directory.
-- New cache work should stay under `src/core/infrastructure/cache`.
+- `theme/` is reference material only and should not be treated as a runtime dependency.
+- `dist/` is generated output from `npm run build`.
+- The app uses shared-database tenancy via tenant context middleware and tenant-scoped entities.
 
 ## Security
 
@@ -259,4 +211,4 @@ Please review [SECURITY.md](SECURITY.md).
 
 ## License
 
-Released under the [GNU GENERAL PUBLIC License](license.txt).
+See [license.txt](license.txt).

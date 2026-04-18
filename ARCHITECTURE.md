@@ -1,265 +1,300 @@
-# Modular Monolith Architecture
+# Workless Architecture
 
-## Overview
+## Runtime Shape
 
-This refactor keeps the application as a NestJS monolith, but changes the runtime model from flat feature modules to modular compiled modules with runtime state.
+Workless is a NestJS modular monolith. The running application is assembled in `src/app.module.ts` from these layers:
 
-Implemented layers:
+1. `ConfigModule`
+2. `EventEmitterModule`
+3. `ThrottlerModule`
+4. `TenantModule`
+5. `DatabaseModule`
+6. `CacheModule`
+7. `PlatformModule`
+8. `CoreModule`
+9. runtime business modules from `src/modules/runtime-modules.ts`
 
-- `src/app`: platform services and IAM-style controllers/modules
-- `src/core`: module registry, module lifecycle, hook/event system, module enable/disable guard, HTML cache headers, cache infrastructure
-- `src/database`: TypeORM bootstrap and lifecycle seeding entrypoint
-- `src/modules`: self-contained business modules with `controllers`, `services`, `entities`, `repositories`, `dto`, `hooks`, `policies`, `seeders`, `migrations`, `lifecycle`, `views`
-- `public`: static asset output target for Vite or other frontend builds
+This means the project is not split into separate deployable services. Platform features and business modules run in one Nest process and share the same database connection and middleware pipeline.
 
-## Runtime Flow
+## Bootstrap
 
-1. `CoreModule` discovers System modules through `@SystemModule(...)` metadata.
-2. `ModuleRegistryService` syncs discovered modules into `system_module_registry` and keeps a runtime in-memory snapshot for fast enablement checks.
-3. `ModuleLifecycleService` executes `install`, `uninstall`, and `upgrade`, logs actions, and emits lifecycle events.
-4. `ModuleEnabledGuard` blocks controllers decorated with `@RequiresModule('module_name')` when the module is not installed and enabled.
-5. `HookService` resolves `@Hook('event.name')` handlers for payload transformation flows.
-6. `EventBusService` emits post-action and lifecycle events for loose coupling.
+`src/main.ts` is the HTTP bootstrap.
 
-## Module Registry
+Current responsibilities:
 
-Entity: `src/core/registry/module-registry.entity.ts`
+- create the Nest app
+- apply Helmet
+- enable CORS
+- serve static files from `public/`
+- set global API prefix to `/api/v1`
+- exclude `GET /` and `GET /auth/login` from the prefix
+- enable `ValidationPipe`
 
-Tracked state:
+Current route shape:
 
-- `name`
-- `version`
-- `status`: `installed | uninstalled | disabled`
-- `enabled`
-- `description`
-- `dependencies`
-- `installedAt`
-- `upgradedAt`
+- HTML pages:
+  - `GET /`
+  - `GET /auth/login`
+- API endpoints:
+  - `/api/v1/...`
 
-Current runtime behavior:
+## Top-Level Source Layout
 
-- registry metadata is synchronized on bootstrap
-- enable/disable checks prefer the in-memory snapshot over repeated database reads
-- persistence is only updated when module metadata or lifecycle state actually changes
+```text
+src/
+  app.module.ts
+  main.ts
+  app/
+  core/
+  database/
+  modules/
+```
 
-API endpoints:
+### `src/app`
+
+Platform concerns that are always present regardless of which runtime business modules are installed.
+
+Current contents:
+
+- `auth/`: JWT guard, strategy, `@Public()`
+- `controllers/`: auth, home, users, notifications, permissions, profile, roles, settings
+- `dto/`: login and user DTOs
+- `entities/`: platform users and memberships
+- `providers/`: permission guard, listeners, policies
+- `services/`: auth, users, roles, notifications
+- `views/`: landing page, login page, shared HTML components
+
+`PlatformModule` wires these pieces together and also exports service contracts through the interfaces under `src/core/interfaces`.
+
+### `src/core`
+
+Cross-cutting infrastructure and runtime orchestration.
+
+Current responsibilities:
+
+- hook system
+- event bus
+- module metadata discovery
+- module enabled guard
+- module registry persistence
+- module lifecycle commands and HTTP controller
+- tenant context resolution
+- HTML cache headers/interceptor
+- cache infrastructure
+
+Important files:
+
+- `src/core/core.module.ts`
+- `src/core/events/event-bus.service.ts`
+- `src/core/events/hook.service.ts`
+- `src/core/module/module.decorator.ts`
+- `src/core/module/module.explorer.ts`
+- `src/core/module/module-enabled.guard.ts`
+- `src/core/registry/module-registry.entity.ts`
+- `src/core/registry/module.registry.ts`
+- `src/core/lifecycle/module.lifecycle.ts`
+- `src/core/lifecycle/module-lifecycle.controller.ts`
+- `src/core/tenant/tenant-context.middleware.ts`
+- `src/core/http/html-cache.interceptor.ts`
+- `src/core/infrastructure/cache/cache.module.ts`
+
+### `src/database`
+
+Database integration for the Nest app and operational runners.
+
+Current contents:
+
+- `database.module.ts`: registers TypeORM
+- `typeorm.config.ts`: Postgres connection options from environment
+- `platform-schema.runner.ts`: platform schema runner
+- `seeder.runner.ts`: lifecycle-aware seeding entrypoint
+- `migrations/`: platform migrations
+- `seeders/`: platform seeders
+
+The database configuration currently assumes PostgreSQL and enables `synchronize` only for non-production environments when `DB_SYNC=true`.
+
+### `src/modules`
+
+Business modules loaded at runtime.
+
+Current runtime list from `src/modules/runtime-modules.ts`:
+
+- `crm`
+- `helpdesk`
+- `org`
+
+Current state:
+
+- `crm` contains the most real implementation
+- `helpdesk` and `org` mostly provide module/lifecycle scaffolding
+- `apps` is present as a scaffold and is not currently loaded by `runtime-modules.ts`
+
+## Runtime Module Loading
+
+Runtime modules are not auto-scanned from the filesystem. They are loaded from the explicit list in `src/modules/runtime-modules.ts`.
+
+Current behavior:
+
+- if a module export is present, it is added to `AppModule.imports`
+- if a module file is missing, the loader logs a warning and skips it
+- expected exports:
+  - `CrmModule`
+  - `HelpdeskModule`
+  - `OrgModule`
+
+This makes module activation explicit at code level while still allowing operational enable/disable state through the module registry.
+
+## Module Registry and Lifecycle
+
+The module registry persists operational state in `ModuleRegistryEntity`.
+
+Tracked state includes:
+
+- module name
+- version
+- status
+- enabled flag
+- description
+- dependencies
+- timestamps such as installed and upgraded dates
+
+Current lifecycle surface:
+
+- controller: `src/core/lifecycle/module-lifecycle.controller.ts`
+- service: `src/core/lifecycle/module.lifecycle.ts`
+- CLI runner: `src/core/lifecycle/module-lifecycle.runner.ts`
+
+Current HTTP endpoints:
 
 - `GET /api/v1/system/modules`
 - `POST /api/v1/system/modules/:name/install`
 - `POST /api/v1/system/modules/:name/uninstall`
 - `POST /api/v1/system/modules/:name/upgrade`
 
-CLI entrypoint:
+Current CLI commands:
 
 - `npm run module:list`
-- `npm run module:install -- crm`
-- `npm run module:upgrade -- crm`
-- `npm run module:uninstall -- crm`
+- `npm run module:install -- <name>`
+- `npm run module:upgrade -- <name>`
+- `npm run module:uninstall -- <name>`
 
-## Module Lifecycle
+## Guards and Request Pipeline
 
-Contract: `src/core/system/system-module.interface.ts`
+Global guards in the current app:
 
-Each System module implements:
+- `ThrottlerGuard` from `AppModule`
+- `JwtAuthGuard` from `PlatformModule`
+- `PermissionGuard` from `PlatformModule`
+- `ModuleEnabledGuard` from `CoreModule`
 
-- `install(context)`
-- `uninstall(context)`
-- `upgrade(context, fromVersion)`
+Important consequence:
 
-Current CRM example:
+- endpoints are authenticated by default unless marked with `@Public()`
+- module-enabled checks are centralized in core
+- tenant context middleware runs for all routes before controller handling
 
-- lifecycle provider: `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
-- migration: `src/modules/crm/migrations/crm-contact-index.migration.ts`
-- seeder: `src/modules/crm/seeders/crm-contact.seeder.ts`
+## Tenant Model
 
-Install flow:
+The current tenant model is shared-database multi-tenancy.
 
-1. run idempotent module migrations
-2. seed baseline data
-3. mark registry state as installed and enabled
-4. clear stale cache namespaces
+Implemented pieces:
 
-Uninstall flow:
+- `TenantContextMiddleware`
+- `TenantContextService`
+- `TenantScopedEntity`
 
-1. execute module-specific cleanup hooks
-2. disable module
-3. mark registry state as uninstalled
+Current behavior:
 
-Upgrade flow:
+- tenant is resolved from request context
+- entities can inherit tenant-scoped fields
+- cache keys can include tenant identifiers
+- HTML cache can vary by tenant header
 
-1. read the current stored version
-2. run module migrations for the target code version
-3. clear cache namespaces
-4. mark the new version as installed
+## Hooks and Events
 
-Lifecycle side effects:
+Workless keeps both a hook pipeline and an event bus.
 
-- log install / uninstall / upgrade actions
-- emit lifecycle events after state changes
+Use cases:
 
-## CRM Example Module
+- hooks: pre-processing and payload transformation before domain writes
+- events: post-action notifications and loose coupling between modules
 
-Implemented CRM module structure:
-
-- `src/modules/crm/controllers/crm-contact.controller.ts`
-- `src/modules/crm/services/crm-contact.service.ts`
-- `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
-- `src/modules/crm/entities/crm-contact.entity.ts`
-- `src/modules/crm/repositories/crm-contact.repository.ts`
-- `src/modules/crm/hooks/crm-contact.hooks.ts`
-- `src/modules/crm/policies/crm-contact.policy.ts`
-- `src/modules/crm/seeders/crm-contact.seeder.ts`
-- `src/modules/crm/migrations/crm-contact-index.migration.ts`
-- `src/modules/crm/views/crm-contact.view.ts`
-- `src/modules/crm/views/crm-dashboard.page.ts`
-
-Design choices:
-
-- controllers stay thin and delegate orchestration to services
-- entities stay persistence-focused and services coordinate contact workflows
-- repository stays tenant-aware and hides persistence concerns from services
-- hooks sanitize inbound DTOs before persistence
-- event bus handles post-write notifications such as `customer.afterCreate`
-- module enablement is enforced centrally with `@RequiresModule('crm')`
-
-Known edge:
-
-- older CRM duplicates such as `crm.controller.ts` and `crm.service.ts` still exist in the tree
-- the active wired path is `crm-contact.*` via `src/modules/crm/module.ts`
-
-## Cache Layer
-
-Implementation:
-
-- `src/core/infrastructure/cache/cache.module.ts`
-- `src/core/infrastructure/cache/cache.service.ts`
-- `src/core/infrastructure/cache/redis.provider.ts`
-
-Public contract:
-
-- `cacheService.get(key)`
-- `cacheService.set(key, value, ttl)`
-- `cacheService.del(key)`
-- `cacheService.remember(key, ttl, resolver)`
-
-### Cache Strategy
-
-CRM cache keys are tenant-aware:
-
-- contact detail: `crm:{tenantId}:contacts:{id}`
-- collection namespace version: `crm:{tenantId}:contacts:version`
-- list results: `crm:{tenantId}:contacts:list:{version}:{queryHash}`
-- dashboard: `crm:{tenantId}:dashboard:{version}`
-
-Recommended TTLs:
-
-- dashboard summary: `60s`
-- list endpoints: `120s`
-- profile/detail endpoints: `300s`
-
-### Invalidation
-
-On create/update/delete:
-
-- delete the contact detail key
-- delete the collection version key
-- let list and dashboard keys roll forward to a fresh namespace version
-
-This avoids wildcard deletes and keeps invalidation Redis-friendly at scale.
-
-## Hook / Event System
-
-Files:
+Important files:
 
 - `src/core/events/hook.decorator.ts`
 - `src/core/events/hook.service.ts`
+- `src/core/events/event-bus.service.ts`
 
-Pattern:
+## Cache and HTML Rendering
 
-- `@Hook('customer.beforeCreate')`
-- `await hookService.emit('customer.beforeCreate', payload)`
+The cache layer lives under:
 
-Why both hooks and events are kept:
+- `src/core/infrastructure/cache/cache.module.ts`
+- `src/core/infrastructure/cache/cache.service.ts`
 
-- hooks support sequential payload transformation before domain work
-- events let other modules react after domain work without direct imports
+HTML cache support lives under:
 
-Recommended split:
+- `src/core/http/html-cache.decorator.ts`
+- `src/core/http/html-cache.interceptor.ts`
 
-- `HookService` for `before*` flows that may transform payloads
-- `EventBusService` for `after*` and lifecycle notifications
+Views are server-rendered with KITA JSX/TSX from `src/app/views` and `src/modules/*/views`.
 
-Current example:
+Current public HTML examples:
 
-- CRM sanitizes contact payloads through `CrmContactHooks`
-- Notifications listens to `customer.afterCreate`
+- `src/app/views/home/home.page.tsx`
+- `src/app/views/auth/login.page.tsx`
+- `src/modules/crm/views/crm-dashboard.page.tsx`
 
-## HTML Cache Guidelines
+## CRM as the Reference Module
 
-Implemented example:
+`crm` is the most complete example of the intended module shape.
 
-- endpoint: `GET /api/v1/crm/dashboard/page`
-- decorator: `@HtmlCacheable({ maxAgeSeconds: 60, scope: 'public', vary: ['Accept-Encoding', 'X-Tenant-Id'] })`
-- renderer: `src/modules/crm/views/crm-dashboard.page.ts`
+Current CRM implementation includes:
 
-Guidelines:
+- controller: `src/modules/crm/controllers/crm-contact.controller.ts`
+- DTOs: `src/modules/crm/dto/*`
+- entity: `src/modules/crm/entities/crm-contact.entity.ts`
+- repository: `src/modules/crm/repositories/crm-contact.repository.ts`
+- hooks: `src/modules/crm/hooks/crm-contact.hooks.ts`
+- policies: `src/modules/crm/policies/*`
+- lifecycle: `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
+- migration: `src/modules/crm/migrations/crm-contact-index.migration.ts`
+- seeder: `src/modules/crm/seeders/crm-contact.seeder.ts`
+- views: `src/modules/crm/views/*`
 
-- only mark pages `public` when content is shared and not user-specific
-- include `X-Tenant-Id` in `Vary` when a page is tenant-aware
-- keep authenticated or personalized pages `private` or `no-store`
-- let NGINX or another reverse proxy own the HTML cache; the app only sets correct headers
-- use surrogate keys only for broad page groups, not for per-user cache invalidation
+This is the best place to copy structure from when adding a new runtime business module.
 
-Example NGINX policy:
+## Frontend Asset Pipeline
 
-```nginx
-proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=system_html:100m inactive=10m use_temp_path=off;
+The live runtime serves assets from `public/`.
 
-location /api/v1/crm/dashboard/page {
-    proxy_cache system_html;
-    proxy_cache_key "$scheme$request_method$host$request_uri$http_x_tenant_id";
-    proxy_cache_valid 200 60s;
-    add_header X-Proxy-Cache $upstream_cache_status;
-    proxy_pass http://nestjs_upstream;
-}
-```
+Current CSS pipeline:
 
-## Multi-Tenant Notes
+- source: `public/assets/css/app.css`
+- output: `public/assets/css/tailwindcss.css`
+- config: `tailwind.config.js`
 
-Current implementation stays in the shared-database model:
+Current scripts:
 
-- every business entity inherits `tenantId`
-- request scope resolves tenant through `TenantContextMiddleware`
-- cache keys include `tenantId`
-- public HTML cache varies by tenant header
+- `npm run dev:css`
+- `npm run build:css`
 
-For future database-per-tenant evolution:
+`vite.config.ts` and `vitest.config.ts` exist in the repository, but the current application runtime is still the Nest server plus static files from `public/`.
 
-- keep `TenantContextService` as the single tenant resolution boundary
-- move connection routing behind the infrastructure layer without changing module code
+## Non-Runtime Reference Material
 
-## Scaling Best Practices
+`theme/` is reference material only.
 
-- Keep modules isolated and communicate through hooks or domain events, not direct imports.
-- Cache list and dashboard reads aggressively, but make invalidation deterministic and tenant-aware.
-- Prefer namespace-version invalidation over Redis key scans.
-- Use reverse-proxy HTML caching only for shared views with stable TTLs.
-- Keep controllers transport-only and move orchestration into services and state rules into entities.
-- Treat module lifecycle as an operational boundary: install, upgrade, and uninstall should stay idempotent.
-- Add metrics around cache hit ratio, module lifecycle duration, queue depth, and slow queries before splitting architecture further.
-- Delay microservices until module boundaries, traffic profile, and operational burden justify the extra complexity.
+It should not be treated as part of the runtime architecture, import graph, or asset dependency chain.
 
 ## Verification
 
-Verified locally:
+This document was aligned to the current repository structure, runtime wiring, and scripts in:
 
-- `npm install`
-- `npm run build`
-
-Not runtime-verified in this workspace:
-
-- database-backed module registry operations
-- Redis connectivity
-- HTTP endpoints against a running Nest process
-
-Those require the target Postgres and optional Redis environment to be available.
+- `src/main.ts`
+- `src/app.module.ts`
+- `src/app/platform.module.ts`
+- `src/core/core.module.ts`
+- `src/database/*`
+- `src/modules/runtime-modules.ts`
+- `package.json`
