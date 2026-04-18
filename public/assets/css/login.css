@@ -138,14 +138,6 @@ label.field > span:first-child {
   text-align: center;
   font-size: 0.8125rem;
 }
-.link-primary {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-.link-primary:hover {
-  color: var(--color-primary-focus);
-}
 
 /* OR divider */
 .or-divider {
@@ -193,13 +185,4 @@ label.field > span:first-child {
   margin: 0 0.75rem;
 }
 
-/* Error alert */
-.alert-error {
-  margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 0.375rem;
-  color: #dc2626;
-  font-size: 0.8125rem;
-}
+
