@@ -3,6 +3,12 @@
     "brand": {
       "workless": "Workless"
     },
+    "language": {
+      "english": "English",
+      "thai": "ไทย",
+      "switchToEnglish": "EN",
+      "switchToThai": "TH"
+    },
     "actions": {
       "signIn": "Sign In",
       "signingIn": "Signing in...",

@@ -13,6 +13,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { AuthController } from './controllers/auth.controller';
 import { HomeController } from './controllers/home.controller';
+import { LanguageController } from './controllers/language.controller';
 import { UsersController } from './controllers/users.controller';
 import { PlatformMembershipEntity } from './entities/platform-membership.entity';
 import { PlatformUserEntity } from './entities/platform-user.entity';
@@ -40,7 +41,7 @@ import { UsersService } from './services/users.service';
       }),
     }),
   ],
-  controllers: [AuthController, HomeController, UsersController],
+  controllers: [AuthController, HomeController, LanguageController, UsersController],
   providers: [
     AuthService,
     JwtStrategy,

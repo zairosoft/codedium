@@ -13,6 +13,9 @@ async function bootstrap() {
   app.use(
     helmet({
       contentSecurityPolicy: false, // Disable CSP for server-rendered HTML pages
+      referrerPolicy: {
+        policy: 'strict-origin-when-cross-origin',
+      },
     }),
   );
 
@@ -29,6 +32,7 @@ async function bootstrap() {
     exclude: [
       { path: '/', method: RequestMethod.GET },
       { path: 'auth/login', method: RequestMethod.GET },
+      { path: 'language/:locale', method: RequestMethod.GET },
     ],
   });
   app.useGlobalPipes(

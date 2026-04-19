@@ -15,6 +15,7 @@ const GOOGLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="2
 export function renderLoginPage(options: LoginPageOptions = {}): string {
   const locale = options.locale ?? 'en';
   const { t } = createTranslator(locale);
+  const isThai = locale === 'th';
   const initialState = JSON.stringify({
     email: options.email ?? '',
     error: options.error ?? '',
@@ -110,6 +111,32 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
         >
           <main className="grid w-full grow grid-cols-1 place-items-center">
             <div className="w-full max-w-[26rem] p-4 sm:px-5">
+              <div className="mb-4 flex justify-end">
+                <div className="inline-flex rounded-lg border border-slate-200 bg-white/80 p-1 text-xs font-semibold shadow-sm dark:border-navy-600 dark:bg-navy-800/80">
+                  <a
+                    href="/language/en"
+                    className={[
+                      'rounded-md px-3 py-1.5 transition-colors',
+                      isThai
+                        ? 'text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50'
+                        : 'bg-primary text-white dark:bg-accent',
+                    ].join(' ')}
+                  >
+                    {t('common.language.switchToEnglish')}
+                  </a>
+                  <a
+                    href="/language/th"
+                    className={[
+                      'rounded-md px-3 py-1.5 transition-colors',
+                      isThai
+                        ? 'bg-primary text-white dark:bg-accent'
+                        : 'text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50',
+                    ].join(' ')}
+                  >
+                    {t('common.language.switchToThai')}
+                  </a>
+                </div>
+              </div>
               <div className="text-center">
                 <img
                   src={LOGO_URL}
