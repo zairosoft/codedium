@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { minifyHtml } from '../../helpers/minify-html';
 
 type HtmlOptions = {
   title: string;
@@ -9,14 +10,6 @@ type HtmlOptions = {
   head?: ReactNode;
   htmlClassName?: string;
 };
-
-function minifyHtml(input: string): string {
-  return input
-    .replace(/\n\s*/g, '')
-    .replace(/>\s+</g, '><')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
-}
 
 export function html(options: HtmlOptions): string {
   const raw = renderToStaticMarkup(
