@@ -14,15 +14,11 @@
     "skipLibCheck": true,
     "strict": false,
     "moduleResolution": "node",
-    "jsx": "react",
-    "jsxFactory": "Html.createElement",
-    "jsxFragmentFactory": "Html.Fragment",
-    "plugins": [
-      { "name": "@kitajs/ts-html-plugin" }
-    ],
+    "jsx": "react-jsx",
     "types": [
       "node",
-      "@kitajs/html"
+      "react",
+      "react-dom"
     ]
   },
   "include": [
@@ -33,4 +29,3 @@
     "dist"
   ]
 }
-

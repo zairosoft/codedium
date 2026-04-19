@@ -1,8 +1,13 @@
-import * as Html from '@kitajs/html';
+import type { ReactNode } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 type HtmlOptions = {
   title: string;
-  children: Html.Children;
+  children?: ReactNode;
+  bodyHtml?: string;
+  bodyClassName?: string;
+  head?: ReactNode;
+  htmlClassName?: string;
 };
 
 function minifyHtml(input: string): string {
@@ -14,19 +19,29 @@ function minifyHtml(input: string): string {
 }
 
 export function html(options: HtmlOptions): string {
-  const raw = (
-    <html lang="en">
+  const raw = renderToStaticMarkup(
+    <html lang="en" className={options.htmlClassName}>
       <head>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{options.title}</title>
         <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
+        {options.head}
       </head>
-      <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
-        {options.children}
-      </body>
-    </html>
-  ) as string;
+      {options.bodyHtml
+        ? (
+            <body
+              className={options.bodyClassName ?? 'min-h-screen bg-slate-50 text-slate-800 antialiased'}
+              dangerouslySetInnerHTML={{ __html: options.bodyHtml }}
+            />
+          )
+        : (
+            <body className={options.bodyClassName ?? 'min-h-screen bg-slate-50 text-slate-800 antialiased'}>
+              {options.children}
+            </body>
+          )}
+    </html>,
+  );
 
   return '<!DOCTYPE html>' + minifyHtml(raw);
 }

@@ -1,7 +1,7 @@
 {
   "name": "@zairosoft/workless",
   "version": "1.0.0",
-  "description": "Platform - Modular monolith backend",
+  "description": "An AI platform that reduces workload and enables you to work faster, easier, and more efficiently.",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -24,7 +24,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@kitajs/html": "^4.2.13",
     "@nestjs/cache-manager": "^3.1.0",
     "@nestjs/common": "^11.1.16",
     "@nestjs/config": "^4.0.3",
@@ -45,18 +44,21 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "typeorm": "^0.3.28"
   },
   "devDependencies": {
-    "@kitajs/ts-html-plugin": "^4.1.4",
     "@tailwindcss/cli": "^4.2.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.3.5",
     "@types/passport-jwt": "^4.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4.2.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
