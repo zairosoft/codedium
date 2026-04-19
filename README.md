@@ -20,7 +20,7 @@ The application is a single NestJS process. Business modules are discovered from
 - NestJS 11
 - TypeORM
 - PostgreSQL
-- Redis / ioredis
+- Redis
 - BullMQ
 - KITA JSX/TSX server-rendered views
 - Tailwind CSS 4
