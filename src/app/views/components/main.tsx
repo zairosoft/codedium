@@ -1,12 +1,14 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { minifyHtml } from '../../helpers/minify-html';
+import type { AppLocale } from '../../helpers/i18n';
 
 export type HtmlDocumentProps = PropsWithChildren<{
   title: string;
   bodyClassName?: string;
   head?: ReactNode;
   htmlClassName?: string;
+  locale?: AppLocale;
 }>;
 
 type RawHtmlProps = {
@@ -23,15 +25,18 @@ export function Raw({ html, asContents = false }: RawHtmlProps) {
   );
 }
 
+export { Raw as RawHtml };
+
 export function Html({
   title,
   bodyClassName,
   head,
   htmlClassName,
+  locale = 'en',
   children,
 }: HtmlDocumentProps) {
   return (
-    <html lang="en" className={htmlClassName}>
+    <html lang={locale} className={htmlClassName}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,3 +55,5 @@ export function Render(props: HtmlDocumentProps): string {
   const raw = renderToStaticMarkup(<Html {...props} />);
   return '<!DOCTYPE html>' + minifyHtml(raw);
 }
+
+export { Render as render };

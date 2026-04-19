@@ -1,0 +1,40 @@
+{
+  "common": {
+    "brand": {
+      "workless": "Workless"
+    },
+    "actions": {
+      "signIn": "Sign In",
+      "signingIn": "Signing in...",
+      "createAccount": "Create account"
+    },
+    "legal": {
+      "privacyNotice": "Privacy Notice",
+      "termsOfService": "Term of service"
+    }
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "Workless - Sign In",
+      "heading": "Welcome Back",
+      "subheading": "Please sign in to continue",
+      "usernameLabel": "Username:",
+      "usernamePlaceholder": "Enter Username",
+      "passwordLabel": "Password:",
+      "passwordPlaceholder": "Enter Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot Password?",
+      "noAccount": "Dont have Account?",
+      "validation": {
+        "missingEmail": "Please enter your email address."
+      },
+      "errors": {
+        "loginFailed": "Login failed. Please try again.",
+        "network": "Network error. Please check your connection."
+      },
+      "social": {
+        "google": "Google"
+      }
+    }
+  }
+}

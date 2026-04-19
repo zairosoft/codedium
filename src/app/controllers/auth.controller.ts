@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Header, Post, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, Header, Post, Req, Res } from '@nestjs/common';
+import type { Request, Response } from 'express';
 import { Public } from '../auth/public.decorator';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dto/login.dto';
+import { resolveLocaleFromRequest } from '../helpers/i18n';
 import { renderLoginPage } from '../views/auth/login.page';
 
 @Controller('auth')
@@ -15,9 +16,9 @@ export class AuthController {
   @Public()
   @Get('login')
   @Header('Content-Type', 'text/html; charset=utf-8')
-  renderLogin(@Res({ passthrough: true }) response: Response) {
+  renderLogin(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     response.type('html');
-    return renderLoginPage();
+    return renderLoginPage({ locale: resolveLocaleFromRequest(request) });
   }
 
   /**

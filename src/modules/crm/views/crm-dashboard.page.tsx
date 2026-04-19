@@ -1,3 +1,4 @@
+import { createTranslator, type AppLocale } from '../../../app/helpers/i18n';
 import { Render } from '../../../app/views/components/main';
 import { CrmDashboardView } from './crm-contact.view';
 
@@ -22,30 +23,33 @@ function ContactRow({ fullName, email, status }: { fullName: string; email: stri
   );
 }
 
-export function renderCrmDashboardPage(summary: CrmDashboardView): string {
+export function renderCrmDashboardPage(summary: CrmDashboardView, locale: AppLocale): string {
+  const { t } = createTranslator(locale, { modules: ['crm'] });
+
   return Render({
-    title: 'CRM Dashboard',
+    title: t('crm.dashboard.pageTitle'),
+    locale,
     children: (
       <main className="mx-auto max-w-4xl px-5 py-8">
         <header className="mb-6">
-          <h1 className="text-3xl font-extrabold text-slate-900">CRM Dashboard</h1>
-          <p className="mt-1 text-sm text-slate-500">Tenant: {summary.tenantId}</p>
+          <h1 className="text-3xl font-extrabold text-slate-900">{t('crm.dashboard.heading')}</h1>
+          <p className="mt-1 text-sm text-slate-500">{t('crm.dashboard.tenantLabel')}: {summary.tenantId}</p>
         </header>
 
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <MetricCard label="Total contacts" value={summary.metrics.totalContacts} />
-          <MetricCard label="Customers" value={summary.metrics.totalCustomers} />
-          <MetricCard label="Leads" value={summary.metrics.totalLeads} />
+          <MetricCard label={t('crm.dashboard.metrics.totalContacts')} value={summary.metrics.totalContacts} />
+          <MetricCard label={t('crm.dashboard.metrics.customers')} value={summary.metrics.totalCustomers} />
+          <MetricCard label={t('crm.dashboard.metrics.leads')} value={summary.metrics.totalLeads} />
         </section>
 
         <section className="mt-6 rounded-2xl border border-slate-200/60 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
-          <h2 className="mb-4 text-lg font-bold text-slate-800">Recent contacts</h2>
+          <h2 className="mb-4 text-lg font-bold text-slate-800">{t('crm.dashboard.recentContacts')}</h2>
           <ul className="list-none p-0">
             {summary.recentContacts.length > 0
               ? summary.recentContacts.map((c) => (
                   <ContactRow fullName={c.fullName} email={c.email} status={c.status} />
                 ))
-              : <li className="py-3 text-sm text-slate-400">No recent contacts yet.</li>
+              : <li className="py-3 text-sm text-slate-400">{t('crm.dashboard.emptyRecentContacts')}</li>
             }
           </ul>
         </section>

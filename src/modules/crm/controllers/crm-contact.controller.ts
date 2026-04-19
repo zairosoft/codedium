@@ -8,12 +8,14 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   Res,
 } from '@nestjs/common';
-import { Response } from 'express';
+import type { Request, Response } from 'express';
 import { HtmlCacheable } from '../../../core/http/html-cache.decorator';
 import { RequiresModule } from '../../../core/module/module-enabled.decorator';
 import { RequirePermissions } from '../../../app/providers/require-permissions.decorator';
+import { resolveLocaleFromRequest } from '../../../app/helpers/i18n';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
@@ -76,9 +78,13 @@ export class CrmContactController {
     vary: ['Accept-Encoding', 'X-Tenant-Id'],
     surrogateKey: 'crm-dashboard',
   })
-  async renderDashboard(@Res({ passthrough: true }) response: Response) {
+  async renderDashboard(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     response.type('html');
     const summary = await this.crmContactService.getDashboardSummary();
-    return renderCrmDashboardPage(CrmContactViewMapper.toDashboard(summary));
+    const locale = resolveLocaleFromRequest(request);
+    return renderCrmDashboardPage(CrmContactViewMapper.toDashboard(summary), locale);
   }
 }

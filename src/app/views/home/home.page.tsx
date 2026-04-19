@@ -16,9 +16,7 @@ export function renderHomePage(): string {
             Home page is live.
           </h1>
           <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-500">
-            The root route now serves a real HTML page. Your API stays under
-            <code className="rounded-lg bg-slate-100 px-2 py-0.5 text-sm font-medium text-slate-700">/api/v1</code>,
-            and the app is connected to the local PostgreSQL instance from ServBay.
+            The root route now serves a real HTML page. Your API stays under /api/v1, and the app is connected to the local PostgreSQL instance from ServBay.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
@@ -45,23 +43,15 @@ export function renderHomePage(): string {
         <section className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-3">
           <article className="rounded-2xl border border-slate-200/60 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
             <h2 className="mb-2 text-base font-semibold text-slate-800">API Base</h2>
-            <p className="text-sm leading-relaxed text-slate-500">
-              Application endpoints remain mounted at
-              <code className="rounded-lg bg-slate-100 px-2 py-0.5 text-xs">/api/v1</code>.
-            </p>
+            <p className="text-sm leading-relaxed text-slate-500">Application endpoints remain mounted at /api/v1.</p>
           </article>
           <article className="rounded-2xl border border-slate-200/60 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
             <h2 className="mb-2 text-base font-semibold text-slate-800">Database</h2>
-            <p className="text-sm leading-relaxed text-slate-500">
-              Current local setup uses PostgreSQL on
-              <code className="rounded-lg bg-slate-100 px-2 py-0.5 text-xs">127.0.0.1:5432</code>.
-            </p>
+            <p className="text-sm leading-relaxed text-slate-500">Current local setup uses PostgreSQL on 127.0.0.1:5432.</p>
           </article>
           <article className="rounded-2xl border border-slate-200/60 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
             <h2 className="mb-2 text-base font-semibold text-slate-800">Entry Points</h2>
-            <p className="text-sm leading-relaxed text-slate-500">
-              Use the module registry and CRM dashboard links above as the first navigation points.
-            </p>
+            <p className="text-sm leading-relaxed text-slate-500">Use the module registry and CRM dashboard links above as the first navigation points.</p>
           </article>
         </section>
       </main>

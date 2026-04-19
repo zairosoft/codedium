@@ -1,9 +1,11 @@
 import { renderToStaticMarkup } from 'react-dom/server';
+import { createTranslator, type AppLocale } from '../../helpers/i18n';
 import { minifyHtml } from '../../helpers/minify-html';
 
 type LoginPageOptions = {
   error?: string;
   email?: string;
+  locale?: AppLocale;
 };
 
 const LOGO_URL = 'https://www.zairosoft.com/assets/2025/12/logo.webp';
@@ -11,11 +13,22 @@ const LOGO_URL = 'https://www.zairosoft.com/assets/2025/12/logo.webp';
 const GOOGLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>`;
 
 export function renderLoginPage(options: LoginPageOptions = {}): string {
-  const initialEmail = JSON.stringify(options.email ?? '');
-  const initialError = JSON.stringify(options.error ?? '');
+  const locale = options.locale ?? 'en';
+  const { t } = createTranslator(locale);
+  const initialState = JSON.stringify({
+    email: options.email ?? '',
+    error: options.error ?? '',
+    messages: {
+      missingEmail: t('auth.login.validation.missingEmail'),
+      loginFailed: t('auth.login.errors.loginFailed'),
+      networkError: t('auth.login.errors.network'),
+      signIn: t('common.actions.signIn'),
+      signingIn: t('common.actions.signingIn'),
+    },
+  });
 
   const raw = renderToStaticMarkup(
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -23,7 +36,7 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
           name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
-        <title>Workless - Sign In</title>
+        <title>{t('auth.login.pageTitle')}</title>
         <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
         <style dangerouslySetInnerHTML={{ __html: '[x-cloak]{display:none!important;}' }} />
         <link rel="preconnect" href="https://fonts.googleapis.com/" />
@@ -40,12 +53,15 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                 document.documentElement.classList.add("dark");
 
               window.loginPage = function(initialState) {
+                var messages = initialState.messages || {};
+
                 return {
                   email: initialState.email || '',
                   password: '',
                   rememberMe: false,
                   loading: false,
                   error: initialState.error || '',
+                  messages: messages,
                   showError(message) {
                     this.error = message;
                   },
@@ -53,7 +69,7 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                     this.error = '';
 
                     if (!this.email) {
-                      this.showError('Please enter your email address.');
+                      this.showError(messages.missingEmail || '');
                       return;
                     }
 
@@ -68,14 +84,14 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       var data = await res.json();
 
                       if (!res.ok) {
-                        this.showError(data.message || 'Login failed. Please try again.');
+                        this.showError(data.message || messages.loginFailed || '');
                         return;
                       }
 
                       sessionStorage.setItem('workless_token', data.accessToken);
                       window.location.href = '/';
                     } catch (e) {
-                      this.showError('Network error. Please check your connection.');
+                      this.showError(messages.networkError || '');
                     } finally {
                       this.loading = false;
                     }
@@ -104,24 +120,24 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                 />
                 <div className="mt-4">
                   <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100">
-                    Welcome Back
+                    {t('auth.login.heading')}
                   </h2>
                   <p className="text-slate-400 dark:text-navy-300">
-                    Please sign in to continue
+                    {t('auth.login.subheading')}
                   </p>
                 </div>
               </div>
               <div
                 className="card mt-5 rounded-lg p-5 lg:p-7"
-                {...{ 'x-data': `loginPage({ email: ${initialEmail}, error: ${initialError} })` }}
+                {...{ 'x-data': `loginPage(${initialState})` }}
               >
                 <label className="block">
-                  <span>Username:</span>
+                  <span>{t('auth.login.usernameLabel')}</span>
                   <span className="relative mt-1.5 flex">
                     <input
                       id="login-email"
                       className="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                      placeholder="Enter Username"
+                      placeholder={t('auth.login.usernamePlaceholder')}
                       type="text"
                       autoComplete="username"
                       {...{
@@ -148,12 +164,12 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   </span>
                 </label>
                 <label className="mt-4 block">
-                  <span>Password:</span>
+                  <span>{t('auth.login.passwordLabel')}</span>
                   <span className="relative mt-1.5 flex">
                     <input
                       id="login-password"
                       className="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                      placeholder="Enter Password"
+                      placeholder={t('auth.login.passwordPlaceholder')}
                       type="password"
                       autoComplete="current-password"
                       {...{
@@ -187,13 +203,13 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       id="remember-me"
                       {...{ 'x-model': 'rememberMe' }}
                     />
-                    <span className="line-clamp-1">Remember me</span>
+                    <span className="line-clamp-1">{t('auth.login.rememberMe')}</span>
                   </label>
                   <a
                     href="#"
                     className="text-xs text-slate-400 transition-colors line-clamp-1 hover:text-slate-800 focus:text-slate-800 dark:text-navy-300 dark:hover:text-navy-100 dark:focus:text-navy-100"
                   >
-                    Forgot Password?
+                    {t('auth.login.forgotPassword')}
                   </a>
                 </div>
                 <button
@@ -205,7 +221,9 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                     'x-bind:disabled': 'loading',
                   }}
                 >
-                  <span {...{ 'x-text': "loading ? 'Signing in...' : 'Sign In'" }}>Sign In</span>
+                  <span {...{ 'x-text': "loading ? messages.signingIn : messages.signIn" }}>
+                    {t('common.actions.signIn')}
+                  </span>
                 </button>
                 <div
                   id="login-error"
@@ -219,12 +237,12 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                 />
                 <div className="mt-4 text-center text-xs-plus">
                   <p className="line-clamp-1">
-                    <span>Dont have Account?</span>{' '}
+                    <span>{t('auth.login.noAccount')}</span>{' '}
                     <a
                       className="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
                       href="#"
                     >
-                      Create account
+                      {t('common.actions.createAccount')}
                     </a>
                   </p>
                 </div>
@@ -242,14 +260,14 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       className="size-5.5"
                       dangerouslySetInnerHTML={{ __html: GOOGLE_SVG }}
                     />
-                    <span>Google</span>
+                    <span>{t('auth.login.social.google')}</span>
                   </button>
                 </div>
               </div>
               <div className="mt-8 flex justify-center text-xs text-slate-400 dark:text-navy-300">
-                <a href="#">Privacy Notice</a>
+                <a href="#">{t('common.legal.privacyNotice')}</a>
                 <div className="mx-3 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-                <a href="#">Term of service</a>
+                <a href="#">{t('common.legal.termsOfService')}</a>
               </div>
             </div>
           </main>

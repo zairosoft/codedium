@@ -1,0 +1,40 @@
+{
+  "common": {
+    "brand": {
+      "workless": "Workless"
+    },
+    "actions": {
+      "signIn": "เข้าสู่ระบบ",
+      "signingIn": "กำลังเข้าสู่ระบบ...",
+      "createAccount": "สร้างบัญชี"
+    },
+    "legal": {
+      "privacyNotice": "นโยบายความเป็นส่วนตัว",
+      "termsOfService": "เงื่อนไขการใช้งาน"
+    }
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "Workless - เข้าสู่ระบบ",
+      "heading": "ยินดีต้อนรับกลับ",
+      "subheading": "กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ",
+      "usernameLabel": "ชื่อผู้ใช้:",
+      "usernamePlaceholder": "กรอกชื่อผู้ใช้",
+      "passwordLabel": "รหัสผ่าน:",
+      "passwordPlaceholder": "กรอกรหัสผ่าน",
+      "rememberMe": "จดจำฉัน",
+      "forgotPassword": "ลืมรหัสผ่าน?",
+      "noAccount": "ยังไม่มีบัญชี?",
+      "validation": {
+        "missingEmail": "กรุณากรอกอีเมลของคุณ"
+      },
+      "errors": {
+        "loginFailed": "เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+        "network": "เกิดปัญหาเครือข่าย กรุณาตรวจสอบการเชื่อมต่อ"
+      },
+      "social": {
+        "google": "Google"
+      }
+    }
+  }
+}
