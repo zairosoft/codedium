@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { createTranslator, type AppLocale } from '../../helpers/i18n';
+import { createTranslator, type AppLocale } from '../../../core/i18n';
 import { minifyHtml } from '../../helpers/minify-html';
 
 type LoginPageOptions = {
@@ -37,6 +37,7 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
           name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
+        <meta name="turbo-refresh-method" content="morph" />
         <title>{t('auth.login.pageTitle')}</title>
         <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
         <style dangerouslySetInnerHTML={{ __html: '[x-cloak]{display:none!important;}' }} />
@@ -46,6 +47,10 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          type="module"
+          src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.13/+esm"
+        ></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
         <script
           dangerouslySetInnerHTML={{

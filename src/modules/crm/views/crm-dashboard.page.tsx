@@ -1,4 +1,4 @@
-import { createTranslator, type AppLocale } from '../../../app/helpers/i18n';
+import { createTranslator, type AppLocale } from '../../../core/i18n';
 import { Render } from '../../../app/views/components/main';
 import { CrmDashboardView } from './crm-contact.view';
 

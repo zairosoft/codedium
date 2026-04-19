@@ -15,7 +15,7 @@ import type { Request, Response } from 'express';
 import { HtmlCacheable } from '../../../core/http/html-cache.decorator';
 import { RequiresModule } from '../../../core/module/module-enabled.decorator';
 import { RequirePermissions } from '../../../app/providers/require-permissions.decorator';
-import { resolveLocaleFromRequest } from '../../../app/helpers/i18n';
+import { resolveLocaleFromRequest } from '../../../core/i18n';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';

@@ -18,6 +18,27 @@ function loadJsonFile(filePath: string): MessageTree | null {
   return JSON.parse(fs.readFileSync(filePath, 'utf8')) as MessageTree;
 }
 
+function isObject(value: unknown): value is MessageTree {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function deepMerge(target: MessageTree, source: MessageTree): MessageTree {
+  const output: MessageTree = { ...target };
+
+  for (const [key, value] of Object.entries(source)) {
+    const current = output[key];
+
+    if (isObject(current) && isObject(value)) {
+      output[key] = deepMerge(current, value);
+      continue;
+    }
+
+    output[key] = value;
+  }
+
+  return output;
+}
+
 function loadLocaleDirectory(localeRoot: string): MessageTree | null {
   if (!fs.existsSync(localeRoot)) {
     return null;
@@ -45,7 +66,7 @@ function loadLocaleDirectory(localeRoot: string): MessageTree | null {
 }
 
 function loadAppLocales(): Record<AppLocale, MessageTree> {
-  const localesRoot = path.resolve(__dirname, '../locales');
+  const localesRoot = path.resolve(__dirname, '../app/locales');
 
   if (!fs.existsSync(localesRoot)) {
     return {};
@@ -70,7 +91,7 @@ function loadAppLocales(): Record<AppLocale, MessageTree> {
 }
 
 function loadModuleLocales(): Record<ModuleLocaleName, Record<AppLocale, MessageTree>> {
-  const modulesRoot = path.resolve(__dirname, '../../modules');
+  const modulesRoot = path.resolve(__dirname, '../modules');
 
   if (!fs.existsSync(modulesRoot)) {
     return {};
@@ -120,27 +141,6 @@ const defaultLocale = 'en';
 export const supportedLocales = Object.freeze(
   Object.keys(appLocales).sort(),
 ) as readonly AppLocale[];
-
-function isObject(value: unknown): value is MessageTree {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function deepMerge(target: MessageTree, source: MessageTree): MessageTree {
-  const output: MessageTree = { ...target };
-
-  for (const [key, value] of Object.entries(source)) {
-    const current = output[key];
-
-    if (isObject(current) && isObject(value)) {
-      output[key] = deepMerge(current, value);
-      continue;
-    }
-
-    output[key] = value;
-  }
-
-  return output;
-}
 
 function getByPath(messages: MessageTree, key: string): string | undefined {
   const parts = key.split('.');
