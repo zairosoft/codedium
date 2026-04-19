@@ -10,8 +10,10 @@ const LOGO_URL = 'https://www.zairosoft.com/assets/2025/12/logo.webp';
 const GOOGLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>`;
 
 export function renderLoginPage(options: LoginPageOptions = {}): string {
+  const initialEmail = JSON.stringify(options.email ?? '');
+  const initialError = JSON.stringify(options.error ?? '');
   const page = (
-    <html lang="en" class="dark">
+    <html lang="en">
       <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,15 +23,65 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
         />
         <title>Workless - Sign In</title>
         <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
+        <style>{`[x-cloak]{display:none!important;}` as 'safe'}</style>
         <link rel="preconnect" href="https://fonts.googleapis.com/" />
         <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
+        <script>{`
+          localStorage.getItem("_x_darkMode_on") === "true" &&
+            document.documentElement.classList.add("dark");
+
+          window.loginPage = function(initialState) {
+            return {
+              email: initialState.email || '',
+              password: '',
+              rememberMe: false,
+              loading: false,
+              error: initialState.error || '',
+              showError(message) {
+                this.error = message;
+              },
+              async submit() {
+                this.error = '';
+
+                if (!this.email) {
+                  this.showError('Please enter your email address.');
+                  return;
+                }
+
+                this.loading = true;
+
+                try {
+                  var res = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: this.email })
+                  });
+                  var data = await res.json();
+
+                  if (!res.ok) {
+                    this.showError(data.message || 'Login failed. Please try again.');
+                    return;
+                  }
+
+                  sessionStorage.setItem('workless_token', data.accessToken);
+                  window.location.href = '/';
+                } catch (e) {
+                  this.showError('Network error. Please check your connection.');
+                } finally {
+                  this.loading = false;
+                }
+              }
+            };
+          };
+        ` as 'safe'}</script>
       </head>
-      <body class="is-header-blur">
-        <div id="root" class="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900">
+      <body class="is-header-blur" x-data>
+        <div id="root" class="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900" x-cloak>
           <main class="grid w-full grow grid-cols-1 place-items-center">
             <div class="w-full max-w-[26rem] p-4 sm:px-5">
               <div class="text-center">
@@ -49,7 +101,10 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   </p>
                 </div>
               </div>
-              <div class="card mt-5 rounded-lg p-5 lg:p-7">
+              <div
+                class="card mt-5 rounded-lg p-5 lg:p-7"
+                x-data={`loginPage({ email: ${initialEmail}, error: ${initialError} })`}
+              >
                 <label class="block">
                   <span>Username:</span>
                   <span class="relative mt-1.5 flex">
@@ -59,7 +114,8 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       placeholder="Enter Username"
                       type="text"
                       autocomplete="username"
-                      value={options.email ?? ''}
+                      x-model="email"
+                      {...{ 'x-on:keydown.enter.prevent': 'submit()' }}
                     />
                     <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
                       <svg
@@ -88,6 +144,8 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       placeholder="Enter Password"
                       type="password"
                       autocomplete="current-password"
+                      x-model="password"
+                      {...{ 'x-on:keydown.enter.prevent': 'submit()' }}
                     />
                     <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
                       <svg
@@ -113,6 +171,7 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       class="form-checkbox is-basic size-5 rounded-sm border-slate-400/70 checked:border-primary checked:bg-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:checked:border-accent dark:checked:bg-accent dark:hover:border-accent dark:focus:border-accent"
                       type="checkbox"
                       id="remember-me"
+                      x-model="rememberMe"
                     />
                     <span class="line-clamp-1">Remember me</span>
                   </label>
@@ -127,27 +186,18 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   id="login-submit"
                   class="btn mt-5 w-full bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
                   type="button"
+                  {...{ 'x-on:click': 'submit()', 'x-bind:disabled': 'loading' }}
                 >
-                  Sign In
+                  <span x-text="loading ? 'Signing in...' : 'Sign In'">Sign In</span>
                 </button>
-                {options.error && (
-                  <div
-                    id="login-error"
-                    role="alert"
-                    class="mt-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-xs-plus text-red-400"
-                    safe
-                  >
-                    {options.error}
-                  </div>
-                )}
-                {!options.error && (
-                  <div
-                    id="login-error"
-                    role="alert"
-                    class="mt-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-xs-plus text-red-400"
-                    style="display:none"
-                  />
-                )}
+                <div
+                  id="login-error"
+                  role="alert"
+                  class="mt-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-xs-plus text-red-400"
+                  x-cloak
+                  x-show="error"
+                  x-text="error"
+                />
                 <div class="mt-4 text-center text-xs-plus">
                   <p class="line-clamp-1">
                     <span>Dont have Account?</span>{' '}
@@ -182,54 +232,6 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
             </div>
           </main>
         </div>
-
-        <script>{`
-          (function() {
-            var btn = document.getElementById('login-submit');
-            var errEl = document.getElementById('login-error');
-
-            function showError(msg) {
-              errEl.textContent = msg;
-              errEl.style.display = 'block';
-            }
-
-            btn.addEventListener('click', async function() {
-              var email = document.getElementById('login-email').value.trim();
-              errEl.style.display = 'none';
-
-              if (!email) {
-                showError('Please enter your email address.');
-                document.getElementById('login-email').focus();
-                return;
-              }
-
-              btn.disabled = true;
-              btn.textContent = 'Signing in...';
-
-              try {
-                var res = await fetch('/api/v1/auth/login', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email: email })
-                });
-                var data = await res.json();
-
-                if (!res.ok) {
-                  showError(data.message || 'Login failed. Please try again.');
-                  return;
-                }
-
-                sessionStorage.setItem('workless_token', data.accessToken);
-                window.location.href = '/';
-              } catch (e) {
-                showError('Network error. Please check your connection.');
-              } finally {
-                btn.disabled = false;
-                btn.textContent = 'Sign In';
-              }
-            });
-          })();
-        ` as 'safe'}</script>
       </body>
     </html>
   ) as unknown as string;
