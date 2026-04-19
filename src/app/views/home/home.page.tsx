@@ -1,7 +1,7 @@
-import { html } from '../components/html';
+import { Render } from '../components/main';
 
 export function renderHomePage(): string {
-  return html({
+  return Render({
     title: 'Workless Home',
     children: (
       <main className="mx-auto max-w-5xl px-4 py-14">

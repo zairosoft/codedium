@@ -1,4 +1,4 @@
-import { html } from '../../../app/views/components/html';
+import { Render } from '../../../app/views/components/main';
 import { CrmDashboardView } from './crm-contact.view';
 
 function MetricCard({ label, value }: { label: string; value: number }) {
@@ -23,7 +23,7 @@ function ContactRow({ fullName, email, status }: { fullName: string; email: stri
 }
 
 export function renderCrmDashboardPage(summary: CrmDashboardView): string {
-  return html({
+  return Render({
     title: 'CRM Dashboard',
     children: (
       <main className="mx-auto max-w-4xl px-5 py-8">
