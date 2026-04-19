@@ -13,3 +13,4 @@ Feel free to report security issues based on the following chart.
 ## Reporting a Vulnerability
 
 If you discover any security related issues, please email zairosoft@outlook.com instead of using the issue tracker.
+
