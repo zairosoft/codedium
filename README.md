@@ -2,7 +2,7 @@
 
 NestJS modular monolith for platform services, tenant-aware business modules, and server-rendered HTML pages.
 
-![Screen](https://www.zairosoft.com/assets/2025/04/codedium.webp "Dashboards")
+![Screen](https://www.zairosoft.com/assets/2026/02/crm.webp "Dashboards")
 
 ## Overview
 
