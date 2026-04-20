@@ -31,8 +31,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1', {
     exclude: [
       { path: '/', method: RequestMethod.GET },
-      { path: 'auth/login', method: RequestMethod.GET },
       { path: 'language/:locale', method: RequestMethod.GET },
+      { path: 'auth/login', method: RequestMethod.GET },
+      { path: 'auth/register', method: RequestMethod.GET },
     ],
   });
   app.useGlobalPipes(

@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { resolveLocaleFromRequest } from '../../core/i18n';
 import { renderLoginPage } from '../views/auth/login.page';
+import { renderRegisterPage } from '../views/auth/register.page';
 
 @Controller('auth')
 export class AuthController {
@@ -28,5 +29,16 @@ export class AuthController {
   @Post('login')
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto.email, dto.tenantId);
+  }
+
+  /**
+   * GET /auth/register — renders the HTML register page
+   */
+  @Public()
+  @Get('register')
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  renderRegister(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    response.type('html');
+    return renderRegisterPage({ locale: resolveLocaleFromRequest(request) });
   }
 }

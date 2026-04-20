@@ -12,7 +12,9 @@
     "actions": {
       "signIn": "เข้าสู่ระบบ",
       "signingIn": "กำลังเข้าสู่ระบบ...",
-      "createAccount": "สร้างบัญชี"
+      "createAccount": "สร้างบัญชี",
+      "signUp": "สมัครสมาชิก",
+      "signingUp": "กำลังสมัคร..."
     },
     "legal": {
       "privacyNotice": "นโยบายความเป็นส่วนตัว",
@@ -40,6 +42,32 @@
       },
       "social": {
         "google": "Google"
+      }
+    },
+    "register": {
+      "pageTitle": "Workless - สมัครสมาชิก",
+      "heading": "สร้างบัญชีใหม่",
+      "subheading": "กรุณากรอกข้อมูลเพื่อสมัครสมาชิก",
+      "nameLabel": "ชื่อ-นามสกุล:",
+      "namePlaceholder": "กรอกชื่อ-นามสกุล",
+      "emailLabel": "อีเมล:",
+      "emailPlaceholder": "กรอกอีเมลของคุณ",
+      "passwordLabel": "รหัสผ่าน:",
+      "passwordPlaceholder": "กรอกรหัสผ่าน",
+      "confirmPasswordLabel": "ยืนยันรหัสผ่าน:",
+      "confirmPasswordPlaceholder": "กรอกรหัสผ่านอีกครั้ง",
+      "agreePrefix": "ฉันยอมรับ",
+      "alreadyHaveAccount": "มีบัญชีอยู่แล้ว?",
+      "validation": {
+        "missingName": "กรุณากรอกชื่อ-นามสกุล",
+        "missingEmail": "กรุณากรอกอีเมลของคุณ",
+        "missingPassword": "กรุณากรอกรหัสผ่าน",
+        "passwordMismatch": "รหัสผ่านไม่ตรงกัน",
+        "mustAgree": "กรุณายอมรับเงื่อนไขการใช้งานเพื่อดำเนินการต่อ"
+      },
+      "errors": {
+        "registerFailed": "สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+        "network": "เกิดปัญหาเครือข่าย กรุณาตรวจสอบการเชื่อมต่อ"
       }
     }
   }

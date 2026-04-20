@@ -12,11 +12,13 @@
     "actions": {
       "signIn": "Sign In",
       "signingIn": "Signing in...",
-      "createAccount": "Create account"
+      "createAccount": "Create account",
+      "signUp": "Sign Up",
+      "signingUp": "Signing up..."
     },
     "legal": {
       "privacyNotice": "Privacy Notice",
-      "termsOfService": "Term of service"
+      "termsOfService": "Terms of Service"
     }
   },
   "auth": {
@@ -40,6 +42,32 @@
       },
       "social": {
         "google": "Google"
+      }
+    },
+    "register": {
+      "pageTitle": "Workless - Sign Up",
+      "heading": "Create Account",
+      "subheading": "Please sign up to continue",
+      "nameLabel": "Full Name:",
+      "namePlaceholder": "Enter your full name",
+      "emailLabel": "Email:",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password:",
+      "passwordPlaceholder": "Enter password",
+      "confirmPasswordLabel": "Confirm Password:",
+      "confirmPasswordPlaceholder": "Repeat password",
+      "agreePrefix": "I agree with",
+      "alreadyHaveAccount": "Already have an account?",
+      "validation": {
+        "missingName": "Please enter your full name.",
+        "missingEmail": "Please enter your email address.",
+        "missingPassword": "Please enter a password.",
+        "passwordMismatch": "Passwords do not match.",
+        "mustAgree": "You must agree to the terms to continue."
+      },
+      "errors": {
+        "registerFailed": "Registration failed. Please try again.",
+        "network": "Network error. Please check your connection."
       }
     }
   }
