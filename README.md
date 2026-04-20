@@ -199,9 +199,9 @@ Optional tooling present in the repo:
 
 These exist for frontend tooling and local build workflows, but the primary runtime remains the Nest app serving static assets from `public/`.
 
-## Design
+## Support us
 
-- `Figma` https://www.figma.com/design/SNfE4YC1IQuCRK2sk8rFxa/workless?node-id=0-1&t=lbQKcJi9Rrtc5mBE-1
+- [Sponsors](https://github.com/sponsors/zairosoft)
 
 ## Security
 
