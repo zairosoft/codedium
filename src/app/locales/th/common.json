@@ -15,10 +15,6 @@
       "createAccount": "สร้างบัญชี",
       "signUp": "สมัครสมาชิก",
       "signingUp": "กำลังสมัคร..."
-    },
-    "legal": {
-      "privacyNotice": "นโยบายความเป็นส่วนตัว",
-      "termsOfService": "เงื่อนไขการใช้งาน"
     }
   },
   "auth": {
@@ -56,7 +52,6 @@
       "passwordPlaceholder": "กรอกรหัสผ่าน",
       "confirmPasswordLabel": "ยืนยันรหัสผ่าน:",
       "confirmPasswordPlaceholder": "กรอกรหัสผ่านอีกครั้ง",
-      "agreePrefix": "ฉันยอมรับ",
       "alreadyHaveAccount": "มีบัญชีอยู่แล้ว?",
       "validation": {
         "missingName": "กรุณากรอกชื่อ-นามสกุล",

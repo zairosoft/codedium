@@ -15,10 +15,6 @@
       "createAccount": "Create account",
       "signUp": "Sign Up",
       "signingUp": "Signing up..."
-    },
-    "legal": {
-      "privacyNotice": "Privacy Notice",
-      "termsOfService": "Terms of Service"
     }
   },
   "auth": {
@@ -56,7 +52,6 @@
       "passwordPlaceholder": "Enter password",
       "confirmPasswordLabel": "Confirm Password:",
       "confirmPasswordPlaceholder": "Repeat password",
-      "agreePrefix": "I agree with",
       "alreadyHaveAccount": "Already have an account?",
       "validation": {
         "missingName": "Please enter your full name.",

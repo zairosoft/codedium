@@ -1,6 +1,6 @@
-import { renderToStaticMarkup } from 'react-dom/server';
-import { createTranslator, type AppLocale } from '../../../core/i18n';
-import { minifyHtml } from '../../helpers/minify-html';
+import { renderToStaticMarkup } from "react-dom/server";
+import { createTranslator, type AppLocale } from "../../../core/i18n";
+import { minifyHtml } from "../../helpers/minify-html";
 
 type LoginPageOptions = {
   error?: string;
@@ -8,23 +8,23 @@ type LoginPageOptions = {
   locale?: AppLocale;
 };
 
-const LOGO_URL = 'https://www.zairosoft.com/assets/2025/12/logo.webp';
+const LOGO_URL = "https://www.zairosoft.com/assets/2025/12/logo.webp";
 
 const GOOGLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>`;
 
 export function renderLoginPage(options: LoginPageOptions = {}): string {
-  const locale = options.locale ?? 'en';
+  const locale = options.locale ?? "en";
   const { t } = createTranslator(locale);
-  const isThai = locale === 'th';
+  const isThai = locale === "th";
   const initialState = JSON.stringify({
-    email: options.email ?? '',
-    error: options.error ?? '',
+    email: options.email ?? "",
+    error: options.error ?? "",
     messages: {
-      missingEmail: t('auth.login.validation.missingEmail'),
-      loginFailed: t('auth.login.errors.loginFailed'),
-      networkError: t('auth.login.errors.network'),
-      signIn: t('common.actions.signIn'),
-      signingIn: t('common.actions.signingIn'),
+      missingEmail: t("auth.login.validation.missingEmail"),
+      loginFailed: t("auth.login.errors.loginFailed"),
+      networkError: t("auth.login.errors.network"),
+      signIn: t("common.actions.signIn"),
+      signingIn: t("common.actions.signingIn"),
     },
   });
 
@@ -38,11 +38,19 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
         <meta name="turbo-refresh-method" content="morph" />
-        <title>{t('auth.login.pageTitle')}</title>
+        <title>{t("auth.login.pageTitle")}</title>
         <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
-        <style dangerouslySetInnerHTML={{ __html: '[x-cloak]{display:none!important;}' }} />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: "[x-cloak]{display:none!important;}",
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com/" />
-        <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com/"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
@@ -51,7 +59,10 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
           type="module"
           src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.13/+esm"
         ></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"></script>
+        <script
+          defer
+          src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"
+        ></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -108,11 +119,11 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
           }}
         />
       </head>
-      <body className="is-header-blur" {...{ 'x-data': '' }}>
+      <body className="is-header-blur" {...{ "x-data": "" }}>
         <div
           id="root"
           className="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900"
-          {...{ 'x-cloak': '' }}
+          {...{ "x-cloak": "" }}
         >
           <main className="grid w-full grow grid-cols-1 place-items-center">
             <div className="w-full max-w-[26rem] p-4 sm:px-5">
@@ -121,24 +132,24 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   <a
                     href="/language/en"
                     className={[
-                      'rounded-md px-3 py-1.5 transition-colors',
+                      "rounded-md px-3 py-1.5 transition-colors",
                       isThai
-                        ? 'text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50'
-                        : 'bg-primary text-white dark:bg-accent',
-                    ].join(' ')}
+                        ? "text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50"
+                        : "bg-primary text-white dark:bg-accent",
+                    ].join(" ")}
                   >
-                    {t('common.language.switchToEnglish')}
+                    {t("common.language.switchToEnglish")}
                   </a>
                   <a
                     href="/language/th"
                     className={[
-                      'rounded-md px-3 py-1.5 transition-colors',
+                      "rounded-md px-3 py-1.5 transition-colors",
                       isThai
-                        ? 'bg-primary text-white dark:bg-accent'
-                        : 'text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50',
-                    ].join(' ')}
+                        ? "bg-primary text-white dark:bg-accent"
+                        : "text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50",
+                    ].join(" ")}
                   >
-                    {t('common.language.switchToThai')}
+                    {t("common.language.switchToThai")}
                   </a>
                 </div>
               </div>
@@ -152,29 +163,29 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                 />
                 <div className="mt-4">
                   <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100">
-                    {t('auth.login.heading')}
+                    {t("auth.login.heading")}
                   </h2>
                   <p className="text-slate-400 dark:text-navy-300">
-                    {t('auth.login.subheading')}
+                    {t("auth.login.subheading")}
                   </p>
                 </div>
               </div>
               <div
                 className="card mt-5 rounded-lg p-5 lg:p-7"
-                {...{ 'x-data': `loginPage(${initialState})` }}
+                {...{ "x-data": `loginPage(${initialState})` }}
               >
                 <label className="block">
-                  <span>{t('auth.login.usernameLabel')}</span>
+                  <span>{t("auth.login.usernameLabel")}</span>
                   <span className="relative mt-1.5 flex">
                     <input
                       id="login-email"
                       className="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                      placeholder={t('auth.login.usernamePlaceholder')}
+                      placeholder={t("auth.login.usernamePlaceholder")}
                       type="text"
                       autoComplete="username"
                       {...{
-                        'x-model': 'email',
-                        'x-on:keydown.enter.prevent': 'submit()',
+                        "x-model": "email",
+                        "x-on:keydown.enter.prevent": "submit()",
                       }}
                     />
                     <span className="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
@@ -196,17 +207,17 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   </span>
                 </label>
                 <label className="mt-4 block">
-                  <span>{t('auth.login.passwordLabel')}</span>
+                  <span>{t("auth.login.passwordLabel")}</span>
                   <span className="relative mt-1.5 flex">
                     <input
                       id="login-password"
                       className="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                      placeholder={t('auth.login.passwordPlaceholder')}
+                      placeholder={t("auth.login.passwordPlaceholder")}
                       type="password"
                       autoComplete="current-password"
                       {...{
-                        'x-model': 'password',
-                        'x-on:keydown.enter.prevent': 'submit()',
+                        "x-model": "password",
+                        "x-on:keydown.enter.prevent": "submit()",
                       }}
                     />
                     <span className="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
@@ -233,15 +244,17 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       className="form-checkbox is-basic size-5 rounded-sm border-slate-400/70 checked:border-primary checked:bg-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:checked:border-accent dark:checked:bg-accent dark:hover:border-accent dark:focus:border-accent"
                       type="checkbox"
                       id="remember-me"
-                      {...{ 'x-model': 'rememberMe' }}
+                      {...{ "x-model": "rememberMe" }}
                     />
-                    <span className="line-clamp-1">{t('auth.login.rememberMe')}</span>
+                    <span className="line-clamp-1">
+                      {t("auth.login.rememberMe")}
+                    </span>
                   </label>
                   <a
                     href="#"
                     className="text-xs text-slate-400 transition-colors line-clamp-1 hover:text-slate-800 focus:text-slate-800 dark:text-navy-300 dark:hover:text-navy-100 dark:focus:text-navy-100"
                   >
-                    {t('auth.login.forgotPassword')}
+                    {t("auth.login.forgotPassword")}
                   </a>
                 </div>
                 <button
@@ -249,12 +262,17 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   className="btn mt-5 w-full bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
                   type="button"
                   {...{
-                    'x-on:click': 'submit()',
-                    'x-bind:disabled': 'loading',
+                    "x-on:click": "submit()",
+                    "x-bind:disabled": "loading",
                   }}
                 >
-                  <span {...{ 'x-text': "loading ? messages.signingIn : messages.signIn" }}>
-                    {t('common.actions.signIn')}
+                  <span
+                    {...{
+                      "x-text":
+                        "loading ? messages.signingIn : messages.signIn",
+                    }}
+                  >
+                    {t("common.actions.signIn")}
                   </span>
                 </button>
                 <div
@@ -262,19 +280,19 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                   role="alert"
                   className="mt-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-xs-plus text-red-400"
                   {...{
-                    'x-cloak': '',
-                    'x-show': 'error',
-                    'x-text': 'error',
+                    "x-cloak": "",
+                    "x-show": "error",
+                    "x-text": "error",
                   }}
                 />
                 <div className="mt-4 text-center text-xs-plus">
                   <p className="line-clamp-1">
-                    <span>{t('auth.login.noAccount')}</span>{' '}
+                    <span>{t("auth.login.noAccount")}</span>
                     <a
                       className="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
                       href="/auth/register"
                     >
-                      {t('common.actions.createAccount')}
+                      &nbsp; {t("common.actions.createAccount")}
                     </a>
                   </p>
                 </div>
@@ -292,14 +310,20 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
                       className="size-5.5"
                       dangerouslySetInnerHTML={{ __html: GOOGLE_SVG }}
                     />
-                    <span>{t('auth.login.social.google')}</span>
+                    <span>{t("auth.login.social.google")}</span>
                   </button>
                 </div>
               </div>
               <div className="mt-8 flex justify-center text-xs text-slate-400 dark:text-navy-300">
-                <a href="#">{t('common.legal.privacyNotice')}</a>
-                <div className="mx-3 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-                <a href="#">{t('common.legal.termsOfService')}</a>
+                Powered by &nbsp;&nbsp;
+                <a
+                  className="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
+                  href="https://www.workless.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Workless
+                </a>
               </div>
             </div>
           </main>
@@ -308,5 +332,5 @@ export function renderLoginPage(options: LoginPageOptions = {}): string {
     </html>,
   );
 
-  return '<!DOCTYPE html>' + minifyHtml(raw);
+  return "<!DOCTYPE html>" + minifyHtml(raw);
 }
