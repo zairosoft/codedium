@@ -2,7 +2,6 @@ import { createView, type AppLocale } from "../components/main";
 
 type RegisterPageOptions = {
   error?: string;
-  locale?: AppLocale;
 };
 
 const LOGO_URL = "https://www.zairosoft.com/assets/2025/12/logo.webp";

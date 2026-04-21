@@ -76,11 +76,11 @@ export type ViewContext = {
   isLang: boolean;
 };
 
-export function createView<TOptions extends { locale?: AppLocale }>(
+export function createView<TOptions>(
   builder: (ctx: ViewContext, options: TOptions) => HtmlDocumentProps,
 ) {
-  return function renderView(options: TOptions = {} as TOptions): string {
-    const locale = options?.locale ?? "en";
+  return function renderView(options: TOptions & { locale?: AppLocale } = {} as any): string {
+    const locale = options?.locale ?? (process.env.LOCALE as AppLocale) ?? "en";
     const { t } = createTranslator(locale);
     const isLang = locale === "th";
 

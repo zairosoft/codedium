@@ -3,7 +3,6 @@ import { createView, type AppLocale } from "../components/main";
 type LoginPageOptions = {
   error?: string;
   email?: string;
-  locale?: AppLocale;
 };
 
 export const renderLoginPage = createView<LoginPageOptions>(
