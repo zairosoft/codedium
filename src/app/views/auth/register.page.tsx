@@ -1,4 +1,4 @@
-import { Render, createTranslator, type AppLocale } from "../components/main";
+import { createView, type AppLocale } from "../components/main";
 
 type RegisterPageOptions = {
   error?: string;
@@ -9,59 +9,56 @@ const LOGO_URL = "https://www.zairosoft.com/assets/2025/12/logo.webp";
 
 const GOOGLE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>`;
 
-export function renderRegisterPage(options: RegisterPageOptions = {}): string {
-  const locale = options.locale ?? "en";
-  const { t } = createTranslator(locale);
-  const isThai = locale === "th";
-  const initialState = JSON.stringify({
-    error: options.error ?? "",
-    messages: {
-      missingName: t("auth.register.validation.missingName"),
-      missingEmail: t("auth.register.validation.missingEmail"),
-      missingPassword: t("auth.register.validation.missingPassword"),
-      passwordMismatch: t("auth.register.validation.passwordMismatch"),
-      mustAgree: t("auth.register.validation.mustAgree"),
-      registerFailed: t("auth.register.errors.registerFailed"),
-      networkError: t("auth.register.errors.network"),
-      signUp: t("common.actions.signUp"),
-      signingUp: t("common.actions.signingUp"),
-    },
-  });
+export const renderRegisterPage = createView<RegisterPageOptions>(
+  ({ t, isLang }, options) => {
+    const initialState = JSON.stringify({
+      error: options.error ?? "",
+      messages: {
+        missingName: t("auth.register.validation.missingName"),
+        missingEmail: t("auth.register.validation.missingEmail"),
+        missingPassword: t("auth.register.validation.missingPassword"),
+        passwordMismatch: t("auth.register.validation.passwordMismatch"),
+        mustAgree: t("auth.register.validation.mustAgree"),
+        registerFailed: t("auth.register.errors.registerFailed"),
+        networkError: t("auth.register.errors.network"),
+        signUp: t("common.actions.signUp"),
+        signingUp: t("common.actions.signingUp"),
+      },
+    });
 
-  return Render({
-    locale,
-    title: t("auth.register.pageTitle"),
-    bodyClassName: "is-header-blur",
-    bodyProps: { "x-data": "" },
-    head: (
-      <>
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-          name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-        />
-        <style
-          dangerouslySetInnerHTML={{
-            __html: "[x-cloak]{display:none!important;}",
-          }}
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com/" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com/"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <script
-          defer
-          src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+    return {
+      title: t("auth.register.pageTitle"),
+      bodyClassName: "is-header-blur",
+      bodyProps: { "x-data": "" },
+      head: (
+        <>
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          />
+          <style
+            dangerouslySetInnerHTML={{
+              __html: "[x-cloak]{display:none!important;}",
+            }}
+          />
+          <link rel="preconnect" href="https://fonts.googleapis.com/" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com/"
+            crossOrigin="anonymous"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
+          <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
               localStorage.getItem("_x_darkMode_on") === "true" &&
                 document.documentElement.classList.add("dark");
 
@@ -133,11 +130,11 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
                 };
               };
             `,
-          }}
-        />
-      </>
-    ),
-    children: (
+            }}
+          />
+        </>
+      ),
+      children: (
         <div
           id="root"
           className="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900"
@@ -152,7 +149,7 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
                     href="/language/en"
                     className={[
                       "rounded-md px-3 py-1.5 transition-colors",
-                      isThai
+                      isLang
                         ? "text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50"
                         : "bg-primary text-white dark:bg-accent",
                     ].join(" ")}
@@ -163,7 +160,7 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
                     href="/language/th"
                     className={[
                       "rounded-md px-3 py-1.5 transition-colors",
-                      isThai
+                      isLang
                         ? "bg-primary text-white dark:bg-accent"
                         : "text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50",
                     ].join(" ")}
@@ -395,6 +392,7 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
             </div>
           </main>
         </div>
-    )
-  });
-}
+      ),
+    };
+  },
+);

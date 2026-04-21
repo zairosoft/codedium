@@ -1,7 +1,7 @@
-import type { PropsWithChildren, ReactNode } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { minifyHtml } from '../../helpers/minify-html';
-import { createTranslator, type AppLocale } from '../../../core/i18n';
+import type { PropsWithChildren, ReactNode } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { minifyHtml } from "../../helpers/minify-html";
+import { createTranslator, type AppLocale } from "../../../core/i18n";
 
 export { createTranslator, type AppLocale };
 
@@ -23,7 +23,7 @@ export function Raw({ html, asContents = false }: RawHtmlProps) {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: html }}
-      style={asContents ? { display: 'contents' } : undefined}
+      style={asContents ? { display: "contents" } : undefined}
     />
   );
 }
@@ -35,7 +35,7 @@ export function Html({
   bodyClassName,
   head,
   htmlClassName,
-  locale = 'en',
+  locale = "en",
   bodyProps = {},
   children,
 }: HtmlDocumentProps) {
@@ -53,7 +53,12 @@ export function Html({
         ></script>
         {head}
       </head>
-      <body className={bodyClassName ?? 'min-h-screen bg-slate-50 text-slate-800 antialiased'} {...bodyProps}>
+      <body
+        className={
+          bodyClassName ?? "min-h-screen bg-slate-50 text-slate-800 antialiased"
+        }
+        {...bodyProps}
+      >
         {children}
       </body>
     </html>
@@ -62,7 +67,28 @@ export function Html({
 
 export function Render(props: HtmlDocumentProps): string {
   const raw = renderToStaticMarkup(<Html {...props} />);
-  return '<!DOCTYPE html>' + minifyHtml(raw);
+  return "<!DOCTYPE html>" + minifyHtml(raw);
+}
+
+export type ViewContext = {
+  t: (key: string) => string;
+  locale: AppLocale;
+  isLang: boolean;
+};
+
+export function createView<TOptions extends { locale?: AppLocale }>(
+  builder: (ctx: ViewContext, options: TOptions) => HtmlDocumentProps,
+) {
+  return function renderView(options: TOptions = {} as TOptions): string {
+    const locale = options?.locale ?? "en";
+    const { t } = createTranslator(locale);
+    const isLang = locale === "th";
+
+    return Render({
+      locale,
+      ...builder({ t, locale, isLang }, options),
+    });
+  };
 }
 
 export { Render as render };
