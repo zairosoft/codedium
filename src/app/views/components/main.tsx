@@ -1,7 +1,9 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { minifyHtml } from '../../helpers/minify-html';
-import type { AppLocale } from '../../../core/i18n';
+import { createTranslator, type AppLocale } from '../../../core/i18n';
+
+export { createTranslator, type AppLocale };
 
 export type HtmlDocumentProps = PropsWithChildren<{
   title: string;
@@ -9,6 +11,7 @@ export type HtmlDocumentProps = PropsWithChildren<{
   head?: ReactNode;
   htmlClassName?: string;
   locale?: AppLocale;
+  bodyProps?: Record<string, any>;
 }>;
 
 type RawHtmlProps = {
@@ -33,6 +36,7 @@ export function Html({
   head,
   htmlClassName,
   locale = 'en',
+  bodyProps = {},
   children,
 }: HtmlDocumentProps) {
   return (
@@ -49,7 +53,7 @@ export function Html({
         ></script>
         {head}
       </head>
-      <body className={bodyClassName ?? 'min-h-screen bg-slate-50 text-slate-800 antialiased'}>
+      <body className={bodyClassName ?? 'min-h-screen bg-slate-50 text-slate-800 antialiased'} {...bodyProps}>
         {children}
       </body>
     </html>

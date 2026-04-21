@@ -1,6 +1,4 @@
-import { renderToStaticMarkup } from "react-dom/server";
-import { createTranslator, type AppLocale } from "../../../core/i18n";
-import { minifyHtml } from "../../helpers/minify-html";
+import { Render, createTranslator, type AppLocale } from "../components/main";
 
 type RegisterPageOptions = {
   error?: string;
@@ -30,18 +28,18 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
     },
   });
 
-  const raw = renderToStaticMarkup(
-    <html lang={locale}>
-      <head>
-        <meta charSet="UTF-8" />
+  return Render({
+    locale,
+    title: t("auth.register.pageTitle"),
+    bodyClassName: "is-header-blur",
+    bodyProps: { "x-data": "" },
+    head: (
+      <>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta
           name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
         />
-        <meta name="turbo-refresh-method" content="morph" />
-        <title>{t("auth.register.pageTitle")}</title>
-        <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
         <style
           dangerouslySetInnerHTML={{
             __html: "[x-cloak]{display:none!important;}",
@@ -57,10 +55,6 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        <script
-          type="module"
-          src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.13/+esm"
-        ></script>
         <script
           defer
           src="https://cdn.jsdelivr.net/npm/alpinejs/dist/cdn.min.js"
@@ -141,8 +135,9 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
             `,
           }}
         />
-      </head>
-      <body className="is-header-blur" {...{ "x-data": "" }}>
+      </>
+    ),
+    children: (
         <div
           id="root"
           className="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900"
@@ -400,9 +395,6 @@ export function renderRegisterPage(options: RegisterPageOptions = {}): string {
             </div>
           </main>
         </div>
-      </body>
-    </html>,
-  );
-
-  return "<!DOCTYPE html>" + minifyHtml(raw);
+    )
+  });
 }
