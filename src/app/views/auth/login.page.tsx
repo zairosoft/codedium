@@ -305,7 +305,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
                 </div>
               </div>
               <div className="mt-8 flex justify-center text-xs text-slate-400 dark:text-navy-300">
-                Powered by &nbsp;&nbsp;
+                Powered by &nbsp;
                 <a
                   className="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
                   href="https://www.workless.app"
