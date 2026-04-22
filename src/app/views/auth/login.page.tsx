@@ -142,7 +142,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
               </div>
               <div className="text-center">
                 <img
-                  src="https://www.zairosoft.com/assets/2025/12/logo.webp"
+                  src="/assets/images/logo.webp"
                   alt="Workless"
                   className="mx-auto object-contain"
                   width="50"
