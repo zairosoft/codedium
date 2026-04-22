@@ -1,4 +1,4 @@
-import { minify, type Options } from 'html-minifier';
+import { minify as htmlMinify, type Options } from 'html-minifier';
 
 const defaultOptions: Options = {
   collapseWhitespace: true,
@@ -15,9 +15,9 @@ const defaultOptions: Options = {
   sortClassName: true,
 };
 
-export function minifyHtml(
+export function minify(
   input: string,
   options?: Options,
 ): string {
-  return minify(input, { ...defaultOptions, ...options });
+  return htmlMinify(input, { ...defaultOptions, ...options });
 }
