@@ -357,7 +357,7 @@ export const renderRegisterPage = createView<RegisterPageOptions>(
                 {/* Link to login */}
                 <div className="mt-4 text-center text-xs-plus">
                   <p className="line-clamp-1">
-                    <span>{t("auth.register.alreadyHaveAccount")}</span>{" "}
+                    <span>{t("auth.register.alreadyHaveAccount")}</span>
                     <a
                       className="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
                       href="/auth/login"

@@ -59,9 +59,6 @@
   }
 }
 
-
-
-
 .link-primary {
   color: var(--color-primary);
   text-decoration: none;
@@ -82,24 +79,11 @@
   font-size: 0.8125rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 @layer components {
   .card {
     background-color: #fff;
     border-radius: var(--radius-lg);
-    box-shadow:
-      0 3px 10px 0 rgb(48 46 56 / 0.06);
+    box-shadow: 0 3px 10px 0 rgb(48 46 56 / 0.06);
     color: #64748b;
     display: flex;
     flex-direction: column;
@@ -139,8 +123,7 @@
   .form-input,
   .form-checkbox,
   .form-checkbox::before {
-    transition:
-      all 0.2s var(--default-transition-timing-function);
+    transition: all 0.2s var(--default-transition-timing-function);
   }
 
   .form-input {
@@ -148,6 +131,7 @@
     contain: paint;
     letter-spacing: var(--tracking-wide);
     outline: none;
+    font-size: 0.875rem !important;
   }
 
   input.form-input:focus,
