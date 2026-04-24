@@ -1,6 +1,6 @@
 # Workless
 
-NestJS modular monolith for platform services, tenant-aware business modules, and server-rendered HTML pages.
+Workless is an AI SaaS platform that helps reduce workloads, making work easier, faster, and more efficient for every organization.
 
 ![Screen](https://www.zairosoft.com/assets/2026/02/crm.webp "Dashboards")
 
