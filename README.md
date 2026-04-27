@@ -199,7 +199,13 @@ Optional tooling present in the repo:
 
 These exist for frontend tooling and local build workflows, but the primary runtime remains the Nest app serving static assets from `public/`.
 
-## Support
+## Get in Touch
+
+- 📧 Email: [info@zairosoft.com](mailto:info@zairosoft.com)
+- 💼 LinkedIn: [linkedin.com/in/zairosoft](https://www.linkedin.com/in/zairosoft)
+- 🌐 Website: [zairosoft.com](https://www.zairosoft.com)
+
+## Support Me
 
 - [Sponsors](https://github.com/sponsors/zairosoft)
 
