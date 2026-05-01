@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { TenantScopedEntity } from '../../core/tenant/tenant-scoped.entity';
+import { TenantScopedEntity } from '../../workless/tenant/tenant-scoped.entity';
 import { PlatformUserEntity } from './platform-user.entity';
 
 @Entity({ name: 'platform_user_memberships' })

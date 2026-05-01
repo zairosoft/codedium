@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ModuleSeeder } from '../../../core/lifecycle/module-seeder.interface';
-import { DEFAULT_TENANT_ID } from '../../../core/tenant/tenant.constants';
+import { ModuleSeeder } from '../../../workless/lifecycle/module-seeder.interface';
+import { DEFAULT_TENANT_ID } from '../../../workless/tenant/tenant.constants';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
 import { CrmContactRepository } from '../repositories/crm-contact.repository';
 

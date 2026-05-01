@@ -4,11 +4,11 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { PlatformModule } from './app/platform.module';
-import { CoreModule } from './core/core.module';
-import { CacheModule } from './core/infrastructure/cache/cache.module';
+import { WorklessModule } from './workless/workless.module';
+import { CacheModule } from './workless/infrastructure/cache/cache.module';
 import { DatabaseModule } from './database/database.module';
-import { TenantContextMiddleware } from './core/tenant/tenant-context.middleware';
-import { TenantModule } from './core/tenant/tenant.module';
+import { TenantContextMiddleware } from './workless/tenant/tenant-context.middleware';
+import { TenantModule } from './workless/tenant/tenant.module';
 import { loadRuntimeModules } from './modules/runtime-modules';
 
 const runtimeModules = loadRuntimeModules();
@@ -41,7 +41,7 @@ const runtimeModules = loadRuntimeModules();
     DatabaseModule,
     CacheModule,
     PlatformModule,
-    CoreModule,
+    WorklessModule,
     ...runtimeModules,
   ],
   providers: [

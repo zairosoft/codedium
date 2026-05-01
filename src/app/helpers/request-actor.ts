@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import type { AuthenticatedUser } from '../../core/interfaces/auth.interface';
+import type { AuthenticatedUser } from '../../workless/interfaces/auth.interface';
 
 export type RequestActor = {
   userId?: string;

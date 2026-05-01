@@ -1,4 +1,4 @@
-import { DEFAULT_TENANT_ID } from '../../core/tenant/tenant.constants';
+import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
 import {
   DataSource,
   QueryRunner,

@@ -50,4 +50,4 @@ import { ModuleRegistryService } from './registry/module.registry';
     ModuleLifecycleService,
   ],
 })
-export class CoreModule {}
+export class WorklessModule {}

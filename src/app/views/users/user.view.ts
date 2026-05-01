@@ -1,4 +1,4 @@
-import { MembershipRecord, UserRecord } from '../../../core/interfaces/user.interface';
+import { MembershipRecord, UserRecord } from '../../../workless/interfaces/user.interface';
 
 export type UserItemView = {
   id: string;

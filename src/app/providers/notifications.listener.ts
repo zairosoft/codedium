@@ -4,7 +4,7 @@ import {
   NOTIFICATION_SERVICE,
   NotificationEvent,
   NotificationServicePort,
-} from '../../core/interfaces/notification.interface';
+} from '../../workless/interfaces/notification.interface';
 
 @Injectable()
 export class NotificationsListener {

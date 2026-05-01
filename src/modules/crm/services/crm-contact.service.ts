@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { CACHE_PORT, CachePort } from '../../../core/interfaces/cache.interface';
-import { EVENT_BUS_PORT, EventBusPort } from '../../../core/interfaces/event-bus.interface';
-import { HOOK_PORT, HookPort } from '../../../core/interfaces/hook.interface';
+import { CACHE_PORT, CachePort } from '../../../workless/interfaces/cache.interface';
+import { EVENT_BUS_PORT, EventBusPort } from '../../../workless/interfaces/event-bus.interface';
+import { HOOK_PORT, HookPort } from '../../../workless/interfaces/hook.interface';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';

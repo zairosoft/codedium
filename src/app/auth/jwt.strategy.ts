@@ -2,9 +2,9 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { USER_SERVICE, UserServicePort } from '../../core/interfaces/user.interface';
-import { TENANT_CONTEXT, TenantContextPort } from '../../core/tenant/tenant-context.interface';
-import type { JwtPayload, AuthenticatedUser } from '../../core/interfaces/auth.interface';
+import { USER_SERVICE, UserServicePort } from '../../workless/interfaces/user.interface';
+import { TENANT_CONTEXT, TenantContextPort } from '../../workless/tenant/tenant-context.interface';
+import type { JwtPayload, AuthenticatedUser } from '../../workless/interfaces/auth.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

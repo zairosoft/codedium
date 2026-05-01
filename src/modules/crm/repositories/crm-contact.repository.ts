@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { TENANT_CONTEXT, TenantContextPort } from '../../../core/tenant/tenant-context.interface';
+import { TENANT_CONTEXT, TenantContextPort } from '../../../workless/tenant/tenant-context.interface';
 import { ListContactsDto } from '../dto/list-contacts.dto';
 import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
 import { CrmDashboardSummary } from './crm-dashboard.summary';

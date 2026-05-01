@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
 import { AppModule } from '../app.module';
-import { ModuleLifecycleService } from '../core/lifecycle/module.lifecycle';
-import { ModuleRegistryService } from '../core/registry/module.registry';
+import { ModuleLifecycleService } from '../workless/lifecycle/module.lifecycle';
+import { ModuleRegistryService } from '../workless/registry/module.registry';
 import { PlatformUserSchemaMigration } from './migrations/platform-user-schema.migration';
 
 async function runSeeders() {

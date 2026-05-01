@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Hook } from '../../../core/events/hook.decorator';
+import { Hook } from '../../../workless/events/hook.decorator';
 import { CreateContactDto } from '../dto/create-contact.dto';
 import { UpdateContactDto } from '../dto/update-contact.dto';
 

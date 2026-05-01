@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import { Public } from '../auth/public.decorator';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dto/login.dto';
-import { resolveLocaleFromRequest } from '../../core/i18n';
+import { resolveLocaleFromRequest } from '../../workless/i18n';
 import { renderLoginPage } from '../views/auth/login.page';
 import { renderRegisterPage } from '../views/auth/register.page';
 

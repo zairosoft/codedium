@@ -5,9 +5,9 @@ import {
   AuthSession,
   JwtPayload,
   LoginResult,
-} from '../../core/interfaces/auth.interface';
-import { USER_SERVICE, UserServicePort } from '../../core/interfaces/user.interface';
-import { DEFAULT_TENANT_ID } from '../../core/tenant/tenant.constants';
+} from '../../workless/interfaces/auth.interface';
+import { USER_SERVICE, UserServicePort } from '../../workless/interfaces/user.interface';
+import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
 
 @Injectable()
 export class AuthService implements AuthServicePort {
