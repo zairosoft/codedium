@@ -1,6 +1,6 @@
 # Workless
 
-NestJS modular monolith for platform services, tenant-aware business modules, and server-rendered HTML pages.
+Workless is an AI SaaS platform that helps reduce workloads, making work easier, faster, and more efficient for every organization.
 
 ![Screen](https://www.zairosoft.com/assets/2026/02/crm.webp "Dashboards")
 
@@ -199,7 +199,13 @@ Optional tooling present in the repo:
 
 These exist for frontend tooling and local build workflows, but the primary runtime remains the Nest app serving static assets from `public/`.
 
-## Support
+## Get in Touch
+
+- 📧 Email: [info@zairosoft.com](mailto:info@zairosoft.com)
+- 💼 LinkedIn: [linkedin.com/in/zairosoft](https://www.linkedin.com/in/zairosoft)
+- 🌐 Website: [zairosoft.com](https://www.zairosoft.com)
+
+## Support Me
 
 - [Sponsors](https://github.com/sponsors/zairosoft)
 
