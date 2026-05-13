@@ -9,7 +9,7 @@ Workless is an AI SaaS platform that helps reduce workloads, making work easier,
 Workless is organized around four top-level runtime areas:
 
 - `src/app`: platform-level auth, users, roles, notifications, home page, and HTML views
-- `src/core`: module registry, lifecycle, hook/event bus, tenant context, and HTML cache support
+- `src/workless`: module registry, lifecycle, hook/event bus, tenant context, and HTML cache support
 - `src/database`: TypeORM bootstrap, schema runner, and seeder runner
 - `src/modules`: runtime business modules such as `crm`, `helpdesk`, and `org`
 
