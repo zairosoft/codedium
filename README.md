@@ -143,7 +143,7 @@ src/
     providers/
     services/
     views/
-  core/
+  workless/
     events/
     http/
     infrastructure/
