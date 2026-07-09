@@ -10,7 +10,7 @@ export function createTypeOrmConfig(configService: ConfigService): TypeOrmModule
     port: Number(configService.get<number>('DB_PORT', 5432)),
     username: configService.get<string>('DB_USERNAME', 'postgres'),
     password: configService.get<string>('DB_PASSWORD', 'postgres'),
-    database: configService.get<string>('DB_NAME', 'zairosoft'),
+    database: configService.get<string>('DB_NAME', 'workless'),
     autoLoadEntities: true,
     // SECURITY: Never synchronize in production — use migrations instead
     synchronize: !isProduction && configService.get<string>('DB_SYNC', 'false') === 'true',
