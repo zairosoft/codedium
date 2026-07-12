@@ -6,6 +6,7 @@ import { HookService } from '../events/hook.service';
 import { SystemModuleExplorer } from '../module/module.explorer';
 import { ModuleLifecycleContext } from '../module/module.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
+import { MigrationService } from '../../database/migration.service';
 
 @Injectable()
 export class ModuleLifecycleService {
@@ -18,6 +19,7 @@ export class ModuleLifecycleService {
     private readonly cacheService: CacheService,
     private readonly hookService: HookService,
     private readonly eventBus: EventBusService,
+    private readonly migrationService: MigrationService,
   ) {}
 
   async install(name: string) {
@@ -31,6 +33,7 @@ export class ModuleLifecycleService {
 
     await this.ensureDependenciesEnabled(definition.metadata.dependencies);
     this.logger.log(`Installing module "${name}"`);
+    await this.migrationService.migrateModule(name, definition.metadata.migrations);
     await definition.instance.install(context);
     const result = await this.moduleRegistry.markInstalled(name, definition.metadata.version);
     await this.eventBus.emit('system.module.installed', {
@@ -75,27 +78,45 @@ export class ModuleLifecycleService {
     const definition = this.getDefinitionOrFail(name);
     const currentState = await this.moduleRegistry.getOrFail(name);
     const context = this.createContext();
+    const fromVersion = currentState.version;
 
     this.logger.log(
-      `Upgrading module "${name}" from "${currentState.version}" to "${definition.metadata.version}"`,
+      `Upgrading module "${name}" from "${fromVersion}" to "${definition.metadata.version}"`,
     );
-    await definition.instance.upgrade(context, currentState.version);
+    await this.migrationService.migrateModule(name, definition.metadata.migrations);
+    await definition.instance.upgrade(context, fromVersion);
     const result = await this.moduleRegistry.markInstalled(name, definition.metadata.version);
     await this.eventBus.emit('system.module.upgraded', {
       name,
-      fromVersion: currentState.version,
+      fromVersion,
       toVersion: definition.metadata.version,
     });
     await this.eventBus.emit('notification.send', {
       name: 'system.module.upgraded',
       payload: {
         name,
-        fromVersion: currentState.version,
+        fromVersion,
         toVersion: definition.metadata.version,
       },
       receivedAt: new Date().toISOString(),
     });
     return result;
+  }
+
+  async migrate(name: string): Promise<string[]> {
+    const definition = this.getDefinitionOrFail(name);
+    await this.ensureDependenciesEnabled(definition.metadata.dependencies);
+    return this.migrationService.migrateModule(name, definition.metadata.migrations);
+  }
+
+  async migrationStatus(name: string) {
+    const definition = this.getDefinitionOrFail(name);
+    return this.migrationService.status('module', name, definition.metadata.migrations);
+  }
+
+  async revertMigration(name: string): Promise<string | null> {
+    const definition = this.getDefinitionOrFail(name);
+    return this.migrationService.revertLast('module', name, definition.metadata.migrations);
   }
 
   private getDefinitionOrFail(name: string) {

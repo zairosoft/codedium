@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { createTypeOrmConfig } from './typeorm.config';
+import { MigrationService } from './migration.service';
 
 @Global()
 @Module({
@@ -11,6 +12,7 @@ import { createTypeOrmConfig } from './typeorm.config';
       useFactory: (configService: ConfigService) => createTypeOrmConfig(configService),
     }),
   ],
-  exports: [TypeOrmModule],
+  providers: [MigrationService],
+  exports: [TypeOrmModule, MigrationService],
 })
 export class DatabaseModule {}

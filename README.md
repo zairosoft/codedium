@@ -103,6 +103,7 @@ Useful defaults from `.env.example`:
 5. Start the app
 
 ```bash
+npm run db:migrate
 npm run start:dev
 ```
 
@@ -115,11 +116,18 @@ npm run start
 npm run dev
 npm run build:css
 npm run db:platform
+npm run db:migrate
+npm run db:migrate:status
+npm run db:migrate:revert
 npm run seed
 npm run module:list
 npm run module:install -- crm
 npm run module:upgrade -- crm
 npm run module:uninstall -- crm
+npm run module:migrate -- crm
+npm run module:migrate -- --all
+npm run module:migrate:status -- crm
+npm run module:migrate:revert -- crm
 ```
 
 Notes:
@@ -127,6 +135,100 @@ Notes:
 - `npm run dev` starts Nest dev mode and Tailwind watch mode together
 - `npm run build:css` compiles `public/assets/css/app.css` to `public/assets/css/tailwindcss.css`
 - `npm run test` is currently a placeholder and does not run a real test suite yet
+
+## Database Migrations
+
+Workless records platform and module migrations in `system_migrations`. Migrations are
+ordered by timestamp, protected by a PostgreSQL advisory lock, and run once inside a
+transaction by default. Keep `DB_SYNC=false`; schema changes should be delivered as
+migrations.
+
+Run pending platform migrations before starting a new deployment:
+
+```bash
+npm run db:migrate
+```
+
+Inspect migration state or roll back the latest platform migration:
+
+```bash
+npm run db:migrate:status
+npm run db:migrate:revert
+```
+
+`npm run db:platform` remains as an alias for `npm run db:migrate`.
+
+### Module migrations
+
+Installing or upgrading a module automatically runs its pending migrations before its
+lifecycle hook:
+
+```bash
+npm run module:install -- crm
+npm run module:upgrade -- crm
+```
+
+Migrations can also be managed without changing the installed module version:
+
+```bash
+# Run one module
+npm run module:migrate -- crm
+
+# Run every discovered module
+npm run module:migrate -- --all
+
+# Inspect or revert one module
+npm run module:migrate:status -- crm
+npm run module:migrate:revert -- crm
+```
+
+Uninstalling a module does not remove its tables or data. Use migration rollback only
+when the schema change itself must be reverted.
+
+### Adding a module migration
+
+Create a migration class under the module's `migrations` directory:
+
+```ts
+import { QueryRunner } from 'typeorm';
+import { WorklessMigration } from '../../../database/migration.interface';
+
+export class AddCrmContactSourceMigration implements WorklessMigration {
+  readonly name = 'add-crm-contact-source';
+  readonly timestamp = 202607120200;
+  readonly checksum = 'add-crm-contact-source-v1';
+
+  async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      'ALTER TABLE "crm_contacts" ADD COLUMN IF NOT EXISTS "source" varchar(80)',
+    );
+  }
+
+  async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      'ALTER TABLE "crm_contacts" DROP COLUMN IF EXISTS "source"',
+    );
+  }
+}
+```
+
+Then register the class in the module metadata. The lifecycle service does not need to
+loop over migrations itself:
+
+```ts
+@SystemModule({
+  name: 'crm',
+  version: '1.1.0',
+  migrations: [
+    CrmContactSchemaMigration,
+    CrmContactIndexMigration,
+    AddCrmContactSourceMigration,
+  ],
+})
+```
+
+Migration names must be unique within their scope. Never edit an applied migration;
+create a new migration instead, because Workless verifies applied migration checksums.
 
 ## Project Structure
 

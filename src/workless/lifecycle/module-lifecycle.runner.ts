@@ -36,6 +36,10 @@ async function bootstrap(): Promise<void> {
         if (command === 'upgrade') {
           await lifecycle.upgrade(moduleState.name);
         }
+
+        if (command === 'migrate') {
+          await lifecycle.migrate(moduleState.name);
+        }
       }
 
       return;
@@ -59,6 +63,22 @@ async function bootstrap(): Promise<void> {
 
     if (command === 'uninstall') {
       await lifecycle.uninstall(target);
+      return;
+    }
+
+    if (command === 'migrate') {
+      await lifecycle.migrate(target);
+      return;
+    }
+
+    if (command === 'migration:status') {
+      console.table(await lifecycle.migrationStatus(target));
+      return;
+    }
+
+    if (command === 'migration:revert') {
+      const reverted = await lifecycle.revertMigration(target);
+      console.log(reverted ? `Reverted migration: ${reverted}` : 'No applied migration to revert.');
       return;
     }
 

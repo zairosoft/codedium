@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { WorklessMigrationConstructor } from '../../database/migration.interface';
 import { CachePort } from '../interfaces/cache.interface';
 import { HookPort } from '../interfaces/hook.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
@@ -16,17 +17,13 @@ export interface SystemModuleLifecycle {
   upgrade(context: ModuleLifecycleContext, fromVersion?: string): Promise<void>;
 }
 
-export interface ModuleMigration {
-  name: string;
-  run(context: ModuleLifecycleContext): Promise<void>;
-}
-
 export interface DiscoveredSystemModule {
   metadata: {
     name: string;
     version: string;
     description?: string;
     dependencies: string[];
+    migrations: WorklessMigrationConstructor[];
   };
   instance: SystemModuleLifecycle;
 }

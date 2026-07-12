@@ -1,6 +1,5 @@
 import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
 import {
-  DataSource,
   QueryRunner,
   Table,
   TableColumn,
@@ -18,11 +17,11 @@ async function tableHasIndex(
 }
 
 export class PlatformUserSchemaMigration {
-  async run(dataSource: DataSource): Promise<void> {
-    const queryRunner = dataSource.createQueryRunner();
-    await queryRunner.connect();
+  readonly name = 'platform-user-schema';
+  readonly timestamp = 202607120002;
+  readonly checksum = 'platform-user-schema-v1';
 
-    try {
+  async up(queryRunner: QueryRunner): Promise<void> {
       const hasTable = await queryRunner.hasTable('platform_users');
       if (!hasTable) {
         await queryRunner.createTable(
@@ -224,8 +223,10 @@ export class PlatformUserSchemaMigration {
           }),
         );
       }
-    } finally {
-      await queryRunner.release();
-    }
+  }
+
+  async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable('platform_user_memberships', true, true);
+    await queryRunner.dropTable('platform_users', true, true);
   }
 }

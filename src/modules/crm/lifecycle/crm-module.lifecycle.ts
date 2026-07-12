@@ -5,6 +5,7 @@ import {
   SystemModuleLifecycle,
 } from '../../../workless/module/module.interface';
 import { CrmContactIndexMigration } from '../migrations/crm-contact-index.migration';
+import { CrmContactSchemaMigration } from '../migrations/crm-contact-schema.migration';
 import { CrmContactSeeder } from '../seeders/crm-contact.seeder';
 
 const MODULE_CACHE_VERSION_KEY = 'crm:module:version';
@@ -13,18 +14,13 @@ const MODULE_CACHE_VERSION_KEY = 'crm:module:version';
   name: 'crm',
   version: '1.0.0',
   description: 'CRM contacts, dashboards, hooks, and tenant-aware caching',
+  migrations: [CrmContactSchemaMigration, CrmContactIndexMigration],
 })
 @Injectable()
 export class CrmModuleLifecycleService implements SystemModuleLifecycle {
-  private readonly migrations = [new CrmContactIndexMigration()];
-
   constructor(private readonly seeder: CrmContactSeeder) {}
 
   async install(context: ModuleLifecycleContext): Promise<void> {
-    for (const migration of this.migrations) {
-      await migration.run(context);
-    }
-
     await this.seeder.seed();
     await this.bumpModuleCacheVersion(context);
   }
@@ -34,10 +30,6 @@ export class CrmModuleLifecycleService implements SystemModuleLifecycle {
   }
 
   async upgrade(context: ModuleLifecycleContext): Promise<void> {
-    for (const migration of this.migrations) {
-      await migration.run(context);
-    }
-
     await this.bumpModuleCacheVersion(context);
   }
 

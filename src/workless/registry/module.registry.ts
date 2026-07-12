@@ -43,12 +43,12 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
         const nextDescription = definition.metadata.description ?? null;
         const nextDependencies = definition.metadata.dependencies ?? [];
         const needsUpdate =
-          existing.version !== definition.metadata.version ||
+          existing.availableVersion !== definition.metadata.version ||
           existing.description !== nextDescription ||
           JSON.stringify(existing.dependencies ?? []) !== JSON.stringify(nextDependencies);
 
         if (needsUpdate) {
-          existing.version = definition.metadata.version;
+          existing.availableVersion = definition.metadata.version;
           existing.description = nextDescription;
           existing.dependencies = nextDependencies;
           syncedRecords.push(this.remember(await this.moduleRegistryRepository.save(existing)));
@@ -61,7 +61,8 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
 
       const created = this.moduleRegistryRepository.create({
         name: definition.metadata.name,
-        version: definition.metadata.version,
+        version: '0.0.0',
+        availableVersion: definition.metadata.version,
         description: definition.metadata.description ?? null,
         dependencies: definition.metadata.dependencies,
         status: ModuleStatus.UNINSTALLED,
@@ -140,6 +141,7 @@ export class ModuleRegistryService implements OnApplicationBootstrap {
   async markInstalled(name: string, version: string): Promise<ModuleRegistryEntity> {
     const record = await this.getOrFail(name);
     record.version = version;
+    record.availableVersion = version;
     record.status = ModuleStatus.INSTALLED;
     record.enabled = true;
     record.installedAt = record.installedAt ?? new Date();

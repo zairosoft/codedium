@@ -1,24 +1,22 @@
-import { ModuleLifecycleContext, ModuleMigration } from '../../../workless/module/module.interface';
+import { QueryRunner } from 'typeorm';
+import { WorklessMigration } from '../../../database/migration.interface';
 
-export class CrmContactIndexMigration implements ModuleMigration {
-  name = 'crm-contact-index-tenant-status';
+export class CrmContactIndexMigration implements WorklessMigration {
+  readonly name = 'crm-contact-index-tenant-status';
+  readonly timestamp = 202607120101;
+  readonly checksum = 'crm-contact-index-tenant-status-v1';
 
-  async run({ dataSource }: ModuleLifecycleContext): Promise<void> {
-    const queryRunner = dataSource.createQueryRunner();
-    await queryRunner.connect();
+  async up(queryRunner: QueryRunner): Promise<void> {
+    const tableExists = await queryRunner.hasTable('crm_contacts');
+    if (!tableExists) return;
 
-    try {
-      const tableExists = await queryRunner.hasTable('crm_contacts');
-      if (!tableExists) {
-        return;
-      }
+    await queryRunner.query(
+      'CREATE INDEX IF NOT EXISTS "idx_crm_contacts_tenant_status" ON "crm_contacts" ("tenantId", "status")',
+    );
+  }
 
-      await queryRunner.query(
-        'CREATE INDEX IF NOT EXISTS "idx_crm_contacts_tenant_status" ON "crm_contacts" ("tenantId", "status")',
-      );
-    } finally {
-      await queryRunner.release();
-    }
+  async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query('DROP INDEX IF EXISTS "idx_crm_contacts_tenant_status"');
   }
 }
 

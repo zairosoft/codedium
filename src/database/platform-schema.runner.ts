@@ -1,24 +1,37 @@
 import 'reflect-metadata';
-import { NestFactory } from '@nestjs/core';
-import { DataSource } from 'typeorm';
-import { AppModule } from '../app.module';
-import { PlatformUserSchemaMigration } from './migrations/platform-user-schema.migration';
+import { MigrationService } from './migration.service';
+import { platformMigrations } from './migrations/platform-migrations';
+import { createStandaloneDataSource } from './standalone-data-source';
 
 async function runPlatformSchema(): Promise<void> {
-  const app = await NestFactory.createApplicationContext(AppModule);
+  const dataSource = createStandaloneDataSource();
+  await dataSource.initialize();
 
   try {
-    const dataSource = app.get(DataSource);
-    const platformUserSchemaMigration = new PlatformUserSchemaMigration();
-    await platformUserSchemaMigration.run(dataSource);
+    const migrationService = new MigrationService(dataSource);
+    const [command = 'migrate'] = process.argv.slice(2);
+    if (command === 'migrate') {
+      await migrationService.migratePlatform(platformMigrations);
+      return;
+    }
+    if (command === 'status') {
+      console.table(await migrationService.status('platform', null, platformMigrations));
+      return;
+    }
+    if (command === 'revert') {
+      const reverted = await migrationService.revertLast('platform', null, platformMigrations);
+      console.log(reverted ? `Reverted migration: ${reverted}` : 'No applied migration to revert.');
+      return;
+    }
+    throw new Error(`Unsupported database migration command "${command}".`);
   } finally {
-    await app.close();
+    await dataSource.destroy();
   }
 }
 
 runPlatformSchema()
   .then(() => {
-    console.log('Platform schema completed');
+    console.log('Platform migration command completed');
   })
   .catch((error) => {
     console.error('Platform schema failed', error);

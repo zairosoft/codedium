@@ -25,6 +25,9 @@ export class ModuleRegistryEntity {
   @Column({ type: 'varchar', length: 32 })
   version: string;
 
+  @Column({ type: 'varchar', length: 32, nullable: true })
+  availableVersion?: string | null;
+
   @Column({ type: 'varchar', length: 20, default: ModuleStatus.UNINSTALLED })
   status: ModuleStatus;
 
