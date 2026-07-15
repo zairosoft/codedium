@@ -128,6 +128,8 @@ npm run module:migrate -- crm
 npm run module:migrate -- --all
 npm run module:migrate:status -- crm
 npm run module:migrate:revert -- crm
+npm run module:seed -- crm
+npm run module:seed -- --all
 ```
 
 Notes:
@@ -229,6 +231,71 @@ loop over migrations itself:
 
 Migration names must be unique within their scope. Never edit an applied migration;
 create a new migration instead, because Workless verifies applied migration checksums.
+
+## Module Seeders
+
+Module seeders run independently from module installation. Each seeder must be
+idempotent so it is safe to execute more than once.
+
+Seed one module or every discovered module:
+
+```bash
+npm run module:seed -- crm
+npm run module:seed -- --all
+```
+
+The existing `seed` command uses the same module seeding engine and seeds all modules:
+
+```bash
+npm run seed
+```
+
+Platform administrators can also trigger a module seeder through the lifecycle API:
+
+```text
+POST /api/v1/modules/crm/seed
+```
+
+Before running seeders, Workless applies pending migrations for the target module. The
+command does not install, enable, disable, or change the version of a module.
+
+Create a Nest provider implementing `ModuleSeeder`:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { ModuleSeeder } from '../../../workless/lifecycle/module-seeder.interface';
+
+@Injectable()
+export class CrmPipelineSeeder implements ModuleSeeder {
+  readonly name = 'crm-default-pipeline';
+  readonly order = 200;
+
+  async seed(): Promise<void> {
+    // Check for existing data, then insert or update the required defaults.
+  }
+}
+```
+
+Register the seeder as a provider in the Nest module, then add it to the system module
+metadata:
+
+```ts
+@Module({
+  providers: [CrmPipelineSeeder, CrmModuleLifecycleService],
+})
+export class CrmModule {}
+
+@SystemModule({
+  name: 'crm',
+  version: '1.1.0',
+  migrations: [CrmContactSchemaMigration],
+  seeders: [CrmContactSeeder, CrmPipelineSeeder],
+})
+```
+
+Seeders are ordered by `order` and then by name. Seeder names must be unique within a
+module. A seeder may use constructor injection because it is resolved from the Nest
+dependency injection container.
 
 ## Project Structure
 

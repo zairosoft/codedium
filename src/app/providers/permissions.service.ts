@@ -24,6 +24,7 @@ export class PermissionsService implements PermissionServicePort {
         'system.module.install',
         'system.module.uninstall',
         'system.module.upgrade',
+        'system.module.seed',
         'crm.contact.read',
         'crm.contact.write',
       ],

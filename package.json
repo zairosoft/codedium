@@ -21,6 +21,7 @@
     "module:migrate": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts migrate",
     "module:migrate:status": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts migration:status",
     "module:migrate:revert": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts migration:revert",
+    "module:seed": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts seed",
     "module:uninstall": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts uninstall",
     "test": "echo \"No tests configured yet\" && exit 0",
     "build:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/tailwindcss.css --minify"

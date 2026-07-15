@@ -40,6 +40,10 @@ async function bootstrap(): Promise<void> {
         if (command === 'migrate') {
           await lifecycle.migrate(moduleState.name);
         }
+
+        if (command === 'seed') {
+          await lifecycle.seed(moduleState.name);
+        }
       }
 
       return;
@@ -79,6 +83,11 @@ async function bootstrap(): Promise<void> {
     if (command === 'migration:revert') {
       const reverted = await lifecycle.revertMigration(target);
       console.log(reverted ? `Reverted migration: ${reverted}` : 'No applied migration to revert.');
+      return;
+    }
+
+    if (command === 'seed') {
+      console.table(await lifecycle.seed(target));
       return;
     }
 

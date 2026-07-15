@@ -15,13 +15,11 @@ const MODULE_CACHE_VERSION_KEY = 'crm:module:version';
   version: '1.0.0',
   description: 'CRM contacts, dashboards, hooks, and tenant-aware caching',
   migrations: [CrmContactSchemaMigration, CrmContactIndexMigration],
+  seeders: [CrmContactSeeder],
 })
 @Injectable()
 export class CrmModuleLifecycleService implements SystemModuleLifecycle {
-  constructor(private readonly seeder: CrmContactSeeder) {}
-
   async install(context: ModuleLifecycleContext): Promise<void> {
-    await this.seeder.seed();
     await this.bumpModuleCacheVersion(context);
   }
 

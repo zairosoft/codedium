@@ -47,6 +47,7 @@ export class SystemModuleExplorer {
           ...metadata,
           dependencies: metadata.dependencies ?? [],
           migrations: metadata.migrations ?? [],
+          seeders: metadata.seeders ?? [],
         },
         instance,
       });

@@ -11,7 +11,7 @@ async function runSeeders() {
     const moduleRegistry = app.get(ModuleRegistryService);
     const modules = await moduleRegistry.list();
     for (const moduleState of modules) {
-      await moduleLifecycle.install(moduleState.name);
+      await moduleLifecycle.seed(moduleState.name);
     }
   } finally {
     await app.close();

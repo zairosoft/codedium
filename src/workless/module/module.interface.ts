@@ -3,6 +3,7 @@ import { WorklessMigrationConstructor } from '../../database/migration.interface
 import { CachePort } from '../interfaces/cache.interface';
 import { HookPort } from '../interfaces/hook.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
+import { ModuleSeederConstructor } from '../lifecycle/module-seeder.interface';
 
 export type ModuleLifecycleContext = {
   dataSource: DataSource;
@@ -24,6 +25,7 @@ export interface DiscoveredSystemModule {
     description?: string;
     dependencies: string[];
     migrations: WorklessMigrationConstructor[];
+    seeders: ModuleSeederConstructor[];
   };
   instance: SystemModuleLifecycle;
 }

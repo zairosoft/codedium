@@ -1,5 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
 import { WorklessMigrationConstructor } from '../../database/migration.interface';
+import { ModuleSeederConstructor } from '../lifecycle/module-seeder.interface';
 
 export const SYSTEM_MODULE_METADATA = Symbol('SYSTEM_MODULE_METADATA');
 
@@ -9,6 +10,7 @@ export type SystemModuleMetadata = {
   description?: string;
   dependencies?: string[];
   migrations?: WorklessMigrationConstructor[];
+  seeders?: ModuleSeederConstructor[];
 };
 
 export function SystemModule(metadata: SystemModuleMetadata): ClassDecorator {

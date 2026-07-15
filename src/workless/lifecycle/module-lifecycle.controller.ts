@@ -33,4 +33,10 @@ export class ModuleLifecycleController {
   upgrade(@Param('name') name: string) {
     return this.moduleLifecycle.upgrade(name);
   }
+
+  @Post(':name/seed')
+  @RequirePermissions('system.module.seed')
+  seed(@Param('name') name: string) {
+    return this.moduleLifecycle.seed(name);
+  }
 }

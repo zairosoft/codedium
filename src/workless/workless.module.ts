@@ -8,6 +8,7 @@ import { EventBusService } from './events/event-bus.service';
 import { HookService } from './events/hook.service';
 import { ModuleLifecycleController } from './lifecycle/module-lifecycle.controller';
 import { ModuleLifecycleService } from './lifecycle/module.lifecycle';
+import { ModuleSeedingService } from './lifecycle/module-seeding.service';
 import { SystemModuleExplorer } from './module/module.explorer';
 import { ModuleEnabledGuard } from './module/module-enabled.guard';
 import { ModuleRegistryEntity } from './registry/module-registry.entity';
@@ -31,6 +32,7 @@ import { ModuleRegistryService } from './registry/module.registry';
     SystemModuleExplorer,
     ModuleRegistryService,
     ModuleLifecycleService,
+    ModuleSeedingService,
     {
       provide: APP_GUARD,
       useClass: ModuleEnabledGuard,
@@ -48,6 +50,7 @@ import { ModuleRegistryService } from './registry/module.registry';
     SystemModuleExplorer,
     ModuleRegistryService,
     ModuleLifecycleService,
+    ModuleSeedingService,
   ],
 })
 export class WorklessModule {}

@@ -7,6 +7,7 @@ import { SystemModuleExplorer } from '../module/module.explorer';
 import { ModuleLifecycleContext } from '../module/module.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
 import { MigrationService } from '../../database/migration.service';
+import { ModuleSeedingService } from './module-seeding.service';
 
 @Injectable()
 export class ModuleLifecycleService {
@@ -20,6 +21,7 @@ export class ModuleLifecycleService {
     private readonly hookService: HookService,
     private readonly eventBus: EventBusService,
     private readonly migrationService: MigrationService,
+    private readonly moduleSeedingService: ModuleSeedingService,
   ) {}
 
   async install(name: string) {
@@ -117,6 +119,18 @@ export class ModuleLifecycleService {
   async revertMigration(name: string): Promise<string | null> {
     const definition = this.getDefinitionOrFail(name);
     return this.migrationService.revertLast('module', name, definition.metadata.migrations);
+  }
+
+  async seed(name: string) {
+    const definition = this.getDefinitionOrFail(name);
+    await this.ensureDependenciesEnabled(definition.metadata.dependencies);
+    await this.migrationService.migrateModule(name, definition.metadata.migrations);
+    const results = await this.moduleSeedingService.seed(name, definition.metadata.seeders);
+    await this.eventBus.emit('system.module.seeded', {
+      name,
+      seeders: results.map((result) => result.seeder),
+    });
+    return results;
   }
 
   private getDefinitionOrFail(name: string) {

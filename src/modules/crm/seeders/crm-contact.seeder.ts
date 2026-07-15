@@ -6,6 +6,9 @@ import { CrmContactRepository } from '../repositories/crm-contact.repository';
 
 @Injectable()
 export class CrmContactSeeder implements ModuleSeeder {
+  readonly name = 'crm-default-contacts';
+  readonly order = 100;
+
   constructor(private readonly repository: CrmContactRepository) {}
 
   async seed(): Promise<void> {
