@@ -384,4 +384,4 @@ Please review [SECURITY.md](SECURITY.md).
 
 ## License
 
-See [license.txt](license.txt).
+See [LICENSE](LICENSE).
