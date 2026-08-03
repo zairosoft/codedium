@@ -120,8 +120,8 @@ npm run db:migrate
 npm run db:migrate:status
 npm run db:migrate:revert
 npm run seed
-npm run module:create -- agent
 npm run module:list
+npm run module:create -- crm
 npm run module:install -- crm
 npm run module:upgrade -- crm
 npm run module:uninstall -- crm
@@ -351,105 +351,6 @@ Current state:
 - `crm` is the most complete reference module
 - `helpdesk` and `org` have module/lifecycle scaffolding in place
 - `apps` is a reserved scaffold and is not currently loaded at runtime
-
-## Creating a Module
-
-Create and register a new module with the module generator:
-
-```bash
-npm run module:create -- inventory
-```
-
-Module names must use lowercase kebab-case. The generator creates the standard
-directories, Nest module entry point, lifecycle provider, locale directories, and
-the entry in `src/modules/runtime-modules.ts`. It will not overwrite an existing
-module. Use `src/modules/crm` as the reference when implementing module behavior.
-
-For example, the generated `inventory` module starts with this structure:
-
-```text
-src/modules/inventory/
-  controllers/
-  dto/
-  entities/
-  hooks/
-  lifecycle/
-  migrations/
-  policies/
-  repositories/
-  seeders/
-  services/
-  views/
-  module.ts
-```
-
-Not every directory is required immediately. Keep controllers thin, place business
-orchestration in services, and keep persistence logic in repositories. Do not create a
-`models/` directory or import services directly from another business module.
-
-Create the Nest module entry point:
-
-```ts
-import { Module } from '@nestjs/common';
-import { InventoryModuleLifecycleService } from './lifecycle/inventory-module.lifecycle';
-
-@Module({
-  providers: [InventoryModuleLifecycleService],
-})
-export class InventoryModule {}
-```
-
-Add a lifecycle provider so Workless can discover and manage the module:
-
-```ts
-import { Injectable } from '@nestjs/common';
-import { SystemModule } from '../../../workless/module/module.decorator';
-import {
-  ModuleLifecycleContext,
-  SystemModuleLifecycle,
-} from '../../../workless/module/module.interface';
-
-@Injectable()
-@SystemModule({
-  name: 'inventory',
-  version: '1.0.0',
-})
-export class InventoryModuleLifecycleService implements SystemModuleLifecycle {
-  async install(_context: ModuleLifecycleContext): Promise<void> {}
-
-  async uninstall(_context: ModuleLifecycleContext): Promise<void> {}
-
-  async upgrade(
-    _context: ModuleLifecycleContext,
-    _fromVersion?: string,
-  ): Promise<void> {}
-}
-```
-
-Register the module in `src/modules/runtime-modules.ts`:
-
-```ts
-const RUNTIME_MODULE_SPECS: RuntimeModuleSpec[] = [
-  // Existing modules...
-  {
-    name: 'inventory',
-    exportName: 'InventoryModule',
-    requirePath: './inventory/module',
-  },
-];
-```
-
-Then verify and install it:
-
-```bash
-npm run build
-npm run module:list
-npm run module:install -- inventory
-```
-
-The lifecycle commands require a working PostgreSQL connection. If the module owns
-database schema or initial data, register its migrations and seeders in the
-`@SystemModule` metadata as described above.
 
 ## Frontend Asset Pipeline
 
