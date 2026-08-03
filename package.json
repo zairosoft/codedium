@@ -15,6 +15,7 @@
     "db:migrate:status": "ts-node src/database/platform-schema.runner.ts status",
     "db:migrate:revert": "ts-node src/database/platform-schema.runner.ts revert",
     "seed": "ts-node src/database/seeder.runner.ts",
+    "module:create": "ts-node src/workless/lifecycle/module-create.runner.ts",
     "module:list": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts list",
     "module:install": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts install",
     "module:upgrade": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts upgrade",

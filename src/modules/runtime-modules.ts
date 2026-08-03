@@ -9,6 +9,7 @@ type RuntimeModuleSpec = {
 const logger = new Logger('RuntimeModules');
 
 const RUNTIME_MODULE_SPECS: RuntimeModuleSpec[] = [
+  { name: 'agent', exportName: 'AgentModule', requirePath: './agent/module' },
   { name: 'crm', exportName: 'CrmModule', requirePath: './crm/module' },
   { name: 'helpdesk', exportName: 'HelpdeskModule', requirePath: './helpdesk/module' },
   { name: 'org', exportName: 'OrgModule', requirePath: './org/module' },

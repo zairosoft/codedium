@@ -120,6 +120,7 @@ npm run db:migrate
 npm run db:migrate:status
 npm run db:migrate:revert
 npm run seed
+npm run module:create -- agent
 npm run module:list
 npm run module:install -- crm
 npm run module:upgrade -- crm
@@ -353,11 +354,18 @@ Current state:
 
 ## Creating a Module
 
-Workless does not currently provide a `module:create` generator. Create a new module
-under `src/modules/<module-name>` and use `src/modules/crm` as the reference
-implementation.
+Create and register a new module with the module generator:
 
-For example, a module named `inventory` should start with this structure:
+```bash
+npm run module:create -- inventory
+```
+
+Module names must use lowercase kebab-case. The generator creates the standard
+directories, Nest module entry point, lifecycle provider, locale directories, and
+the entry in `src/modules/runtime-modules.ts`. It will not overwrite an existing
+module. Use `src/modules/crm` as the reference when implementing module behavior.
+
+For example, the generated `inventory` module starts with this structure:
 
 ```text
 src/modules/inventory/
