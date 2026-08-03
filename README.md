@@ -351,6 +351,98 @@ Current state:
 - `helpdesk` and `org` have module/lifecycle scaffolding in place
 - `apps` is a reserved scaffold and is not currently loaded at runtime
 
+## Creating a Module
+
+Workless does not currently provide a `module:create` generator. Create a new module
+under `src/modules/<module-name>` and use `src/modules/crm` as the reference
+implementation.
+
+For example, a module named `inventory` should start with this structure:
+
+```text
+src/modules/inventory/
+  controllers/
+  dto/
+  entities/
+  hooks/
+  lifecycle/
+  migrations/
+  policies/
+  repositories/
+  seeders/
+  services/
+  views/
+  module.ts
+```
+
+Not every directory is required immediately. Keep controllers thin, place business
+orchestration in services, and keep persistence logic in repositories. Do not create a
+`models/` directory or import services directly from another business module.
+
+Create the Nest module entry point:
+
+```ts
+import { Module } from '@nestjs/common';
+import { InventoryModuleLifecycleService } from './lifecycle/inventory-module.lifecycle';
+
+@Module({
+  providers: [InventoryModuleLifecycleService],
+})
+export class InventoryModule {}
+```
+
+Add a lifecycle provider so Workless can discover and manage the module:
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { SystemModule } from '../../../workless/module/module.decorator';
+import {
+  ModuleLifecycleContext,
+  SystemModuleLifecycle,
+} from '../../../workless/module/module.interface';
+
+@Injectable()
+@SystemModule({
+  name: 'inventory',
+  version: '1.0.0',
+})
+export class InventoryModuleLifecycleService implements SystemModuleLifecycle {
+  async install(_context: ModuleLifecycleContext): Promise<void> {}
+
+  async uninstall(_context: ModuleLifecycleContext): Promise<void> {}
+
+  async upgrade(
+    _context: ModuleLifecycleContext,
+    _fromVersion?: string,
+  ): Promise<void> {}
+}
+```
+
+Register the module in `src/modules/runtime-modules.ts`:
+
+```ts
+const RUNTIME_MODULE_SPECS: RuntimeModuleSpec[] = [
+  // Existing modules...
+  {
+    name: 'inventory',
+    exportName: 'InventoryModule',
+    requirePath: './inventory/module',
+  },
+];
+```
+
+Then verify and install it:
+
+```bash
+npm run build
+npm run module:list
+npm run module:install -- inventory
+```
+
+The lifecycle commands require a working PostgreSQL connection. If the module owns
+database schema or initial data, register its migrations and seeders in the
+`@SystemModule` metadata as described above.
+
 ## Frontend Asset Pipeline
 
 Workless serves static files from `public/`.
