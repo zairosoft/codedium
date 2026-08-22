@@ -34,7 +34,7 @@ async function bootstrap(): Promise<void> {
   const projectRoot = process.cwd();
   const modulesRoot = resolve(projectRoot, 'src/modules');
   const moduleRoot = resolve(modulesRoot, name);
-  const runtimeModulesPath = join(modulesRoot, 'runtime-modules.ts');
+  const runtimeModulesPath = join(modulesRoot, 'modules.ts');
 
   await ensurePathDoesNotExist(moduleRoot, name);
 
@@ -115,7 +115,7 @@ function addRuntimeModule(source: string, runtimeSpec: string): string {
   const marker = /const RUNTIME_MODULE_SPECS: RuntimeModuleSpec\[\] = \[\r?\n/;
 
   if (!marker.test(source)) {
-    throw new Error('Could not find RUNTIME_MODULE_SPECS in src/modules/runtime-modules.ts.');
+    throw new Error('Could not find RUNTIME_MODULE_SPECS in src/modules/modules.ts.');
   }
 
   const newline = source.includes('\r\n') ? '\r\n' : '\n';

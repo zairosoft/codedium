@@ -8,7 +8,7 @@ export class CreateModuleRegistryMigration implements WorklessMigration {
 
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS "module_registry" (
+      CREATE TABLE IF NOT EXISTS "module_registries" (
         "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         "name" varchar(80) NOT NULL,
         "version" varchar(32) NOT NULL DEFAULT '0.0.0',
@@ -25,16 +25,16 @@ export class CreateModuleRegistryMigration implements WorklessMigration {
       )
     `);
     await queryRunner.query(`
-      CREATE UNIQUE INDEX IF NOT EXISTS "uq_module_registry_name"
-      ON "module_registry" ("name")
+      CREATE UNIQUE INDEX IF NOT EXISTS "uq_module_registries_name"
+      ON "module_registries" ("name")
     `);
     await queryRunner.query(`
-      ALTER TABLE "module_registry"
+      ALTER TABLE "module_registries"
       ADD COLUMN IF NOT EXISTS "availableVersion" varchar(32)
     `);
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('DROP TABLE IF EXISTS "module_registry"');
+    await queryRunner.query('DROP TABLE IF EXISTS "module_registries"');
   }
 }

@@ -21,7 +21,7 @@ Database seeders receive a TypeORM `DataSource`. Module seeders receive their de
 
 1. supplies an ephemeral JWT secret only when the seeder process has no usable secret
 2. starts a Nest application context with `AppModule`
-3. application bootstrap synchronizes discoverable module records in `module_registry`
+3. application bootstrap synchronizes discoverable module records in `module_registries`
 4. runs registered database seeders in ascending `order`
 5. lists discovered modules
 6. for each module, applies pending module migrations and then runs its seeders
@@ -81,4 +81,3 @@ Module seeders are sorted by `order`, then by `name`. `moduleLifecycle.seed()` a
 4. Verify expected row counts and unique keys.
 5. Verify password/token storage, foreign keys, tenant scope, and audit fields.
 6. Report which command and database mutation actually completed; a build alone does not verify seed behavior.
-

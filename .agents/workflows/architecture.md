@@ -18,7 +18,7 @@ Use this workflow to inspect or explain Workless architecture without drifting i
 1. `src/app.module.ts`
 2. `src/app/platform.module.ts`
 3. `src/core/core.module.ts`
-4. `src/modules/runtime-modules.ts`
+4. `src/modules/modules.ts`
 5. target files under `src/app`, `src/core`, or `src/modules`
 
 ## What To Capture

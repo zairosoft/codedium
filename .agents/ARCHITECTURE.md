@@ -65,7 +65,7 @@ Database layer:
 
 Plugin modules:
 
-- `src/modules/runtime-modules.ts`
+- `src/modules/modules.ts`
 - `src/modules/crm/*`
 - `src/modules/helpdesk/*`
 - `src/modules/org/*`
@@ -135,7 +135,7 @@ Do not reintroduce older paths such as:
 
 Runtime modules are loaded through:
 
-- `src/modules/runtime-modules.ts`
+- `src/modules/modules.ts`
 
 This is intentionally resilient. If a plugin module is missing from disk, the app should skip it instead of crashing on a static import.
 

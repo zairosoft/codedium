@@ -12,7 +12,7 @@ Workless uses a custom migration layer built on TypeORM `QueryRunner`:
 
 - contract: `src/database/migration.interface.ts`
 - execution and history: `src/database/migration.service.ts`
-- database CLI: `src/database/platform-schema.runner.ts`
+- database CLI: `src/database/migration.runner.ts`
 - database migration registry: `src/database/migrations/migrations.ts`
 - module lifecycle integration: `src/workless/lifecycle/module.lifecycle.ts`
 
@@ -122,4 +122,3 @@ Module migrations may use descriptive filenames already established by the modul
 4. Inspect the resulting columns, constraints, indexes, foreign keys, and history row.
 5. Test `down` only against a disposable database unless rollback was explicitly requested.
 6. Never claim runtime migration success from a TypeScript build alone.
-

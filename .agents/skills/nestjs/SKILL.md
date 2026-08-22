@@ -29,7 +29,7 @@ Before structural changes, inspect in this order:
 
 1. `src/app.module.ts`
 2. `src/core/core.module.ts`
-3. `src/modules/runtime-modules.ts`
+3. `src/modules/modules.ts`
 4. target module `src/modules/<name>/module.ts` or target platform module under `src/app/<name>`
 5. related runtime files under:
    - `src/core/system`

@@ -23,7 +23,7 @@ Assume the following unless the code proves otherwise:
 - core runtime, contracts, tenant, and cache infrastructure live in `src/core`
 - database bootstrap and TypeORM config live in `src/database`
 - plugin modules live in `src/modules`
-- module loading is resilient and driven through `src/modules/runtime-modules.ts`
+- module loading is resilient and driven through `src/modules/modules.ts`
 - generated assets are not the source of truth
 - module-owned views are preferred over a shared `src/views` path
 

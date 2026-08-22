@@ -13,7 +13,7 @@ export enum ModuleStatus {
   DISABLED = 'disabled',
 }
 
-@Entity({ name: 'module_registry' })
+@Entity({ name: 'module_registries' })
 export class ModuleRegistryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

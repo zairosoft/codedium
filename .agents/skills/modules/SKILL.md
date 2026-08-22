@@ -79,7 +79,7 @@ Important:
 
 When a module participates in runtime lifecycle management, check and update:
 
-- `src/modules/runtime-modules.ts`
+- `src/modules/modules.ts`
 - `src/core/system/system-module.decorator.ts`
 - `src/core/system/system-module.interface.ts`
 - `src/core/registry/module.registry.ts`

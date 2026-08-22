@@ -9,7 +9,7 @@ import { CacheModule } from './workless/infrastructure/cache/cache.module';
 import { DatabaseModule } from './database/database.module';
 import { TenantContextMiddleware } from './workless/tenant/tenant-context.middleware';
 import { TenantModule } from './workless/tenant/tenant.module';
-import { loadRuntimeModules } from './modules/runtime-modules';
+import { loadRuntimeModules } from './modules/modules';
 
 const runtimeModules = loadRuntimeModules();
 

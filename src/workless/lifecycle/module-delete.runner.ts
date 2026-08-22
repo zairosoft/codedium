@@ -17,7 +17,7 @@ async function bootstrap(): Promise<void> {
 
   const modulesRoot = resolve(process.cwd(), 'src/modules');
   const moduleRoot = resolve(modulesRoot, name);
-  const runtimeModulesPath = join(modulesRoot, 'runtime-modules.ts');
+  const runtimeModulesPath = join(modulesRoot, 'modules.ts');
   const stagedModuleRoot = resolve(
     modulesRoot,
     `.${name}.delete-${process.pid}-${Date.now()}`,

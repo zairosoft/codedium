@@ -13,7 +13,7 @@ Workless is organized around four top-level runtime areas:
 - `src/database`: TypeORM bootstrap, schema runner, and seeder runner
 - `src/modules`: runtime business modules such as `crm`, `helpdesk`, and `org`
 
-The application is a single NestJS process. Business modules are discovered from `src/modules/runtime-modules.ts` and then mounted into `AppModule`.
+The application is a single NestJS process. Business modules are discovered from `src/modules/modules.ts` and then mounted into `AppModule`.
 
 ## Stack
 
@@ -32,7 +32,7 @@ The application is a single NestJS process. Business modules are discovered from
 - `src/app/platform.module.ts`: platform controllers, auth, users, permissions, notifications
 - `src/core/core.module.ts`: module lifecycle, module enablement guard, hook/event bus, HTML cache interceptor
 - `src/database/database.module.ts`: TypeORM integration
-- `src/modules/runtime-modules.ts`: list of business modules to load at runtime
+- `src/modules/modules.ts`: list of business modules to load at runtime
 
 ## URL Structure
 
@@ -332,7 +332,7 @@ src/
     crm/
     helpdesk/
     org/
-    runtime-modules.ts
+    modules.ts
 public/
   assets/
     css/
@@ -340,7 +340,7 @@ public/
 
 ## Module Status
 
-Runtime-loaded modules from `src/modules/runtime-modules.ts`:
+Runtime-loaded modules from `src/modules/modules.ts`:
 
 - `crm`
 - `helpdesk`

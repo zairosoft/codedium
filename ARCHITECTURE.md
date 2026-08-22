@@ -12,7 +12,7 @@ Workless is a NestJS modular monolith. The running application is assembled in `
 6. `CacheModule`
 7. `PlatformModule`
 8. `CoreModule`
-9. runtime business modules from `src/modules/runtime-modules.ts`
+9. runtime business modules from `src/modules/modules.ts`
 
 This means the project is not split into separate deployable services. Platform features and business modules run in one Nest process and share the same database connection and middleware pipeline.
 
@@ -106,7 +106,7 @@ Current contents:
 
 - `database.module.ts`: registers TypeORM
 - `typeorm.config.ts`: Postgres connection options from environment
-- `platform-schema.runner.ts`: platform schema runner
+- `migration.runner.ts`: database migration runner
 - `seeder.runner.ts`: lifecycle-aware seeding entrypoint
 - `migrations/`: platform migrations
 - `seeders/`: platform seeders
@@ -117,7 +117,7 @@ The database configuration currently assumes PostgreSQL and enables `synchronize
 
 Business modules loaded at runtime.
 
-Current runtime list from `src/modules/runtime-modules.ts`:
+Current runtime list from `src/modules/modules.ts`:
 
 - `crm`
 - `helpdesk`
@@ -127,11 +127,11 @@ Current state:
 
 - `crm` contains the most real implementation
 - `helpdesk` and `org` mostly provide module/lifecycle scaffolding
-- `apps` is present as a scaffold and is not currently loaded by `runtime-modules.ts`
+- `apps` is present as a scaffold and is not currently loaded by `modules.ts`
 
 ## Runtime Module Loading
 
-Runtime modules are not auto-scanned from the filesystem. They are loaded from the explicit list in `src/modules/runtime-modules.ts`.
+Runtime modules are not auto-scanned from the filesystem. They are loaded from the explicit list in `src/modules/modules.ts`.
 
 Current behavior:
 
@@ -296,5 +296,5 @@ This document was aligned to the current repository structure, runtime wiring, a
 - `src/app/platform.module.ts`
 - `src/core/core.module.ts`
 - `src/database/*`
-- `src/modules/runtime-modules.ts`
+- `src/modules/modules.ts`
 - `package.json`

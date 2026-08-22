@@ -14,7 +14,7 @@ Do not use it for PostgreSQL schema history. Use `db-migrate.md` for database mi
 - shared runtime, interfaces, tenant context, events, cache, registry, and lifecycle: `src/workless`
 - plugin modules: `src/modules`
 - database runtime, migrations, and seeders: `src/database`
-- runtime module list: `src/modules/runtime-modules.ts`
+- runtime module list: `src/modules/modules.ts`
 
 Inspect source before trusting older architecture notes. Do not reintroduce stale `src/core`, `src/common`, or generic starter-kit paths.
 

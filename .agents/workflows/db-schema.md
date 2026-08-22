@@ -42,7 +42,7 @@ Modules must not reach into application services to persist their own data.
 
 ## Naming Reality
 
-- Table and index names are snake_case, for example `users`, `module_registry`, and `uq_users_email`.
+- Table and index names are snake_case, for example `users`, `module_registries`, and `uq_users_email`.
 - Column naming is not globally uniform yet. New database migrations may use snake_case, while existing lifecycle and module tables contain camelCase columns.
 - Follow the convention of the table being changed. Do not silently rename existing columns for style alone.
 - When entity property names and database column names differ, map them explicitly with `@Column({ name: '...' })` and equivalent date/delete decorators.
@@ -111,4 +111,3 @@ Every index increases write and storage cost. Do not index every field.
 3. Apply the migration only when database mutation is authorized.
 4. Inspect the real PostgreSQL schema after applying.
 5. Verify tenant isolation, uniqueness, foreign keys, soft deletion, and index usage as applicable.
-
