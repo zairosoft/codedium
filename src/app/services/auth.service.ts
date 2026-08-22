@@ -1,3 +1,4 @@
+import * as argon2 from 'argon2';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -44,11 +45,15 @@ export class AuthService implements AuthServicePort {
       .where('user.email = :email', { email: normalizedEmail })
       .getOne();
 
-    if (!user || !user.isActive || !this.verifyPassword(password, user.password)) {
+    const passwordMatches = user && await this.verifyPassword(password, user.password);
+    if (!user || !user.isActive || !passwordMatches) {
       throw new UnauthorizedException('Invalid email or password.');
     }
 
-    await this.usersRepository.update(user.id, { lastLoggedAt: new Date() });
+    await this.usersRepository.update(user.id, {
+      lastLoggedAt: new Date(),
+      ...(this.isLegacyScryptHash(user.password) ? { password: await this.hashPassword(password) } : {}),
+    });
     return this.createLoginResult(user, tenantId);
   }
 
@@ -62,7 +67,7 @@ export class AuthService implements AuthServicePort {
     const user = this.usersRepository.create({
       name: dto.displayName.trim(),
       email,
-      password: this.hashPassword(dto.password),
+      password: await this.hashPassword(dto.password),
       role: 'user',
       isActive: true,
       locale: 'en',
@@ -91,13 +96,29 @@ export class AuthService implements AuthServicePort {
     };
   }
 
-  private hashPassword(password: string): string {
-    const salt = randomBytes(16);
-    const hash = scryptSync(password, salt, 64);
-    return `scrypt:${salt.toString('hex')}:${hash.toString('hex')}`;
+  private async hashPassword(password: string): Promise<string> {
+    return argon2.hash(password, {
+      type: argon2.argon2id,
+      memoryCost: 19_456,
+      timeCost: 2,
+      parallelism: 1,
+      hashLength: 32,
+    });
   }
 
-  private verifyPassword(password: string, storedValue: string): boolean {
+  private async verifyPassword(password: string, storedValue: string): Promise<boolean> {
+    if (storedValue.startsWith('$argon2id$')) {
+      try {
+        return await argon2.verify(storedValue, password);
+      } catch {
+        return false;
+      }
+    }
+
+    return this.verifyLegacyScryptPassword(password, storedValue);
+  }
+
+  private verifyLegacyScryptPassword(password: string, storedValue: string): boolean {
     const [algorithm, saltHex, hashHex] = storedValue.split(':');
     if (algorithm !== 'scrypt' || !saltHex || !hashHex) {
       return false;
@@ -110,5 +131,9 @@ export class AuthService implements AuthServicePort {
     } catch {
       return false;
     }
+  }
+
+  private isLegacyScryptHash(storedValue: string): boolean {
+    return storedValue.startsWith('scrypt:');
   }
 }

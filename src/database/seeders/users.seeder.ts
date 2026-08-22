@@ -1,4 +1,5 @@
-import { randomBytes, scryptSync } from 'node:crypto';
+import * as argon2 from 'argon2';
+import { randomBytes } from 'node:crypto';
 import { DataSource } from 'typeorm';
 import { DatabaseSeeder } from './seeder.interface';
 
@@ -16,7 +17,7 @@ export class UsersSeeder implements DatabaseSeeder {
       }
 
       const password = process.env.SEED_USER_PASSWORD ?? 'ChangeMe123!';
-      const passwordHash = this.hashPassword(password);
+      const passwordHash = await this.hashPassword(password);
       const adminId = this.createUuidV7();
       const sampleUserId = this.createUuidV7();
 
@@ -67,10 +68,14 @@ export class UsersSeeder implements DatabaseSeeder {
     }
   }
 
-  private hashPassword(password: string): string {
-    const salt = randomBytes(16);
-    const hash = scryptSync(password, salt, 64);
-    return `scrypt:${salt.toString('hex')}:${hash.toString('hex')}`;
+  private async hashPassword(password: string): Promise<string> {
+    return argon2.hash(password, {
+      type: argon2.argon2id,
+      memoryCost: 19_456,
+      timeCost: 2,
+      parallelism: 1,
+      hashLength: 32,
+    });
   }
 
   private createUuidV7(): string {
