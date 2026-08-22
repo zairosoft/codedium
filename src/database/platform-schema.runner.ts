@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { MigrationService } from './migration.service';
-import { platformMigrations } from './migrations/platform-migrations';
+import { migrations } from './migrations/migrations';
 import { createStandaloneDataSource } from './standalone-data-source';
 
 async function runPlatformSchema(): Promise<void> {
@@ -11,15 +11,15 @@ async function runPlatformSchema(): Promise<void> {
     const migrationService = new MigrationService(dataSource);
     const [command = 'migrate'] = process.argv.slice(2);
     if (command === 'migrate') {
-      await migrationService.migratePlatform(platformMigrations);
+      await migrationService.migratePlatform(migrations);
       return;
     }
     if (command === 'status') {
-      console.table(await migrationService.status('platform', null, platformMigrations));
+      console.table(await migrationService.status('platform', null, migrations));
       return;
     }
     if (command === 'revert') {
-      const reverted = await migrationService.revertLast('platform', null, platformMigrations);
+      const reverted = await migrationService.revertLast('platform', null, migrations);
       console.log(reverted ? `Reverted migration: ${reverted}` : 'No applied migration to revert.');
       return;
     }

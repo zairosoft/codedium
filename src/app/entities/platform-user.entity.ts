@@ -2,7 +2,7 @@ import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { TenantScopedEntity } from '../../workless/tenant/tenant-scoped.entity';
 import { PlatformMembershipEntity } from './platform-membership.entity';
 
-@Entity({ name: 'platform_users' })
+@Entity({ name: 'users' })
 @Index(['tenantId', 'email'], { unique: true })
 export class PlatformUserEntity extends TenantScopedEntity {
   @Column({ type: 'varchar', length: 160 })

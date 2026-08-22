@@ -2,7 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { TenantScopedEntity } from '../../workless/tenant/tenant-scoped.entity';
 import { PlatformUserEntity } from './platform-user.entity';
 
-@Entity({ name: 'platform_user_memberships' })
+@Entity({ name: 'user_memberships' })
 @Index(['tenantId', 'userId', 'organizationId'], { unique: true })
 export class PlatformMembershipEntity extends TenantScopedEntity {
   @Column({ type: 'uuid' })

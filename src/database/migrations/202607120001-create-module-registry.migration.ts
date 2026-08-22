@@ -1,14 +1,14 @@
 import { QueryRunner } from 'typeorm';
 import { WorklessMigration } from '../migration.interface';
 
-export class PlatformCoreSchemaMigration implements WorklessMigration {
-  readonly name = 'platform-core-schema';
+export class CreateModuleRegistryMigration implements WorklessMigration {
+  readonly name = 'create-module-registry';
   readonly timestamp = 202607120001;
-  readonly checksum = 'platform-core-schema-v1';
+  readonly checksum = 'create-module-registry-v1';
 
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS "system_module_registry" (
+      CREATE TABLE IF NOT EXISTS "module_registry" (
         "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         "name" varchar(80) NOT NULL,
         "version" varchar(32) NOT NULL DEFAULT '0.0.0',
@@ -25,16 +25,16 @@ export class PlatformCoreSchemaMigration implements WorklessMigration {
       )
     `);
     await queryRunner.query(`
-      CREATE UNIQUE INDEX IF NOT EXISTS "IDX_system_module_registry_name"
-      ON "system_module_registry" ("name")
+      CREATE UNIQUE INDEX IF NOT EXISTS "uq_module_registry_name"
+      ON "module_registry" ("name")
     `);
     await queryRunner.query(`
-      ALTER TABLE "system_module_registry"
+      ALTER TABLE "module_registry"
       ADD COLUMN IF NOT EXISTS "availableVersion" varchar(32)
     `);
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('DROP TABLE IF EXISTS "system_module_registry"');
+    await queryRunner.query('DROP TABLE IF EXISTS "module_registry"');
   }
 }

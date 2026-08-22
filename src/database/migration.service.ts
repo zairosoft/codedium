@@ -80,7 +80,7 @@ export class MigrationService {
       }
       await this.withOptionalTransaction(queryRunner, migration, async () => {
         await migration.down!(queryRunner);
-        await queryRunner.query('DELETE FROM "system_migrations" WHERE "id" = $1', [last.id]);
+        await queryRunner.query('DELETE FROM "migrations" WHERE "id" = $1', [last.id]);
       });
       return last.migrationName;
     } finally {
@@ -119,7 +119,7 @@ export class MigrationService {
         await this.withOptionalTransaction(queryRunner, migration, async () => {
           await migration.up(queryRunner);
           await queryRunner.query(
-            `INSERT INTO "system_migrations"
+            `INSERT INTO "migrations"
               ("scope", "moduleName", "migrationName", "timestamp", "checksum", "batch", "executionMs")
              VALUES ($1, $2, $3, $4, $5, $6, $7)`,
             [scope, moduleName, migration.name, migration.timestamp, checksum, batch, Date.now() - startedAt],
@@ -172,7 +172,7 @@ export class MigrationService {
 
   private async ensureHistoryTable(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS "system_migrations" (
+      CREATE TABLE IF NOT EXISTS "migrations" (
         "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         "scope" varchar(20) NOT NULL,
         "moduleName" varchar(80),
@@ -185,8 +185,8 @@ export class MigrationService {
       )
     `);
     await queryRunner.query(`
-      CREATE UNIQUE INDEX IF NOT EXISTS "uq_system_migrations_scope_module_name"
-      ON "system_migrations" ("scope", COALESCE("moduleName", ''), "migrationName")
+      CREATE UNIQUE INDEX IF NOT EXISTS "uq_migrations_scope_module_name"
+      ON "migrations" ("scope", COALESCE("moduleName", ''), "migrationName")
     `);
   }
 
@@ -196,7 +196,7 @@ export class MigrationService {
     moduleName: string | null,
   ): Promise<AppliedMigration[]> {
     return queryRunner.query(
-      `SELECT * FROM "system_migrations"
+      `SELECT * FROM "migrations"
        WHERE "scope" = $1 AND "moduleName" IS NOT DISTINCT FROM $2
        ORDER BY "timestamp" ASC`,
       [scope, moduleName],
