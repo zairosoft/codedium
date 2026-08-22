@@ -69,7 +69,6 @@ export const renderRegisterPage = createView<RegisterPageOptions>(
                   email: '',
                   password: '',
                   confirmPassword: '',
-                  agreeTerms: false,
                   loading: false,
                   error: initialState.error || '',
                   messages: messages,
@@ -95,11 +94,6 @@ export const renderRegisterPage = createView<RegisterPageOptions>(
                       this.showError(messages.passwordMismatch || '');
                       return;
                     }
-                    if (!this.agreeTerms) {
-                      this.showError(messages.mustAgree || '');
-                      return;
-                    }
-
                     this.loading = true;
 
                     try {

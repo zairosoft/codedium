@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import { Public } from '../auth/public.decorator';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
 import { resolveLocaleFromRequest } from '../../workless/i18n';
 import { renderLoginPage } from '../views/auth/login.page';
 import { renderRegisterPage } from '../views/auth/register.page';
@@ -28,7 +29,7 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.tenantId);
+    return this.authService.login(dto.email, dto.password, dto.tenantId);
   }
 
   /**
@@ -40,5 +41,11 @@ export class AuthController {
   renderRegister(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     response.type('html');
     return renderRegisterPage({ locale: resolveLocaleFromRequest(request) });
+  }
+
+  @Public()
+  @Post('register')
+  async register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
   }
 }

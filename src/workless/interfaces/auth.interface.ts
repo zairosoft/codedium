@@ -33,7 +33,7 @@ export type LoginResult = {
 
 export interface AuthServicePort {
   createSession(userId: string, tenantId?: string): Promise<AuthSession>;
-  login(email: string, tenantId?: string): Promise<LoginResult>;
+  login(email: string, password: string, tenantId?: string): Promise<LoginResult>;
 }
 
 export const AUTH_SERVICE = Symbol('AUTH_SERVICE');

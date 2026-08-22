@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { MigrationService } from './migration.service';
 import { migrations } from './migrations/migrations';
-import { createStandaloneDataSource } from './env.source';
+import { createStandaloneDataSource } from '../config/env.config';
 
 async function runPlatformSchema(): Promise<void> {
   const dataSource = createStandaloneDataSource();

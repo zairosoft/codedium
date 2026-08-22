@@ -82,7 +82,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
                       var res = await fetch('/api/v1/auth/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: this.email })
+                      body: JSON.stringify({ email: this.email, password: this.password })
                       });
                       var data = await res.json();
 

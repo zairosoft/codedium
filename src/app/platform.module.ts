@@ -10,6 +10,7 @@ import { PERMISSION_SERVICE } from '../workless/interfaces/permission.interface'
 import { ROLE_SERVICE } from '../workless/interfaces/role.interface';
 import { USER_SERVICE } from '../workless/interfaces/user.interface';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { resolveJwtSecret } from '../config/jwt.config';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { AuthController } from './controllers/auth.controller';
 import { HomeController } from './controllers/home.controller';
@@ -34,7 +35,7 @@ import { UsersService } from './services/users.service';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET', 'dev-secret-change-me'),
+        secret: resolveJwtSecret(configService),
         signOptions: {
           expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1h') as any,
         },

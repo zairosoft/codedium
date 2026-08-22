@@ -1,22 +1,99 @@
-import { Column, Entity, Index, OneToMany } from 'typeorm';
-import { TenantScopedEntity } from '../../workless/tenant/tenant-scoped.entity';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { PlatformMembershipEntity } from './platform-membership.entity';
 
 @Entity({ name: 'users' })
-@Index(['tenantId', 'email'], { unique: true })
-export class PlatformUserEntity extends TenantScopedEntity {
+@Index('uq_users_email', ['email'], { unique: true })
+export class PlatformUserEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ type: 'varchar', length: 120 })
+  name: string;
+
   @Column({ type: 'varchar', length: 160 })
   email: string;
 
-  @Column({ type: 'varchar', length: 120 })
-  displayName: string;
+  @Column({ type: 'varchar', length: 255, select: false })
+  password: string;
 
-  @Column({ type: 'boolean', default: true })
-  active: boolean;
+  @Column({ type: 'varchar', length: 50 })
+  role: string;
 
-  @Column({ type: 'jsonb', default: () => "'[]'::jsonb" })
-  roles: string[];
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  img?: string | null;
+
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  isActive: boolean;
+
+  @Column({ type: 'varchar', length: 10, default: 'en' })
+  locale: string;
+
+  @Column({ name: 'last_logged_activities', type: 'text', nullable: true })
+  lastLoggedActivities?: string | null;
+
+  @Column({ name: 'remember_token', type: 'varchar', length: 255, nullable: true, select: false })
+  rememberToken?: string | null;
+
+  @Column({ name: 'email_verified_at', type: 'timestamptz', nullable: true })
+  emailVerifiedAt?: Date | null;
+
+  @Column({ name: 'last_logged_at', type: 'timestamptz', nullable: true })
+  lastLoggedAt?: Date | null;
+
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt: Date;
+
+  @Column({ name: 'created_by', type: 'uuid', nullable: true })
+  createdBy?: string | null;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+  updatedAt: Date;
+
+  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
+  updatedBy?: string | null;
+
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz', nullable: true })
+  deletedAt?: Date | null;
+
+  @Column({ name: 'deleted_by', type: 'uuid', nullable: true })
+  deletedBy?: string | null;
 
   @OneToMany(() => PlatformMembershipEntity, (membership) => membership.user)
   memberships?: PlatformMembershipEntity[];
+
+  get displayName(): string {
+    return this.name;
+  }
+
+  set displayName(value: string) {
+    this.name = value;
+  }
+
+  get active(): boolean {
+    return this.isActive;
+  }
+
+  set active(value: boolean) {
+    this.isActive = value;
+  }
+
+  get roles(): string[] {
+    return this.role ? [this.role] : [];
+  }
+
+  set roles(value: string[]) {
+    this.role = value[0] ?? 'user';
+  }
+
+  // Memberships retain tenant scope; user accounts are globally unique by email.
+  tenantId?: string;
 }
