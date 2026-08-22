@@ -9,9 +9,9 @@ import { NOTIFICATION_SERVICE } from '../workless/interfaces/notification.interf
 import { PERMISSION_SERVICE } from '../workless/interfaces/permission.interface';
 import { ROLE_SERVICE } from '../workless/interfaces/role.interface';
 import { USER_SERVICE } from '../workless/interfaces/user.interface';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../workless/jwt/jwt-auth.guard';
 import { resolveJwtSecret } from '../config/jwt.config';
-import { JwtStrategy } from './auth/jwt.strategy';
+import { JwtStrategy } from '../workless/jwt/jwt.strategy';
 import { AuthController } from './controllers/auth.controller';
 import { HomeController } from './controllers/home.controller';
 import { LanguageController } from './controllers/language.controller';

@@ -16,7 +16,7 @@ export class UsersSeeder implements DatabaseSeeder {
         throw new Error('Table "users" does not exist. Run database migrations before seeding.');
       }
 
-      const password = process.env.SEED_USER_PASSWORD ?? 'ChangeMe123!';
+      const password = process.env.SEED_USER_PASSWORD ?? '123456';
       const passwordHash = await this.hashPassword(password);
       const adminId = this.createUuidV7();
       const sampleUserId = this.createUuidV7();

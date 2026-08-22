@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { Public } from '../auth/public.decorator';
+import { Public } from '../../workless/jwt/public.decorator';
 import { renderHomePage } from '../views/home/home.page';
 
 @Controller()

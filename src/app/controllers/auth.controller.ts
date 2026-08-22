@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Header, Post, Req, Res } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { Public } from '../auth/public.decorator';
+import { Public } from '../../workless/jwt/public.decorator';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';

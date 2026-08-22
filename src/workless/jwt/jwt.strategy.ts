@@ -4,8 +4,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
-import type { JwtPayload, AuthenticatedUser } from '../../workless/interfaces/auth.interface';
-import { PlatformUserEntity } from '../entities/platform-user.entity';
+import type { JwtPayload, AuthenticatedUser } from '../interfaces/auth.interface';
+import { PlatformUserEntity } from '../../app/entities/platform-user.entity';
 import { resolveJwtSecret } from '../../config/jwt.config';
 
 @Injectable()

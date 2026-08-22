@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Param, Req, Res } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { Public } from '../auth/public.decorator';
+import { Public } from '../../workless/jwt/public.decorator';
 import { LOCALE_COOKIE_NAME, resolveLocale } from '../../workless/i18n';
 
 function resolveRedirectTarget(request: Request): string {
