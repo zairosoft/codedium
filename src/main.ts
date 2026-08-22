@@ -5,6 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { HttpErrorViewFilter } from './workless/http/http-error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -43,6 +44,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useGlobalFilters(new HttpErrorViewFilter());
 
   const port = Number(process.env.PORT ?? 3000);
   await app.listen(port);
