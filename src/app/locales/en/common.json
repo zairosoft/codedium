@@ -19,7 +19,7 @@
   },
   "auth": {
     "login": {
-      "pageTitle": "Workless - Sign In",
+      "pageTitle": "Sign In",
       "heading": "Welcome Back",
       "subheading": "Please sign in to continue",
       "usernameLabel": "Username:",
@@ -41,7 +41,7 @@
       }
     },
     "register": {
-      "pageTitle": "Workless - Sign Up",
+      "pageTitle": "Sign Up",
       "heading": "Create Account",
       "subheading": "Please sign up to continue",
       "nameLabel": "Full Name:",

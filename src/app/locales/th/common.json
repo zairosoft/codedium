@@ -19,7 +19,7 @@
   },
   "auth": {
     "login": {
-      "pageTitle": "Workless - เข้าสู่ระบบ",
+      "pageTitle": "เข้าสู่ระบบ",
       "heading": "ยินดีต้อนรับกลับ",
       "subheading": "กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ",
       "usernameLabel": "ชื่อผู้ใช้:",
