@@ -2,7 +2,7 @@
 
 Workless helps organizations reduce repetitive work through modular business capabilities.
 
-![Workless CRM dashboard](https://www.zairosoft.com/assets/2026/02/crm.webp "Workless CRM dashboard")
+![Workless dashboard](https://www.zairosoft.com/assets/2026/02/crm.webp "Workless dashboard")
 
 ## What It Includes
 
@@ -17,15 +17,6 @@ Workless runs as one NestJS application with:
 - server-rendered React TSX views
 - English and Thai locale JSON
 - Tailwind CSS v4 assets
-
-Current runtime modules:
-
-- agent
-- crm
-- helpdesk
-- org
-
-CRM is the most complete reference module. Agent, helpdesk, and org currently contain mostly scaffold and lifecycle wiring.
 
 ## Technology
 
@@ -180,14 +171,50 @@ Examples:
 - POST /api/v1/auth/login
 - POST /api/v1/auth/register
 - GET /api/v1/modules
-- GET /api/v1/crm/contacts
-- GET /api/v1/crm/dashboard/page
+- POST /api/v1/modules/:name/install
+- POST /api/v1/modules/:name/upgrade
 
 Routes require JWT authentication unless marked public. Permission and module-enabled guards apply after authentication where configured.
 
 Tenant-aware requests use:
 
     X-Tenant-Id: <tenant-uuid>
+
+## Users, Companies, and Tenants
+
+These names describe different parts of the code and should remain separate:
+
+| Concept | Code responsibility | Current storage |
+| --- | --- | --- |
+| User | Authentication identity, profile, role, and account status | `users` |
+| Company | Ownership reference used to scope users and memberships | `company_id` on `users` and `user_memberships` |
+| Tenant | Per-request execution scope used by repositories, entities, and cache keys | `tenantId` on tenant-scoped module data |
+
+TypeScript uses `companyId`, while PostgreSQL maps that property to `company_id`.
+There is currently no separate `companies` entity or `companies` table; company values are UUID
+references. Add a company-owned entity and migration only when company records need their own
+metadata or lifecycle.
+
+Tenant context is technical infrastructure under `src/workless/tenant/`. The request flow is:
+
+1. `TenantContextMiddleware` resolves and validates the tenant UUID from the request context.
+2. `TenantContextService` keeps the active `tenantId` in `AsyncLocalStorage` for the request.
+3. Repositories obtain the active value through `TENANT_CONTEXT`.
+4. Queries include the tenant scope, and cache keys include the same `tenantId`.
+
+The current users implementation uses the active `tenantId` to create and filter
+`users.companyId`. Keep those values aligned on user operations unless the company-to-tenant
+mapping is intentionally redesigned. A row in `user_memberships` adds organization and role
+assignment inside that scope; it does not replace request-level tenant isolation.
+
+For new module code:
+
+- extend `TenantScopedEntity` for data that must be isolated per request scope
+- resolve `tenantId` inside repositories instead of trusting IDs supplied by controllers
+- include `tenantId` in every read, update, delete, uniqueness rule, and relevant index
+- prefix cache keys with the module name and `tenantId`
+- invalidate only keys belonging to the active tenant after writes
+- use `companyId` only for company ownership or membership relationships
 
 ## Source Structure
 
@@ -238,10 +265,7 @@ Tenant-aware requests use:
         workless.module.ts
       modules/
         modules.ts
-        agent/
-        crm/
-        helpdesk/
-        org/
+        <module>/
 
 Main responsibilities:
 
@@ -250,19 +274,6 @@ Main responsibilities:
 - src/database contains application migrations and seeders.
 - src/modules contains installable business modules.
 - src/config contains environment, JWT, and TypeORM configuration.
-
-## Users, Companies, and Tenants
-
-The application schema stores company_id on:
-
-- users
-- user_memberships
-
-TypeScript uses the property name companyId and maps it to company_id in PostgreSQL.
-
-Business module data uses tenantId for request isolation. Repositories and cache keys must remain tenant-aware.
-
-Company and tenant are both present concepts. Do not assume they are interchangeable without checking the entity and request context used by the feature.
 
 ## Database Migrations
 
@@ -306,13 +317,13 @@ Installing or upgrading a module applies its pending migrations before lifecycle
 
 Run migrations without changing the installed version:
 
-    npm run module:migrate -- crm
+    npm run module:migrate -- accounting
     npm run module:migrate -- --all
 
 Inspect or revert one module:
 
-    npm run module:migrate:status -- crm
-    npm run module:migrate:revert -- crm
+    npm run module:migrate:status -- accounting
+    npm run module:migrate:revert -- accounting
 
 Uninstalling a module does not automatically delete its tables or business data.
 
@@ -334,7 +345,7 @@ Seed application data and every registered module:
 
 Seed one module or all modules:
 
-    npm run module:seed -- crm
+    npm run module:seed -- accounting
     npm run module:seed -- --all
 
 Module seeders must be idempotent. Seeder names must be unique within a module, and ordering uses order followed by name.

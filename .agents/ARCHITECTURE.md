@@ -226,44 +226,11 @@ Expected lifecycle methods:
 
 Module loading is intentionally tolerant of a missing optional module directory. Registry reads should represent discoverable modules rather than stale filesystem assumptions.
 
-## Database and Company Scope
+## Database
 
 Application migrations live under src/database/migrations and are registered through src/database/migrations/migrations.ts.
 
 Module migrations remain inside each module and execute through module lifecycle commands.
-
-The current application user schema includes company_id on both:
-
-- users
-- user_memberships
-
-TypeScript entity properties use companyId and map to the PostgreSQL company_id column.
-
-Business-module records use tenantId for request isolation. Company and tenant concepts are both present today:
-
-- companyId associates users and memberships with a company
-- tenantId scopes request context, module records, repositories, and cache keys
-
-Do not silently treat companyId and tenantId as interchangeable. Follow the active entity and request context for the feature being changed.
-
-## Tenant Context
-
-Tenant flow:
-
-1. TenantContextMiddleware reads x-tenant-id.
-2. TenantContextService normalizes and stores it in AsyncLocalStorage.
-3. tenant-aware repositories read the active tenant from TenantContextService.
-4. module entities store tenantId.
-5. cache and rendered-page keys include tenant scope.
-
-Relevant paths:
-
-- src/workless/tenant/tenant-context.middleware.ts
-- src/workless/tenant/tenant-context.service.ts
-- src/workless/tenant/tenant-scoped.entity.ts
-- src/workless/tenant/tenant.constants.ts
-
-Every business-data read, update, and delete must preserve tenant scope.
 
 ## Cache
 
@@ -383,7 +350,6 @@ Update this file and the relevant .agents/skills entry when any of these change:
 - directories under src
 - root Nest module wiring
 - module scaffold or lifecycle commands
-- tenant or company scope
 - cache behavior
 - authentication or permission boundaries
 - locale loading

@@ -305,30 +305,6 @@ Module migrations remain inside each module and execute through lifecycle comman
 
 TypeORM synchronize is available only outside production and only when DB_SYNC=true. Prefer explicit migrations for schema evolution.
 
-## Company and Tenant Scope
-
-The current user schema includes company_id on:
-
-- users
-- user_memberships
-
-TypeScript entity properties use companyId and map to the PostgreSQL company_id column.
-
-Business modules use tenantId for request isolation:
-
-- TenantContextMiddleware reads x-tenant-id
-- TenantContextService stores normalized context in AsyncLocalStorage
-- tenant-aware repositories filter every business query
-- TenantScopedEntity provides common tenant and timestamp fields
-- cache keys include tenant scope
-
-Company and tenant concepts coexist:
-
-- companyId associates users and memberships with a company
-- tenantId scopes requests, module records, repositories, and cache keys
-
-Do not silently treat companyId and tenantId as interchangeable. Follow the active entity and request context for the feature being changed.
-
 ## Request Security
 
 Global request protections include:
@@ -342,8 +318,6 @@ Global request protections include:
 - ValidationPipe
 
 Endpoints require authentication unless marked public. Permission metadata is enforced by PermissionGuard, and feature policies perform additional business checks.
-
-Company or tenant access must not rely on a client-supplied identifier alone. Authentication, membership, request context, and repository scope must agree.
 
 ## Hooks and Events
 
@@ -471,7 +445,6 @@ Update this document when any of these change:
 - source directories
 - root Nest wiring
 - module scaffold or lifecycle commands
-- company or tenant scope
 - database migrations
 - cache behavior
 - authentication or permission boundaries
