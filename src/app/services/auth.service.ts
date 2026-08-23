@@ -9,7 +9,7 @@ import {
   AuthSession,
   JwtPayload,
   LoginResult,
-} from '../../workless/interfaces/auth.interface';
+} from '../interfaces/auth.interface';
 import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
 import { RegisterDto } from '../dto/register.dto';
 import { PlatformUserEntity } from '../entities/platform-user.entity';
@@ -65,6 +65,7 @@ export class AuthService implements AuthServicePort {
     }
 
     const user = this.usersRepository.create({
+      companyId: DEFAULT_TENANT_ID,
       name: dto.displayName.trim(),
       email,
       password: await this.hashPassword(dto.password),
@@ -81,7 +82,7 @@ export class AuthService implements AuthServicePort {
     const payload: JwtPayload = {
       userId: user.id,
       email: user.email,
-      tenantId: tenantId ?? DEFAULT_TENANT_ID,
+      tenantId: tenantId ?? user.companyId ?? DEFAULT_TENANT_ID,
       roles: [user.role],
     };
 

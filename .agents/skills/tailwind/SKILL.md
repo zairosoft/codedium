@@ -1,12 +1,25 @@
 ---
 name: tailwind-patterns
-description: Tailwind CSS v4 principles. CSS-first configuration, container queries, modern patterns, design token architecture.
+description: Apply Tailwind CSS v4 patterns to Workless server-rendered TSX views and its current CSS, CLI, and Vite build paths.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 # Tailwind CSS Patterns (v4 - 2025)
 
 > Modern utility-first CSS with CSS-native configuration.
+
+## Workless Project Structure
+
+Workless currently uses a Tailwind v4 hybrid setup:
+
+- source entry: `public/assets/css/app.css`
+- generated output: `public/assets/css/tailwindcss.css`
+- JavaScript theme extensions: `tailwind.config.js`, loaded by `@config` in `app.css`
+- CSS plugins: `@tailwindcss/forms` and `@tailwindcss/typography`, loaded with `@plugin`
+- Vite pipeline: `vite.config.ts`
+- server-rendered TSX: `src/app/views/**/*.tsx` and `src/modules/*/views/**/*.tsx`
+
+Edit `app.css`, `tailwind.config.js`, or TSX source as appropriate. Do not hand-edit `tailwindcss.css`. Verify asset changes with `npm run build:css`; `npm run dev:css` is the watch command.
 
 ---
 
@@ -16,7 +29,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 | v3 (Legacy) | v4 (Current) |
 |-------------|--------------|
-| `tailwind.config.js` | CSS-based `@theme` directive |
+| JavaScript-first config | CSS-first config; Workless still loads `tailwind.config.js` through `@config` |
 | PostCSS plugin | Oxide engine (10x faster) |
 | JIT mode | Native, always-on |
 | Plugin system | CSS-native features |
@@ -236,7 +249,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 | Method | Use When |
 |--------|----------|
-| **React/Vue component** | Dynamic, JS needed |
+| **Server-rendered TSX helper** | Repeated Workless view markup |
 | **@apply in CSS** | Static, no JS needed |
 | **Design tokens** | Reusable values |
 

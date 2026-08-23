@@ -16,6 +16,10 @@ export class PlatformUserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index('idx_users_company_id')
+  @Column({ name: 'company_id', type: 'uuid' })
+  companyId: string;
+
   @Column({ type: 'varchar', length: 120 })
   name: string;
 
@@ -94,6 +98,4 @@ export class PlatformUserEntity {
     this.role = value[0] ?? 'user';
   }
 
-  // Memberships retain tenant scope; user accounts are globally unique by email.
-  tenantId?: string;
 }

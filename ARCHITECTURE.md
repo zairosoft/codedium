@@ -1,300 +1,481 @@
 # Workless Architecture
 
-## Runtime Shape
+## Overview
 
-Workless is a NestJS modular monolith. The running application is assembled in `src/app.module.ts` from these layers:
+Workless is a NestJS 11 modular monolith. A single Nest process hosts application features, the shared Workless runtime, and optional business modules.
 
-1. `ConfigModule`
-2. `EventEmitterModule`
-3. `ThrottlerModule`
-4. `TenantModule`
-5. `DatabaseModule`
-6. `CacheModule`
-7. `PlatformModule`
-8. `CoreModule`
-9. runtime business modules from `src/modules/modules.ts`
+The application is not split into independently deployed services. All active modules share:
 
-This means the project is not split into separate deployable services. Platform features and business modules run in one Nest process and share the same database connection and middleware pipeline.
+- one Nest dependency-injection graph
+- one PostgreSQL connection
+- one request middleware and guard pipeline
+- one module registry
+- one Redis or in-memory cache abstraction
+- one server-rendered view system
 
-## Bootstrap
+Current stack:
 
-`src/main.ts` is the HTTP bootstrap.
+- NestJS 11 with Express
+- TypeORM and PostgreSQL
+- Passport JWT authentication
+- optional Redis through ioredis
+- tenant request context through AsyncLocalStorage
+- React TSX rendered to static HTML with react-dom/server
+- Turbo for browser navigation enhancement
+- Tailwind CSS v4 with CLI and Vite build paths
+- JSON localization for application and module messages
 
-Current responsibilities:
+This is not a hydrated React SPA. Do not assume Next.js, client-side React routing, or a separate frontend repository.
 
-- create the Nest app
-- apply Helmet
-- enable CORS
-- serve static files from `public/`
-- set global API prefix to `/api/v1`
-- exclude `GET /` and `GET /auth/login` from the prefix
-- enable `ValidationPipe`
+## Source Layout
 
-Current route shape:
+    src/
+      app.module.ts
+      main.ts
+      app/
+        controllers/
+        dto/
+        entities/
+        helpers/
+        interfaces/
+        locales/
+          en/
+          th/
+        middleware/
+        providers/
+        services/
+        views/
+          components/
+          auth/
+          errors/
+          home/
+          permissions/
+          roles/
+          users/
+      config/
+        env.config.ts
+        jwt.config.ts
+        typeorm.config.ts
+      database/
+        database.module.ts
+        migrations/
+        seeders/
+        migration.interface.ts
+        migration.service.ts
+        migration.runner.ts
+        seeder.runner.ts
+      workless/
+        events/
+        http/
+        infrastructure/
+          cache/
+        jwt/
+        lifecycle/
+        module/
+        registry/
+        tenant/
+        i18n.ts
+        workless.module.ts
+      modules/
+        modules.ts
+        agent/
+        crm/
+        helpdesk/
+        org/
+      tests/
 
-- HTML pages:
-  - `GET /`
-  - `GET /auth/login`
-- API endpoints:
-  - `/api/v1/...`
+Layer responsibilities:
 
-## Top-Level Source Layout
+- src/app owns authentication, users, memberships, permissions, notifications, application locales, and shared rendered views.
+- src/workless owns reusable module runtime behavior, lifecycle, registry, hooks, events, tenant context, guards, HTTP helpers, and cache infrastructure.
+- src/database owns application migrations, seeders, and operational runners.
+- src/modules owns installable business capabilities.
+- src/config owns environment, JWT, and TypeORM configuration.
 
-```text
-src/
-  app.module.ts
-  main.ts
-  app/
-  core/
-  database/
-  modules/
-```
+## Bootstrap and Root Wiring
 
-### `src/app`
+src/app.module.ts composes:
 
-Platform concerns that are always present regardless of which runtime business modules are installed.
+1. ConfigModule
+2. EventEmitterModule
+3. ThrottlerModule
+4. TenantModule
+5. DatabaseModule
+6. CacheModule
+7. the application feature module imported from src/app
+8. WorklessModule
+9. runtime modules returned by src/modules/modules.ts
 
-Current contents:
+TenantContextMiddleware is applied to all routes. Throttling, authentication, permissions, module availability, and HTML cache behavior are registered as global guards or interceptors through the owning Nest modules.
 
-- `auth/`: JWT guard, strategy, `@Public()`
-- `controllers/`: auth, home, users, notifications, permissions, profile, roles, settings
-- `dto/`: login and user DTOs
-- `entities/`: platform users and memberships
-- `providers/`: permission guard, listeners, policies
-- `services/`: auth, users, roles, notifications
-- `views/`: landing page, login page, shared HTML components
+src/main.ts owns:
 
-`PlatformModule` wires these pieces together and also exports service contracts through the interfaces under `src/core/interfaces`.
+- Nest application bootstrap
+- Helmet
+- CORS
+- static assets from public
+- the api/v1 global prefix
+- selected prefix exclusions for public HTML routes
+- ValidationPipe
+- the global HTTP error view filter
 
-### `src/core`
+## Application Layer
 
-Cross-cutting infrastructure and runtime orchestration.
+src/app is organized by Nest responsibility rather than by a second nested feature tree.
 
-Current responsibilities:
+- controllers handle HTTP transport
+- dto validates public request input
+- entities map application database tables
+- helpers derive request actors and shared state
+- interfaces define application contracts and Nest injection tokens
+- locales contains application-wide messages
+- providers contains guards, policies, listeners, decorators, and provider mappings
+- services implements authentication, users, roles, permissions, and notifications
+- views contains server-rendered React TSX and response view mapping
 
-- hook system
-- event bus
-- module metadata discovery
-- module enabled guard
-- module registry persistence
-- module lifecycle commands and HTTP controller
-- tenant context resolution
-- HTML cache headers/interceptor
-- cache infrastructure
+Controllers should remain thin. Business orchestration belongs in services, authorization decisions belong in policies, and persistence behavior belongs in repositories or TypeORM-backed services.
 
-Important files:
+## Contracts and Dependency Injection
 
-- `src/core/core.module.ts`
-- `src/core/events/event-bus.service.ts`
-- `src/core/events/hook.service.ts`
-- `src/core/module/module.decorator.ts`
-- `src/core/module/module.explorer.ts`
-- `src/core/module/module-enabled.guard.ts`
-- `src/core/registry/module-registry.entity.ts`
-- `src/core/registry/module.registry.ts`
-- `src/core/lifecycle/module.lifecycle.ts`
-- `src/core/lifecycle/module-lifecycle.controller.ts`
-- `src/core/tenant/tenant-context.middleware.ts`
-- `src/core/http/html-cache.interceptor.ts`
-- `src/core/infrastructure/cache/cache.module.ts`
+Shared application contracts currently live under src/app/interfaces:
 
-### `src/database`
+- auth.interface.ts
+- cache.interface.ts
+- event-bus.interface.ts
+- hook.interface.ts
+- notification.interface.ts
+- permission.interface.ts
+- role.interface.ts
+- user.interface.ts
 
-Database integration for the Nest app and operational runners.
+TypeScript interfaces are compile-time contracts. Exported Symbol values are runtime Nest injection tokens.
 
-Current contents:
+Module-owned contracts belong under:
 
-- `database.module.ts`: registers TypeORM
-- `typeorm.config.ts`: Postgres connection options from environment
-- `migration.runner.ts`: database migration runner
-- `seeder.runner.ts`: lifecycle-aware seeding entrypoint
-- `migrations/`: platform migrations
-- `seeders/`: platform seeders
+    src/modules/<module>/interfaces/
 
-The database configuration currently assumes PostgreSQL and enables `synchronize` only for non-production environments when `DB_SYNC=true`.
+Create an interface when it represents a real port, domain boundary, reusable type, or exported capability. Do not create empty interfaces merely to mirror every service or entity.
 
-### `src/modules`
+## Workless Runtime
 
-Business modules loaded at runtime.
+src/workless contains cross-cutting runtime behavior:
 
-Current runtime list from `src/modules/modules.ts`:
+- events implements the event bus and hook system
+- http implements HTML cache metadata, interceptor behavior, and error rendering
+- infrastructure/cache implements Redis and in-memory stores
+- jwt implements the JWT strategy, authentication guard, and public-route metadata
+- lifecycle implements module lifecycle commands, HTTP endpoints, migration coordination, and module seeding
+- module implements metadata, discovery, and the enabled guard
+- registry persists installed and enabled module state
+- tenant owns tenant normalization and request context
+- i18n.ts loads and merges application and module locale JSON
 
-- `crm`
-- `helpdesk`
-- `org`
+WorklessModule is global and exports the runtime services and injection tokens that consumers need.
 
-Current state:
+## Runtime Modules
 
-- `crm` contains the most real implementation
-- `helpdesk` and `org` mostly provide module/lifecycle scaffolding
-- `apps` is present as a scaffold and is not currently loaded by `modules.ts`
+Runtime module specifications are declared explicitly in src/modules/modules.ts.
 
-## Runtime Module Loading
+Current specifications:
 
-Runtime modules are not auto-scanned from the filesystem. They are loaded from the explicit list in `src/modules/modules.ts`.
+- agent
+- crm
+- helpdesk
+- org
 
-Current behavior:
+The loader resolves each configured module dynamically:
 
-- if a module export is present, it is added to `AppModule.imports`
-- if a module file is missing, the loader logs a warning and skips it
-- expected exports:
-  - `CrmModule`
-  - `HelpdeskModule`
-  - `OrgModule`
+- a present module with the expected export is loaded
+- a missing optional module is logged and skipped
+- an unexpected import failure is rethrown
 
-This makes module activation explicit at code level while still allowing operational enable/disable state through the module registry.
+CRM is the primary complete reference implementation. Agent, helpdesk, and org are currently scaffold-heavy; inspect their providers and controllers before treating them as complete features.
 
-## Module Registry and Lifecycle
+## Module Structure
 
-The module registry persists operational state in `ModuleRegistryEntity`.
+Create a module with:
 
-Tracked state includes:
+    npm run module:create -- <module-name>
 
-- module name
-- version
-- status
-- enabled flag
-- description
-- dependencies
-- timestamps such as installed and upgraded dates
+The generator registers it in src/modules/modules.ts and creates:
 
-Current lifecycle surface:
+    src/modules/<module-name>/
+      controllers/
+      dto/
+      entities/
+      hooks/
+      interfaces/
+      lifecycle/
+      locales/
+        en/
+        th/
+      migrations/
+      policies/
+      repositories/
+      seeders/
+      services/
+      views/
+      module.ts
 
-- controller: `src/core/lifecycle/module-lifecycle.controller.ts`
-- service: `src/core/lifecycle/module.lifecycle.ts`
-- CLI runner: `src/core/lifecycle/module-lifecycle.runner.ts`
+Responsibilities:
 
-Current HTTP endpoints:
+- controllers expose HTTP endpoints
+- dto validates public input
+- entities define TypeORM persistence
+- repositories own tenant-aware queries
+- services orchestrate use cases
+- policies own permissions and business rules
+- hooks expose synchronous extension points
+- interfaces define module-owned contracts
+- lifecycle handles install, upgrade, and uninstall
+- migrations own module schema changes
+- seeders own repeatable module seed data
+- locales owns module translation JSON
+- views owns rendered TSX or response mapping
 
-- `GET /api/v1/modules`
-- `POST /api/v1/modules/:name/install`
-- `POST /api/v1/modules/:name/uninstall`
-- `POST /api/v1/modules/:name/upgrade`
+Do not introduce a models directory. Use entities, DTOs, interfaces, repositories, and explicit view types.
 
-Current CLI commands:
+## Module Boundaries
 
-- `npm run module:list`
-- `npm run module:install -- <name>`
-- `npm run module:upgrade -- <name>`
-- `npm run module:uninstall -- <name>`
+Keep these boundaries:
 
-## Guards and Request Pipeline
+- src/app does not import business module implementations
+- modules do not import services or repositories from another module
+- modules do not import application service implementations
+- modules may consume stable injected contracts
+- synchronous extension points use hooks or explicit ports
+- asynchronous cross-domain communication uses events
+- each module owns its entities, migrations, seeders, translations, and cache keys
 
-Global guards in the current app:
+When sharing a capability, expose the smallest stable contract instead of another module's internal service.
 
-- `ThrottlerGuard` from `AppModule`
-- `JwtAuthGuard` from `PlatformModule`
-- `PermissionGuard` from `PlatformModule`
-- `ModuleEnabledGuard` from `CoreModule`
+## Registry and Lifecycle
 
-Important consequence:
+Module discovery and lifecycle live under:
 
-- endpoints are authenticated by default unless marked with `@Public()`
-- module-enabled checks are centralized in core
-- tenant context middleware runs for all routes before controller handling
+- src/workless/module/module.decorator.ts
+- src/workless/module/module.interface.ts
+- src/workless/module/module.explorer.ts
+- src/workless/registry/module-registry.entity.ts
+- src/workless/registry/module.registry.ts
+- src/workless/lifecycle/module.lifecycle.ts
+- src/workless/lifecycle/module-lifecycle.controller.ts
+- src/workless/lifecycle/module-lifecycle.runner.ts
 
-## Tenant Model
+Registry state tracks module identity, version, status, enabled state, dependencies, descriptions, and lifecycle timestamps.
 
-The current tenant model is shared-database multi-tenancy.
+Lifecycle capabilities include:
 
-Implemented pieces:
+- list
+- install
+- uninstall
+- upgrade
+- migrate
+- migration status
+- migration revert
+- seed
 
-- `TenantContextMiddleware`
-- `TenantContextService`
-- `TenantScopedEntity`
+Expected module lifecycle methods:
 
-Current behavior:
+- install(context)
+- uninstall(context)
+- upgrade(context, fromVersion)
 
-- tenant is resolved from request context
-- entities can inherit tenant-scoped fields
-- cache keys can include tenant identifiers
-- HTML cache can vary by tenant header
+Module-enabled checks are centralized through ModuleEnabledGuard and apply only when module metadata is present on the route.
+
+## Database and Migrations
+
+DatabaseModule registers TypeORM asynchronously from src/config/typeorm.config.ts.
+
+Application migrations:
+
+- live in src/database/migrations
+- are registered in src/database/migrations/migrations.ts
+- execute through src/database/migration.runner.ts
+- record execution history through MigrationService
+- use PostgreSQL advisory locks
+- run transactionally unless a migration opts out
+
+Current application migrations create:
+
+- the module registry
+- users and user memberships
+
+Module migrations remain inside each module and execute through lifecycle commands.
+
+TypeORM synchronize is available only outside production and only when DB_SYNC=true. Prefer explicit migrations for schema evolution.
+
+## Company and Tenant Scope
+
+The current user schema includes company_id on:
+
+- users
+- user_memberships
+
+TypeScript entity properties use companyId and map to the PostgreSQL company_id column.
+
+Business modules use tenantId for request isolation:
+
+- TenantContextMiddleware reads x-tenant-id
+- TenantContextService stores normalized context in AsyncLocalStorage
+- tenant-aware repositories filter every business query
+- TenantScopedEntity provides common tenant and timestamp fields
+- cache keys include tenant scope
+
+Company and tenant concepts coexist:
+
+- companyId associates users and memberships with a company
+- tenantId scopes requests, module records, repositories, and cache keys
+
+Do not silently treat companyId and tenantId as interchangeable. Follow the active entity and request context for the feature being changed.
+
+## Request Security
+
+Global request protections include:
+
+- ThrottlerGuard
+- JwtAuthGuard
+- PermissionGuard
+- ModuleEnabledGuard
+- TenantContextMiddleware
+- Helmet
+- ValidationPipe
+
+Endpoints require authentication unless marked public. Permission metadata is enforced by PermissionGuard, and feature policies perform additional business checks.
+
+Company or tenant access must not rely on a client-supplied identifier alone. Authentication, membership, request context, and repository scope must agree.
 
 ## Hooks and Events
 
-Workless keeps both a hook pipeline and an event bus.
+Use hooks when a caller needs a transformed payload before continuing:
 
-Use cases:
+    request -> hook -> transformed payload -> write
 
-- hooks: pre-processing and payload transformation before domain writes
-- events: post-action notifications and loose coupling between modules
+Use events after a state change when listeners should react without controlling the original operation:
 
-Important files:
+    write -> event -> independent listeners
 
-- `src/core/events/hook.decorator.ts`
-- `src/core/events/hook.service.ts`
-- `src/core/events/event-bus.service.ts`
+Hooks and events are provided by src/workless/events and exposed through injection tokens.
 
-## Cache and HTML Rendering
+Avoid direct service coupling between business modules.
 
-The cache layer lives under:
+## Cache
 
-- `src/core/infrastructure/cache/cache.module.ts`
-- `src/core/infrastructure/cache/cache.service.ts`
+Cache implementation:
 
-HTML cache support lives under:
+- src/workless/infrastructure/cache/cache.module.ts
+- src/workless/infrastructure/cache/cache.service.ts
+- src/workless/infrastructure/cache/cache.store.ts
+- src/workless/infrastructure/cache/redis.provider.ts
 
-- `src/core/http/html-cache.decorator.ts`
-- `src/core/http/html-cache.interceptor.ts`
+Behavior:
 
-Views are server-rendered with KITA JSX/TSX from `src/app/views` and `src/modules/*/views`.
+- REDIS_ENABLED=true selects RedisCacheStore
+- REDIS_ENABLED=false selects InMemoryCacheStore
+- Redis unavailability while enabled does not automatically switch to memory
 
-Current public HTML examples:
+Cache orchestration belongs in services. Business keys must include tenant scope. Create, update, and delete flows must invalidate detail and collection or version keys.
 
-- `src/app/views/home/home.page.tsx`
-- `src/app/views/auth/login.page.tsx`
-- `src/modules/crm/views/crm-dashboard.page.tsx`
+HTML response cache behavior is separate:
 
-## CRM as the Reference Module
+- src/workless/http/html-cache.decorator.ts
+- src/workless/http/html-cache.interceptor.ts
 
-`crm` is the most complete example of the intended module shape.
+## Server-Rendered Views
 
-Current CRM implementation includes:
+Shared HTML and React helpers:
 
-- controller: `src/modules/crm/controllers/crm-contact.controller.ts`
-- DTOs: `src/modules/crm/dto/*`
-- entity: `src/modules/crm/entities/crm-contact.entity.ts`
-- repository: `src/modules/crm/repositories/crm-contact.repository.ts`
-- hooks: `src/modules/crm/hooks/crm-contact.hooks.ts`
-- policies: `src/modules/crm/policies/*`
-- lifecycle: `src/modules/crm/lifecycle/crm-module.lifecycle.ts`
-- migration: `src/modules/crm/migrations/crm-contact-index.migration.ts`
-- seeder: `src/modules/crm/seeders/crm-contact.seeder.ts`
-- views: `src/modules/crm/views/*`
+- src/app/views/components/main.tsx
+- src/app/views/components/layouts
 
-This is the best place to copy structure from when adding a new runtime business module.
+Module views:
 
-## Frontend Asset Pipeline
+- src/modules/<module>/views
 
-The live runtime serves assets from `public/`.
+React components are rendered with react-dom/server to static markup. They are server view helpers, not hydrated browser components.
 
-Current CSS pipeline:
+The shared HTML document loads Turbo for navigation enhancement. Introducing client-side React state, hydration, or routing is an architecture change.
 
-- source: `public/assets/css/app.css`
-- output: `public/assets/css/tailwindcss.css`
-- config: `tailwind.config.js`
+## Localization
 
-Current scripts:
+Locale loading is implemented in src/workless/i18n.ts.
 
-- `npm run dev:css`
-- `npm run build:css`
+Messages live under:
 
-`vite.config.ts` and `vitest.config.ts` exist in the repository, but the current application runtime is still the Nest server plus static files from `public/`.
+- src/app/locales/<locale>/*.json
+- src/modules/<module>/locales/<locale>/*.json
 
-## Non-Runtime Reference Material
+English is the fallback locale. Current application locale directories include en and th. Module views request their module messages when creating a translator.
 
-`theme/` is reference material only.
+## CSS and Assets
 
-It should not be treated as part of the runtime architecture, import graph, or asset dependency chain.
+Active asset paths:
+
+- public/assets/css/app.css is Tailwind source
+- public/assets/css/tailwindcss.css is generated output
+- tailwind.config.js contains project theme extensions
+- vite.config.ts builds assets into public/assets
+
+Do not hand-edit generated tailwindcss.css. Change app.css, tailwind.config.js, or TSX classes and rebuild.
+
+## Commands
+
+Development:
+
+    npm run build
+    npm run start
+    npm run start:dev
+    npm run dev
+    npm run build:css
+    npm run dev:css
+
+Database:
+
+    npm run db:migrate
+    npm run db:migrate:status
+    npm run db:migrate:revert
+    npm run seed
+
+Modules:
+
+    npm run module:create -- <name>
+    npm run module:delete -- <name>
+    npm run module:list
+    npm run module:install -- <name>
+    npm run module:upgrade -- <name>
+    npm run module:uninstall -- <name>
+    npm run module:migrate -- <name>
+    npm run module:migrate:status -- <name>
+    npm run module:migrate:revert -- <name>
+    npm run module:seed -- <name>
+
+npm test is currently a placeholder and is not evidence of application correctness.
 
 ## Verification
 
-This document was aligned to the current repository structure, runtime wiring, and scripts in:
+Choose checks proportional to the change:
 
-- `src/main.ts`
-- `src/app.module.ts`
-- `src/app/platform.module.ts`
-- `src/core/core.module.ts`
-- `src/database/*`
-- `src/modules/modules.ts`
-- `package.json`
+- Nest or TypeScript changes: npm run build
+- CSS or Tailwind changes: npm run build:css
+- application migration review: npm run db:migrate:status before mutation
+- module lifecycle changes: inspect registration, lifecycle metadata, and active providers
+- Redis behavior: verify Redis is enabled and reachable
+- rendered pages: inspect TSX and rendered browser output
+
+Always distinguish static review, successful compilation, and live runtime verification.
+
+## Maintenance
+
+Update this document when any of these change:
+
+- source directories
+- root Nest wiring
+- module scaffold or lifecycle commands
+- company or tenant scope
+- database migrations
+- cache behavior
+- authentication or permission boundaries
+- locale loading
+- server-rendering structure
+- CSS source or generated output paths
+- verification commands

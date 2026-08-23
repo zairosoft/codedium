@@ -1,9 +1,10 @@
 import { Request } from 'express';
-import type { AuthenticatedUser } from '../../workless/interfaces/auth.interface';
+import type { AuthenticatedUser } from '../interfaces/auth.interface';
 
 export type RequestActor = {
   userId?: string;
   roleCodes: string[];
+  companyId?: string;
   organizationId?: string;
 };
 
@@ -21,9 +22,14 @@ export function resolveRequestActor(request: PermissionAwareRequest): RequestAct
   const authenticatedUser = request.user;
 
   if (authenticatedUser) {
+    const activeMembership = authenticatedUser.memberships?.find(
+      (membership) => membership.isDefault,
+    ) ?? authenticatedUser.memberships?.[0];
+
     return {
       userId: authenticatedUser.userId,
-      organizationId: authenticatedUser.memberships?.[0]?.organizationId,
+      companyId: activeMembership?.companyId,
+      organizationId: activeMembership?.organizationId,
       roleCodes: [...new Set(authenticatedUser.roles ?? [])],
     };
   }
@@ -31,6 +37,7 @@ export function resolveRequestActor(request: PermissionAwareRequest): RequestAct
   // Fallback for public routes — no identity
   return {
     userId: undefined,
+    companyId: undefined,
     organizationId: undefined,
     roleCodes: [],
   };

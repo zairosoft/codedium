@@ -18,7 +18,7 @@ async function tableHasIndex(
 export class CreateUsersMigration {
   readonly name = 'create-users';
   readonly timestamp = 202607120002;
-  readonly checksum = 'create-users-v2';
+  readonly checksum = 'create-users-v5-company-id-columns';
 
   async up(queryRunner: QueryRunner): Promise<void> {
     const hasTable = await queryRunner.hasTable('users');
@@ -33,6 +33,12 @@ export class CreateUsersMigration {
               isPrimary: true,
               isNullable: false,
               default: 'gen_random_uuid()',
+            },
+            {
+              name: 'company_id',
+              type: 'uuid',
+              isNullable: false,
+              default: `'${DEFAULT_TENANT_ID}'`,
             },
             {
               name: 'name',
@@ -138,6 +144,10 @@ export class CreateUsersMigration {
               isUnique: true,
             }),
             new TableIndex({
+              name: 'idx_users_company_id',
+              columnNames: ['company_id'],
+            }),
+            new TableIndex({
               name: 'idx_users_role',
               columnNames: ['role'],
             }),
@@ -176,6 +186,11 @@ export class CreateUsersMigration {
               },
               {
                 name: 'userId',
+                type: 'uuid',
+                isNullable: false,
+              },
+              {
+                name: 'company_id',
                 type: 'uuid',
                 isNullable: false,
               },
@@ -230,15 +245,30 @@ export class CreateUsersMigration {
       const hasMembershipIndex = await tableHasIndex(
         queryRunner,
         'user_memberships',
-        'uq_user_memberships_tenant_user_org',
+        'uq_user_memberships_tenant_user_company_org',
       );
       if (!hasMembershipIndex) {
         await queryRunner.createIndex(
           'user_memberships',
           new TableIndex({
-            name: 'uq_user_memberships_tenant_user_org',
-            columnNames: ['tenantId', 'userId', 'organizationId'],
+            name: 'uq_user_memberships_tenant_user_company_org',
+            columnNames: ['tenantId', 'userId', 'company_id', 'organizationId'],
             isUnique: true,
+          }),
+        );
+      }
+
+      const hasCompanyIndex = await tableHasIndex(
+        queryRunner,
+        'user_memberships',
+        'idx_user_memberships_tenant_company',
+      );
+      if (!hasCompanyIndex) {
+        await queryRunner.createIndex(
+          'user_memberships',
+          new TableIndex({
+            name: 'idx_user_memberships_tenant_company',
+            columnNames: ['tenantId', 'company_id'],
           }),
         );
       }

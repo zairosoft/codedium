@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { WorklessMigrationConstructor } from '../../database/migration.interface';
-import { CachePort } from '../interfaces/cache.interface';
-import { HookPort } from '../interfaces/hook.interface';
+import { CachePort } from '../../app/interfaces/cache.interface';
+import { HookPort } from '../../app/interfaces/hook.interface';
 import { ModuleRegistryService } from '../registry/module.registry';
 import { ModuleSeederConstructor } from '../lifecycle/module-seeder.interface';
 

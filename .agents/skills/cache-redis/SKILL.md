@@ -11,14 +11,18 @@ Use this skill when work touches cache behavior in Workless.
 
 Workless has a central cache abstraction under:
 
-- `src/core/infrastructure/cache/cache.service.ts`
-- `src/core/infrastructure/cache/cache.store.ts`
-- `src/core/infrastructure/cache/redis.provider.ts`
+- `src/workless/infrastructure/cache/cache.service.ts`
+- `src/workless/infrastructure/cache/cache.store.ts`
+- `src/workless/infrastructure/cache/redis.provider.ts`
 
 Redis is optional:
 
 - if Redis is enabled, cache uses `ioredis`
 - otherwise cache falls back to in-memory storage
+- the shared cache contract currently lives at `src/app/interfaces/cache.interface.ts`
+- `CacheModule` is wired globally from `src/app.module.ts`
+
+The in-memory fallback is selected only when `REDIS_ENABLED` is false. Do not claim automatic failover when Redis is enabled but unavailable.
 
 ## Use This Skill For
 
@@ -34,11 +38,11 @@ Redis is optional:
 
 Before changing cache logic, inspect in this order:
 
-1. `src/core/infrastructure/cache/cache.service.ts`
-2. `src/core/infrastructure/cache/redis.provider.ts`
+1. `src/workless/infrastructure/cache/cache.service.ts`
+2. `src/workless/infrastructure/cache/redis.provider.ts`
 3. the active service using cache
 4. the repository used by that service
-5. `src/core/http/html-cache.interceptor.ts` if page caching is involved
+5. `src/workless/http/html-cache.interceptor.ts` if page caching is involved
 
 For an active reference, inspect:
 
@@ -111,7 +115,7 @@ Data cache:
 HTML cache:
 
 - handled through response headers
-- configured through `src/core/http/html-cache.interceptor.ts`
+- configured through `src/workless/http/html-cache.interceptor.ts`
 
 Do not mix these concerns.
 
@@ -123,7 +127,7 @@ Avoid these in Workless:
 - wildcard delete as the primary invalidation strategy
 - cache logic in controllers
 - caching raw request objects
-- reintroducing removed `src/infrastructure/cache/*` paths
+- introducing a second cache implementation outside `src/workless/infrastructure/cache/*`
 - claiming Redis behavior was verified when Redis was not enabled
 
 ## Verification

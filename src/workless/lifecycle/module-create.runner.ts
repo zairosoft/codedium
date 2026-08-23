@@ -7,6 +7,7 @@ const MODULE_DIRECTORIES = [
   'dto',
   'entities',
   'hooks',
+  'interfaces',
   'lifecycle',
   'locales/en',
   'locales/th',

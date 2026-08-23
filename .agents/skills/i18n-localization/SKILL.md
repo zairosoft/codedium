@@ -1,91 +1,45 @@
 ---
 name: i18n-localization
-description: Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support.
+description: Maintain Workless application and module locale JSON, server-rendered translation usage, locale resolution, and translation completeness.
 allowed-tools: Read, Glob, Grep
 ---
 
 # i18n & Localization
 
-> Internationalization (i18n) and Localization (L10n) best practices.
+## Project Structure
 
----
+Workless owns locale loading in `src/workless/i18n.ts`; it does not use `react-i18next` or Next.js locale routing.
 
-## 1. Core Concepts
+```text
+src/app/locales/
+  en/*.json
+  th/*.json
+src/modules/<module>/locales/
+  en/*.json
+  th/*.json
+```
 
-| Term | Meaning |
-|------|---------|
-| **i18n** | Internationalization - making app translatable |
-| **L10n** | Localization - actual translations |
-| **Locale** | Language + Region (en-US, tr-TR) |
-| **RTL** | Right-to-left languages (Arabic, Hebrew) |
+- application-wide messages belong in `src/app/locales/<locale>`
+- module-owned messages belong in `src/modules/<module>/locales/<locale>`
+- `npm run module:create -- <name>` creates the `en` and `th` locale roots
+- English is the runtime fallback locale
 
----
+## Runtime Pattern
 
-## 2. When to Use i18n
+Resolve request locale through `resolveLocaleFromRequest(...)`. Current priority is locale cookie, `x-lang`, `accept-language`, then English fallback.
 
-| Project Type | i18n Needed? |
-|--------------|--------------|
-| Public web app | ✅ Yes |
-| SaaS product | ✅ Yes |
-| Internal tool | ⚠️ Maybe |
-| Single-region app | ⚠️ Consider future |
-| Personal project | ❌ Optional |
-
----
-
-## 3. Implementation Patterns
-
-### React (react-i18next)
+Server-rendered views use the project translator:
 
 ```tsx
-import { useTranslation } from 'react-i18next';
-
-function Welcome() {
-  const { t } = useTranslation();
-  return <h1>{t('welcome.title')}</h1>;
-}
+const { t } = createTranslator(locale, { modules: ['crm'] });
+return <h1>{t('crm.dashboard.heading')}</h1>;
 ```
 
-### Next.js (next-intl)
-
-```tsx
-import { useTranslations } from 'next-intl';
-
-export default function Page() {
-  const t = useTranslations('Home');
-  return <h1>{t('title')}</h1>;
-}
-```
-
-### Python (gettext)
-
-```python
-from gettext import gettext as _
-
-print(_("Welcome to our app"))
-```
+Pass the owning module name when a view needs module messages. Keep keys namespaced by application area or module.
 
 ---
 
-## 4. File Structure
-
-```
-locales/
-├── en/
-│   ├── common.json
-│   ├── auth.json
-│   └── errors.json
-├── tr/
-│   ├── common.json
-│   ├── auth.json
-│   └── errors.json
-└── ar/          # RTL
-    └── ...
-```
-
----
-
-## 5. Best Practices
+## Best Practices
 
 ### DO ✅
 
@@ -106,7 +60,7 @@ locales/
 
 ---
 
-## 6. Common Issues
+## Common Issues
 
 | Issue | Solution |
 |-------|----------|
@@ -118,7 +72,7 @@ locales/
 
 ---
 
-## 7. RTL Support
+## RTL Support
 
 ```css
 /* CSS Logical Properties */
@@ -134,7 +88,7 @@ locales/
 
 ---
 
-## 8. Checklist
+## Checklist
 
 Before shipping:
 
@@ -151,4 +105,4 @@ Before shipping:
 
 | Script | Purpose | Command |
 |--------|---------|---------|
-| `scripts/i18n_checker.py` | Detect hardcoded strings & missing translations | `python scripts/i18n_checker.py <project_path>` |
+| `scripts/i18n_checker.py` | Detect hardcoded strings and compare locale keys | `python .agents/skills/i18n-localization/scripts/i18n_checker.py .` |

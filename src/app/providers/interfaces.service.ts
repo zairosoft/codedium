@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
-import { AUTH_SERVICE } from '../../workless/interfaces/auth.interface';
-import { NOTIFICATION_SERVICE } from '../../workless/interfaces/notification.interface';
-import { PERMISSION_SERVICE } from '../../workless/interfaces/permission.interface';
-import { ROLE_SERVICE } from '../../workless/interfaces/role.interface';
-import { USER_SERVICE } from '../../workless/interfaces/user.interface';
+import { AUTH_SERVICE } from '../interfaces/auth.interface';
+import { NOTIFICATION_SERVICE } from '../interfaces/notification.interface';
+import { PERMISSION_SERVICE } from '../interfaces/permission.interface';
+import { ROLE_SERVICE } from '../interfaces/role.interface';
+import { USER_SERVICE } from '../interfaces/user.interface';
 import { AuthService } from '../services/auth.service';
 import { NotificationsService } from '../services/notifications.service';
 import { PermissionsService } from './permissions.service';

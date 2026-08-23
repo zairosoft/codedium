@@ -7,9 +7,9 @@ import {
   UpdateUserInput,
   UserRecord,
   UserServicePort,
-} from '../../workless/interfaces/user.interface';
-import { EVENT_BUS_PORT, EventBusPort } from '../../workless/interfaces/event-bus.interface';
-import { HOOK_PORT, HookPort } from '../../workless/interfaces/hook.interface';
+} from '../interfaces/user.interface';
+import { EVENT_BUS_PORT, EventBusPort } from '../interfaces/event-bus.interface';
+import { HOOK_PORT, HookPort } from '../interfaces/hook.interface';
 import { TENANT_CONTEXT, TenantContextPort } from '../../workless/tenant/tenant-context.interface';
 import { RequestActor } from '../helpers/request-actor';
 import { ListUsersDto } from '../dto/list-users.dto';
@@ -36,7 +36,7 @@ export class UsersService implements UserServicePort {
   async findById(id: string): Promise<UserRecord | null> {
     const tenantId = this.tenantContext.getTenantId();
     const entity = await this.usersRepository.findOne({
-      where: { id, tenantId },
+      where: { id, companyId: tenantId },
       relations: { memberships: true },
     });
     return entity ? this.toRecord(entity) : null;
@@ -45,7 +45,7 @@ export class UsersService implements UserServicePort {
   async findByEmail(email: string): Promise<UserRecord | null> {
     const tenantId = this.tenantContext.getTenantId();
     const entity = await this.usersRepository.findOne({
-      where: { tenantId, email: email.trim().toLowerCase() },
+      where: { companyId: tenantId, email: email.trim().toLowerCase() },
       relations: { memberships: true },
     });
     return entity ? this.toRecord(entity) : null;
@@ -75,10 +75,10 @@ export class UsersService implements UserServicePort {
     const search = query.search?.trim();
     const where = search
       ? [
-          { tenantId, email: ILike(`%${search}%`) },
-          { tenantId, displayName: ILike(`%${search}%`) },
+          { companyId: tenantId, email: ILike(`%${search}%`) },
+          { companyId: tenantId, displayName: ILike(`%${search}%`) },
         ]
-      : { tenantId };
+      : { companyId: tenantId };
 
     const [entities, total] = await this.usersRepository.findAndCount({
       where,
@@ -114,7 +114,7 @@ export class UsersService implements UserServicePort {
       const usersRepository = manager.getRepository(PlatformUserEntity);
       const membershipsRepository = manager.getRepository(PlatformMembershipEntity);
       const existing = await usersRepository.findOne({
-        where: { tenantId, email },
+        where: { companyId: tenantId, email },
       });
 
       if (existing) {
@@ -124,7 +124,7 @@ export class UsersService implements UserServicePort {
       const now = new Date();
       const user = usersRepository.create({
         id: randomUUID(),
-        tenantId,
+        companyId: tenantId,
         email,
         displayName: payload.displayName.trim(),
         active: true,
@@ -142,7 +142,7 @@ export class UsersService implements UserServicePort {
       );
 
       const persisted = await usersRepository.findOne({
-        where: { id: user.id, tenantId },
+        where: { id: user.id, companyId: tenantId },
         relations: { memberships: true },
       });
 
@@ -167,7 +167,7 @@ export class UsersService implements UserServicePort {
     const tenantId = this.tenantContext.getTenantId();
     const payload = await this.hookService.emit('user.updating', input);
     const existing = await this.usersRepository.findOne({
-      where: { id, tenantId },
+      where: { id, companyId: tenantId },
       relations: { memberships: true },
     });
 
@@ -186,7 +186,7 @@ export class UsersService implements UserServicePort {
     const nextEmail = payload.email?.trim().toLowerCase();
     if (nextEmail && nextEmail !== existing.email) {
       const duplicate = await this.usersRepository.findOne({
-        where: { tenantId, email: nextEmail },
+        where: { companyId: tenantId, email: nextEmail },
       });
 
       if (duplicate) {
@@ -217,7 +217,7 @@ export class UsersService implements UserServicePort {
       }
 
       const persisted = await usersRepository.findOne({
-        where: { id: existing.id, tenantId },
+        where: { id: existing.id, companyId: tenantId },
         relations: { memberships: true },
       });
 
@@ -241,11 +241,13 @@ export class UsersService implements UserServicePort {
   private toRecord(entity: PlatformUserEntity): UserRecord {
     return {
       id: entity.id,
+      companyId: entity.companyId,
       email: entity.email,
       displayName: entity.displayName,
       active: entity.active,
       roles: [...(entity.roles ?? [])],
       memberships: (entity.memberships ?? []).map((membership) => ({
+        companyId: membership.companyId,
         organizationId: membership.organizationId,
         roleCode: membership.roleCode,
         isDefault: membership.isDefault,
@@ -272,6 +274,7 @@ export class UsersService implements UserServicePort {
         id: randomUUID(),
         tenantId,
         userId,
+        companyId: membership.companyId,
         organizationId: membership.organizationId,
         roleCode: membership.roleCode.trim(),
         isDefault: membership.isDefault ?? index === 0,

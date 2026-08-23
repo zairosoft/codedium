@@ -1,12 +1,14 @@
-import { MembershipRecord, UserRecord } from '../../../workless/interfaces/user.interface';
+import { MembershipRecord, UserRecord } from '../../interfaces/user.interface';
 
 export type UserItemView = {
   id: string;
+  companyId: string;
   email: string;
   displayName: string;
   active: boolean;
   platformRoles: string[];
   organizations: {
+    companyId: string;
     organizationId: string;
     roleCode: string;
     isDefault: boolean;
@@ -18,6 +20,7 @@ export class UsersViewMapper {
   static toItem(user: UserRecord): UserItemView {
     return {
       id: user.id,
+      companyId: user.companyId,
       email: user.email,
       displayName: user.displayName,
       active: user.active,
@@ -65,6 +68,7 @@ export class UsersViewMapper {
 
   private static toMembership(membership: MembershipRecord) {
     return {
+      companyId: membership.companyId,
       organizationId: membership.organizationId,
       roleCode: membership.roleCode,
       isDefault: membership.isDefault ?? false,

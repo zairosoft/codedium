@@ -12,6 +12,9 @@ import { Type } from 'class-transformer';
 
 class UpdateMembershipDto {
   @IsUUID()
+  companyId: string;
+
+  @IsUUID()
   organizationId: string;
 
   @IsString()

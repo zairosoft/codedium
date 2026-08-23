@@ -1,7 +1,7 @@
 import { Global, Inject, Module, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
-import { CACHE_PORT } from '../../interfaces/cache.interface';
+import { CACHE_PORT } from '../../../app/interfaces/cache.interface';
 import { REDIS_CLIENT } from './cache.constants';
 import { CacheService } from './cache.service';
 import { createRedisClient } from './redis.provider';

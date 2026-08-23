@@ -14,7 +14,8 @@ This skill focuses on the project-specific module structure and runtime conventi
 - plugin modules live under `src/modules/<module-name>`
 - modules should stay self-contained
 - cross-module communication should prefer hooks or emitted events
-- modules may depend on `src/core/interfaces/*`
+- module-owned contracts live under `src/modules/<module-name>/interfaces`
+- shared application contracts currently live under `src/app/interfaces`
 - module state is managed through the system registry and lifecycle services
 - tenant-awareness and cache invalidation are part of the design
 
@@ -25,7 +26,7 @@ Use this skill for tasks such as:
 - creating a new plugin module under `src/modules`
 - refactoring an existing feature into the plugin structure
 - adding controllers, services, repositories, hooks, policies, seeders, or migrations to a module
-- removing legacy `models/` usage from a module and replacing it with `entities`, `dto`, or `src/core/interfaces`
+- removing legacy `models/` usage from a module and replacing it with `entities`, `dto`, or module-owned `interfaces`
 - wiring a module into registry and lifecycle flow
 - reviewing whether a module violates isolation boundaries
 - adding tenant-aware cache keys and invalidation
@@ -33,7 +34,7 @@ Use this skill for tasks such as:
 Do not use this skill for:
 
 - generic NestJS issues with no module architecture impact
-- platform-layer work under `src/app`
+- application-layer work under `src/app` with no plugin-module impact
 - isolated TypeScript typing problems with no module design impact
 
 ## Expected Module Shape
@@ -46,7 +47,12 @@ src/modules/<module-name>/
   dto/
   entities/
   hooks/
+  interfaces/
   lifecycle/
+  locales/
+    en/
+    th/
+  migrations/
   policies/
   repositories/
   seeders/
@@ -80,16 +86,20 @@ Important:
 When a module participates in runtime lifecycle management, check and update:
 
 - `src/modules/modules.ts`
-- `src/core/system/system-module.decorator.ts`
-- `src/core/system/system-module.interface.ts`
-- `src/core/registry/module.registry.ts`
-- `src/core/lifecycle/module.lifecycle.ts`
+- `src/workless/module/module.decorator.ts`
+- `src/workless/module/module.interface.ts`
+- `src/workless/module/module.explorer.ts`
+- `src/workless/registry/module.registry.ts`
+- `src/workless/lifecycle/module.lifecycle.ts`
+- `src/workless/lifecycle/module-lifecycle.runner.ts`
 
 Typical lifecycle responsibilities:
 
 - `install(context)`
 - `uninstall(context)`
 - `upgrade(context, fromVersion)`
+
+Create new module scaffolds with `npm run module:create -- <module-name>`. The generator creates the standard directories, locale roots, lifecycle provider, and runtime registration. Do not hand-create a partial scaffold when this command fits the request.
 
 ## Cache Guidance
 

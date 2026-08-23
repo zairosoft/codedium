@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
-import type { JwtPayload, AuthenticatedUser } from '../interfaces/auth.interface';
+import type { JwtPayload, AuthenticatedUser } from '../../app/interfaces/auth.interface';
 import { PlatformUserEntity } from '../../app/entities/platform-user.entity';
 import { resolveJwtSecret } from '../../config/jwt.config';
 
@@ -41,6 +41,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       tenantId: payload.tenantId,
       roles: [user.role],
       memberships: (user.memberships ?? []).map((membership) => ({
+        companyId: membership.companyId,
         organizationId: membership.organizationId,
         roleCode: membership.roleCode,
         isDefault: membership.isDefault,

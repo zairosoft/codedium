@@ -1,4 +1,5 @@
 export type MembershipRecord = {
+  companyId: string;
   organizationId: string;
   roleCode: string;
   isDefault?: boolean;
@@ -6,6 +7,7 @@ export type MembershipRecord = {
 
 export type UserRecord = {
   id: string;
+  companyId: string;
   email: string;
   displayName: string;
   active: boolean;

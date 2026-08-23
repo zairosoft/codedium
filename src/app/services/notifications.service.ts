@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   NotificationEvent,
   NotificationServicePort,
-} from '../../workless/interfaces/notification.interface';
+} from '../interfaces/notification.interface';
 
 @Injectable()
 export class NotificationsService implements NotificationServicePort {

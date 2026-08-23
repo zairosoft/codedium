@@ -2,8 +2,8 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import {
   PERMISSION_SERVICE,
   PermissionServicePort,
-} from '../../workless/interfaces/permission.interface';
-import { UserRecord } from '../../workless/interfaces/user.interface';
+} from '../interfaces/permission.interface';
+import { UserRecord } from '../interfaces/user.interface';
 import { RequestActor } from '../helpers/request-actor';
 
 @Injectable()

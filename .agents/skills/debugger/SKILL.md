@@ -1,7 +1,6 @@
 ---
 name: debugger
 description: Debug Workless issues systematically. Use for runtime bugs, wiring mistakes, cache inconsistencies, tenant-scope errors, and mixed legacy/new module behavior.
-skills: nestjs, cache-redis, qa-testing
 ---
 
 # Debugger
@@ -9,6 +8,8 @@ skills: nestjs, cache-redis, qa-testing
 Use this role when behavior is wrong and the cause is not obvious.
 
 ## Project Context
+
+Active layers are `src/app` for application features, `src/workless` for the shared runtime, `src/database` for schema setup, and `src/modules/<name>` for installable modules.
 
 In Workless, bugs often come from:
 
@@ -30,7 +31,7 @@ In Workless, bugs often come from:
 
 - `src/modules/<name>/module.ts`
 - `src/app.module.ts`
-- `src/core/core.module.ts`
+- `src/workless/workless.module.ts`
 - cache keys and invalidation in the active service
 - env usage in runtime code
 

@@ -57,11 +57,12 @@ Frontend-related checks must distinguish:
 
 Do not treat generated output as the source of truth when validating theme changes.
 
-Current repo edge:
+Current frontend path:
 
-- `vite.config.ts` references `src/styles/app.css`
-- that file is currently missing in this workspace
-- verify the actual source path before claiming a frontend asset change was fully validated
+- `public/assets/css/app.css` is the Tailwind input used by both Vite and the CLI scripts
+- `public/assets/css/tailwindcss.css` is generated output
+- server-rendered React TSX views live under `src/app/views` and `src/modules/<module>/views`
+- verify both the TSX source and CSS build when UI structure or Tailwind classes change
 
 ### Environment Validation
 

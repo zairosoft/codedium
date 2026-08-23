@@ -2,7 +2,7 @@ import { BadRequestException, ForbiddenException, Injectable, NestMiddleware } f
 import { Request, Response, NextFunction } from 'express';
 import { normalizeTenantId } from './tenant.constants';
 import { TenantContextService } from './tenant-context.service';
-import type { AuthenticatedUser } from '../interfaces/auth.interface';
+import type { AuthenticatedUser } from '../../app/interfaces/auth.interface';
 
 type AuthenticatedRequest = Request & { user?: AuthenticatedUser };
 

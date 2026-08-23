@@ -11,40 +11,40 @@ Use this skill for NestJS-specific work in Workless.
 
 Workless is a NestJS modular monolith with:
 
-- platform layer under `src/app`
-- core engine under `src/core`
+- application features under `src/app`
+- shared runtime engine under `src/workless`
 - plugin modules under `src/modules`
 - `ConfigModule.forRoot(...)` in `src/app.module.ts`
 - global validation pipe in `src/main.ts`
 - TypeORM + PostgreSQL
-- optional Redis-backed cache under `src/core/infrastructure/cache`
-- tenant scoping through `src/core/tenant/*`
-- runtime module registry and lifecycle under `src/core/lifecycle` and `src/core/registry`
+- optional Redis-backed cache under `src/workless/infrastructure/cache`
+- tenant scoping through `src/workless/tenant/*`
+- runtime module registry and lifecycle under `src/workless/lifecycle`, `src/workless/module`, and `src/workless/registry`
 
-This repo is backend-first. Do not assume React, Passport auth, or microservices unless the code exists.
+Views are server-rendered React TSX through `react-dom/server`; this is not a hydrated SPA. Passport JWT auth is active. Do not assume client-side routing or microservices.
 
 ## Read First
 
 Before structural changes, inspect in this order:
 
 1. `src/app.module.ts`
-2. `src/core/core.module.ts`
+2. `src/workless/workless.module.ts`
 3. `src/modules/modules.ts`
-4. target module `src/modules/<name>/module.ts` or target platform module under `src/app/<name>`
+4. target module `src/modules/<name>/module.ts` or target application feature under `src/app`
 5. related runtime files under:
-   - `src/core/system`
-   - `src/core/registry`
-   - `src/core/lifecycle`
-   - `src/core/events`
-   - `src/core/interfaces`
-   - `src/core/tenant`
+   - `src/workless/module`
+   - `src/workless/registry`
+   - `src/workless/lifecycle`
+   - `src/workless/events`
+   - `src/workless/infrastructure`
+   - `src/workless/tenant`
 
 ## Active Patterns In Workless
 
 ### Layering
 
-- `src/app` is stable platform code
-- `src/core` is shared runtime engine
+- `src/app` contains application auth, users, permissions, locales, and shared views
+- `src/workless` contains the shared runtime engine
 - `src/modules` contains optional plugin modules
 
 ### Module Wiring
@@ -58,18 +58,18 @@ Expected responsibilities:
 - policies own permission and rule checks
 - hooks and events are used for extension points
 - lifecycle services are added only when a module needs install, upgrade, or uninstall behavior
-- backend code should avoid a separate `models/` layer and instead use `entities/`, `dto/`, and `src/core/interfaces/*`
+- backend code should avoid a separate `models/` layer and instead use `entities/`, `dto/`, and the owning module's `interfaces/`
 
 ### Runtime System
 
 When a module participates in lifecycle management, inspect:
 
-- `src/core/system/system-module.decorator.ts`
-- `src/core/system/system-module.interface.ts`
-- `src/core/system/system-module.explorer.ts`
-- `src/core/registry/module.registry.ts`
-- `src/core/lifecycle/module.lifecycle.ts`
-- `src/core/lifecycle/module-lifecycle.runner.ts`
+- `src/workless/module/module.decorator.ts`
+- `src/workless/module/module.interface.ts`
+- `src/workless/module/module.explorer.ts`
+- `src/workless/registry/module.registry.ts`
+- `src/workless/lifecycle/module.lifecycle.ts`
+- `src/workless/lifecycle/module-lifecycle.runner.ts`
 
 Current low-risk runtime pattern:
 
@@ -90,7 +90,7 @@ Tenant flow is:
 
 Preferred cache path:
 
-- `src/core/infrastructure/cache/*`
+- `src/workless/infrastructure/cache/*`
 
 Use this for new cache work:
 
@@ -101,13 +101,13 @@ Use this for new cache work:
 
 Page cache headers live under:
 
-- `src/core/http/html-cache.interceptor.ts`
+- `src/workless/http/html-cache.interceptor.ts`
 
 ## Workless-Specific Hazards
 
 ### Runtime vs Scaffold
 
-`src/modules/apps` exists as scaffold only. Do not treat it as an active runtime module unless the code changes.
+`agent`, `helpdesk`, and `org` are currently scaffold-heavy. Confirm active providers and controllers before making behavior claims.
 
 ### CRM Reference Path
 
@@ -131,7 +131,7 @@ npm run build
 Useful setup commands:
 
 ```bash
-npm run db:platform
+npm run db:migrate
 npm run seed
 ```
 
