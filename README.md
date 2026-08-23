@@ -180,42 +180,6 @@ Tenant-aware requests use:
 
     X-Tenant-Id: <tenant-uuid>
 
-## Users, Companies, and Tenants
-
-These names describe different parts of the code and should remain separate:
-
-| Concept | Code responsibility | Current storage |
-| --- | --- | --- |
-| User | Authentication identity, profile, role, and account status | `users` |
-| Company | Ownership reference used to scope users and memberships | `company_id` on `users` and `user_memberships` |
-| Tenant | Per-request execution scope used by repositories, entities, and cache keys | `tenantId` on tenant-scoped module data |
-
-TypeScript uses `companyId`, while PostgreSQL maps that property to `company_id`.
-There is currently no separate `companies` entity or `companies` table; company values are UUID
-references. Add a company-owned entity and migration only when company records need their own
-metadata or lifecycle.
-
-Tenant context is technical infrastructure under `src/workless/tenant/`. The request flow is:
-
-1. `TenantContextMiddleware` resolves and validates the tenant UUID from the request context.
-2. `TenantContextService` keeps the active `tenantId` in `AsyncLocalStorage` for the request.
-3. Repositories obtain the active value through `TENANT_CONTEXT`.
-4. Queries include the tenant scope, and cache keys include the same `tenantId`.
-
-The current users implementation uses the active `tenantId` to create and filter
-`users.companyId`. Keep those values aligned on user operations unless the company-to-tenant
-mapping is intentionally redesigned. A row in `user_memberships` adds organization and role
-assignment inside that scope; it does not replace request-level tenant isolation.
-
-For new module code:
-
-- extend `TenantScopedEntity` for data that must be isolated per request scope
-- resolve `tenantId` inside repositories instead of trusting IDs supplied by controllers
-- include `tenantId` in every read, update, delete, uniqueness rule, and relevant index
-- prefix cache keys with the module name and `tenantId`
-- invalidate only keys belonging to the active tenant after writes
-- use `companyId` only for company ownership or membership relationships
-
 ## Source Structure
 
     src/
