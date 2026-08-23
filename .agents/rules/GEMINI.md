@@ -4,53 +4,57 @@ trigger: always_on
 
 # Workless Gemini Rules
 
-These rules keep agent behavior aligned with the actual Workless repository.
+Use these rules to keep agent work aligned with the current repository.
 
 ## Read Order
 
 Before substantial work:
 
-1. read `.agent/ARCHITECTURE.md`
-2. inspect the active code under `src/`
-3. load only the smallest relevant skill from `.agent/skills`
+1. read the root `ARCHITECTURE.md`
+2. inspect the active implementation under `src/`
+3. read `src/app.module.ts`, `src/workless/workless.module.ts`, and `src/modules/modules.ts` when changing structure or wiring
+4. load only the smallest relevant skill from `.agents/skills/`
 
-## Repository Reality
+The active source code wins when documentation and implementation disagree.
 
-Assume the following unless the code proves otherwise:
+## Repository Structure
 
-- Workless is a NestJS modular monolith
-- platform code lives in `src/app`
-- core runtime, contracts, tenant, and cache infrastructure live in `src/core`
-- database bootstrap and TypeORM config live in `src/database`
-- plugin modules live in `src/modules`
-- module loading is resilient and driven through `src/modules/modules.ts`
-- generated assets are not the source of truth
-- module-owned views are preferred over a shared `src/views` path
+- application features live under `src/app`
+- shared runtime behavior lives under `src/workless`
+- database migrations and seeders live under `src/database`
+- installable modules live under `src/modules`
+- shared application contracts live under `src/app/interfaces`
+- module-owned contracts live under `src/modules/<module>/interfaces`
+- tenant request context lives under `src/workless/tenant`
+- cache infrastructure lives under `src/workless/infrastructure/cache`
 
-## Editing Rules
+## Coding Rules
 
-- prefer repo-specific patterns over generic framework advice
 - keep controllers thin and orchestration in services
-- keep persistence concerns in repositories and entities
-- prefer event-driven or hook-driven extension over direct module coupling
-- keep queries and cache keys tenant-aware
-- do not reintroduce deprecated paths under `src/infrastructure` or `src/common`
+- keep persistence behavior in repositories and entities
+- keep authorization and business rules in policies
+- validate public input with DTOs
+- use hooks or events instead of direct coupling between business modules
+- keep repository queries and cache keys tenant-aware
+- add module interfaces only for real contracts, ports, reusable types, or exported capabilities
+- do not introduce a backend `models/` directory
 
-## Verification Rules
+## Verification
 
-Use the lightest verification that matches the change.
+Use the lightest verification that proves the change. The primary baseline is:
 
-Default baseline:
+    npm run build
 
-- `npm run build`
+Use these commands when the task requires database preparation or inspection:
 
-Setup commands when needed:
+    npm run db:migrate:status
+    npm run db:migrate
+    npm run seed
 
-- `npm run db:platform`
-- `npm run seed`
+`npm test` is currently a placeholder. Do not claim a check passed unless it actually ran.
 
-Do not claim tests ran unless they actually ran.
+## Documentation
 
-## Conflict Rule
-
-If `.agent` content conflicts with the codebase, the codebase wins.
+- use the root `ARCHITECTURE.md` as the only architecture source of truth
+- keep `README.md` focused on setup and day-to-day usage
+- update the relevant `.agents/skills/` entry when an established project pattern changes

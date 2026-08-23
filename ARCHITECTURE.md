@@ -78,10 +78,7 @@ This is not a hydrated React SPA. Do not assume Next.js, client-side React routi
         workless.module.ts
       modules/
         modules.ts
-        agent/
-        crm/
-        helpdesk/
-        org/
+        <module>/
       tests/
 
 Layer responsibilities:
@@ -172,24 +169,18 @@ src/workless contains cross-cutting runtime behavior:
 
 WorklessModule is global and exports the runtime services and injection tokens that consumers need.
 
-## Runtime Modules
+## Runtime Module Loading
 
 Runtime module specifications are declared explicitly in src/modules/modules.ts.
 
-Current specifications:
-
-- agent
-- crm
-- helpdesk
-- org
+Treat that file as the source of truth for the configured module list. Do not duplicate the
+current list in architecture documentation.
 
 The loader resolves each configured module dynamically:
 
 - a present module with the expected export is loaded
 - a missing optional module is logged and skipped
 - an unexpected import failure is rethrown
-
-CRM is the primary complete reference implementation. Agent, helpdesk, and org are currently scaffold-heavy; inspect their providers and controllers before treating them as complete features.
 
 ## Module Structure
 

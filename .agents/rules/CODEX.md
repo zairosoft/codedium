@@ -2,53 +2,56 @@
 
 Use these rules when operating in the `workless` repository.
 
-## First Principles
+## Read Order
 
-- read `.agent/ARCHITECTURE.md` before major edits
-- inspect the active implementation in `src/` before trusting `.agent` templates
-- use the smallest relevant skill from `.agent/skills`
-- keep guidance grounded in the current repo, not in copied starter kits
+Before substantial work:
 
-## Project Assumptions
+1. read the root `ARCHITECTURE.md`
+2. inspect the active implementation under `src/`
+3. read `src/app.module.ts`, `src/workless/workless.module.ts`, and `src/modules/modules.ts` when changing structure or wiring
+4. load only the smallest relevant skill from `.agents/skills/`
 
-- backend is NestJS
-- platform code lives under `src/app`
-- core engine lives under `src/core`
-- plugin modules live under `src/modules`
-- contracts live under `src/core/interfaces`
-- tenant context lives under `src/core/tenant`
-- cache and database infrastructure live under `src/core/infrastructure`
-- backend module work should target `controllers/services/entities/repositories/dto/policies/hooks/lifecycle/seeders`
-- do not introduce `models/` under backend paths; prefer `entities`, `dto`, and `src/core/interfaces`
+The active source code wins when documentation and implementation disagree.
 
-## Architecture Rules
+## Repository Structure
 
-- `src/app` must not depend on `src/modules`
-- modules must not import other modules directly
-- modules must not import app services directly
-- cross-domain communication should use hooks or emitted events
-- controllers stay thin
-- services orchestrate
-- repositories own persistence
-- entities stay persistence-focused
-- policies own authorization and rule checks
-- cache behavior and tenant scope must be explicit
+- application features live under `src/app`
+- shared runtime behavior lives under `src/workless`
+- database migrations and seeders live under `src/database`
+- installable modules live under `src/modules`
+- shared application contracts live under `src/app/interfaces`
+- module-owned contracts live under `src/modules/<module>/interfaces`
+- tenant request context lives under `src/workless/tenant`
+- cache infrastructure lives under `src/workless/infrastructure/cache`
 
-## Verification Expectations
+## Coding Rules
 
-Default verification baseline:
+- keep controllers thin
+- keep use-case orchestration in services
+- keep persistence behavior in repositories and entities
+- keep authorization and business rules in policies
+- validate public input with DTOs
+- use hooks or events instead of direct coupling between business modules
+- keep repository queries and cache keys tenant-aware
+- add module interfaces only for real contracts, ports, reusable types, or exported capabilities
+- do not introduce a backend `models/` directory; use entities, DTOs, interfaces, repositories, and explicit view types
 
-- `npm run build`
+## Verification
 
-Environment-specific helpers:
+Choose checks proportional to the change. The primary baseline is:
 
-- `npm run db:platform`
-- `npm run seed`
+    npm run build
 
-Do not claim tests passed unless you actually ran them.
+Useful environment-dependent commands:
 
-## Hygiene
+    npm run db:migrate:status
+    npm run db:migrate
+    npm run seed
 
-- if `.agent/workflows` or `.agent/scripts` are generic, say so and verify first
-- if `.agent` and source code disagree, follow the source code
-- do not reintroduce removed paths like `src/infrastructure/*` or `src/common/tenant/*`
+`npm test` is currently a placeholder. Do not claim compilation, tests, database behavior, or Redis behavior was verified unless the relevant check actually ran.
+
+## Documentation
+
+- keep `ARCHITECTURE.md` focused on stable coding structure and dependency rules
+- keep `README.md` focused on setup and day-to-day usage
+- update the relevant `.agents/skills/` entry when an established project pattern changes
