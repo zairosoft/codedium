@@ -40,6 +40,7 @@
     "@nestjs/platform-express": "^11.1.16",
     "@nestjs/throttler": "^6.5.0",
     "@nestjs/typeorm": "^11.0.0",
+    "alpinejs": "^3.16.3",
     "argon2": "^0.45.1",
     "bullmq": "^5.70.4",
     "cache-manager": "^7.2.8",
