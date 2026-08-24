@@ -25,9 +25,9 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#4f46e5",
+          DEFAULT: "#e93504",
           light: "#eaf1ff",
-          focus: "#4338ca",
+          focus: "#e04806",
           "dark-light": "rgba(67,97,238,.15)",
         },
         accent: {

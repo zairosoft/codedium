@@ -1,5 +1,5 @@
 import { createView, type AppLocale } from "../components/main";
-import { url } from "../../../workless/http/app-url";
+import { url } from "../../../workless/http/url";
 
 type LoginPageOptions = {
   error?: string;
