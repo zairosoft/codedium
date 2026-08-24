@@ -1,4 +1,5 @@
 import { createView, type AppLocale } from "../components/main";
+import { url } from "../../../workless/http/app-url";
 
 type LoginPageOptions = {
   error?: string;
@@ -7,6 +8,7 @@ type LoginPageOptions = {
 
 export const renderLoginPage = createView<LoginPageOptions>(
   ({ t, isLang }, options) => {
+    const registerUrl = url("/auth/register");
     const initialState = JSON.stringify({
       email: options.email ?? "",
       error: options.error ?? "",
@@ -345,7 +347,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
                     <span>{t("auth.login.noAccount")}</span>
                     <a
                       className="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
-                      href="/auth/register"
+                      href={registerUrl}
                     >
                       &nbsp; {t("common.actions.createAccount")}
                     </a>
