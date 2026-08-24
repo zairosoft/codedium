@@ -1,7 +1,5 @@
 import { createView } from '../components/main';
 
-const LOGO_URL = 'https://www.zairosoft.com/assets/2025/12/logo.webp';
-
 export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
   title: t('auth.forgotPassword.pageTitle'),
   bodyClassName: 'is-header-blur',
@@ -10,6 +8,7 @@ export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
     <>
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+      <style dangerouslySetInnerHTML={{ __html: '.language-option:hover,.language-option:focus-visible{background-color:var(--color-primary-light);color:var(--color-primary-focus);outline:none}html.dark .language-option:hover,html.dark .language-option:focus-visible{background-color:var(--color-navy-700);color:var(--color-navy-50)}' }} />
       <link rel="preconnect" href="https://fonts.googleapis.com/" />
       <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -19,26 +18,26 @@ export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
   children: (
     <div id="root" className="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900">
       <main className="grid w-full grow grid-cols-1 place-items-center">
-        <div className="w-full max-w-[26rem] p-4 sm:px-5">
-          <div className="mb-4 flex justify-end">
-            <div className="inline-flex rounded-lg border border-slate-200 bg-white/80 p-1 text-xs font-semibold shadow-sm dark:border-navy-600 dark:bg-navy-800/80">
-              <a href="/language/en" className={['rounded-md px-3 py-1.5 transition-colors', isLang ? 'text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50' : 'bg-primary text-white dark:bg-accent'].join(' ')}>
-                {t('common.language.switchToEnglish')}
-              </a>
-              <a href="/language/th" className={['rounded-md px-3 py-1.5 transition-colors', isLang ? 'bg-primary text-white dark:bg-accent' : 'text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50'].join(' ')}>
-                {t('common.language.switchToThai')}
-              </a>
-            </div>
-          </div>
-
-         
-
+        <div className="w-full p-4 sm:px-5" style={{ maxWidth: '30rem' }}>
           <form className="card mt-5 rounded-lg p-5 lg:p-7" action="#" method="post">
+            <div className="flex justify-end" style={{ display: 'flex', position: 'absolute', right: '10px', top: '10px' }}>
+              <details style={{ position: 'relative' }}>
+                <summary className="flex cursor-pointer items-center justify-center" style={{ display: 'flex', width: '42px', height: '42px', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', backgroundColor: 'var(--color-primary-light)', listStyle: 'none' }} aria-label="Select language">
+                  <span style={{ width: '24px', height: '24px', flex: '0 0 24px', overflow: 'hidden', borderRadius: '50%' }}>
+                    <img src={isLang ? '/assets/images/flags/TH.svg' : '/assets/images/flags/US.svg'} alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </span>
+                </summary>
+                <div className="rounded-lg border border-slate-200 bg-white p-2 shadow-sm dark:border-navy-600 dark:bg-navy-800" style={{ position: 'absolute', zIndex: 10, top: 'calc(100% + 0.5rem)', right: 0, minWidth: '8rem' }}>
+                  <a href="/language/th" className="language-option flex items-center gap-2 rounded-md px-3 py-2 text-sm"><span style={{ width: '20px', height: '20px', flex: '0 0 20px', overflow: 'hidden', borderRadius: '50%' }}><img src="/assets/images/flags/TH.svg" alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></span><span>ภาษาไทย</span></a>
+                  <a href="/language/en" className="language-option flex items-center gap-2 rounded-md px-3 py-2 text-sm"><span style={{ width: '20px', height: '20px', flex: '0 0 20px', overflow: 'hidden', borderRadius: '50%' }}><img src="/assets/images/flags/US.svg" alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></span><span>English</span></a>
+                </div>
+              </details>
+            </div>
 
               <div className="text-center">
-                <img src={LOGO_URL} alt="Workless" className="mx-auto object-contain" width="50" height="50" />
+                <img src="/assets/images/logo.png" alt="Workless" className="mx-auto object-contain" width="100" />
                 <div className="mt-4">
-                  <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100">{t('auth.forgotPassword.heading')}</h2>
+                  <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100" style={{ marginBottom: '1.5rem' }}>{t('auth.forgotPassword.heading')}</h2>
                   <p className="text-slate-400 dark:text-navy-300">{t('auth.forgotPassword.subheading')}</p>
                 </div>
               </div>
