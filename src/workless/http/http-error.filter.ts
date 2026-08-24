@@ -31,14 +31,13 @@ export class HttpErrorViewFilter implements ExceptionFilter {
     const request = context.getRequest<Request>();
     const response = context.getResponse<Response>();
     const status = exception instanceof HttpException ? exception.getStatus() : 500;
-    const requestPath = request.originalUrl ?? request.url;
     const acceptsHtml = request.headers.accept?.includes('text/html') ?? false;
 
-    // Browser navigation receives an HTML error page. API clients continue to
-    // receive JSON so existing integrations can handle errors programmatically.
+    // Render an HTML view only when the client explicitly requests HTML. This
+    // keeps fetch/API clients on JSON while browser navigation, including a
+    // direct visit to an API URL, receives the appropriate error page.
     if (
       !response.headersSent &&
-      !requestPath.startsWith('/api/') &&
       acceptsHtml &&
       status in errorViews
     ) {

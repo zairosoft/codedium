@@ -129,7 +129,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
             <div className="w-full p-4 sm:px-5" style={{ maxWidth: "30rem" }}>
               
               <div
-                className="card mt-5 rounded-lg p-5 lg:p-7"
+                className="card rounded-lg p-5 lg:p-7"
                 {...{ "x-data": `loginPage(${initialState})` }}
               >
 
