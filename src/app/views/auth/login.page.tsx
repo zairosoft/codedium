@@ -24,7 +24,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
     return {
       title: t("auth.login.pageTitle"),
       bodyClassName: "is-header-blur",
-      bodyProps: { "x-data": "" },
+      bodyProps: { "x-data": "", style: { overflowY: "hidden" } },
       head: (
         <>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -117,6 +117,12 @@ export const renderLoginPage = createView<LoginPageOptions>(
                 };
               };
             `,
+            }}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "window.addEventListener('load',function(){document.body.style.overflowY='';},{once:true});",
             }}
           />
         </>

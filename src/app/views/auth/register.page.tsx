@@ -26,7 +26,7 @@ export const renderRegisterPage = createView<RegisterPageOptions>(
     return {
       title: t("auth.register.pageTitle"),
       bodyClassName: "is-header-blur",
-      bodyProps: { "x-data": "" },
+      bodyProps: { "x-data": "", style: { overflowY: "hidden" } },
       head: (
         <>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -125,6 +125,12 @@ export const renderRegisterPage = createView<RegisterPageOptions>(
                 };
               };
             `,
+            }}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "window.addEventListener('load',function(){document.body.style.overflowY='';},{once:true});",
             }}
           />
         </>

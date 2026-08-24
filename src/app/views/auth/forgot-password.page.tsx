@@ -3,7 +3,7 @@ import { createView } from '../components/main';
 export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
   title: t('auth.forgotPassword.pageTitle'),
   bodyClassName: 'is-header-blur',
-  bodyProps: { 'x-data': '' },
+  bodyProps: { 'x-data': '', style: { overflowY: 'hidden' } },
   head: (
     <>
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -13,6 +13,7 @@ export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
       <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       <script dangerouslySetInnerHTML={{ __html: 'localStorage.getItem("_x_darkMode_on") === "true" && document.documentElement.classList.add("dark");' }} />
+      <script dangerouslySetInnerHTML={{ __html: "window.addEventListener('load',function(){document.body.style.overflowY='';},{once:true});" }} />
     </>
   ),
   children: (
