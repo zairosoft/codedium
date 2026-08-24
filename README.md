@@ -31,7 +31,7 @@ Workless runs as one NestJS application with:
 - Tailwind CSS 4
 - Vite
 
-The React code is rendered to static HTML on the server. Workless is not a hydrated SPA and does not use Next.js routing.
+The React code is rendered to static HTML on the server.
 
 ## Requirements
 
