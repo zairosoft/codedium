@@ -64,6 +64,16 @@
         "registerFailed": "Registration failed. Please try again.",
         "network": "Network error. Please check your connection."
       }
+    },
+    "forgotPassword": {
+      "pageTitle": "Forgot Password",
+      "heading": "Forgot your password?",
+      "subheading": "Enter your email address and we will help you reset your password.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "Enter your email address",
+      "submit": "Send reset link",
+      "comingSoon": "Password reset email delivery is not configured yet.",
+      "backToLogin": "Back to sign in"
     }
   }
 }

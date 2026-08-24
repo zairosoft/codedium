@@ -238,8 +238,8 @@ export const renderLoginPage = createView<LoginPageOptions>(
                     </span>
                   </label>
                   <a
-                    href="#"
-                    className="text-xs text-slate-400 transition-colors line-clamp-1 hover:text-slate-800 focus:text-slate-800 dark:text-navy-300 dark:hover:text-navy-100 dark:focus:text-navy-100"
+                    href="/auth/forgot/password"
+                    className="text-sm text-slate-400 transition-colors line-clamp-1 hover:text-slate-800 focus:text-slate-800 dark:text-navy-300 dark:hover:text-navy-100 dark:focus:text-navy-100"
                   >
                     {t("auth.login.forgotPassword")}
                   </a>

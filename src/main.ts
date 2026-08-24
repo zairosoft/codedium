@@ -35,6 +35,7 @@ async function bootstrap() {
       { path: 'language/:locale', method: RequestMethod.GET },
       { path: 'auth/login', method: RequestMethod.GET },
       { path: 'auth/register', method: RequestMethod.GET },
+      { path: 'auth/forgot/password', method: RequestMethod.GET },
     ],
   });
   app.useGlobalPipes(
