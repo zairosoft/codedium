@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { PlatformModule } from './app/platform.module';
+import { PlatformModule } from './app/app';
 import { WorklessModule } from './workless/workless.module';
 import { CacheModule } from './workless/infrastructure/cache/cache.module';
 import { DatabaseModule } from './database/database.module';

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PlatformMembershipEntity } from './platform-membership.entity';
+import { PlatformMembershipEntity } from './membership.entity';
 
 @Entity({ name: 'users' })
 @Index('uq_users_email', ['email'], { unique: true })

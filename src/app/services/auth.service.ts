@@ -12,7 +12,7 @@ import {
 } from '../interfaces/auth.interface';
 import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
 import { RegisterDto } from '../dto/register.dto';
-import { PlatformUserEntity } from '../entities/platform-user.entity';
+import { PlatformUserEntity } from '../entities/user.entity';
 
 @Injectable()
 export class AuthService implements AuthServicePort {

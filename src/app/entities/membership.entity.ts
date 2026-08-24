@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { TenantScopedEntity } from '../../workless/tenant/tenant-scoped.entity';
-import { PlatformUserEntity } from './platform-user.entity';
+import { PlatformUserEntity } from './user.entity';
 
 @Entity({ name: 'user_memberships' })
 @Index(['tenantId', 'userId', 'companyId', 'organizationId'], { unique: true })

@@ -13,8 +13,8 @@ import { HOOK_PORT, HookPort } from '../interfaces/hook.interface';
 import { TENANT_CONTEXT, TenantContextPort } from '../../workless/tenant/tenant-context.interface';
 import { RequestActor } from '../helpers/request-actor';
 import { ListUsersDto } from '../dto/list-users.dto';
-import { PlatformMembershipEntity } from '../entities/platform-membership.entity';
-import { PlatformUserEntity } from '../entities/platform-user.entity';
+import { PlatformMembershipEntity } from '../entities/membership.entity';
+import { PlatformUserEntity } from '../entities/user.entity';
 import { UsersPolicy } from '../providers/users.policy';
 import { DataSource, ILike, Repository } from 'typeorm';
 

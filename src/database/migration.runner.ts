@@ -31,9 +31,9 @@ async function runPlatformSchema(): Promise<void> {
 
 runPlatformSchema()
   .then(() => {
-    console.log('Platform migration command completed');
+    console.log('Migration command completed');
   })
   .catch((error) => {
-    console.error('Platform schema failed', error);
+    console.error('Migration failed', error);
     process.exit(1);
   });
