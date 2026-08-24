@@ -8,7 +8,7 @@ type MainLayoutOptions = {
 };
 
 export function renderMainLayoutView(options: MainLayoutOptions = {}): string {
-  const title = options.title ?? 'Zairosoft Platform';
+  const title = options.title ?? 'Workless';
   const sidebar = options.includeSidebar === false ? '' : renderSidebarView();
 
   return render({
