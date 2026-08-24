@@ -32,7 +32,20 @@ export const renderLoginPage = createView<LoginPageOptions>(
           />
           <style
             dangerouslySetInnerHTML={{
-              __html: "[x-cloak]{display:none!important;}",
+              __html: `
+                [x-cloak]{display:none!important;}
+                .language-option:hover,
+                .language-option:focus-visible {
+                  background-color: var(--color-primary-light);
+                  color: var(--color-primary-focus);
+                  outline: none;
+                }
+                html.dark .language-option:hover,
+                html.dark .language-option:focus-visible {
+                  background-color: var(--color-navy-700);
+                  color: var(--color-navy-50);
+                }
+              `,
             }}
           />
           <link rel="preconnect" href="https://fonts.googleapis.com/" />
@@ -113,7 +126,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
           {...{ "x-cloak": "" }}
         >
           <main className="grid w-full grow grid-cols-1 place-items-center">
-            <div className="w-full max-w-[26rem] p-4 sm:px-5">
+            <div className="w-full p-4 sm:px-5" style={{ maxWidth: "30rem" }}>
               
               <div
                 className="card mt-5 rounded-lg p-5 lg:p-7"
@@ -121,44 +134,81 @@ export const renderLoginPage = createView<LoginPageOptions>(
               >
 
 
-<div className="mb-4 flex justify-end">
-                  <div className="inline-flex rounded-lg border border-slate-200 bg-white/80 p-1 text-xs font-semibold shadow-sm dark:border-navy-600 dark:bg-navy-800/80">
-                    <a
-                      href="/language/en"
-                      className={[
-                        "rounded-md px-3 py-1.5 transition-colors",
-                        isLang
-                          ? "text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50"
-                          : "bg-primary text-white dark:bg-accent",
-                      ].join(" ")}
+                <div
+                  className="mb-4 flex justify-end"
+                  style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}
+                >
+                  <details style={{ position: "relative" }}>
+                    <summary
+                      className="flex cursor-pointer items-center rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-600 dark:border-navy-600 dark:bg-navy-800 dark:text-navy-100"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        minWidth: "6rem",
+                        padding: "0.5rem 0.625rem",
+                        listStyle: "none",
+                      }}
+                      aria-label="Select language"
                     >
-                      {t("common.language.switchToEnglish")}
-                    </a>
-                    <a
-                      href="/language/th"
-                      className={[
-                        "rounded-md px-3 py-1.5 transition-colors",
-                        isLang
-                          ? "bg-primary text-white dark:bg-accent"
-                          : "text-slate-500 hover:text-slate-800 dark:text-navy-200 dark:hover:text-navy-50",
-                      ].join(" ")}
+                      <span style={{ width: "20px", height: "20px", flex: "0 0 20px", overflow: "hidden", borderRadius: "50%" }}>
+                        <img
+                          src={isLang ? "/assets/images/flags/TH.svg" : "/assets/images/flags/US.svg"}
+                          alt=""
+                          width="20"
+                          height="20"
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                      </span>
+                      <span>{isLang ? "TH" : "EN"}</span>
+                      <svg
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        aria-hidden="true"
+                        style={{ width: "1rem", height: "1rem", marginLeft: "auto" }}
+                      >
+                        <path d="m5 7.5 5 5 5-5" />
+                      </svg>
+                    </summary>
+                    <div
+                      className="rounded-lg border border-slate-200 bg-white p-1 shadow-sm dark:border-navy-600 dark:bg-navy-800"
+                      style={{
+                        position: "absolute",
+                        zIndex: 10,
+                        top: "calc(100% + 0.5rem)",
+                        right: 0,
+                        minWidth: "100%",
+                      }}
                     >
-                      {t("common.language.switchToThai")}
-                    </a>
-                  </div>
+                      <a href="/language/th" className="language-option flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">
+                        <span style={{ width: "20px", height: "20px", flex: "0 0 20px", overflow: "hidden", borderRadius: "50%" }}>
+                          <img src="/assets/images/flags/TH.svg" alt="" width="20" height="20" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        </span>
+                        <span>TH</span>
+                      </a>
+                      <a href="/language/en" className="language-option flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">
+                        <span style={{ width: "20px", height: "20px", flex: "0 0 20px", overflow: "hidden", borderRadius: "50%" }}>
+                          <img src="/assets/images/flags/US.svg" alt="" width="20" height="20" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        </span>
+                        <span>EN</span>
+                      </a>
+                    </div>
+                  </details>
                 </div>
 
 
               <div className="text-center">
                 <img
-                  src="/assets/images/logo.webp"
+                  src="/assets/images/logo.png"
                   alt="Workless"
                   className="mx-auto object-contain"
                   width="50"
                   height="50"
                 />
                 <div className="mt-4">
-                  <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100">
+                  <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100" style={{ marginBottom: "1.5rem" }}>
                     ล็อกอินเข้าสู่ระบบ
                   </h2>
                 </div>
