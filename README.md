@@ -74,6 +74,7 @@ Application:
 - PORT: HTTP port
 - LOCALE: default rendered locale
 - NODE_ENV: development or production
+- VITE_DEV_SERVER_URL: Vite development server URL for CSS HMR
 - CORS_ORIGIN: optional allowed browser origin
 
 PostgreSQL:
@@ -124,12 +125,12 @@ Application:
     npm run start
     npm run dev
 
-npm run dev builds CSS once, then starts both the Tailwind watcher and Nest development process.
+npm run dev builds the fallback stylesheet once, then starts Vite and Nest together. Open the
+application at http://localhost:3000. Vite runs at http://localhost:5173 and provides Tailwind CSS
+HMR. The static stylesheet remains loaded as a fallback, so pages stay styled if Vite is unavailable.
 
-CSS:
-
-    npm run build:css
-    npm run dev:css
+npm run build uses Vite to compile production CSS assets, then TypeScript compiles the Nest
+application into dist.
 
 Database:
 
@@ -438,14 +439,13 @@ Vite build configuration:
 
 Do not edit generated tailwindcss.css directly. Change app.css, tailwind.config.js, or TSX classes and rebuild:
 
-    npm run build:css
+    npm run build
 
 ## Verification
 
 Use the smallest check that proves the change:
 
-- Nest or TypeScript changes: npm run build
-- CSS or Tailwind changes: npm run build:css
+- CSS, Tailwind, Nest, or TypeScript changes: npm run build
 - application migration review: npm run db:migrate:status
 - module lifecycle changes: inspect module registration and lifecycle metadata
 - Redis behavior: verify Redis is enabled and reachable

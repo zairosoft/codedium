@@ -39,6 +39,10 @@ export function Html({
   bodyProps = {},
   children,
 }: HtmlDocumentProps) {
+  const isDevelopment = process.env.NODE_ENV !== "production";
+  const viteDevServerUrl = (process.env.VITE_DEV_SERVER_URL ?? "http://localhost:5173")
+    .replace(/\/$/, "");
+
   return (
     <html lang={locale} className={htmlClassName}>
       <head>
@@ -47,6 +51,15 @@ export function Html({
         <meta name="turbo-refresh-method" content="morph" />
         <title>{title}</title>
         <link rel="stylesheet" href="/assets/css/tailwindcss.css" />
+        {isDevelopment && (
+          <>
+            <script type="module" src={`${viteDevServerUrl}/@vite/client`}></script>
+            <link
+              rel="stylesheet"
+              href={`${viteDevServerUrl}/public/assets/css/app.css`}
+            />
+          </>
+        )}
         <script
           type="module"
           src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.13/+esm"

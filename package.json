@@ -4,12 +4,10 @@
   "description": "An AI platform that reduces workload and enables you to work faster, easier, and more efficiently.",
   "main": "dist/main.js",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
     "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
-    "dev": "npm run build:css && (npm run dev:css & npm run dev:nest)",
-    "dev:nest": "ts-node-dev --respawn --transpile-only src/main.ts",
-    "dev:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/tailwindcss.css --watch",
+    "dev": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/tailwindcss.css --minify && concurrently --kill-others --names vite,nest \"vite\" \"ts-node-dev --respawn --transpile-only src/main.ts\"",
     "db:platform": "ts-node src/database/migration.runner.ts migrate",
     "db:migrate": "ts-node src/database/migration.runner.ts migrate",
     "db:migrate:status": "ts-node src/database/migration.runner.ts status",
@@ -25,8 +23,7 @@
     "module:migrate:revert": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts migration:revert",
     "module:seed": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts seed",
     "module:uninstall": "ts-node src/workless/lifecycle/module-lifecycle.runner.ts uninstall",
-    "test": "echo \"No tests configured yet\" && exit 0",
-    "build:css": "tailwindcss -i ./public/assets/css/app.css -o ./public/assets/css/tailwindcss.css --minify"
+    "test": "echo \"No tests configured yet\" && exit 0"
   },
   "keywords": [],
   "author": "",
@@ -74,6 +71,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "concurrently": "^10.0.5",
     "tailwindcss": "^4.2.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",

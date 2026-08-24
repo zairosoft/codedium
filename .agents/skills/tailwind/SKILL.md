@@ -13,13 +13,17 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 Workless currently uses a Tailwind v4 hybrid setup:
 
 - source entry: `public/assets/css/app.css`
-- generated output: `public/assets/css/tailwindcss.css`
+- development: Vite serves `app.css` with HMR while Nest serves the SSR application
+- fallback and production output: `public/assets/css/tailwindcss.css`
 - JavaScript theme extensions: `tailwind.config.js`, loaded by `@config` in `app.css`
 - CSS plugins: `@tailwindcss/forms` and `@tailwindcss/typography`, loaded with `@plugin`
 - Vite pipeline: `vite.config.ts`
 - server-rendered TSX: `src/app/views/**/*.tsx` and `src/modules/*/views/**/*.tsx`
 
-Edit `app.css`, `tailwind.config.js`, or TSX source as appropriate. Do not hand-edit `tailwindcss.css`. Verify asset changes with `npm run build:css`; `npm run dev:css` is the watch command.
+Edit `app.css`, `tailwind.config.js`, or TSX source as appropriate. Do not hand-edit `tailwindcss.css`.
+Use `npm run dev` to start Vite and Nest together. The SSR document loads the static stylesheet
+first as a failure-safe fallback, then Vite CSS in development. `npm run build` runs `vite build`
+for production assets before compiling the Nest application with TypeScript.
 
 ---
 

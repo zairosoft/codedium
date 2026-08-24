@@ -382,6 +382,7 @@ Active asset paths:
 - vite.config.ts builds assets into public/assets
 
 Do not hand-edit generated tailwindcss.css. Change app.css, tailwind.config.js, or TSX classes and rebuild.
+The npm run build command runs Vite for production assets before compiling Nest with TypeScript.
 
 ## Commands
 
@@ -391,8 +392,6 @@ Development:
     npm run start
     npm run start:dev
     npm run dev
-    npm run build:css
-    npm run dev:css
 
 Database:
 
@@ -420,8 +419,7 @@ npm test is currently a placeholder and is not evidence of application correctne
 
 Choose checks proportional to the change:
 
-- Nest or TypeScript changes: npm run build
-- CSS or Tailwind changes: npm run build:css
+- CSS, Tailwind, Nest, or TypeScript changes: npm run build
 - application migration review: npm run db:migrate:status before mutation
 - module lifecycle changes: inspect registration, lifecycle metadata, and active providers
 - Redis behavior: verify Redis is enabled and reachable
