@@ -31,15 +31,21 @@ export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
             </div>
           </div>
 
-          <div className="text-center">
-            <img src={LOGO_URL} alt="Workless" className="mx-auto object-contain" width="50" height="50" />
-            <div className="mt-4">
-              <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100">{t('auth.forgotPassword.heading')}</h2>
-              <p className="text-slate-400 dark:text-navy-300">{t('auth.forgotPassword.subheading')}</p>
-            </div>
-          </div>
+         
 
           <form className="card mt-5 rounded-lg p-5 lg:p-7" action="#" method="post">
+
+              <div className="text-center">
+                <img src={LOGO_URL} alt="Workless" className="mx-auto object-contain" width="50" height="50" />
+                <div className="mt-4">
+                  <h2 className="text-2xl font-semibold text-slate-600 dark:text-navy-100">{t('auth.forgotPassword.heading')}</h2>
+                  <p className="text-slate-400 dark:text-navy-300">{t('auth.forgotPassword.subheading')}</p>
+                </div>
+              </div>
+
+
+
+
             <label className="block">
               <span>{t('auth.forgotPassword.emailLabel')}</span>
               <span className="relative mt-1.5 flex">
