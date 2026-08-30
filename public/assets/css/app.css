@@ -5,6 +5,7 @@
 
 @layer base {
   :root {
+    --margin-x: 1rem;
     --color-primary: theme(colors.primary.DEFAULT);
     --color-primary-focus: theme(colors.primary.focus);
     --color-primary-light: theme(colors.primary.light);
@@ -34,6 +35,12 @@
     --radius-lg: 0.5rem;
     --tracking-wide: 0.025em;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      --margin-x: 1.5rem;
+    }
   }
 
   *,

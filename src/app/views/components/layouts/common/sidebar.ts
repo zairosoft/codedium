@@ -1,33 +1,61 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+export type SidebarIcon =
+  | 'dashboard'
+  | 'apps'
+  | 'pages'
+  | 'forms'
+  | 'components'
+  | 'elements';
 
-const THEME_PATH = join(process.cwd(), 'theme html', 'pages-starter-1.html');
-const SIDEBAR_START = '<!-- Sidebar -->';
-const MAIN_WRAPPER_START = '<!-- Main Content Wrapper -->';
+export type SidebarRailItem = {
+  label: string;
+  href: string;
+  icon: SidebarIcon;
+  active?: boolean;
+};
 
-let cachedSidebarHtml: string | null = null;
+export type SidebarMenuGroup = {
+  label: string;
+  items: Array<{
+    label: string;
+    href: string;
+    active?: boolean;
+  }>;
+};
 
-function extractBetween(source: string, startMarker: string, endMarker: string): string {
-  const startIndex = source.indexOf(startMarker);
-  const endIndex = source.indexOf(endMarker);
+/**
+ * Navigation adapted from Lineone pages-starter-1.html.
+ * The demo's .html links are mapped to routes that exist in Workless.
+ */
+export const sidebarRailItems: SidebarRailItem[] = [
+  {
+    label: 'Dashboard',
+    href: '/api/v1/crm/dashboard/page',
+    icon: 'dashboard',
+  },
+  { label: 'Applications', href: '/', icon: 'apps' },
+  { label: 'Pages & Layouts', href: '#layouts', icon: 'pages', active: true },
+  { label: 'Forms', href: '/auth/register', icon: 'forms' },
+  { label: 'Components', href: '#components', icon: 'components' },
+  { label: 'Elements', href: '#elements', icon: 'elements' },
+];
 
-  if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
-    throw new Error(
-      `Cannot extract sidebar from theme file. Missing markers: "${startMarker}" / "${endMarker}"`,
-    );
-  }
-
-  return source.slice(startIndex, endIndex).trim();
-}
-
-export function renderSidebarView(): string {
-  if (cachedSidebarHtml) {
-    return cachedSidebarHtml;
-  }
-
-  const html = readFileSync(THEME_PATH, 'utf8');
-  cachedSidebarHtml = extractBetween(html, SIDEBAR_START, MAIN_WRAPPER_START);
-  return cachedSidebarHtml;
-}
-
-
+export const sidebarMenuGroups: SidebarMenuGroup[] = [
+  {
+    label: 'Workspace',
+    items: [
+      { label: 'Overview', href: '/' },
+      {
+        label: 'CRM Analytics',
+        href: '/api/v1/crm/dashboard/page',
+        active: true,
+      },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      { label: 'Sign in', href: '/auth/login' },
+      { label: 'Create account', href: '/auth/register' },
+    ],
+  },
+];

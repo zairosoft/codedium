@@ -1,13 +1,13 @@
-import { Render } from '../components/main';
+import { renderMainLayoutView } from '../components/layouts/layout';
 
 export function renderHomePage(): string {
-  return Render({
+  return renderMainLayoutView({
     title: 'Workless Home',
-    children: (
-      <main className="mx-auto max-w-5xl px-4 py-14">
+    content: (
+      <div className="mx-auto w-full max-w-5xl">
         <section className="rounded-3xl border border-slate-200/60 bg-white/80 p-8 shadow-xl backdrop-blur-sm">
           <span className="inline-flex rounded-full bg-teal-700/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-teal-800">
-            Workless Platform
+            Workless
           </span>
           <h1
             className="mt-5 text-5xl font-extrabold leading-tight tracking-tight text-slate-900"
@@ -55,7 +55,7 @@ export function renderHomePage(): string {
             <p className="text-sm leading-relaxed text-slate-500">Use the module registry and CRM dashboard links above as the first navigation points.</p>
           </article>
         </section>
-      </main>
+      </div>
     ),
   });
 }
