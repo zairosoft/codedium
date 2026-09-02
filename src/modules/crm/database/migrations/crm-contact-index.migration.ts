@@ -1,5 +1,5 @@
 import { QueryRunner } from 'typeorm';
-import { WorklessMigration } from '../../../../database/migration.interface';
+import { WorklessMigration } from '@/database/migration.interface';
 
 export class CrmContactIndexMigration implements WorklessMigration {
   readonly name = 'crm-contact-index-tenant-status';

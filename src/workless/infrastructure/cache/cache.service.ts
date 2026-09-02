@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
-import { REDIS_CLIENT } from './cache.constants';
-import { CacheStore, InMemoryCacheStore, RedisCacheStore } from './cache.store';
+import { REDIS_CLIENT } from '@/workless/infrastructure/cache/cache.constants';
+import { CacheStore, InMemoryCacheStore, RedisCacheStore } from '@/workless/infrastructure/cache/cache.store';
 
 @Injectable()
 export class CacheService {

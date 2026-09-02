@@ -9,14 +9,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import type { PermissionAwareRequest } from '../helpers/request-actor';
-import { PermissionGuard } from '../providers/permission.guard';
-import { RequirePermissions } from '../providers/require-permissions.decorator';
-import { UsersService } from '../services/users.service';
-import { UsersViewMapper } from '../views/users/user.view';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { ListUsersDto } from '../dto/list-users.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import type { PermissionAwareRequest } from '@/app/helpers/request-actor';
+import { PermissionGuard } from '@/app/providers/permission.guard';
+import { RequirePermissions } from '@/app/providers/require-permissions.decorator';
+import { UsersService } from '@/app/services/users.service';
+import { UsersViewMapper } from '@/app/views/users/user.view';
+import { CreateUserDto } from '@/app/dto/create-user.dto';
+import { ListUsersDto } from '@/app/dto/list-users.dto';
+import { UpdateUserDto } from '@/app/dto/update-user.dto';
 
 @Controller('platform/users')
 @UseGuards(PermissionGuard)

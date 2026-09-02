@@ -6,7 +6,7 @@ import {
   MigrationStatus,
   WorklessMigration,
   WorklessMigrationConstructor,
-} from './migration.interface';
+} from '@/database/migration.interface';
 
 type AppliedMigration = {
   id: string;

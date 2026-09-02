@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
-import { DatabaseSeeder } from '../../workless/interfaces/seeder.interface';
+import { DEFAULT_TENANT_ID } from '@/workless/tenant/tenant.constants';
+import { DatabaseSeeder } from '@/workless/interfaces/seeder.interface';
 
 export class CompaniesSeeder implements DatabaseSeeder {
   readonly name = 'sample-companies';

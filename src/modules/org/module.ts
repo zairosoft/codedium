@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, registerAs } from '@nestjs/config';
-import appConfig from './app.config.json';
-import { OrgModuleLifecycleService } from './app/lifecycle/org-module.lifecycle';
+import appConfig from '@/modules/org/app.config.json';
+import { OrgModuleLifecycleService } from '@/modules/org/app/lifecycle/org-module.lifecycle';
 
 export const orgConfig = registerAs('org', () => appConfig);
 

@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { ListContactsDto } from '../dto/list-contacts.dto';
-import { ContactStatus } from '../entities/crm-contact.entity';
-import { CrmActor } from './crm-actor.policy';
+import { ListContactsDto } from '@/modules/crm/app/dto/list-contacts.dto';
+import { ContactStatus } from '@/modules/crm/app/entities/crm-contact.entity';
+import { CrmActor } from '@/modules/crm/app/policies/crm-actor.policy';
 
 @Injectable()
 export class CrmContactPolicy {

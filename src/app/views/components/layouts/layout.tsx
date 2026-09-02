@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { render } from '../main';
+import { render } from '@/app/views/components/main';
 import {
   sidebarMenuGroups,
   sidebarRailItems,
   type SidebarIcon,
-} from './common/sidebar';
+} from '@/app/views/components/layouts/common/sidebar';
 
 type MainLayoutOptions = {
   title?: string;

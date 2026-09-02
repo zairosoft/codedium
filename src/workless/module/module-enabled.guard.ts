@@ -5,8 +5,8 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { MODULE_ENABLED_METADATA } from './module-enabled.decorator';
-import { ModuleRegistryService } from '../registry/module.registry';
+import { MODULE_ENABLED_METADATA } from '@/workless/module/module-enabled.decorator';
+import { ModuleRegistryService } from '@/workless/registry/module.registry';
 
 @Injectable()
 export class ModuleEnabledGuard implements CanActivate {

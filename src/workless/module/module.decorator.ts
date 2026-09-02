@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
-import { WorklessMigrationConstructor } from '../../database/migration.interface';
-import { ModuleSeederConstructor } from '../lifecycle/module-seeder.interface';
+import { WorklessMigrationConstructor } from '@/database/migration.interface';
+import { ModuleSeederConstructor } from '@/workless/lifecycle/module-seeder.interface';
 
 export const SYSTEM_MODULE_METADATA = Symbol('SYSTEM_MODULE_METADATA');
 

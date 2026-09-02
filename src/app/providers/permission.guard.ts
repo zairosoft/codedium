@@ -10,10 +10,10 @@ import { Reflector } from '@nestjs/core';
 import {
   PERMISSION_SERVICE,
   PermissionServicePort,
-} from '../interfaces/permission.interface';
-import { resolveRequestActor } from '../helpers/request-actor';
-import type { PermissionAwareRequest } from '../helpers/request-actor';
-import { REQUIRED_PERMISSIONS_METADATA } from './require-permissions.decorator';
+} from '@/app/interfaces/permission.interface';
+import { resolveRequestActor } from '@/app/helpers/request-actor';
+import type { PermissionAwareRequest } from '@/app/helpers/request-actor';
+import { REQUIRED_PERMISSIONS_METADATA } from '@/app/providers/require-permissions.decorator';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {

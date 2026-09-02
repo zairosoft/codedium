@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { SystemModule } from '../../../../workless/module/module.decorator';
+import { SystemModule } from '@/workless/module/module.decorator';
 import {
   ModuleLifecycleContext,
   SystemModuleLifecycle,
-} from '../../../../workless/module/module.interface';
-import { CrmContactIndexMigration } from '../../database/migrations/crm-contact-index.migration';
-import { CrmContactSchemaMigration } from '../../database/migrations/crm-contact-schema.migration';
-import { CrmContactSeeder } from '../../database/seeders/crm-contact.seeder';
+} from '@/workless/module/module.interface';
+import { CrmContactIndexMigration } from '@/modules/crm/database/migrations/crm-contact-index.migration';
+import { CrmContactSchemaMigration } from '@/modules/crm/database/migrations/crm-contact-schema.migration';
+import { CrmContactSeeder } from '@/modules/crm/database/seeders/crm-contact.seeder';
 
 const MODULE_CACHE_VERSION_KEY = 'crm:module:version';
 

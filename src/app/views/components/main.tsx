@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { minify } from "../../../workless/minify";
-import { createTranslator, type AppLocale } from "../../../workless/i18n";
+import { createTranslator, type AppLocale } from '@/workless/i18n';
+import { minify } from '@/workless/minify';
 
 export { createTranslator, type AppLocale };
 

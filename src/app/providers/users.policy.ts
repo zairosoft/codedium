@@ -2,9 +2,9 @@ import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import {
   PERMISSION_SERVICE,
   PermissionServicePort,
-} from '../interfaces/permission.interface';
-import { UserRecord } from '../interfaces/user.interface';
-import { RequestActor } from '../helpers/request-actor';
+} from '@/app/interfaces/permission.interface';
+import { UserRecord } from '@/app/interfaces/user.interface';
+import { RequestActor } from '@/app/helpers/request-actor';
 
 @Injectable()
 export class UsersPolicy {

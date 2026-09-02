@@ -1,4 +1,4 @@
-import type { MembershipRecord } from './user.interface';
+import type { MembershipRecord } from '@/app/interfaces/user.interface';
 
 export type JwtPayload = {
   userId: string;

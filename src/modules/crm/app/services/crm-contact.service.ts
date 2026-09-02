@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { createHash } from 'node:crypto';
-import { CACHE_PORT, CachePort } from '../../../../app/interfaces/cache.interface';
-import { EVENT_BUS_PORT, EventBusPort } from '../../../../app/interfaces/event-bus.interface';
-import { HOOK_PORT, HookPort } from '../../../../app/interfaces/hook.interface';
-import { CreateContactDto } from '../dto/create-contact.dto';
-import { ListContactsDto } from '../dto/list-contacts.dto';
-import { UpdateContactDto } from '../dto/update-contact.dto';
-import { ContactStatus, CrmContactEntity } from '../entities/crm-contact.entity';
-import { CrmContactPolicy } from '../policies/crm-contact.policy';
-import { CrmContactRepository } from '../repositories/crm-contact.repository';
+import { CACHE_PORT, CachePort } from '@app/interfaces/cache.interface';
+import { EVENT_BUS_PORT, EventBusPort } from '@app/interfaces/event-bus.interface';
+import { HOOK_PORT, HookPort } from '@app/interfaces/hook.interface';
+import { CreateContactDto } from '@/modules/crm/app/dto/create-contact.dto';
+import { ListContactsDto } from '@/modules/crm/app/dto/list-contacts.dto';
+import { UpdateContactDto } from '@/modules/crm/app/dto/update-contact.dto';
+import { ContactStatus, CrmContactEntity } from '@/modules/crm/app/entities/crm-contact.entity';
+import { CrmContactPolicy } from '@/modules/crm/app/policies/crm-contact.policy';
+import { CrmContactRepository } from '@/modules/crm/app/repositories/crm-contact.repository';
 
 const LIST_TTL_SECONDS = 120;
 const DASHBOARD_TTL_SECONDS = 60;

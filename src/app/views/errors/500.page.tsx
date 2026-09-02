@@ -1,4 +1,4 @@
-import { createView } from "../components/main";
+import { createView } from "@/app/views/components/main";
 
 export const render500Page = createView<{}>(({ isLang }) => ({
   title: isLang

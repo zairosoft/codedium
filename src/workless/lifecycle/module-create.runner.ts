@@ -163,8 +163,8 @@ function createModuleSource(
 ): string {
   return `import { Module } from '@nestjs/common';
 import { ConfigModule, registerAs } from '@nestjs/config';
-import appConfig from './app.config.json';
-import { ${lifecycleClassName} } from './app/lifecycle/${name}-module.lifecycle';
+import appConfig from '@modules/${name}/app.config.json';
+import { ${lifecycleClassName} } from '@modules/${name}/app/lifecycle/${name}-module.lifecycle';
 
 export const ${toCamelCase(name)}Config = registerAs('${name}', () => appConfig);
 
@@ -205,11 +205,11 @@ function createReadmeSource(name: string): string {
 
 function createLifecycleSource(lifecycleClassName: string, name: string): string {
   return `import { Injectable } from '@nestjs/common';
-import { SystemModule } from '../../../../workless/module/module.decorator';
+import { SystemModule } from '@/workless/module/module.decorator';
 import {
   ModuleLifecycleContext,
   SystemModuleLifecycle,
-} from '../../../../workless/module/module.interface';
+} from '@/workless/module/module.interface';
 
 @SystemModule({
   name: '${name}',

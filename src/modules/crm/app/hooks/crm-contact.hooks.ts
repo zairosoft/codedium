@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Hook } from '../../../../workless/events/hook.decorator';
-import { CreateContactDto } from '../dto/create-contact.dto';
-import { UpdateContactDto } from '../dto/update-contact.dto';
+import { Hook } from '@/workless/events/hook.decorator';
+import { CreateContactDto } from '@/modules/crm/app/dto/create-contact.dto';
+import { UpdateContactDto } from '@/modules/crm/app/dto/update-contact.dto';
 
 @Injectable()
 export class CrmContactHooks {

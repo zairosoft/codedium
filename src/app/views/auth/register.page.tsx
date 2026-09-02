@@ -1,4 +1,4 @@
-import { createView, type AppLocale } from "../components/main";
+import { createView, type AppLocale } from "@/app/views/components/main";
 
 type RegisterPageOptions = {
   error?: string;

@@ -12,16 +12,16 @@ import {
   Res,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { HtmlCacheable } from '../../../../workless/http/html-cache.decorator';
-import { RequiresModule } from '../../../../workless/module/module-enabled.decorator';
-import { RequirePermissions } from '../../../../app/providers/require-permissions.decorator';
-import { resolveLocaleFromRequest } from '../../../../workless/i18n';
-import { CreateContactDto } from '../dto/create-contact.dto';
-import { ListContactsDto } from '../dto/list-contacts.dto';
-import { UpdateContactDto } from '../dto/update-contact.dto';
-import { CrmContactService } from '../services/crm-contact.service';
-import { renderCrmDashboardPage } from '../views/crm-dashboard.page';
-import { CrmContactViewMapper } from '../views/crm-contact.view';
+import { RequirePermissions } from '@app/providers/require-permissions.decorator';
+import { HtmlCacheable } from '@/workless/http/html-cache.decorator';
+import { resolveLocaleFromRequest } from '@/workless/i18n';
+import { RequiresModule } from '@/workless/module/module-enabled.decorator';
+import { CreateContactDto } from '@/modules/crm/app/dto/create-contact.dto';
+import { ListContactsDto } from '@/modules/crm/app/dto/list-contacts.dto';
+import { UpdateContactDto } from '@/modules/crm/app/dto/update-contact.dto';
+import { CrmContactService } from '@/modules/crm/app/services/crm-contact.service';
+import { renderCrmDashboardPage } from '@/modules/crm/app/views/crm-dashboard.page';
+import { CrmContactViewMapper } from '@/modules/crm/app/views/crm-contact.view';
 
 @RequiresModule('crm')
 @Controller('crm')

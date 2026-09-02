@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Header, Post, Req, Res } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { Public } from '../../workless/jwt/public.decorator';
-import { AuthService } from '../services/auth.service';
-import { LoginDto } from '../dto/login.dto';
-import { RegisterDto } from '../dto/register.dto';
-import { resolveLocaleFromRequest } from '../../workless/i18n';
-import { renderLoginPage } from '../views/auth/login.page';
-import { renderRegisterPage } from '../views/auth/register.page';
-import { renderForgotPasswordPage } from '../views/auth/forgot-password.page';
+import { Public } from '@/workless/jwt/public.decorator';
+import { AuthService } from '@/app/services/auth.service';
+import { LoginDto } from '@/app/dto/login.dto';
+import { RegisterDto } from '@/app/dto/register.dto';
+import { resolveLocaleFromRequest } from '@/workless/i18n';
+import { renderLoginPage } from '@/app/views/auth/login.page';
+import { renderRegisterPage } from '@/app/views/auth/register.page';
+import { renderForgotPasswordPage } from '@/app/views/auth/forgot-password.page';
 
 @Controller('auth')
 export class AuthController {

@@ -1,4 +1,4 @@
-import { createView } from "../components/main";
+import { createView } from "@/app/views/components/main";
 
 export const render404Page = createView<{}>(({ isLang }) => ({
   title: isLang ? "ไม่พบหน้านี้ | Workless" : "Page not found | Workless",

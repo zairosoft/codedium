@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
-import { TENANT_CONTEXT } from './tenant-context.interface';
-import { TenantContextService } from './tenant-context.service';
+import { TENANT_CONTEXT } from '@/workless/tenant/tenant-context.interface';
+import { TenantContextService } from '@/workless/tenant/tenant-context.service';
 
 @Global()
 @Module({

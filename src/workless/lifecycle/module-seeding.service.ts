@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { ModuleSeeder, ModuleSeederConstructor } from './module-seeder.interface';
+import { ModuleSeeder, ModuleSeederConstructor } from '@/workless/lifecycle/module-seeder.interface';
 
 export type ModuleSeedResult = {
   moduleName: string;

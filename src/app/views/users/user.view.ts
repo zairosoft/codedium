@@ -1,4 +1,4 @@
-import { MembershipRecord, UserRecord } from '../../interfaces/user.interface';
+import { MembershipRecord, UserRecord } from '@/app/interfaces/user.interface';
 
 export type UserItemView = {
   id: string;

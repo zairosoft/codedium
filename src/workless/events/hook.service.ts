@@ -5,8 +5,8 @@ import {
   MetadataScanner,
   Reflector,
 } from '@nestjs/core';
-import { HOOK_METADATA } from './hook.decorator';
-import { HookPort } from '../../app/interfaces/hook.interface';
+import { HOOK_METADATA } from '@/workless/events/hook.decorator';
+import { HookPort } from '@/app/interfaces/hook.interface';
 
 type HookHandler = (payload: unknown) => Promise<unknown> | unknown;
 

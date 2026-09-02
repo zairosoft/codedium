@@ -4,24 +4,24 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtAuthGuard } from '../workless/jwt/jwt-auth.guard';
-import { resolveJwtSecret } from '../config/jwt.config';
-import { JwtStrategy } from '../workless/jwt/jwt.strategy';
-import { AuthController } from './controllers/auth.controller';
-import { HomeController } from './controllers/home.controller';
-import { LanguageController } from './controllers/language.controller';
-import { UsersController } from './controllers/users.controller';
-import { PlatformMembershipEntity } from './entities/membership.entity';
-import { PlatformUserEntity } from './entities/user.entity';
-import { NotificationsListener } from './providers/notifications.listener';
-import { PermissionGuard } from './providers/permission.guard';
-import { PermissionsService } from './providers/permissions.service';
-import { UsersEventsListener } from './providers/users-events.listener';
-import { UsersPolicy } from './providers/users.policy';
+import { JwtAuthGuard } from '@/workless/jwt/jwt-auth.guard';
+import { resolveJwtSecret } from '@/config/jwt.config';
+import { JwtStrategy } from '@/workless/jwt/jwt.strategy';
+import { AuthController } from '@/app/controllers/auth.controller';
+import { HomeController } from '@/app/controllers/home.controller';
+import { LanguageController } from '@/app/controllers/language.controller';
+import { UsersController } from '@/app/controllers/users.controller';
+import { PlatformMembershipEntity } from '@/app/entities/membership.entity';
+import { PlatformUserEntity } from '@/app/entities/user.entity';
+import { NotificationsListener } from '@/app/providers/notifications.listener';
+import { PermissionGuard } from '@/app/providers/permission.guard';
+import { PermissionsService } from '@/app/providers/permissions.service';
+import { UsersEventsListener } from '@/app/providers/users-events.listener';
+import { UsersPolicy } from '@/app/providers/users.policy';
 import {
   platformServiceExports,
   platformServiceProviders,
-} from './providers/interfaces.service';
+} from '@/app/providers/interfaces.service';
 
 @Module({
   imports: [

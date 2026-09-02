@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { createTypeOrmConfig } from '../config/typeorm.config';
-import { MigrationService } from './migration.service';
+import { createTypeOrmConfig } from '@/config/typeorm.config';
+import { MigrationService } from '@/database/migration.service';
 
 @Global()
 @Module({

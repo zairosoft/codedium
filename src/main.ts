@@ -4,8 +4,8 @@ import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
-import { AppModule } from './app.module';
-import { HttpErrorViewFilter } from './workless/http/http-error.filter';
+import { AppModule } from '@/app.module';
+import { HttpErrorViewFilter } from '@/workless/http/http-error.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

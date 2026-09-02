@@ -1,14 +1,14 @@
 import { Provider } from '@nestjs/common';
-import { AUTH_SERVICE } from '../interfaces/auth.interface';
-import { NOTIFICATION_SERVICE } from '../interfaces/notification.interface';
-import { PERMISSION_SERVICE } from '../interfaces/permission.interface';
-import { ROLE_SERVICE } from '../interfaces/role.interface';
-import { USER_SERVICE } from '../interfaces/user.interface';
-import { AuthService } from '../services/auth.service';
-import { NotificationsService } from '../services/notifications.service';
-import { PermissionsService } from './permissions.service';
-import { RolesService } from '../services/roles.service';
-import { UsersService } from '../services/users.service';
+import { AUTH_SERVICE } from '@/app/interfaces/auth.interface';
+import { NOTIFICATION_SERVICE } from '@/app/interfaces/notification.interface';
+import { PERMISSION_SERVICE } from '@/app/interfaces/permission.interface';
+import { ROLE_SERVICE } from '@/app/interfaces/role.interface';
+import { USER_SERVICE } from '@/app/interfaces/user.interface';
+import { AuthService } from '@/app/services/auth.service';
+import { NotificationsService } from '@/app/services/notifications.service';
+import { PermissionsService } from '@/app/providers/permissions.service';
+import { RolesService } from '@/app/services/roles.service';
+import { UsersService } from '@/app/services/users.service';
 
 /**
  * NestJS modules remain responsible for loading controllers and dependencies;

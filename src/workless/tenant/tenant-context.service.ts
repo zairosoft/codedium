@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { DEFAULT_TENANT_ID, normalizeTenantId } from './tenant.constants';
-import { TenantContextPort } from './tenant-context.interface';
+import { DEFAULT_TENANT_ID, normalizeTenantId } from '@/workless/tenant/tenant.constants';
+import { TenantContextPort } from '@/workless/tenant/tenant-context.interface';
 
 type TenantStore = {
   tenantId: string;

@@ -1,14 +1,14 @@
 import { Catch, ExceptionFilter, HttpException } from '@nestjs/common';
 import type { ArgumentsHost } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { resolveLocaleFromRequest, type AppLocale } from '../i18n';
-import { render401Page } from '../../app/views/errors/401.page';
-import { render403Page } from '../../app/views/errors/403.page';
-import { render404Page } from '../../app/views/errors/404.page';
-import { render419Page } from '../../app/views/errors/419.page';
-import { render429Page } from '../../app/views/errors/429.page';
-import { render500Page } from '../../app/views/errors/500.page';
-import { render503Page } from '../../app/views/errors/503.page';
+import { resolveLocaleFromRequest, type AppLocale } from '@/workless/i18n';
+import { render401Page } from '@/app/views/errors/401.page';
+import { render403Page } from '@/app/views/errors/403.page';
+import { render404Page } from '@/app/views/errors/404.page';
+import { render419Page } from '@/app/views/errors/419.page';
+import { render429Page } from '@/app/views/errors/429.page';
+import { render500Page } from '@/app/views/errors/500.page';
+import { render503Page } from '@/app/views/errors/503.page';
 
 type HttpErrorStatus = 401 | 403 | 404 | 419 | 429 | 500 | 503;
 

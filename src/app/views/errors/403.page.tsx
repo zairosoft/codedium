@@ -1,4 +1,4 @@
-import { createView } from "../components/main";
+import { createView } from "@/app/views/components/main";
 
 export const render403Page = createView<{}>(({ isLang }) => ({
   title: isLang ? "ไม่มีสิทธิ์เข้าถึง | Workless" : "Access denied | Workless",

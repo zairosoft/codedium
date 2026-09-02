@@ -1,13 +1,13 @@
 import { ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { CacheService } from '../infrastructure/cache/cache.service';
-import { EventBusService } from '../events/event-bus.service';
-import { HookService } from '../events/hook.service';
-import { SystemModuleExplorer } from '../module/module.explorer';
-import { ModuleLifecycleContext } from '../module/module.interface';
-import { ModuleRegistryService } from '../registry/module.registry';
-import { MigrationService } from '../../database/migration.service';
-import { ModuleSeedingService } from './module-seeding.service';
+import { CacheService } from '@/workless/infrastructure/cache/cache.service';
+import { EventBusService } from '@/workless/events/event-bus.service';
+import { HookService } from '@/workless/events/hook.service';
+import { SystemModuleExplorer } from '@/workless/module/module.explorer';
+import { ModuleLifecycleContext } from '@/workless/module/module.interface';
+import { ModuleRegistryService } from '@/workless/registry/module.registry';
+import { MigrationService } from '@/database/migration.service';
+import { ModuleSeedingService } from '@/workless/lifecycle/module-seeding.service';
 
 @Injectable()
 export class ModuleLifecycleService {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RoleRecord, RoleServicePort } from '../interfaces/role.interface';
+import { RoleRecord, RoleServicePort } from '@/app/interfaces/role.interface';
 
 @Injectable()
 export class RolesService implements RoleServicePort {

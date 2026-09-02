@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
-import { RequirePermissions } from '../../app/providers/require-permissions.decorator';
-import { ModuleLifecycleService } from './module.lifecycle';
-import { ModuleRegistryService } from '../registry/module.registry';
+import { RequirePermissions } from '@/app/providers/require-permissions.decorator';
+import { ModuleLifecycleService } from '@/workless/lifecycle/module.lifecycle';
+import { ModuleRegistryService } from '@/workless/registry/module.registry';
 
 @Controller('modules')
 export class ModuleLifecycleController {

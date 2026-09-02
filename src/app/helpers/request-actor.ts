@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import type { AuthenticatedUser } from '../interfaces/auth.interface';
+import type { AuthenticatedUser } from '@/app/interfaces/auth.interface';
 
 export type RequestActor = {
   userId?: string;

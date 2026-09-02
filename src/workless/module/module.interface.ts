@@ -1,9 +1,9 @@
 import { DataSource } from 'typeorm';
-import { WorklessMigrationConstructor } from '../../database/migration.interface';
-import { CachePort } from '../../app/interfaces/cache.interface';
-import { HookPort } from '../../app/interfaces/hook.interface';
-import { ModuleRegistryService } from '../registry/module.registry';
-import { ModuleSeederConstructor } from '../lifecycle/module-seeder.interface';
+import { WorklessMigrationConstructor } from '@/database/migration.interface';
+import { CachePort } from '@/app/interfaces/cache.interface';
+import { HookPort } from '@/app/interfaces/hook.interface';
+import { ModuleRegistryService } from '@/workless/registry/module.registry';
+import { ModuleSeederConstructor } from '@/workless/lifecycle/module-seeder.interface';
 
 export type ModuleLifecycleContext = {
   dataSource: DataSource;

@@ -1,18 +1,18 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR, DiscoveryModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EVENT_BUS_PORT } from '../app/interfaces/event-bus.interface';
-import { HOOK_PORT } from '../app/interfaces/hook.interface';
-import { HtmlCacheInterceptor } from './http/html-cache.interceptor';
-import { EventBusService } from './events/event-bus.service';
-import { HookService } from './events/hook.service';
-import { ModuleLifecycleController } from './lifecycle/module-lifecycle.controller';
-import { ModuleLifecycleService } from './lifecycle/module.lifecycle';
-import { ModuleSeedingService } from './lifecycle/module-seeding.service';
-import { SystemModuleExplorer } from './module/module.explorer';
-import { ModuleEnabledGuard } from './module/module-enabled.guard';
-import { ModuleRegistryEntity } from './registry/module-registry.entity';
-import { ModuleRegistryService } from './registry/module.registry';
+import { EVENT_BUS_PORT } from '@/app/interfaces/event-bus.interface';
+import { HOOK_PORT } from '@/app/interfaces/hook.interface';
+import { HtmlCacheInterceptor } from '@/workless/http/html-cache.interceptor';
+import { EventBusService } from '@/workless/events/event-bus.service';
+import { HookService } from '@/workless/events/hook.service';
+import { ModuleLifecycleController } from '@/workless/lifecycle/module-lifecycle.controller';
+import { ModuleLifecycleService } from '@/workless/lifecycle/module.lifecycle';
+import { ModuleSeedingService } from '@/workless/lifecycle/module-seeding.service';
+import { SystemModuleExplorer } from '@/workless/module/module.explorer';
+import { ModuleEnabledGuard } from '@/workless/module/module-enabled.guard';
+import { ModuleRegistryEntity } from '@/workless/registry/module-registry.entity';
+import { ModuleRegistryService } from '@/workless/registry/module.registry';
 
 @Global()
 @Module({

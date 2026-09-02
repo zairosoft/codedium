@@ -10,6 +10,17 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@modules/*": [
+        "src/modules/*"
+      ]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strict": false,
@@ -20,6 +31,11 @@
       "node",
       "react",
       "react-dom"
+    ]
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
     ]
   },
   "include": [

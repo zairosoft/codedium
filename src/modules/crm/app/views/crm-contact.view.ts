@@ -1,8 +1,8 @@
 import {
   CrmContactEntity,
-} from '../entities/crm-contact.entity';
-import { ContactStatus } from '../entities/crm-contact.entity';
-import { CrmDashboardSummary } from '../repositories/crm-dashboard.summary';
+} from '@/modules/crm/app/entities/crm-contact.entity';
+import { ContactStatus } from '@/modules/crm/app/entities/crm-contact.entity';
+import { CrmDashboardSummary } from '@/modules/crm/app/repositories/crm-dashboard.summary';
 
 export type CrmContactView = {
   id: string;

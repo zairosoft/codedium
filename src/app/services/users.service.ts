@@ -7,15 +7,15 @@ import {
   UpdateUserInput,
   UserRecord,
   UserServicePort,
-} from '../interfaces/user.interface';
-import { EVENT_BUS_PORT, EventBusPort } from '../interfaces/event-bus.interface';
-import { HOOK_PORT, HookPort } from '../interfaces/hook.interface';
-import { TENANT_CONTEXT, TenantContextPort } from '../../workless/tenant/tenant-context.interface';
-import { RequestActor } from '../helpers/request-actor';
-import { ListUsersDto } from '../dto/list-users.dto';
-import { PlatformMembershipEntity } from '../entities/membership.entity';
-import { PlatformUserEntity } from '../entities/user.entity';
-import { UsersPolicy } from '../providers/users.policy';
+} from '@/app/interfaces/user.interface';
+import { EVENT_BUS_PORT, EventBusPort } from '@/app/interfaces/event-bus.interface';
+import { HOOK_PORT, HookPort } from '@/app/interfaces/hook.interface';
+import { TENANT_CONTEXT, TenantContextPort } from '@/workless/tenant/tenant-context.interface';
+import { RequestActor } from '@/app/helpers/request-actor';
+import { ListUsersDto } from '@/app/dto/list-users.dto';
+import { PlatformMembershipEntity } from '@/app/entities/membership.entity';
+import { PlatformUserEntity } from '@/app/entities/user.entity';
+import { UsersPolicy } from '@/app/providers/users.policy';
 import { DataSource, ILike, Repository } from 'typeorm';
 
 @Injectable()

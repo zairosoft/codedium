@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { SystemModule } from '../../../../workless/module/module.decorator';
+import { SystemModule } from '@/workless/module/module.decorator';
 import {
   ModuleLifecycleContext,
   SystemModuleLifecycle,
-} from '../../../../workless/module/module.interface';
+} from '@/workless/module/module.interface';
 
 @SystemModule({
   name: 'org',

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DiscoveryService, Reflector } from '@nestjs/core';
-import { SYSTEM_MODULE_METADATA, SystemModuleMetadata } from './module.decorator';
-import { DiscoveredSystemModule, SystemModuleLifecycle } from './module.interface';
+import { SYSTEM_MODULE_METADATA, SystemModuleMetadata } from '@/workless/module/module.decorator';
+import { DiscoveredSystemModule, SystemModuleLifecycle } from '@/workless/module/module.interface';
 
 @Injectable()
 export class SystemModuleExplorer {

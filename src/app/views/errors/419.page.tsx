@@ -1,4 +1,4 @@
-import { createView } from "../components/main";
+import { createView } from "@/app/views/components/main";
 
 export const render419Page = createView<{}>(({ isLang }) => ({
   title: isLang ? "หน้านี้หมดอายุ | Workless" : "Page expired | Workless",

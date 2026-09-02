@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   PermissionRecord,
   PermissionServicePort,
-} from '../interfaces/permission.interface';
+} from '@/app/interfaces/permission.interface';
 
 @Injectable()
 export class PermissionsService implements PermissionServicePort {

@@ -1,5 +1,5 @@
 import { QueryRunner } from 'typeorm';
-import { WorklessMigration } from '../migration.interface';
+import { WorklessMigration } from '@/database/migration.interface';
 
 export class CreateModuleRegistryMigration implements WorklessMigration {
   readonly name = 'create-module-registry';

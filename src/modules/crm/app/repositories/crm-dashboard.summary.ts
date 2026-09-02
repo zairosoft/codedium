@@ -1,4 +1,4 @@
-import { CrmContactEntity } from '../entities/crm-contact.entity';
+import { CrmContactEntity } from '@/modules/crm/app/entities/crm-contact.entity';
 
 export type CrmDashboardSummary = {
   tenantId: string;

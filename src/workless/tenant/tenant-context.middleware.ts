@@ -1,8 +1,8 @@
 import { BadRequestException, ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { normalizeTenantId } from './tenant.constants';
-import { TenantContextService } from './tenant-context.service';
-import type { AuthenticatedUser } from '../../app/interfaces/auth.interface';
+import { normalizeTenantId } from '@/workless/tenant/tenant.constants';
+import { TenantContextService } from '@/workless/tenant/tenant-context.service';
+import type { AuthenticatedUser } from '@/app/interfaces/auth.interface';
 
 type AuthenticatedRequest = Request & { user?: AuthenticatedUser };
 

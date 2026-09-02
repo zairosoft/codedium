@@ -2,10 +2,10 @@ import 'reflect-metadata';
 import { randomBytes } from 'node:crypto';
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
-import { AppModule } from '../app.module';
-import { ModuleLifecycleService } from '../workless/lifecycle/module.lifecycle';
-import { ModuleRegistryService } from '../workless/registry/module.registry';
-import { databaseSeeders } from './seeders/seeders';
+import { AppModule } from '@/app.module';
+import { ModuleLifecycleService } from '@/workless/lifecycle/module.lifecycle';
+import { ModuleRegistryService } from '@/workless/registry/module.registry';
+import { databaseSeeders } from '@/database/seeders/seeders';
 
 async function runSeeders() {
   if (!process.env.JWT_SECRET?.trim()) {

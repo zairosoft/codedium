@@ -1,4 +1,4 @@
-import { renderMainLayoutView } from '../components/layouts/layout';
+import { renderMainLayoutView } from '@/app/views/components/layouts/layout';
 
 export function renderHomePage(): string {
   return renderMainLayoutView({

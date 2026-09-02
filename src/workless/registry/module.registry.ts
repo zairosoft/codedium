@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { SystemModuleExplorer } from '../module/module.explorer';
-import { ModuleRegistryEntity, ModuleStatus } from './module-registry.entity';
+import { SystemModuleExplorer } from '@/workless/module/module.explorer';
+import { ModuleRegistryEntity, ModuleStatus } from '@/workless/registry/module-registry.entity';
 
 @Injectable()
 export class ModuleRegistryService implements OnApplicationBootstrap {

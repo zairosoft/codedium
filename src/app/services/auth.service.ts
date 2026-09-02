@@ -9,10 +9,10 @@ import {
   AuthSession,
   JwtPayload,
   LoginResult,
-} from '../interfaces/auth.interface';
-import { DEFAULT_TENANT_ID } from '../../workless/tenant/tenant.constants';
-import { RegisterDto } from '../dto/register.dto';
-import { PlatformUserEntity } from '../entities/user.entity';
+} from '@/app/interfaces/auth.interface';
+import { DEFAULT_TENANT_ID } from '@/workless/tenant/tenant.constants';
+import { RegisterDto } from '@/app/dto/register.dto';
+import { PlatformUserEntity } from '@/app/entities/user.entity';
 
 @Injectable()
 export class AuthService implements AuthServicePort {

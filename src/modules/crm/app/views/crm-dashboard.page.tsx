@@ -1,6 +1,6 @@
-import { createTranslator, type AppLocale } from '../../../../workless/i18n';
-import { Render } from '../../../../app/views/components/main';
-import { CrmDashboardView } from './crm-contact.view';
+import { Render } from '@app/views/components/main';
+import { createTranslator, type AppLocale } from '@/workless/i18n';
+import { CrmDashboardView } from '@/modules/crm/app/views/crm-contact.view';
 
 function MetricCard({ label, value }: { label: string; value: number }) {
   return (

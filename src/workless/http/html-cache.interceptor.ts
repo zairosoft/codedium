@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { HTML_CACHE_METADATA, HtmlCacheOptions } from './html-cache.decorator';
-import { MODULE_ENABLED_METADATA } from '../module/module-enabled.decorator';
-import { DEFAULT_TENANT_ID, normalizeTenantId } from '../tenant/tenant.constants';
+import { HTML_CACHE_METADATA, HtmlCacheOptions } from '@/workless/http/html-cache.decorator';
+import { MODULE_ENABLED_METADATA } from '@/workless/module/module-enabled.decorator';
+import { DEFAULT_TENANT_ID, normalizeTenantId } from '@/workless/tenant/tenant.constants';
 
 @Injectable()
 export class HtmlCacheInterceptor implements NestInterceptor {
