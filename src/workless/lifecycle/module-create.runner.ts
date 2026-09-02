@@ -3,20 +3,20 @@ import { constants } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const MODULE_DIRECTORIES = [
-  'controllers',
-  'dto',
-  'entities',
-  'hooks',
-  'interfaces',
-  'lifecycle',
-  'locales/en',
-  'locales/th',
-  'migrations',
-  'policies',
-  'repositories',
-  'seeders',
-  'services',
-  'views',
+  'app/controllers',
+  'app/dto',
+  'app/entities',
+  'app/hooks',
+  'app/interfaces',
+  'app/lifecycle',
+  'app/locales/en',
+  'app/locales/th',
+  'app/policies',
+  'app/repositories',
+  'app/services',
+  'app/views',
+  'database/migrations',
+  'database/seeders',
 ];
 
 async function bootstrap(): Promise<void> {
@@ -36,10 +36,14 @@ async function bootstrap(): Promise<void> {
   const modulesRoot = resolve(projectRoot, 'src/modules');
   const moduleRoot = resolve(modulesRoot, name);
   const runtimeModulesPath = join(modulesRoot, 'modules.ts');
+  const projectLicensePath = join(projectRoot, 'LICENSE');
 
   await ensurePathDoesNotExist(moduleRoot, name);
 
-  const runtimeSource = await readFile(runtimeModulesPath, 'utf8');
+  const [runtimeSource, licenseSource] = await Promise.all([
+    readFile(runtimeModulesPath, 'utf8'),
+    readFile(projectLicensePath, 'utf8'),
+  ]);
   const className = `${toPascalCase(name)}Module`;
   const lifecycleClassName = `${toPascalCase(name)}ModuleLifecycleService`;
   const runtimeSpec =
@@ -54,16 +58,38 @@ async function bootstrap(): Promise<void> {
   for (const directory of MODULE_DIRECTORIES) {
     const directoryPath = join(moduleRoot, directory);
     await mkdir(directoryPath, { recursive: true });
-    await writeFile(join(directoryPath, '.gitkeep'), '', { flag: 'wx' });
+
+    if (
+      !['app/lifecycle', 'app/locales/en', 'app/locales/th'].includes(directory)
+    ) {
+      await writeFile(join(directoryPath, '.gitkeep'), '', { flag: 'wx' });
+    }
   }
 
+  await Promise.all([
+    writeFile(join(moduleRoot, 'app/locales/en/common.json'), '{}\n', {
+      flag: 'wx',
+    }),
+    writeFile(join(moduleRoot, 'app/locales/th/common.json'), '{}\n', {
+      flag: 'wx',
+    }),
+  ]);
+  await writeFile(
+    join(moduleRoot, 'app.config.json'),
+    createAppConfigSource(name),
+    { flag: 'wx' },
+  );
+  await writeFile(join(moduleRoot, 'LICENSE'), licenseSource, { flag: 'wx' });
+  await writeFile(join(moduleRoot, 'README.md'), createReadmeSource(name), {
+    flag: 'wx',
+  });
   await writeFile(
     join(moduleRoot, 'module.ts'),
     createModuleSource(className, lifecycleClassName, name),
     { flag: 'wx' },
   );
   await writeFile(
-    join(moduleRoot, 'lifecycle', `${name}-module.lifecycle.ts`),
+    join(moduleRoot, 'app/lifecycle', `${name}-module.lifecycle.ts`),
     createLifecycleSource(lifecycleClassName, name),
     { flag: 'wx' },
   );
@@ -112,6 +138,18 @@ function toPascalCase(name: string): string {
     .join('');
 }
 
+function toCamelCase(name: string): string {
+  const pascalCaseName = toPascalCase(name);
+  return `${pascalCaseName[0].toLowerCase()}${pascalCaseName.slice(1)}`;
+}
+
+function toDisplayName(name: string): string {
+  return name
+    .split('-')
+    .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
+    .join(' ');
+}
+
 function addRuntimeModule(source: string, runtimeSpec: string): string {
   const marker = /const RUNTIME_MODULE_SPECS: RuntimeModuleSpec\[\] = \[\r?\n/;
 
@@ -129,27 +167,59 @@ function createModuleSource(
   name: string,
 ): string {
   return `import { Module } from '@nestjs/common';
-import { ${lifecycleClassName} } from './lifecycle/${name}-module.lifecycle';
+import { ConfigModule, registerAs } from '@nestjs/config';
+import appConfig from './app.config.json';
+import { ${lifecycleClassName} } from './app/lifecycle/${name}-module.lifecycle';
+
+export const ${toCamelCase(name)}Config = registerAs('${name}', () => appConfig);
 
 @Module({
+  imports: [ConfigModule.forFeature(${toCamelCase(name)}Config)],
   providers: [${lifecycleClassName}],
+  exports: [${lifecycleClassName}],
 })
 export class ${className} {}
 `;
 }
 
+function createAppConfigSource(name: string): string {
+  const displayName = toDisplayName(name);
+
+  return `${JSON.stringify(
+    {
+      name: displayName,
+      icon: 'fa fa-cube',
+      version: '1.0.0',
+      license: 'GPL-3.0',
+      author: 'Zairosoft Co., Ltd.',
+      category: 'Other',
+      website: 'https://www.example.com',
+      description: `${displayName} module`,
+      subMenu: [],
+      installable: true,
+      application: false,
+    },
+    null,
+    2,
+  )}\n`;
+}
+
+function createReadmeSource(name: string): string {
+  return `# ${toDisplayName(name)}\n\nGenerated Workless module.\n`;
+}
+
 function createLifecycleSource(lifecycleClassName: string, name: string): string {
   return `import { Injectable } from '@nestjs/common';
-import { SystemModule } from '../../../workless/module/module.decorator';
+import { SystemModule } from '../../../../workless/module/module.decorator';
 import {
   ModuleLifecycleContext,
   SystemModuleLifecycle,
-} from '../../../workless/module/module.interface';
+} from '../../../../workless/module/module.interface';
 
 @SystemModule({
   name: '${name}',
   version: '1.0.0',
-  description: '${toPascalCase(name)} module registry placeholder',
+  description: '${toDisplayName(name)} module registry placeholder',
 })
 @Injectable()
 export class ${lifecycleClassName} implements SystemModuleLifecycle {
