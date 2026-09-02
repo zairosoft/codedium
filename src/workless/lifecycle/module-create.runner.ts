@@ -36,14 +36,10 @@ async function bootstrap(): Promise<void> {
   const modulesRoot = resolve(projectRoot, 'src/modules');
   const moduleRoot = resolve(modulesRoot, name);
   const runtimeModulesPath = join(modulesRoot, 'modules.ts');
-  const projectLicensePath = join(projectRoot, 'LICENSE');
 
   await ensurePathDoesNotExist(moduleRoot, name);
 
-  const [runtimeSource, licenseSource] = await Promise.all([
-    readFile(runtimeModulesPath, 'utf8'),
-    readFile(projectLicensePath, 'utf8'),
-  ]);
+  const runtimeSource = await readFile(runtimeModulesPath, 'utf8');
   const className = `${toPascalCase(name)}Module`;
   const lifecycleClassName = `${toPascalCase(name)}ModuleLifecycleService`;
   const runtimeSpec =
@@ -79,7 +75,6 @@ async function bootstrap(): Promise<void> {
     createAppConfigSource(name),
     { flag: 'wx' },
   );
-  await writeFile(join(moduleRoot, 'LICENSE'), licenseSource, { flag: 'wx' });
   await writeFile(join(moduleRoot, 'README.md'), createReadmeSource(name), {
     flag: 'wx',
   });
@@ -190,8 +185,8 @@ function createAppConfigSource(name: string): string {
       name: displayName,
       icon: 'fa fa-cube',
       version: '1.0.0',
-      license: 'GPL-3.0',
-      author: 'Zairosoft Co., Ltd.',
+      license: '',
+      author: '',
       category: 'Other',
       website: 'https://www.example.com',
       description: `${displayName} module`,
