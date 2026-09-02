@@ -1,5 +1,5 @@
 import { QueryRunner } from 'typeorm';
-import { WorklessMigration } from '../../../database/migration.interface';
+import { WorklessMigration } from '../../../../database/migration.interface';
 
 export class CrmContactIndexMigration implements WorklessMigration {
   readonly name = 'crm-contact-index-tenant-status';
@@ -19,4 +19,3 @@ export class CrmContactIndexMigration implements WorklessMigration {
     await queryRunner.query('DROP INDEX IF EXISTS "idx_crm_contacts_tenant_status"');
   }
 }
-
