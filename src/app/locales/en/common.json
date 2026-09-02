@@ -14,7 +14,9 @@
       "signingIn": "Signing in...",
       "createAccount": "Create account",
       "signUp": "Sign Up",
-      "signingUp": "Signing up..."
+      "signingUp": "Signing up...",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     }
   },
   "auth": {

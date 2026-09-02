@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { createTranslator, type AppLocale } from '../main';
 
 export type CenterConfirmModalProps = {
   /** The Alpine boolean state that controls the modal visibility. */
@@ -7,6 +8,7 @@ export type CenterConfirmModalProps = {
   id?: string;
   title: string;
   description?: ReactNode;
+  locale?: AppLocale;
   confirmLabel?: string;
   cancelLabel?: string;
   /** Alpine expression executed after the user confirms. */
@@ -25,12 +27,14 @@ export function CenterConfirmModal({
   id = 'center-confirm-modal',
   title,
   description,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  locale = 'en',
+  confirmLabel,
+  cancelLabel,
   onConfirm,
   onCancel,
   variant = 'primary',
 }: CenterConfirmModalProps) {
+  const { t } = createTranslator(locale);
   const titleId = `${id}-title`;
   const descriptionId = `${id}-description`;
   const dismissAction = onCancel ?? `${model} = false`;
@@ -91,14 +95,14 @@ export function CenterConfirmModal({
             className="btn border border-slate-300 bg-white px-4 py-2 text-slate-700 hover:bg-slate-100 focus:bg-slate-100 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:hover:bg-navy-600"
             {...{ 'x-on:click': dismissAction }}
           >
-            {cancelLabel}
+            {cancelLabel ?? t('common.actions.cancel')}
           </button>
           <button
             type="button"
             className={`btn px-4 py-2 text-white ${confirmClassName}`}
             {...{ 'x-on:click': confirmAction }}
           >
-            {confirmLabel}
+            {confirmLabel ?? t('common.actions.confirm')}
           </button>
         </div>
       </section>

@@ -14,7 +14,9 @@
       "signingIn": "กำลังเข้าสู่ระบบ...",
       "createAccount": "สร้างบัญชี",
       "signUp": "สมัครสมาชิก",
-      "signingUp": "กำลังสมัคร..."
+      "signingUp": "กำลังสมัคร...",
+      "confirm": "ยืนยัน",
+      "cancel": "ยกเลิก"
     }
   },
   "auth": {
