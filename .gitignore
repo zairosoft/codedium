@@ -38,5 +38,5 @@ Thumbs.db
 .docker/db/data/
 .docker/logs/
 
-/theme
-public/assets/css/tailwindcss.css
+/public/theme
+/public/assets/css/tailwindcss.css

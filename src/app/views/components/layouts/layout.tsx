@@ -76,7 +76,7 @@ function Sidebar() {
         aria-label="Close sidebar"
         className="pointer-events-none fixed inset-0 z-20 bg-slate-900/50 opacity-0 transition-opacity peer-checked/sidebar:pointer-events-auto peer-checked/sidebar:opacity-100 md:hidden"
       />
-      <aside className="fixed inset-y-0 left-0 z-40 w-[4.5rem] -translate-x-full transition-transform duration-200 ease-in-out peer-checked/sidebar:translate-x-0 md:translate-x-0 xl:w-[5rem]">
+      <aside className="workless-main-sidebar fixed inset-y-0 left-0 z-40 w-[var(--main-sidebar-width)]">
         <div className="flex h-full w-full flex-col items-center border-r border-slate-150 bg-white dark:border-navy-700 dark:bg-navy-800">
           <a href="/" className="flex pt-4" aria-label="Workless home">
             <img className="size-11 object-contain transition-transform duration-500 ease-in-out hover:rotate-[360deg]" src="/assets/images/app-logo.svg" alt="Workless" />
@@ -113,11 +113,11 @@ function Sidebar() {
         </div>
       </aside>
 
-      <aside className="fixed inset-y-0 left-0 z-30 w-[calc(4.5rem+15rem)] -translate-x-full shadow-lg transition-transform duration-300 ease-in-out peer-checked/sidebar:translate-x-0 md:peer-checked/sidebar:translate-x-0 xl:w-[20rem] xl:translate-x-0 xl:peer-checked/sidebar:-translate-x-full">
-        <div id="layouts" className="flex h-full w-full flex-col bg-white pl-[4.5rem] dark:bg-navy-800 xl:pl-[5rem]">
-          <div className="flex h-[4.5rem] shrink-0 items-center justify-between pl-5 pr-2">
+      <aside className="workless-sidebar-panel fixed inset-y-0 left-0 z-30 w-[calc(var(--main-sidebar-width)+var(--sidebar-panel-width))]">
+        <div id="layouts" className="flex h-full w-full flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-800">
+          <div className="flex h-[4.5rem] shrink-0 items-center justify-between pl-4 pr-1">
             <p className="text-base tracking-wider text-slate-800 dark:text-navy-100">Layouts</p>
-            <label htmlFor="lineone-sidebar-toggle" className="flex size-8 cursor-pointer items-center justify-center rounded-full text-accent hover:bg-slate-300/20" aria-label="Close navigation panel">
+            <label htmlFor="lineone-sidebar-toggle" className="flex size-7 cursor-pointer items-center justify-center rounded-full text-accent transition-colors hover:bg-slate-300/20 xl:hidden" aria-label="Close navigation panel">
               <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15 19-7-7 7-7" />
               </svg>
@@ -151,13 +151,13 @@ function Sidebar() {
 
 function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-20 h-[61px] border-b border-slate-150 bg-white/95 backdrop-blur-sm transition-[left] duration-300 ease-in-out dark:border-navy-700 dark:bg-navy-800/95 md:left-[4.5rem] md:peer-checked/sidebar:left-[19.5rem] xl:left-[20rem] xl:peer-checked/sidebar:left-[5rem]">
-      <div className="flex h-full items-center justify-between px-[var(--margin-x)]">
+    <header className="workless-header fixed right-0 top-0 z-20 h-[61px] border-b border-slate-150 bg-white/80 backdrop-blur-sm dark:border-navy-700 dark:bg-navy-800/80">
+      <div className="workless-header-container flex h-full items-center justify-between px-[var(--margin-x)]">
         <div className="flex items-center">
-          <label htmlFor="lineone-sidebar-toggle" className="flex size-8 cursor-pointer flex-col justify-center gap-1.5 text-accent" aria-label="Toggle sidebar">
-            <span className="block h-0.5 w-5 bg-current" />
-            <span className="block h-0.5 w-3 bg-current" />
-            <span className="block h-0.5 w-5 bg-current" />
+          <label htmlFor="lineone-sidebar-toggle" className="workless-menu-toggle ml-0.5 flex size-7 cursor-pointer flex-col justify-center gap-1.5 text-accent outline-hidden" aria-label="Toggle sidebar">
+            <span />
+            <span />
+            <span />
           </label>
         </div>
 
@@ -210,8 +210,10 @@ export function renderMainLayoutView(options: MainLayoutOptions = {}): string {
             <Header />
           </>
         )}
-        <main className={`grid w-full min-w-0 place-content-start pb-8 transition-[margin] duration-300 ease-in-out ${includeSidebar ? 'mt-[61px] md:ml-[4.5rem] md:peer-checked/sidebar:ml-[19.5rem] xl:ml-[20rem] xl:peer-checked/sidebar:ml-[5rem]' : ''}`}>
-          <div className="w-full px-[var(--margin-x)]">
+        <main className={includeSidebar
+          ? 'workless-main-content mt-[60px] grid min-w-0 flex-1 place-content-start pb-8'
+          : 'grid w-full min-w-0 place-content-start pb-8'}>
+          <div className={`${includeSidebar ? 'workless-main-container' : ''} w-full px-[var(--margin-x)]`}>
             <div className="flex items-center gap-4 py-5 lg:py-6">
               <h1 className="text-xl font-medium text-slate-800 dark:text-navy-50 lg:text-2xl">{title}</h1>
             </div>

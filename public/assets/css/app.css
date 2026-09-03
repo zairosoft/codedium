@@ -6,6 +6,8 @@
 @layer base {
   :root {
     --margin-x: 1rem;
+    --main-sidebar-width: 4rem;
+    --sidebar-panel-width: 14rem;
     --color-primary: theme(colors.primary.DEFAULT);
     --color-primary-focus: theme(colors.primary.focus);
     --color-primary-light: theme(colors.primary.light);
@@ -38,6 +40,12 @@
   }
 
   @media (min-width: 48rem) {
+    :root {
+      --margin-x: 1.5rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
     :root {
       --margin-x: 1.5rem;
     }
@@ -87,6 +95,172 @@
 }
 
 @layer components {
+  .workless-main-sidebar {
+    translate: -100% 0;
+    transition: translate 200ms cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  #lineone-sidebar-toggle:checked ~ .workless-main-sidebar {
+    translate: 0 0;
+  }
+
+  .workless-sidebar-panel {
+    translate: -100% 0;
+    box-shadow: 0 3px 10px 0 rgb(48 46 56 / 0.06);
+    transition: translate 250ms cubic-bezier(0.4, 0, 1, 1) 150ms;
+  }
+
+  #lineone-sidebar-toggle:checked ~ .workless-sidebar-panel {
+    translate: 0 0;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .workless-header {
+    width: 100%;
+    transition: width 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .workless-header-container {
+    transition: padding 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .workless-main-content {
+    transition:
+      width 250ms cubic-bezier(0.4, 0, 1, 1),
+      margin-left 250ms cubic-bezier(0.4, 0, 1, 1),
+      margin-right 250ms cubic-bezier(0.4, 0, 1, 1),
+      padding-left 250ms cubic-bezier(0.4, 0, 1, 1),
+      padding-right 250ms cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  .workless-main-container {
+    transition: padding 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .workless-menu-toggle span {
+    display: block;
+    height: 2px;
+    width: 1.25rem;
+    background-color: currentColor;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .workless-menu-toggle span:nth-child(2) {
+    width: 0.75rem;
+  }
+
+  #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span {
+    width: 11px;
+    margin-left: 0.5rem;
+    translate: -0.5rem 0;
+  }
+
+  #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span:first-child {
+    rotate: -45deg;
+  }
+
+  #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span:nth-child(2) {
+    display: none;
+  }
+
+  #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span:nth-child(3) {
+    rotate: 45deg;
+  }
+
+  @media (min-width: 48rem) {
+    .workless-main-sidebar {
+      translate: 0 0;
+      z-index: 60;
+    }
+
+    .workless-sidebar-panel {
+      transition-delay: 0ms;
+    }
+
+    .workless-header {
+      width: calc(100% - var(--main-sidebar-width));
+    }
+
+    .workless-main-content {
+      margin-left: var(--main-sidebar-width);
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .workless-sidebar-panel {
+      translate: 0 0;
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-sidebar-panel {
+      translate: -100% 0;
+      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    .workless-header {
+      width: calc(100% - var(--main-sidebar-width) - var(--sidebar-panel-width));
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-header {
+      width: calc(100% - var(--main-sidebar-width));
+    }
+
+    .workless-main-content {
+      margin-left: calc(var(--main-sidebar-width) + var(--sidebar-panel-width));
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-main-content {
+      margin-left: var(--main-sidebar-width);
+      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    .workless-header-container,
+    .workless-main-container {
+      padding-inline: 1.5rem;
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-header .workless-header-container,
+    #lineone-sidebar-toggle:checked ~ .workless-main-content .workless-main-container {
+      padding-inline: var(--margin-x);
+    }
+
+    #lineone-sidebar-toggle:not(:checked) ~ .workless-header .workless-menu-toggle span {
+      width: 11px;
+      margin-left: 0.5rem;
+      translate: -0.5rem 0;
+    }
+
+    #lineone-sidebar-toggle:not(:checked) ~ .workless-header .workless-menu-toggle span:first-child {
+      rotate: -45deg;
+    }
+
+    #lineone-sidebar-toggle:not(:checked) ~ .workless-header .workless-menu-toggle span:nth-child(2) {
+      display: none;
+    }
+
+    #lineone-sidebar-toggle:not(:checked) ~ .workless-header .workless-menu-toggle span:nth-child(3) {
+      rotate: 45deg;
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span {
+      width: 1.25rem;
+      margin-left: 0;
+      translate: 0 0;
+      rotate: 0deg;
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span:nth-child(2) {
+      display: block;
+      width: 0.75rem;
+    }
+
+    #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span:first-child,
+    #lineone-sidebar-toggle:checked ~ .workless-header .workless-menu-toggle span:nth-child(3) {
+      rotate: 0deg;
+    }
+  }
+
   .card {
     background-color: #fff;
     border-radius: var(--radius-lg);
