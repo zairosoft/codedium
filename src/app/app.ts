@@ -8,6 +8,7 @@ import { JwtAuthGuard } from '@/workless/jwt/jwt-auth.guard';
 import { resolveJwtSecret } from '@/config/jwt.config';
 import { JwtStrategy } from '@/workless/jwt/jwt.strategy';
 import { AuthController } from '@/app/controllers/auth.controller';
+import { ComponentsController } from '@/app/controllers/components.controller';
 import { HomeController } from '@/app/controllers/home.controller';
 import { LanguageController } from '@/app/controllers/language.controller';
 import { UsersController } from '@/app/controllers/users.controller';
@@ -37,7 +38,13 @@ import {
       }),
     }),
   ],
-  controllers: [AuthController, HomeController, LanguageController, UsersController],
+  controllers: [
+    AuthController,
+    ComponentsController,
+    HomeController,
+    LanguageController,
+    UsersController,
+  ],
   providers: [
     JwtStrategy,
     {

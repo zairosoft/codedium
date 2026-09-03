@@ -35,7 +35,7 @@ export const sidebarRailItems: SidebarRailItem[] = [
   { label: 'Applications', href: '/', icon: 'apps' },
   { label: 'Pages & Layouts', href: '#layouts', icon: 'pages', active: true },
   { label: 'Forms', href: '/auth/register', icon: 'forms' },
-  { label: 'Components', href: '#components', icon: 'components' },
+  { label: 'Components', href: '/components', icon: 'components' },
   { label: 'Elements', href: '#elements', icon: 'elements' },
 ];
 
