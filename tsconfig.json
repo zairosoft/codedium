@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "Node16",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -9,22 +9,21 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "@app/*": [
-        "src/app/*"
+        "./src/app/*"
       ],
       "@modules/*": [
-        "src/modules/*"
+        "./src/modules/*"
       ]
     },
     "incremental": true,
     "skipLibCheck": true,
     "strict": false,
-    "moduleResolution": "node",
+    "moduleResolution": "Node16",
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "types": [
