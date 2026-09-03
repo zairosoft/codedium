@@ -1,17 +1,19 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
-const stylesEntry = path.resolve(__dirname, 'public/assets/css/app.css');
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+const stylesEntry = path.resolve(projectRoot, 'public/assets/css/app.css');
 
 export default defineConfig({
   publicDir: false,
   plugins: [tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@app': path.resolve(__dirname, './src/app'),
-      '@modules': path.resolve(__dirname, './src/modules'),
+      '@': path.resolve(projectRoot, './src'),
+      '@app': path.resolve(projectRoot, './src/app'),
+      '@modules': path.resolve(projectRoot, './src/modules'),
     },
   },
   server: {
@@ -33,7 +35,7 @@ export default defineConfig({
     strictPort: true,
   },
   build: {
-    outDir: path.resolve(__dirname, 'public/assets'),
+    outDir: path.resolve(projectRoot, 'public/assets'),
     emptyOutDir: false,
     rollupOptions: {
       input: {
