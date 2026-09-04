@@ -417,42 +417,6 @@ Module messages:
 
 Current application locale roots are en and th. English is the fallback locale.
 
-## CSS and Assets
-
-Workless serves static files from public.
-
-Tailwind source:
-
-    public/assets/css/app.css
-
-Generated CSS:
-
-    public/assets/css/tailwindcss.css
-
-Theme extensions:
-
-    tailwind.config.js
-
-Vite build configuration:
-
-    vite.config.ts
-
-Do not edit generated tailwindcss.css directly. Change app.css, tailwind.config.js, or TSX classes and rebuild:
-
-    npm run build
-
-## Verification
-
-Use the smallest check that proves the change:
-
-- CSS, Tailwind, Nest, or TypeScript changes: npm run build
-- application migration review: npm run db:migrate:status
-- module lifecycle changes: inspect module registration and lifecycle metadata
-- Redis behavior: verify Redis is enabled and reachable
-- rendered pages: inspect TSX and browser output
-
-Distinguish static inspection, successful compilation, and live runtime verification.
-
 ## Security
 
 Please review [SECURITY.md](SECURITY.md).
