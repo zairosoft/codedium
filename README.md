@@ -66,56 +66,6 @@ Configure PostgreSQL, then prepare and start the application:
 
 The default HTTP port is 3000.
 
-## Environment
-
-Application:
-
-- APP_NAME: application name
-- PORT: HTTP port
-- LOCALE: default rendered locale
-- NODE_ENV: development or production
-- VITE_DEV_SERVER_URL: Vite development server URL for CSS HMR
-- CORS_ORIGIN: optional allowed browser origin
-
-PostgreSQL:
-
-- DB_HOST
-- DB_PORT
-- DB_USERNAME
-- DB_PASSWORD
-- DB_NAME
-- DB_SYNC
-
-Keep DB_SYNC=false when using migrations. Never enable schema synchronization in production.
-
-Redis:
-
-- REDIS_ENABLED
-- REDIS_HOST
-- REDIS_PORT
-- REDIS_PASSWORD
-- REDIS_DB
-
-Set REDIS_ENABLED=false when Redis is not available. The application chooses in-memory cache only when Redis is disabled; it does not automatically fail over when Redis is enabled but unreachable.
-
-JWT:
-
-- JWT_SECRET
-- JWT_EXPIRES_IN
-
-JWT_SECRET must be a strong private random value and must not be committed.
-
-Mail:
-
-- MAIL_MAILER
-- MAIL_HOST
-- MAIL_PORT
-- MAIL_USERNAME
-- MAIL_PASSWORD
-- MAIL_ENCRYPTION
-- MAIL_FROM_ADDRESS
-- MAIL_FROM_NAME
-
 ## Development Commands
 
 Application:
