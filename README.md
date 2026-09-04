@@ -34,8 +34,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Development assets are served by Vite at `http://localhost:5173`.
 
-Configuration is documented in `.env.example`. Set a secure `JWT_SECRET`, configure PostgreSQL, and keep `DB_SYNC=false` when using migrations or running in production. Redis is optional and can be disabled with `REDIS_ENABLED=false`.
-
 ## Commands
 
 ```bash
@@ -78,8 +76,6 @@ src/
 ├── modules/    # Installable business modules
 └── workless/   # Module runtime, tenant context, lifecycle, HTTP, and cache
 ```
-
-Tailwind source is `public/assets/css/app.css`. Do not edit the generated `public/assets/css/tailwindcss.css` directly; run `npm run build` after changing styles.
 
 ## Security
 
