@@ -105,9 +105,18 @@ function Sidebar() {
                 <circle cx="12" cy="12.06" r="3.27" fill="currentColor" />
               </svg>
             </a>
-            <a href="/auth/login" className="relative flex size-12 items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-700 ring-2 ring-white dark:bg-navy-700 dark:text-navy-100 dark:ring-navy-800" aria-label="Open profile">
-              ZS
-              <span className="absolute right-0 bottom-0 size-3.5 rounded-full border-2 border-white bg-success dark:border-navy-800" />
+            <a
+              href="/auth/login"
+              className="relative flex size-12 shrink-0 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-accent"
+              aria-label="Open profile"
+            >
+              <span className="flex size-full items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-700 ring-2 ring-white dark:bg-navy-700 dark:text-navy-100 dark:ring-navy-700">
+                ZS
+              </span>
+              <span
+                className="absolute right-0 bottom-0 size-3.5 rounded-full border-2 border-white bg-success dark:border-navy-700"
+                aria-hidden="true"
+              />
             </a>
           </div>
         </div>

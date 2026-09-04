@@ -1,0 +1,42 @@
+{
+  "errors": {
+    "actions": {
+      "backToHome": "Back To Home"
+    },
+    "401": {
+      "pageTitle": "Unauthorized | Workless",
+      "heading": "You are not authorized",
+      "description": "You are missing the required rights to be able to access this page."
+    },
+    "403": {
+      "pageTitle": "Access Denied | Workless",
+      "heading": "Access denied",
+      "description": "You do not have permission to view this page."
+    },
+    "404": {
+      "pageTitle": "Page Not Found | Workless",
+      "heading": "Oops. This Page Not Found.",
+      "description": "The page you are looking for is not available."
+    },
+    "419": {
+      "pageTitle": "Page Expired | Workless",
+      "heading": "Page expired",
+      "description": "Your session has expired. Please return home and try again."
+    },
+    "429": {
+      "pageTitle": "Too Many Requests | Workless",
+      "heading": "Too many requests",
+      "description": "You have sent too many requests in a short period of time. Please try again later."
+    },
+    "500": {
+      "pageTitle": "Internal Server Error | Workless",
+      "heading": "Internal Server Error",
+      "description": "The server has been deserted for a while. Please be patient or try again later."
+    },
+    "503": {
+      "pageTitle": "Service Unavailable | Workless",
+      "heading": "Service unavailable",
+      "description": "This service is temporarily unavailable. Please try again later."
+    }
+  }
+}

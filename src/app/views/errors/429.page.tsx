@@ -1,32 +1,22 @@
-import { createView } from "@/app/views/components/main";
+import { createView } from '@/app/views/components/main';
 
-export const render429Page = createView<{}>(({ isLang }) => ({
-  title: isLang
-    ? "ส่งคำขอมากเกินไป | Workless"
-    : "Too many requests | Workless",
-  bodyClassName:
-    "min-h-screen bg-slate-50 text-slate-800 antialiased dark:bg-navy-900",
+export const render429Page = createView<{}>(({ t }) => ({
+  title: t('errors.429.pageTitle'),
+  bodyClassName: 'min-h-100vh flex grow bg-slate-50 text-slate-500 antialiased dark:bg-navy-900 dark:text-navy-200',
   children: (
-    <main className="grid min-h-screen place-items-center px-4 py-10">
-      <section className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-xl dark:border-navy-600 dark:bg-navy-800 sm:p-12">
-        <p className="text-7xl font-bold tracking-tight text-rose-500">429</p>
-        <h1 className="mt-5 text-2xl font-semibold text-slate-800 dark:text-navy-50">
-          {isLang
-            ? "กรุณารอสักครู่แล้วลองใหม่"
-            : "Please slow down and try again shortly."}
-        </h1>
-        <p className="mt-3 text-slate-500 dark:text-navy-200">
-          {isLang
-            ? "ระบบได้รับคำขอจำนวนมากในช่วงเวลาสั้น ๆ"
-            : "Too many requests were sent in a short period of time."}
-        </p>
-        <a
-          className="btn mt-8 inline-flex justify-center bg-primary px-5 py-2.5 font-medium text-white hover:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus"
-          href="/"
-        >
-          {isLang ? "กลับหน้าแรก" : "Back to home"}
+    <main className="grid min-h-100vh w-full grow grid-cols-1 place-items-center">
+      <div className="w-full max-w-md p-6 text-center">
+        <div className="w-full">
+          <img className="w-full dark:hidden" src="/assets/images/error/light-429.webp" alt="" />
+          <img className="hidden w-full dark:block" src="/assets/images/error/dark-429.webp" alt="" />
+        </div>
+        <p className="pt-4 text-7xl font-bold text-primary dark:text-accent">429</p>
+        <h1 className="pt-4 text-xl font-semibold text-slate-800 dark:text-navy-50">{t('errors.429.heading')}</h1>
+        <p className="pt-2 text-slate-500 dark:text-navy-200">{t('errors.429.description')}</p>
+        <a className="btn mt-8 inline-flex h-11 items-center bg-primary text-base font-medium text-white transition-shadow hover:bg-primary-focus hover:shadow-lg hover:shadow-primary/50 focus:bg-primary-focus focus:shadow-lg focus:shadow-primary/50 active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:hover:shadow-accent/50 dark:focus:bg-accent-focus dark:focus:shadow-accent/50 dark:active:bg-accent/90" href="/">
+          {t('errors.actions.backToHome')}
         </a>
-      </section>
+      </div>
     </main>
   ),
 }));
