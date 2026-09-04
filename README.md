@@ -4,13 +4,9 @@ Workless is a modular business application built with NestJS. It provides authen
 
 ![Workless dashboard](https://www.zairosoft.com/assets/2026/02/crm.webp "Workless dashboard")
 
-## Technology
+## Stack
 
-- NestJS, TypeScript, TypeORM, and PostgreSQL
-- Redis with an in-memory cache option
-- React server-rendered TSX and Turbo
-- Tailwind CSS v4 and Vite
-- Passport JWT
+NestJS, TypeScript, TypeORM, PostgreSQL, Redis, React SSR, Turbo, Tailwind CSS v4, Vite, and Passport JWT.
 
 ## Requirements
 
@@ -38,17 +34,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Development assets are served by Vite at `http://localhost:5173`.
 
-## Environment
-
-Important variables are documented in `.env.example`:
-
-- Application: `APP_NAME`, `PORT`, `LOCALE`, `NODE_ENV`
-- Database: `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`
-- JWT: `JWT_SECRET`, `JWT_EXPIRES_IN`
-- Redis: `REDIS_ENABLED`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`, `REDIS_DB`
-- Mail: `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
-
-Keep `DB_SYNC=false` when using migrations and in production.
+Configuration is documented in `.env.example`. Set a secure `JWT_SECRET`, configure PostgreSQL, and keep `DB_SYNC=false` when using migrations or running in production. Redis is optional and can be disabled with `REDIS_ENABLED=false`.
 
 ## Commands
 
@@ -62,10 +48,17 @@ npm run db:migrate:revert           # Revert the latest migration
 npm run seed                        # Run application seeders
 ```
 
-Module lifecycle:
+## Modules
+
+Business modules are self-contained under `src/modules`:
 
 ```bash
-npm run module:create -- <name>
+npm run module:create -- accounting
+```
+
+Common lifecycle commands:
+
+```bash
 npm run module:list
 npm run module:install -- <name>
 npm run module:upgrade -- <name>
@@ -73,46 +66,7 @@ npm run module:uninstall -- <name>
 npm run module:delete -- <name>
 ```
 
-## Modules
-
-Business modules are self-contained under `src/modules`. Create a module with:
-
-```bash
-npm run module:create -- accounting
-```
-
-Generated modules follow this structure:
-
-```text
-src/modules/<module>/
-├── app/
-│   ├── controllers/
-│   ├── dto/
-│   ├── entities/
-│   ├── hooks/
-│   ├── interfaces/
-│   ├── lifecycle/
-│   ├── locales/
-│   ├── policies/
-│   ├── repositories/
-│   ├── services/
-│   └── views/
-├── database/
-│   ├── migrations/
-│   └── seeders/
-├── app.config.json
-├── module.ts
-└── README.md
-```
-
-Use module migrations and seeders with:
-
-```bash
-npm run module:migrate -- <name>
-npm run module:migrate:status -- <name>
-npm run module:migrate:revert -- <name>
-npm run module:seed -- <name>
-```
+Each module contains application code under `app/`, migrations and seeders under `database/`, configuration in `app.config.json`, and its NestJS entry point in `module.ts`.
 
 ## Source Structure
 
