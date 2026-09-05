@@ -15,10 +15,18 @@ export type SidebarRailItem = {
 
 export type SidebarMenuGroup = {
   label: string;
-  items: Array<{
+  items: SidebarMenuItem[];
+};
+
+export type SidebarMenuItem = {
+  label: string;
+  href?: string;
+  active?: boolean;
+  dividerBefore?: boolean;
+  expanded?: boolean;
+  children?: Array<{
     label: string;
     href: string;
-    active?: boolean;
   }>;
 };
 
@@ -31,9 +39,10 @@ export const sidebarRailItems: SidebarRailItem[] = [
     label: 'Dashboard',
     href: '/api/v1/crm/dashboard/page',
     icon: 'dashboard',
+    active: true,
   },
   { label: 'Applications', href: '/', icon: 'apps' },
-  { label: 'Pages & Layouts', href: '#layouts', icon: 'pages', active: true },
+  { label: 'Pages & Layouts', href: '#layouts', icon: 'pages' },
   { label: 'Forms', href: '/auth/register', icon: 'forms' },
   { label: 'Components', href: '/components', icon: 'components' },
   { label: 'Elements', href: '#elements', icon: 'elements' },
@@ -41,21 +50,41 @@ export const sidebarRailItems: SidebarRailItem[] = [
 
 export const sidebarMenuGroups: SidebarMenuGroup[] = [
   {
-    label: 'Workspace',
+    label: 'Dashboards',
     items: [
-      { label: 'Overview', href: '/' },
+      { label: 'Sales', href: '#sales' },
+      { label: 'CRM Analytics', href: '/api/v1/crm/dashboard/page' },
+      { label: 'Orders', href: '#orders' },
       {
-        label: 'CRM Analytics',
-        href: '/api/v1/crm/dashboard/page',
-        active: true,
+        label: 'Cryptocurrency',
+        dividerBefore: true,
+        children: [
+          { label: 'Exchange', href: '#crypto-exchange' },
+          { label: 'Market', href: '#crypto-market' },
+        ],
       },
-    ],
-  },
-  {
-    label: 'Account',
-    items: [
-      { label: 'Sign in', href: '/auth/login' },
-      { label: 'Create account', href: '/auth/register' },
+      {
+        label: 'Banking',
+        expanded: true,
+        children: [
+          { label: 'Banking V1', href: '#banking-v1' },
+          { label: 'Banking V2', href: '#banking-v2' },
+        ],
+      },
+      { label: 'Personal', href: '#personal' },
+      { label: 'CMS Analytics', href: '#cms-analytics', active: true },
+      { label: 'Influencer', href: '#influencer' },
+      { label: 'Travel', href: '#travel' },
+      { label: 'Teacher', href: '#teacher' },
+      { label: 'Education', href: '#education' },
+      { label: 'Authors', href: '#authors' },
+      { label: 'Doctor', href: '#doctor' },
+      { label: 'Employees', href: '#employees' },
+      { label: 'Workspaces', href: '#workspaces' },
+      { label: 'Meetings', href: '#meetings' },
+      { label: 'Projects Board', href: '#projects-board' },
+      { label: 'Widget UI', href: '#widget-ui', dividerBefore: true },
+      { label: 'Widget Contact', href: '#widget-contact' },
     ],
   },
 ];

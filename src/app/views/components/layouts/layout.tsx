@@ -125,7 +125,7 @@ function Sidebar() {
       <aside className="workless-sidebar-panel fixed inset-y-0 left-0 z-30 w-[calc(var(--main-sidebar-width)+var(--sidebar-panel-width))]">
         <div id="layouts" className="flex h-full w-full flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-800">
           <div className="flex h-[4.5rem] shrink-0 items-center justify-between pl-4 pr-1">
-            <p className="text-base tracking-wider text-slate-800 dark:text-navy-100">Layouts</p>
+            <p className="text-xl font-medium tracking-wide text-slate-800 dark:text-navy-100">Dashboards</p>
             <label htmlFor="lineone-sidebar-toggle" className="flex size-7 cursor-pointer items-center justify-center rounded-full text-accent transition-colors hover:bg-slate-300/20 xl:hidden" aria-label="Close navigation panel">
               <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15 19-7-7 7-7" />
@@ -133,25 +133,73 @@ function Sidebar() {
             </label>
           </div>
 
-          <nav className="is-scrollbar-hidden grow overflow-y-auto px-4 pb-6 font-inter" aria-label="Layout navigation">
+          <nav className="is-scrollbar-hidden grow overflow-y-auto px-4 pb-6 font-inter" aria-label="Dashboard navigation">
             {sidebarMenuGroups.map((group, index) => (
-              <section key={group.label} className={index ? 'mt-4 border-t border-slate-200 pt-4 dark:border-navy-500' : ''}>
-                <h2 className="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-navy-300">{group.label}</h2>
-                <ul className="flex flex-col">
-                  {group.items.map((item) => (
-                    <li key={item.label}>
-                      <a href={item.href} className={`flex items-center gap-2 rounded-md px-2 py-2 text-xs-plus tracking-wide outline-hidden transition-all duration-300 hover:pl-3 ${item.active
-                        ? 'font-medium text-accent dark:text-accent-light'
-                        : 'text-slate-600 hover:text-slate-900 dark:text-navy-200 dark:hover:text-navy-50'}`}>
-                        <span className="size-1.5 rounded-full border border-current opacity-50" />
-                        {item.label}
-                      </a>
-                    </li>
-                  ))}
+              <section key={group.label} className={index ? 'mt-3 border-t border-slate-200 pt-3 dark:border-navy-500' : ''}>
+                <h2 className="sr-only">{group.label}</h2>
+                <ul className="flex flex-col gap-0.5">
+                  {group.items.map((item) => {
+                    const spacingClass = item.dividerBefore
+                      ? 'mt-3 border-t border-slate-200 pt-3 dark:border-navy-500'
+                      : '';
+
+                    if (item.children) {
+                      return (
+                        <li key={item.label} className={spacingClass}>
+                          <details className="group/menu" open={item.expanded}>
+                            <summary className={`flex cursor-pointer list-none items-center justify-between rounded-md px-2 py-1.5 text-sm tracking-wide outline-hidden transition-colors hover:text-slate-900 dark:hover:text-navy-50 [&::-webkit-details-marker]:hidden ${item.expanded
+                              ? 'font-semibold text-slate-800 dark:text-navy-100'
+                              : 'text-slate-600 dark:text-navy-200'}`}>
+                              <span>{item.label}</span>
+                              <svg className="size-4.5 text-slate-400 transition-transform duration-200 group-open/menu:rotate-90 dark:text-navy-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                <path d="m9 5 7 7-7 7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </summary>
+                            <ul className="mt-0.5 flex flex-col gap-0.5">
+                              {item.children.map((child) => (
+                                <li key={child.label}>
+                                  <a href={child.href} className="flex items-center gap-3 rounded-md py-1.5 pr-2 pl-4 text-sm tracking-wide text-slate-600 outline-hidden transition-colors hover:text-slate-900 dark:text-navy-200 dark:hover:text-navy-50">
+                                    <span className="size-1.5 rounded-full border border-slate-400 dark:border-navy-300" aria-hidden="true" />
+                                    {child.label}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={item.label} className={spacingClass}>
+                        <a href={item.href} className={`flex items-center rounded-md px-2 py-1.5 text-sm tracking-wide outline-hidden transition-colors ${item.active
+                          ? 'font-medium text-accent dark:text-accent-light'
+                          : 'text-slate-600 hover:text-slate-900 dark:text-navy-200 dark:hover:text-navy-50'}`}>
+                          {item.label}
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
             ))}
           </nav>
+
+          <div className="flex h-[65px] shrink-0 items-center gap-3 border-t border-slate-150 bg-slate-50/70 px-4 dark:border-navy-700 dark:bg-navy-900/30">
+            <div className="min-w-0 grow leading-tight">
+              <p className="truncate text-sm font-semibold text-slate-800 dark:text-navy-50">Zairosoft</p>
+              <p className="mt-1 truncate text-xs text-slate-500 dark:text-navy-300">info@zairosoft.com</p>
+            </div>
+            <a
+              href="/auth/login"
+              className="flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-500 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary dark:text-navy-200 dark:hover:bg-accent/15 dark:hover:text-accent-light dark:focus-visible:ring-accent"
+              aria-label="Sign in"
+            >
+              <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M14 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-3M10 12h11m0 0-3-3m3 3-3 3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+          </div>
         </div>
       </aside>
     </>
