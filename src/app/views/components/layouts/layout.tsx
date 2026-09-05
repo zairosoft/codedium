@@ -90,8 +90,8 @@ function Sidebar() {
                 title={item.label}
                 aria-label={item.label}
                 className={`flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 ${item.active
-                  ? 'bg-accent/10 text-accent hover:bg-accent/20 dark:bg-navy-600 dark:text-accent-light'
-                  : 'text-slate-500 hover:bg-accent/20 hover:text-accent dark:text-navy-200 dark:hover:bg-navy-300/20 dark:hover:text-accent-light'}`}
+                  ? 'bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/15 dark:text-primary'
+                  : 'text-slate-500 hover:bg-primary/10 hover:text-primary dark:text-navy-200 dark:hover:bg-primary/15 dark:hover:text-primary'}`}
               >
                 <SidebarIconView icon={item.icon} />
               </a>
@@ -99,7 +99,7 @@ function Sidebar() {
           </nav>
 
           <div className="flex flex-col items-center gap-3 py-3">
-            <a href="/auth/login" className="flex size-11 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-accent/20 hover:text-accent" title="Settings" aria-label="Settings">
+            <a href="/auth/login" className="flex size-11 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-primary/10 hover:text-primary dark:text-navy-200 dark:hover:bg-primary/15 dark:hover:text-primary" title="Settings" aria-label="Settings">
               <svg className="size-7" viewBox="0 0 24 24" fill="none">
                 <path fill="currentColor" fillOpacity=".3" d="M2 12.95v-1.77c0-1.05.85-1.92 1.9-1.92 1.81 0 2.55-1.29 1.64-2.87a1.92 1.92 0 0 1 .7-2.6l1.73-1c.79-.47 1.81-.19 2.28.61l.11.19c.9 1.58 2.38 1.58 3.29 0l.11-.19c.47-.8 1.49-1.08 2.28-.61l1.73 1a1.92 1.92 0 0 1 .7 2.6c-.91 1.58-.17 2.87 1.64 2.87 1.04 0 1.9.86 1.9 1.92v1.77c0 1.05-.85 1.91-1.9 1.91-1.81 0-2.55 1.29-1.64 2.87.52.92.21 2.08-.7 2.61l-1.73 1c-.79.47-1.81.19-2.28-.61l-.11-.19c-.9-1.58-2.38-1.58-3.29 0l-.11.19c-.47.8-1.49 1.08-2.28.61l-1.73-1a1.92 1.92 0 0 1-.7-2.61c.91-1.58.17-2.87-1.64-2.87A1.91 1.91 0 0 1 2 12.95Z" />
                 <circle cx="12" cy="12.06" r="3.27" fill="currentColor" />
@@ -107,16 +107,12 @@ function Sidebar() {
             </a>
             <a
               href="/auth/login"
-              className="relative flex size-12 shrink-0 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-accent"
+              className="relative flex size-11 shrink-0 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary"
               aria-label="Open profile"
             >
-              <span className="flex size-full items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-700 ring-2 ring-white dark:bg-navy-700 dark:text-navy-100 dark:ring-navy-700">
+              <span className="flex size-full items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/20 dark:bg-primary/15 dark:text-primary dark:ring-primary/30">
                 ZS
               </span>
-              <span
-                className="absolute right-0 bottom-0 size-3.5 rounded-full border-2 border-white bg-success dark:border-navy-700"
-                aria-hidden="true"
-              />
             </a>
           </div>
         </div>
@@ -126,7 +122,7 @@ function Sidebar() {
         <div id="layouts" className="flex h-full w-full flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-800">
           <div className="flex h-[4.5rem] shrink-0 items-center justify-between pl-4 pr-1">
             <p className="text-xl font-medium tracking-wide text-slate-800 dark:text-navy-100">Dashboards</p>
-            <label htmlFor="lineone-sidebar-toggle" className="flex size-7 cursor-pointer items-center justify-center rounded-full text-accent transition-colors hover:bg-slate-300/20 xl:hidden" aria-label="Close navigation panel">
+            <label htmlFor="lineone-sidebar-toggle" className="flex size-7 cursor-pointer items-center justify-center rounded-full text-primary transition-colors hover:bg-primary/10 xl:hidden" aria-label="Close navigation panel">
               <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15 19-7-7 7-7" />
               </svg>
@@ -173,7 +169,7 @@ function Sidebar() {
                     return (
                       <li key={item.label} className={spacingClass}>
                         <a href={item.href} className={`flex items-center rounded-md px-2 py-1.5 text-sm tracking-wide outline-hidden transition-colors ${item.active
-                          ? 'font-medium text-accent dark:text-accent-light'
+                          ? 'font-medium text-primary dark:text-primary'
                           : 'text-slate-600 hover:text-slate-900 dark:text-navy-200 dark:hover:text-navy-50'}`}>
                           {item.label}
                         </a>
@@ -192,7 +188,7 @@ function Sidebar() {
             </div>
             <a
               href="/auth/login"
-              className="flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-500 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary dark:text-navy-200 dark:hover:bg-accent/15 dark:hover:text-accent-light dark:focus-visible:ring-accent"
+              className="flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-500 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary dark:text-navy-200 dark:hover:bg-primary/15 dark:hover:text-primary"
               aria-label="Sign in"
             >
               <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -210,34 +206,68 @@ function Header() {
   return (
     <header className="workless-header fixed right-0 top-0 z-20 h-[61px] border-b border-slate-150 bg-white/80 backdrop-blur-sm dark:border-navy-700 dark:bg-navy-800/80">
       <div className="workless-header-container flex h-full items-center justify-between px-[var(--margin-x)]">
-        <div className="flex items-center">
-          <label htmlFor="lineone-sidebar-toggle" className="workless-menu-toggle ml-0.5 flex size-7 cursor-pointer flex-col justify-center gap-1.5 text-accent outline-hidden" aria-label="Toggle sidebar">
-            <span />
-            <span />
-            <span />
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex items-center">
+            <label htmlFor="lineone-sidebar-toggle" className="workless-menu-toggle ml-0.5 flex size-7 cursor-pointer flex-col justify-center gap-1.5 text-primary outline-hidden" aria-label="Toggle sidebar">
+              <span />
+              <span />
+              <span />
+            </label>
+          </div>
+
+          <label className="relative hidden h-9 min-w-0 sm:block">
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center text-slate-500 dark:text-navy-200">
+              <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+              </svg>
+            </span>
+            <input aria-label="Search" placeholder="Search..." className="h-full w-52 border-0 bg-transparent py-0 pr-3 pl-7 text-sm font-medium text-slate-700 outline-hidden placeholder:text-slate-500 focus:ring-0 dark:text-navy-100 dark:placeholder:text-navy-200 lg:w-72" />
           </label>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <label className="relative mr-2 hidden h-8 sm:flex">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-slate-400">
-              <svg className="size-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+        <div className="flex h-full shrink-0 items-center gap-1 self-center sm:gap-2">
+          <button type="button" className="mr-1 hidden h-9 items-center gap-2 rounded-full px-1.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-150 dark:text-navy-100 dark:hover:bg-navy-600 sm:flex" aria-label="Change language">
+            <span className="size-7 overflow-hidden rounded-full ring-1 ring-slate-200 dark:ring-navy-500">
+              <img src="/assets/images/flags/US.svg" alt="" className="size-full object-cover" />
             </span>
-            <input aria-label="Search" placeholder="Search here..." className="form-input h-full w-60 rounded-full border-0 bg-slate-150 py-0 pr-4 pl-9 text-xs-plus text-slate-800 transition-all hover:bg-slate-200 focus:w-80 dark:bg-navy-900 dark:text-navy-100" />
-          </label>
-          <button type="button" className="flex size-8 items-center justify-center rounded-full text-amber-500 transition-colors hover:bg-slate-150" aria-label="Toggle theme">
-            <svg className="size-5.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.75a.75.75 0 0 1 .75.75V5a.75.75 0 0 1-1.5 0V3.5a.75.75 0 0 1 .75-.75ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm8.5 4.25a.75.75 0 0 1 0 1.5H19a.75.75 0 0 1 0-1.5h1.5ZM5 11.25a.75.75 0 0 1 0 1.5H3.5a.75.75 0 0 1 0-1.5H5Zm12.3-5.61a.75.75 0 0 1 1.06 1.06L17.3 7.76a.75.75 0 1 1-1.06-1.06l1.06-1.06ZM6.7 16.24a.75.75 0 0 1 1.06 1.06L6.7 18.36a.75.75 0 0 1-1.06-1.06l1.06-1.06Zm10.6 0 1.06 1.06a.75.75 0 0 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 1.06-1.06ZM6.7 5.64 7.76 6.7A.75.75 0 0 1 6.7 7.76L5.64 6.7A.75.75 0 0 1 6.7 5.64ZM12 19a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 12 19Z" /></svg>
+            <span>En</span>
           </button>
-          <button type="button" className="flex size-8 items-center justify-center rounded-full text-info transition-colors hover:bg-slate-150" aria-label="Theme settings">
-            <svg className="size-5.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 0 0 0 18h1.35a1.65 1.65 0 0 0 .76-3.12 1.65 1.65 0 0 1 .76-3.12H17A4 4 0 0 0 21 10.7C20.82 6.35 16.85 3 12 3ZM7.5 12A1.5 1.5 0 1 1 7.5 9a1.5 1.5 0 0 1 0 3Zm2-4A1.5 1.5 0 1 1 9.5 5a1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm2 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" /></svg>
+
+          <button type="button" className="hidden size-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-150 hover:text-slate-700 dark:text-navy-200 dark:hover:bg-navy-600 dark:hover:text-navy-50 sm:flex" aria-label="Enter full screen">
+            <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3m13 5h3a2 2 0 0 0 2-2v-3" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
           </button>
-          <button type="button" className="relative flex size-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-150 hover:text-accent" aria-label="Notifications">
-            <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14.86 17H9.14m9.72 0H5.14c1.47-1.56 2.24-3.64 2.14-5.78V9a4.72 4.72 0 1 1 9.44 0v2.22c-.1 2.14.67 4.22 2.14 5.78ZM14 20h-4" /></svg>
-            <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-accent ring-2 ring-white" />
+
+          <button type="button" className="flex size-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-150 dark:text-navy-200 dark:hover:bg-navy-600" aria-label="Toggle theme">
+            <svg className="size-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none" />
+              <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4m10.6 10.6 1.4 1.4m0-13.4-1.4 1.4M6.7 17.3l-1.4 1.4" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
           </button>
-          <button type="button" className="flex size-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-150 hover:text-accent" aria-label="Applications">
-            <svg className="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm12 0h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1ZM4 15h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Zm12 0h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z" /></svg>
+
+          <button type="button" className="relative flex size-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-150 dark:text-navy-200 dark:hover:bg-navy-600" aria-label="Work items">
+            <svg className="size-5.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fillOpacity=".35" d="M4 8h16v10.5A2.5 2.5 0 0 1 17.5 21h-11A2.5 2.5 0 0 1 4 18.5V8Z" />
+              <path d="M8.5 7V5.75A2.75 2.75 0 0 1 11.25 3h1.5a2.75 2.75 0 0 1 2.75 2.75V7H19a2 2 0 0 1 2 2v3.4a20.7 20.7 0 0 1-18 0V9a2 2 0 0 1 2-2h3.5Zm2 0h3V5.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V7Z" />
+            </svg>
+            <span className="absolute -right-0.5 -top-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-white ring-2 ring-white dark:ring-navy-800">1</span>
           </button>
+
+          <button type="button" className="relative flex size-9 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-150 dark:text-navy-200 dark:hover:bg-navy-600" aria-label="Notifications">
+            <svg className="size-5.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18 9a6 6 0 0 0-12 0v3.35c0 1.4-.49 2.75-1.38 3.83A1.1 1.1 0 0 0 5.47 18h13.06a1.1 1.1 0 0 0 .85-1.82A5.98 5.98 0 0 1 18 12.35V9Zm-8.25 11a2.25 2.25 0 0 0 4.5 0h-4.5Z" />
+            </svg>
+            <span className="absolute -right-0.5 -top-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-white ring-2 ring-white dark:ring-navy-800">5</span>
+          </button>
+
+          <a href="/auth/login" className="ml-1 flex size-9 self-center items-center justify-center overflow-hidden rounded-full bg-primary text-white ring-2 ring-primary/20 transition-transform hover:scale-105 dark:ring-primary/30" aria-label="Open profile">
+            <svg className="mt-1 size-8" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="20" cy="13" r="7" fill="currentColor" fillOpacity=".9" />
+              <path d="M7 38c.8-10 5.1-15 13-15s12.2 5 13 15H7Z" fill="currentColor" fillOpacity=".9" />
+              <path d="M13 11c1-5 4-8 8-8 4.8 0 7.6 3.8 7.8 9.4-2.6-1.2-4.7-3.2-6.2-6-1.7 2.8-4.9 4.4-9.6 4.6Z" fill="#1e293b" />
+            </svg>
+          </a>
         </div>
       </div>
     </header>

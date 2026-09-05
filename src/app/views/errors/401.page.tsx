@@ -2,13 +2,35 @@ import { createView } from '@/app/views/components/main';
 
 export const render401Page = createView<{}>(({ t }) => ({
   title: t('errors.401.pageTitle'),
+  head: (
+    <>
+      <meta name="turbo-visit-control" content="reload" />
+      <meta name="turbo-cache-control" content="no-cache" />
+    </>
+  ),
   bodyClassName: 'min-h-100vh flex grow bg-slate-50 text-slate-500 antialiased dark:bg-navy-900 dark:text-navy-200',
   children: (
     <main className="grid min-h-100vh w-full grow grid-cols-1 place-items-center">
       <div className="w-full max-w-md p-6 text-center">
-        <div className="w-full">
-          <img className="w-full dark:hidden" src="/assets/images/error/light-401.webp" alt="" />
-          <img className="hidden w-full dark:block" src="/assets/images/error/dark-401.webp" alt="" />
+        <div className="relative aspect-[565/512] w-full">
+          <img
+            className="absolute inset-0 size-full object-contain dark:hidden"
+            src="/assets/images/error/light-401.webp"
+            width="565"
+            height="512"
+            fetchPriority="high"
+            decoding="sync"
+            alt=""
+          />
+          <img
+            className="absolute inset-0 hidden size-full object-contain dark:block"
+            src="/assets/images/error/dark-401.webp"
+            width="565"
+            height="512"
+            fetchPriority="high"
+            decoding="sync"
+            alt=""
+          />
         </div>
         <p className="pt-4 text-7xl font-bold text-primary dark:text-accent">401</p>
         <h1 className="pt-4 text-xl font-semibold text-slate-800 dark:text-navy-50">{t('errors.401.heading')}</h1>
