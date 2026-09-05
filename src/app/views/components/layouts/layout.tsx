@@ -272,7 +272,7 @@ function Header() {
 
             <div className="absolute top-full right-0 z-50 mt-2 w-60 overflow-hidden rounded-lg border border-slate-200 bg-white py-2 text-slate-600 shadow-xl shadow-slate-200/60 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:shadow-none">
               <div className="flex items-center gap-3 px-4 py-2">
-                <span className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-white ring-2 ring-primary/20 dark:ring-primary/30">
+                <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-white ring-2 ring-primary/20 dark:ring-primary/30">
                   <svg className="mt-1 size-10" viewBox="0 0 40 40" fill="none" aria-hidden="true">
                     <circle cx="20" cy="13" r="7" fill="currentColor" fillOpacity=".9" />
                     <path d="M7 38c.8-10 5.1-15 13-15s12.2 5 13 15H7Z" fill="currentColor" fillOpacity=".9" />
