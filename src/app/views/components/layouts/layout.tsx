@@ -76,7 +76,7 @@ function Sidebar() {
         aria-label="Close sidebar"
         className="pointer-events-none fixed inset-0 z-20 bg-slate-900/50 opacity-0 transition-opacity peer-checked/sidebar:pointer-events-auto peer-checked/sidebar:opacity-100 md:hidden"
       />
-      <aside className="workless-main-sidebar fixed inset-y-0 left-0 z-40 w-[var(--main-sidebar-width)]">
+      <aside className="workless-main-sidebar fixed inset-y-0 left-0 z-40 w-[var(--layout-sidebar-rail-width)]">
         <div className="flex h-full w-full flex-col items-center border-r border-slate-150 bg-white dark:border-navy-700 dark:bg-navy-800">
           <a href="/" className="flex pt-4" aria-label="Workless home">
             <img className="size-11 object-contain transition-transform duration-500 ease-in-out hover:rotate-[360deg]" src="/assets/images/app-logo.svg" alt="Workless" />
@@ -118,8 +118,8 @@ function Sidebar() {
         </div>
       </aside>
 
-      <aside className="workless-sidebar-panel fixed inset-y-0 left-0 z-30 w-[calc(var(--main-sidebar-width)+var(--sidebar-panel-width))]">
-        <div id="layouts" className="flex h-full w-full flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-800">
+      <aside className="workless-sidebar-panel fixed inset-y-0 left-0 z-30 w-[calc(var(--layout-sidebar-rail-width)+var(--layout-sidebar-panel-width))]">
+        <div id="layouts" className="flex h-full w-full flex-col bg-white pl-[var(--layout-sidebar-rail-width)] dark:bg-navy-800">
           <div className="flex h-[4.5rem] shrink-0 items-center justify-between pl-4 pr-1">
             <p className="text-xl font-medium tracking-wide text-slate-800 dark:text-navy-100">Dashboards</p>
             <label htmlFor="lineone-sidebar-toggle" className="flex size-7 cursor-pointer items-center justify-center rounded-full text-primary transition-colors hover:bg-primary/10 xl:hidden" aria-label="Close navigation panel">
@@ -202,10 +202,13 @@ function Sidebar() {
   );
 }
 
+const profileMenuItemClass =
+  'flex items-center gap-3 py-1.5 pr-2 pl-4 text-sm tracking-wide text-slate-600 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary dark:text-navy-200';
+
 function Header() {
   return (
     <header className="workless-header fixed right-0 top-0 z-20 h-[61px] border-b border-slate-150 bg-white/80 backdrop-blur-sm dark:border-navy-700 dark:bg-navy-800/80">
-      <div className="workless-header-container flex h-full items-center justify-between px-[var(--margin-x)]">
+      <div className="workless-header-container flex h-full items-center justify-between px-[var(--layout-page-gutter)]">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex items-center">
             <label htmlFor="lineone-sidebar-toggle" className="workless-menu-toggle ml-0.5 flex size-7 cursor-pointer flex-col justify-center gap-1.5 text-primary outline-hidden" aria-label="Toggle sidebar">
@@ -261,7 +264,7 @@ function Header() {
             <span className="absolute -right-0.5 -top-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-white ring-2 ring-white dark:ring-navy-800">5</span>
           </button>
 
-          <details className="group/profile relative ml-1 flex h-full self-center items-center">
+          <details data-dropdown="profile" className="group/profile relative ml-1 flex h-full self-center items-center">
             <summary className="flex size-9 cursor-pointer list-none items-center justify-center overflow-hidden rounded-full bg-primary text-white ring-2 ring-primary/20 outline-hidden transition-transform hover:scale-105 focus-visible:ring-primary/50 dark:ring-primary/30 [&::-webkit-details-marker]:hidden" aria-label="Open profile menu">
               <svg className="mt-1 size-8" viewBox="0 0 40 40" fill="none" aria-hidden="true">
                 <circle cx="20" cy="13" r="7" fill="currentColor" fillOpacity=".9" />
@@ -270,7 +273,7 @@ function Header() {
               </svg>
             </summary>
 
-            <div className="absolute top-full right-0 z-50 mt-2 w-60 overflow-hidden rounded-lg border border-slate-200 bg-white py-2 text-slate-600 shadow-xl shadow-slate-200/60 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:shadow-none">
+            <div data-dropdown-menu className="absolute top-full right-0 z-50 mt-2 w-60 overflow-hidden rounded-lg border border-slate-200 bg-white py-2 text-slate-600 shadow-xl shadow-slate-200/60 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:shadow-none">
               <div className="flex items-center gap-3 px-4 py-2">
                 <span className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-white ring-2 ring-primary/20 dark:ring-primary/30">
                   <svg className="mt-1 size-10" viewBox="0 0 40 40" fill="none" aria-hidden="true">
@@ -286,26 +289,26 @@ function Header() {
               </div>
 
               <nav className="mt-1" aria-label="Profile menu">
-                <a href="/auth/login" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="/auth/login" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <circle cx="12" cy="7.5" r="3.5" strokeWidth="1.6" />
                     <path d="M5 20a7 7 0 0 1 14 0c-3.7 1.6-10.3 1.6-14 0Z" strokeWidth="1.6" strokeLinejoin="round" />
                   </svg>
                   <span>Profile</span>
                 </a>
-                <a href="#billing" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#billing" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <path d="m4 13 2.2-6.2L18 3l-1.5 13-6.3-1.8L7 20l-2-1 1.2-5.2L4 13Z" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <span>Billing</span>
                 </a>
-                <a href="#settings" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#settings" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <path d="m3 4 18 7-8 2-2 8L3 4Z" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <span>Settings</span>
                 </a>
-                <a href="#keyboard-shortcuts" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#keyboard-shortcuts" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <path d="M4 5h7M7.5 3v4m-2 9 4-8 4 8m-7-3h6m4-8v16m-3-3 6-6m-6 1 6 6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -314,7 +317,7 @@ function Header() {
 
                 <div className="my-2 border-t border-slate-200 dark:border-navy-500" />
 
-                <a href="#team" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#team" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <circle cx="12" cy="8" r="3" strokeWidth="1.5" />
                     <circle cx="5.5" cy="10" r="2" strokeWidth="1.5" />
@@ -323,7 +326,7 @@ function Header() {
                   </svg>
                   <span>Team</span>
                 </a>
-                <a href="#invite-user" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#invite-user" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <circle cx="9" cy="7" r="3" strokeWidth="1.5" />
                     <path d="M3.5 20v-1.5A5.5 5.5 0 0 1 9 13h1m7-4v6m-3-3h6" strokeWidth="1.5" strokeLinecap="round" />
@@ -331,13 +334,13 @@ function Header() {
                   <span className="grow">Invite User</span>
                   <svg className="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m9 5 7 7-7 7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </a>
-                <a href="#github" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#github" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <path d="M8 5C5 6 4 9 4 12s1 6 4 7m8-14c3 1 4 4 4 7s-1 6-4 7M10 8l-2 4 2 4m4-8 2 4-2 4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <span>Github</span>
                 </a>
-                <a href="#support" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="#support" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <path d="M6.5 3H4.8A1.8 1.8 0 0 0 3 4.8C3 13.75 10.25 21 19.2 21a1.8 1.8 0 0 0 1.8-1.8v-1.7l-4-1-1 2c-4.5-1.15-8.85-5.5-10-10l2-1-1-4Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -347,7 +350,7 @@ function Header() {
 
                 <div className="my-2 border-t border-slate-200 dark:border-navy-500" />
 
-                <a href="/auth/login" className="flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary">
+                <a href="/auth/login" className={profileMenuItemClass}>
                   <svg className="size-5.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                     <path d="M12 3v9m-5.7-6.3a8 8 0 1 0 11.4 0" strokeWidth="1.7" strokeLinecap="round" />
                   </svg>
@@ -388,7 +391,7 @@ export function renderMainLayoutView(options: MainLayoutOptions = {}): string {
         <main className={includeSidebar
           ? 'workless-main-content mt-[60px] grid min-w-0 flex-1 place-content-start pb-8'
           : 'grid w-full min-w-0 place-content-start pb-8'}>
-          <div className={`${includeSidebar ? 'workless-main-container' : ''} w-full px-[var(--margin-x)]`}>
+          <div className={`${includeSidebar ? 'workless-main-container' : ''} w-full px-[var(--layout-page-gutter)]`}>
             <div className="flex items-center gap-4 py-5 lg:py-6">
               <h1 className="text-xl font-medium text-slate-800 dark:text-navy-50 lg:text-2xl">{title}</h1>
             </div>

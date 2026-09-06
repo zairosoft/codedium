@@ -36,17 +36,6 @@ export const renderLoginPage = createView<LoginPageOptions>(
             dangerouslySetInnerHTML={{
               __html: `
                 [x-cloak]{display:none!important;}
-                .language-option:hover,
-                .language-option:focus-visible {
-                  background-color: var(--color-primary-light);
-                  color: var(--color-primary-focus);
-                  outline: none;
-                }
-                html.dark .language-option:hover,
-                html.dark .language-option:focus-visible {
-                  background-color: var(--color-navy-700);
-                  color: var(--color-navy-50);
-                }
               `,
             }}
           />
@@ -146,7 +135,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
                   className="mb-4 flex justify-end"
                   style={{ display: "flex", position: "absolute", right: "10px", top: "10px" }}
                 >
-                  <details style={{ position: "relative" }}>
+                  <details data-dropdown="language" style={{ position: "relative" }}>
                     <summary
                       className="flex cursor-pointer items-center justify-center"
                       style={{
@@ -156,7 +145,7 @@ export const renderLoginPage = createView<LoginPageOptions>(
                         width: "42px",
                         height: "42px",
                         borderRadius: "50%",
-                        backgroundColor: "var(--color-primary-light)",
+                        backgroundColor: "var(--color-action-primary-subtle)",
                         listStyle: "none",
                       }}
                       aria-label="Select language"
@@ -183,22 +172,16 @@ export const renderLoginPage = createView<LoginPageOptions>(
                       </span>
                     </summary>
                     <div
-                      className="rounded-lg border border-slate-200 bg-white p-2 shadow-sm dark:border-navy-600 dark:bg-navy-800"
-                      style={{
-                        position: "absolute",
-                        zIndex: 10,
-                        top: "calc(100% + 0.5rem)",
-                        right: 0,
-                        minWidth: "8rem",
-                      }}
+                      data-dropdown-menu
+                      className="absolute right-0 top-full z-50 mt-2 min-w-32 overflow-hidden rounded-lg border border-slate-200 bg-white py-2 text-slate-600 shadow-xl shadow-slate-200/60 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:shadow-none"
                     >
-                      <a href="/language/th" className="language-option flex items-center gap-2 rounded-md px-3 py-2 text-sm">
+                      <a href="/language/th" className="language-option flex items-center gap-2 py-1.5 pr-2 pl-4 text-sm tracking-wide text-slate-600 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary dark:text-navy-200 dark:hover:bg-accent/15 dark:hover:text-accent-light">
                         <span style={{ width: "20px", height: "20px", flex: "0 0 20px", overflow: "hidden", borderRadius: "50%" }}>
                           <img src="/assets/images/flags/TH.svg" alt="" width="20" height="20" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </span>
                         <span>ภาษาไทย</span>
                       </a>
-                      <a href="/language/en" className="language-option flex items-center gap-2 rounded-md px-3 py-2 text-sm">
+                      <a href="/language/en" className="language-option flex items-center gap-2 py-1.5 pr-2 pl-4 text-sm tracking-wide text-slate-600 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary dark:text-navy-200 dark:hover:bg-accent/15 dark:hover:text-accent-light">
                         <span style={{ width: "20px", height: "20px", flex: "0 0 20px", overflow: "hidden", borderRadius: "50%" }}>
                           <img src="/assets/images/flags/US.svg" alt="" width="20" height="20" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         </span>

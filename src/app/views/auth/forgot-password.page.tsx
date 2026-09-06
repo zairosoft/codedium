@@ -8,7 +8,6 @@ export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
     <>
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
-      <style dangerouslySetInnerHTML={{ __html: '.language-option:hover,.language-option:focus-visible{background-color:var(--color-primary-light);color:var(--color-primary-focus);outline:none}html.dark .language-option:hover,html.dark .language-option:focus-visible{background-color:var(--color-navy-700);color:var(--color-navy-50)}' }} />
       <link rel="preconnect" href="https://fonts.googleapis.com/" />
       <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,15 +21,15 @@ export const renderForgotPasswordPage = createView<{}>(({ t, isLang }) => ({
         <div className="w-full p-4 sm:px-5" style={{ maxWidth: '30rem' }}>
           <form className="card mt-5 rounded-lg p-5 lg:p-7" action="#" method="post">
             <div className="flex justify-end" style={{ display: 'flex', position: 'absolute', right: '10px', top: '10px' }}>
-              <details style={{ position: 'relative' }}>
-                <summary className="flex cursor-pointer items-center justify-center" style={{ display: 'flex', width: '42px', height: '42px', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', backgroundColor: 'var(--color-primary-light)', listStyle: 'none' }} aria-label="Select language">
+              <details data-dropdown="language" style={{ position: 'relative' }}>
+                <summary className="flex cursor-pointer items-center justify-center" style={{ display: 'flex', width: '42px', height: '42px', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', backgroundColor: 'var(--color-action-primary-subtle)', listStyle: 'none' }} aria-label="Select language">
                   <span style={{ width: '24px', height: '24px', flex: '0 0 24px', overflow: 'hidden', borderRadius: '50%' }}>
                     <img src={isLang ? '/assets/images/flags/TH.svg' : '/assets/images/flags/US.svg'} alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </span>
                 </summary>
-                <div className="rounded-lg border border-slate-200 bg-white p-2 shadow-sm dark:border-navy-600 dark:bg-navy-800" style={{ position: 'absolute', zIndex: 10, top: 'calc(100% + 0.5rem)', right: 0, minWidth: '8rem' }}>
-                  <a href="/language/th" className="language-option flex items-center gap-2 rounded-md px-3 py-2 text-sm"><span style={{ width: '20px', height: '20px', flex: '0 0 20px', overflow: 'hidden', borderRadius: '50%' }}><img src="/assets/images/flags/TH.svg" alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></span><span>ภาษาไทย</span></a>
-                  <a href="/language/en" className="language-option flex items-center gap-2 rounded-md px-3 py-2 text-sm"><span style={{ width: '20px', height: '20px', flex: '0 0 20px', overflow: 'hidden', borderRadius: '50%' }}><img src="/assets/images/flags/US.svg" alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></span><span>English</span></a>
+                <div data-dropdown-menu className="absolute right-0 top-full z-50 mt-2 min-w-32 overflow-hidden rounded-lg border border-slate-200 bg-white py-2 text-slate-600 shadow-xl shadow-slate-200/60 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:shadow-none">
+                  <a href="/language/th" className="language-option flex items-center gap-2 py-1.5 pr-2 pl-4 text-sm tracking-wide text-slate-600 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary dark:text-navy-200 dark:hover:bg-accent/15 dark:hover:text-accent-light"><span style={{ width: '20px', height: '20px', flex: '0 0 20px', overflow: 'hidden', borderRadius: '50%' }}><img src="/assets/images/flags/TH.svg" alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></span><span>ภาษาไทย</span></a>
+                  <a href="/language/en" className="language-option flex items-center gap-2 py-1.5 pr-2 pl-4 text-sm tracking-wide text-slate-600 outline-hidden transition-colors hover:bg-primary/10 hover:text-primary dark:text-navy-200 dark:hover:bg-accent/15 dark:hover:text-accent-light"><span style={{ width: '20px', height: '20px', flex: '0 0 20px', overflow: 'hidden', borderRadius: '50%' }}><img src="/assets/images/flags/US.svg" alt="" width="20" height="20" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></span><span>English</span></a>
                 </div>
               </details>
             </div>

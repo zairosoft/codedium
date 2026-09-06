@@ -64,6 +64,7 @@ export function Html({
           type="module"
           src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.13/+esm"
         ></script>
+        <script src="/assets/js/app.js" defer></script>
         {head}
       </head>
       <body

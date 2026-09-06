@@ -4,23 +4,40 @@
 
 @layer base {
   :root {
-    --margin-x: 1rem;
-    --main-sidebar-width: 4rem;
-    --sidebar-panel-width: 14rem;
-    --color-primary-focus: theme(colors.primary.focus);
-    --color-primary-light: theme(colors.primary.light);
-    --color-navy-50: theme(colors.navy.50);
-    --color-navy-200: theme(colors.navy.200);
-    --color-navy-700: theme(colors.navy.700);
-    --font-sans: theme(fontFamily.sans);
-    --radius-lg: 0.5rem;
-    --tracking-wide: 0.025em;
-    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    /* Layout */
+    --layout-page-gutter: 1rem;
+    --layout-sidebar-rail-width: 4rem;
+    --layout-sidebar-panel-width: 14rem;
+
+    /* Typography */
+    --typography-font-family: theme(fontFamily.sans);
+    --typography-font-size: 0.875rem;
+    --typography-line-height: 1.5;
+    --typography-tracking-wide: 0.025em;
+
+    /* Shape */
+    --shape-radius-control: 0.5rem;
+
+    /* Motion */
+    --motion-duration-fast: 200ms;
+    --motion-duration-normal: 250ms;
+    --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --motion-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+    --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+    /* Semantic colors used by authored CSS */
+    --color-page-background: theme(colors.slate.50);
+    --color-text-default: theme(colors.slate.700);
+    --color-action-primary-hover: theme(colors.primary.focus);
+    --color-action-primary-subtle: theme(colors.primary.light);
+    --color-surface-dark: theme(colors.navy.700);
+    --color-text-dark: theme(colors.navy.200);
+    --color-text-strong-dark: theme(colors.navy.50);
   }
 
   @media (min-width: 48rem) {
     :root {
-      --margin-x: 1.5rem;
+      --layout-page-gutter: 1.5rem;
     }
   }
 
@@ -30,19 +47,20 @@
   }
 
   body {
-    background-color: #f8fafc;
-    color: #334155;
-    font-family: var(--font-sans);
-    font-size: 14px;
-    line-height: 1.5;
+    background-color: var(--color-page-background);
+    color: var(--color-text-default);
+    font-family: var(--typography-font-family);
+    font-size: var(--typography-font-size);
+    line-height: var(--typography-line-height);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
   .workless-main-sidebar {
     translate: -100% 0;
-    transition: translate 200ms cubic-bezier(0.4, 0, 1, 1);
+    transition: translate var(--motion-duration-fast) var(--motion-ease-exit);
   }
 
   #lineone-sidebar-toggle:checked ~ .workless-main-sidebar {
@@ -52,34 +70,34 @@
   .workless-sidebar-panel {
     translate: -100% 0;
     box-shadow: 0 3px 10px 0 rgb(48 46 56 / 0.06);
-    transition: translate 250ms cubic-bezier(0.4, 0, 1, 1) 150ms;
+    transition: translate var(--motion-duration-normal) var(--motion-ease-exit) 150ms;
   }
 
   #lineone-sidebar-toggle:checked ~ .workless-sidebar-panel {
     translate: 0 0;
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transition-timing-function: var(--motion-ease-enter);
   }
 
   .workless-header {
     width: 100%;
-    transition: width 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width var(--motion-duration-normal) var(--motion-ease-standard);
   }
 
   .workless-header-container {
-    transition: padding 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: padding var(--motion-duration-normal) var(--motion-ease-standard);
   }
 
   .workless-main-content {
     transition:
-      width 250ms cubic-bezier(0.4, 0, 1, 1),
-      margin-left 250ms cubic-bezier(0.4, 0, 1, 1),
-      margin-right 250ms cubic-bezier(0.4, 0, 1, 1),
-      padding-left 250ms cubic-bezier(0.4, 0, 1, 1),
-      padding-right 250ms cubic-bezier(0.4, 0, 1, 1);
+      width var(--motion-duration-normal) var(--motion-ease-exit),
+      margin-left var(--motion-duration-normal) var(--motion-ease-exit),
+      margin-right var(--motion-duration-normal) var(--motion-ease-exit),
+      padding-left var(--motion-duration-normal) var(--motion-ease-exit),
+      padding-right var(--motion-duration-normal) var(--motion-ease-exit);
   }
 
   .workless-main-container {
-    transition: padding 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: padding var(--motion-duration-normal) var(--motion-ease-standard);
   }
 
   .workless-menu-toggle span {
@@ -87,7 +105,7 @@
     height: 2px;
     width: 1.25rem;
     background-color: currentColor;
-    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--motion-duration-normal) var(--motion-ease-standard);
   }
 
   .workless-menu-toggle span:nth-child(2) {
@@ -123,41 +141,41 @@
     }
 
     .workless-header {
-      width: calc(100% - var(--main-sidebar-width));
+      width: calc(100% - var(--layout-sidebar-rail-width));
     }
 
     .workless-main-content {
-      margin-left: var(--main-sidebar-width);
+      margin-left: var(--layout-sidebar-rail-width);
     }
   }
 
   @media (min-width: 80rem) {
     .workless-sidebar-panel {
       translate: 0 0;
-      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+      transition-timing-function: var(--motion-ease-enter);
     }
 
     #lineone-sidebar-toggle:checked ~ .workless-sidebar-panel {
       translate: -100% 0;
-      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+      transition-timing-function: var(--motion-ease-exit);
     }
 
     .workless-header {
-      width: calc(100% - var(--main-sidebar-width) - var(--sidebar-panel-width));
+      width: calc(100% - var(--layout-sidebar-rail-width) - var(--layout-sidebar-panel-width));
     }
 
     #lineone-sidebar-toggle:checked ~ .workless-header {
-      width: calc(100% - var(--main-sidebar-width));
+      width: calc(100% - var(--layout-sidebar-rail-width));
     }
 
     .workless-main-content {
-      margin-left: calc(var(--main-sidebar-width) + var(--sidebar-panel-width));
-      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+      margin-left: calc(var(--layout-sidebar-rail-width) + var(--layout-sidebar-panel-width));
+      transition-timing-function: var(--motion-ease-enter);
     }
 
     #lineone-sidebar-toggle:checked ~ .workless-main-content {
-      margin-left: var(--main-sidebar-width);
-      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+      margin-left: var(--layout-sidebar-rail-width);
+      transition-timing-function: var(--motion-ease-exit);
     }
 
     .workless-header-container,
@@ -167,7 +185,7 @@
 
     #lineone-sidebar-toggle:checked ~ .workless-header .workless-header-container,
     #lineone-sidebar-toggle:checked ~ .workless-main-content .workless-main-container {
-      padding-inline: var(--margin-x);
+      padding-inline: var(--layout-page-gutter);
     }
 
     #lineone-sidebar-toggle:not(:checked) ~ .workless-header .workless-menu-toggle span {
@@ -208,7 +226,7 @@
 
   .card {
     background-color: #fff;
-    border-radius: var(--radius-lg);
+    border-radius: var(--shape-radius-control);
     box-shadow: 0 3px 10px 0 rgb(48 46 56 / 0.06);
     color: #64748b;
     display: flex;
@@ -219,26 +237,26 @@
   }
 
   html.dark .card {
-    background-color: var(--color-navy-700);
+    background-color: var(--color-surface-dark);
     box-shadow: none;
-    color: var(--color-navy-200);
+    color: var(--color-text-dark);
   }
 
   .btn {
     align-items: center;
-    border-radius: var(--radius-lg);
+    border-radius: var(--shape-radius-control);
     cursor: pointer;
     display: inline-flex;
     justify-content: center;
-    letter-spacing: var(--tracking-wide);
+    letter-spacing: var(--typography-tracking-wide);
     padding: 0.5rem 1.25rem;
     text-align: center;
     text-decoration: none;
     transition:
-      background-color 0.2s var(--default-transition-timing-function),
-      border-color 0.2s var(--default-transition-timing-function),
-      color 0.2s var(--default-transition-timing-function),
-      opacity 0.2s var(--default-transition-timing-function);
+      background-color var(--motion-duration-fast) var(--motion-ease-standard),
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
+      color var(--motion-duration-fast) var(--motion-ease-standard),
+      opacity var(--motion-duration-fast) var(--motion-ease-standard);
   }
 
   .btn:disabled {
@@ -249,13 +267,13 @@
   .form-input,
   .form-checkbox,
   .form-checkbox::before {
-    transition: all 0.2s var(--default-transition-timing-function);
+    transition: all var(--motion-duration-fast) var(--motion-ease-standard);
   }
 
   .form-input {
     appearance: none;
     contain: paint;
-    letter-spacing: var(--tracking-wide);
+    letter-spacing: var(--typography-tracking-wide);
     outline: none;
     font-size: 0.875rem !important;
   }
@@ -283,7 +301,7 @@
   }
 
   .form-checkbox {
-    --tw-ease: var(--default-transition-timing-function);
+    --tw-ease: var(--motion-ease-standard);
     background-color: transparent;
     background-image: none;
     border-style: solid;
