@@ -30,7 +30,7 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.password, dto.tenantId);
+    return this.authService.login(dto.email, dto.password);
   }
 
   /**

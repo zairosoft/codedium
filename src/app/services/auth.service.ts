@@ -10,7 +10,7 @@ import {
   JwtPayload,
   LoginResult,
 } from '@/app/interfaces/auth.interface';
-import { DEFAULT_TENANT_ID } from '@/workless/tenant/tenant.constants';
+import { DEFAULT_COMPANY_ID, normalizeCompanyId } from '@/workless/company/company.constants';
 import { RegisterDto } from '@/app/dto/register.dto';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
 
@@ -22,7 +22,7 @@ export class AuthService implements AuthServicePort {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createSession(userId: string, tenantId?: string): Promise<AuthSession> {
+  async createSession(userId: string): Promise<AuthSession> {
     const user = await this.usersRepository.findOne({
       where: { id: userId, isActive: true },
     });
@@ -32,12 +32,12 @@ export class AuthService implements AuthServicePort {
 
     return {
       userId: user.id,
-      tenantId,
+      companyId: normalizeCompanyId(user.companyId),
       authenticatedAt: new Date(),
     };
   }
 
-  async login(email: string, password: string, tenantId?: string): Promise<LoginResult> {
+  async login(email: string, password: string): Promise<LoginResult> {
     const normalizedEmail = email.trim().toLowerCase();
     const user = await this.usersRepository
       .createQueryBuilder('user')
@@ -54,7 +54,7 @@ export class AuthService implements AuthServicePort {
       lastLoggedAt: new Date(),
       ...(this.isLegacyScryptHash(user.password) ? { password: await this.hashPassword(password) } : {}),
     });
-    return this.createLoginResult(user, tenantId);
+    return this.createLoginResult(user);
   }
 
   async register(dto: RegisterDto): Promise<LoginResult> {
@@ -65,7 +65,7 @@ export class AuthService implements AuthServicePort {
     }
 
     const user = this.usersRepository.create({
-      companyId: DEFAULT_TENANT_ID,
+      companyId: DEFAULT_COMPANY_ID,
       name: dto.displayName.trim(),
       email,
       password: await this.hashPassword(dto.password),
@@ -78,11 +78,11 @@ export class AuthService implements AuthServicePort {
     return this.createLoginResult(created);
   }
 
-  private createLoginResult(user: PlatformUserEntity, tenantId?: string): LoginResult {
+  private createLoginResult(user: PlatformUserEntity): LoginResult {
     const payload: JwtPayload = {
       userId: user.id,
       email: user.email,
-      tenantId: tenantId ?? user.companyId ?? DEFAULT_TENANT_ID,
+      companyId: normalizeCompanyId(user.companyId),
       roles: [user.role],
     };
 

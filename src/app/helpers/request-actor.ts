@@ -22,14 +22,10 @@ export function resolveRequestActor(request: PermissionAwareRequest): RequestAct
   const authenticatedUser = request.user;
 
   if (authenticatedUser) {
-    const activeMembership = authenticatedUser.memberships?.find(
-      (membership) => membership.isDefault,
-    ) ?? authenticatedUser.memberships?.[0];
-
     return {
       userId: authenticatedUser.userId,
-      companyId: activeMembership?.companyId,
-      organizationId: activeMembership?.organizationId,
+      companyId: authenticatedUser.companyId,
+      organizationId: undefined,
       roleCodes: [...new Set(authenticatedUser.roles ?? [])],
     };
   }

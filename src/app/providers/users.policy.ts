@@ -10,7 +10,6 @@ import { RequestActor } from '@/app/helpers/request-actor';
 export class UsersPolicy {
   private static readonly READ_PERMISSION = 'platform.user.read';
   private static readonly WRITE_PERMISSION = 'platform.user.write';
-  private static readonly MEMBERSHIP_PERMISSION = 'platform.membership.assign';
 
   constructor(
     @Inject(PERMISSION_SERVICE)
@@ -36,14 +35,6 @@ export class UsersPolicy {
     }
 
     this.assertPermissions(actor, [UsersPolicy.WRITE_PERMISSION], 'User updates are forbidden.');
-  }
-
-  assertCanAssignMemberships(actor: RequestActor): void {
-    this.assertPermissions(
-      actor,
-      [UsersPolicy.MEMBERSHIP_PERMISSION],
-      'Membership assignment is forbidden.',
-    );
   }
 
   private assertPermissions(

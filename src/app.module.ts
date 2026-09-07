@@ -8,8 +8,8 @@ import { loadRuntimeModules } from '@modules/modules';
 import { WorklessModule } from '@/workless/workless.module';
 import { CacheModule } from '@/workless/infrastructure/cache/cache.module';
 import { DatabaseModule } from '@/database/database.module';
-import { TenantContextMiddleware } from '@/workless/tenant/tenant-context.middleware';
-import { TenantModule } from '@/workless/tenant/tenant.module';
+import { CompanyContextMiddleware } from '@/workless/company/company-context.middleware';
+import { CompanyModule } from '@/workless/company/company.module';
 
 const runtimeModules = loadRuntimeModules();
 
@@ -37,7 +37,7 @@ const runtimeModules = loadRuntimeModules();
         limit: 200,
       },
     ]),
-    TenantModule,
+    CompanyModule,
     DatabaseModule,
     CacheModule,
     PlatformModule,
@@ -54,7 +54,7 @@ const runtimeModules = loadRuntimeModules();
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(TenantContextMiddleware)
+      .apply(CompanyContextMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

@@ -4,11 +4,9 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PlatformMembershipEntity } from '@/app/entities/membership.entity';
 
 @Entity({ name: 'users' })
 @Index('uq_users_email', ['email'], { unique: true })
@@ -70,9 +68,6 @@ export class PlatformUserEntity {
 
   @Column({ name: 'deleted_by', type: 'uuid', nullable: true })
   deletedBy?: string | null;
-
-  @OneToMany(() => PlatformMembershipEntity, (membership) => membership.user)
-  memberships?: PlatformMembershipEntity[];
 
   get displayName(): string {
     return this.name;

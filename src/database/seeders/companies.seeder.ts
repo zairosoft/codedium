@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { DEFAULT_TENANT_ID } from '@/workless/tenant/tenant.constants';
+import { DEFAULT_COMPANY_ID } from '@/workless/company/company.constants';
 import { DatabaseSeeder } from '@/workless/interfaces/seeder.interface';
 
 export class CompaniesSeeder implements DatabaseSeeder {
@@ -27,7 +27,7 @@ export class CompaniesSeeder implements DatabaseSeeder {
           "is_active" = EXCLUDED."is_active",
           "updated_at" = now()`,
         [
-          DEFAULT_TENANT_ID,
+          DEFAULT_COMPANY_ID,
           'Workless System',
           'system',
           'Default company for system users and local development.',

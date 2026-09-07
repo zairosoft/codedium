@@ -12,8 +12,8 @@ import { ComponentsController } from '@/app/controllers/components.controller';
 import { HomeController } from '@/app/controllers/home.controller';
 import { LanguageController } from '@/app/controllers/language.controller';
 import { UsersController } from '@/app/controllers/users.controller';
-import { PlatformMembershipEntity } from '@/app/entities/membership.entity';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
+import { CompanyContextGuard } from '@/workless/company/company-context.guard';
 import { NotificationsListener } from '@/app/providers/notifications.listener';
 import { PermissionGuard } from '@/app/providers/permission.guard';
 import { PermissionsService } from '@/app/providers/permissions.service';
@@ -26,7 +26,7 @@ import {
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PlatformUserEntity, PlatformMembershipEntity]),
+    TypeOrmModule.forFeature([PlatformUserEntity]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -50,6 +50,10 @@ import {
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: CompanyContextGuard,
     },
     NotificationsListener,
     PermissionGuard,

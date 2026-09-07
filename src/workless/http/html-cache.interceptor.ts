@@ -1,6 +1,7 @@
 import {
   CallHandler,
   ExecutionContext,
+  Inject,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
@@ -8,11 +9,15 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { HTML_CACHE_METADATA, HtmlCacheOptions } from '@/workless/http/html-cache.decorator';
 import { MODULE_ENABLED_METADATA } from '@/workless/module/module-enabled.decorator';
-import { DEFAULT_TENANT_ID, normalizeTenantId } from '@/workless/tenant/tenant.constants';
+import { COMPANY_CONTEXT, CompanyContextPort } from '@/workless/company/company-context.interface';
 
 @Injectable()
 export class HtmlCacheInterceptor implements NestInterceptor {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    @Inject(COMPANY_CONTEXT)
+    private readonly companyContext: CompanyContextPort,
+  ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     if (context.getType() !== 'http') {
@@ -37,10 +42,8 @@ export class HtmlCacheInterceptor implements NestInterceptor {
         context.getClass(),
       ]) ?? 'platform';
     const route = request.originalUrl ?? request.url ?? 'unknown-route';
-    const rawTenantId = request.headers?.['x-tenant-id'];
-    const tenantHeader = Array.isArray(rawTenantId) ? rawTenantId[0] : rawTenantId;
-    const tenantId = tenantHeader ? normalizeTenantId(tenantHeader) : DEFAULT_TENANT_ID;
-    const cacheKey = `${moduleName}:${tenantId}:${route}`;
+    const companyId = this.companyContext.getCompanyId();
+    const cacheKey = `${moduleName}:${companyId}:${route}`;
 
     response.setHeader('Cache-Control', `${scope}, max-age=${options.maxAgeSeconds}`);
     response.setHeader('Vary', (options.vary ?? ['Accept-Encoding']).join(', '));
@@ -59,4 +62,3 @@ export class HtmlCacheInterceptor implements NestInterceptor {
     return next.handle();
   }
 }
-

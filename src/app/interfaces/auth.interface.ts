@@ -1,23 +1,20 @@
-import type { MembershipRecord } from '@/app/interfaces/user.interface';
-
 export type JwtPayload = {
   userId: string;
   email: string;
-  tenantId: string;
+  companyId: string;
   roles: string[];
 };
 
 export type AuthenticatedUser = {
   userId: string;
   email: string;
-  tenantId: string;
+  companyId: string;
   roles: string[];
-  memberships: MembershipRecord[];
 };
 
 export type AuthSession = {
   userId: string;
-  tenantId?: string;
+  companyId: string;
   authenticatedAt: Date;
 };
 
@@ -32,8 +29,8 @@ export type LoginResult = {
 };
 
 export interface AuthServicePort {
-  createSession(userId: string, tenantId?: string): Promise<AuthSession>;
-  login(email: string, password: string, tenantId?: string): Promise<LoginResult>;
+  createSession(userId: string): Promise<AuthSession>;
+  login(email: string, password: string): Promise<LoginResult>;
 }
 
 export const AUTH_SERVICE = Symbol('AUTH_SERVICE');

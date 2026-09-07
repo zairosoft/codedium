@@ -1,4 +1,4 @@
-import { DEFAULT_TENANT_ID } from '@/workless/tenant/tenant.constants';
+import { DEFAULT_COMPANY_ID } from '@/workless/company/company.constants';
 import {
   QueryRunner,
   Table,
@@ -38,7 +38,7 @@ export class CreateUsersMigration {
               name: 'company_id',
               type: 'uuid',
               isNullable: false,
-              default: `'${DEFAULT_TENANT_ID}'`,
+              default: `'${DEFAULT_COMPANY_ID}'`,
             },
             {
               name: 'name',
@@ -182,7 +182,7 @@ export class CreateUsersMigration {
                 name: 'tenantId',
                 type: 'uuid',
                 isNullable: false,
-                default: `'${DEFAULT_TENANT_ID}'`,
+                default: `'${DEFAULT_COMPANY_ID}'`,
               },
               {
                 name: 'userId',

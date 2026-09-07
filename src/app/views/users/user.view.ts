@@ -1,4 +1,4 @@
-import { MembershipRecord, UserRecord } from '@/app/interfaces/user.interface';
+import { UserRecord } from '@/app/interfaces/user.interface';
 
 export type UserItemView = {
   id: string;
@@ -7,12 +7,6 @@ export type UserItemView = {
   displayName: string;
   active: boolean;
   platformRoles: string[];
-  organizations: {
-    companyId: string;
-    organizationId: string;
-    roleCode: string;
-    isDefault: boolean;
-  }[];
   createdAt: string;
 };
 
@@ -25,7 +19,6 @@ export class UsersViewMapper {
       displayName: user.displayName,
       active: user.active,
       platformRoles: [...user.roles],
-      organizations: user.memberships.map((membership) => this.toMembership(membership)),
       createdAt: user.createdAt.toISOString(),
     };
   }
@@ -39,7 +32,6 @@ export class UsersViewMapper {
         { key: 'email', label: 'Email' },
         { key: 'active', label: 'Active' },
         { key: 'platformRoles', label: 'Platform Roles' },
-        { key: 'organizations', label: 'Organization Memberships' },
       ],
       data: users.map((user) => this.toItem(user)),
       meta,
@@ -60,18 +52,9 @@ export class UsersViewMapper {
         {
           key: 'access',
           title: 'Access',
-          fields: ['platformRoles', 'organizations'],
+          fields: ['platformRoles'],
         },
       ],
-    };
-  }
-
-  private static toMembership(membership: MembershipRecord) {
-    return {
-      companyId: membership.companyId,
-      organizationId: membership.organizationId,
-      roleCode: membership.roleCode,
-      isDefault: membership.isDefault ?? false,
     };
   }
 }

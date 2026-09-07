@@ -18,7 +18,6 @@ export class PermissionsService implements PermissionServicePort {
       [
         'platform.user.read',
         'platform.user.write',
-        'platform.membership.assign',
         'platform.role.read',
         'platform.permission.read',
         'system.module.install',
@@ -34,12 +33,11 @@ export class PermissionsService implements PermissionServicePort {
       [
         'platform.user.read',
         'platform.user.write',
-        'platform.membership.assign',
         'crm.contact.read',
         'crm.contact.write',
       ],
     ],
-    ['org.admin', ['platform.user.read', 'platform.membership.assign', 'crm.contact.read']],
+    ['org.admin', ['platform.user.read', 'crm.contact.read']],
     ['org.member', ['platform.user.read', 'crm.contact.read']],
   ]);
 

@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import type { JwtPayload, AuthenticatedUser } from '@/app/interfaces/auth.interface';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
 import { resolveJwtSecret } from '@/config/jwt.config';
+import { normalizeCompanyId } from '@/workless/company/company.constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -29,23 +30,32 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: JwtPayload): Promise<AuthenticatedUser> {
     const user = await this.usersRepository.findOne({
       where: { id: payload.userId, isActive: true },
-      relations: { memberships: true },
     });
     if (!user) {
       throw new UnauthorizedException('User account is disabled or not found.');
     }
 
+    if (typeof payload.companyId !== 'string') {
+      throw new UnauthorizedException('Token company is invalid.');
+    }
+
+    let tokenCompanyId: string;
+    try {
+      tokenCompanyId = normalizeCompanyId(payload.companyId);
+    } catch {
+      throw new UnauthorizedException('Token company is invalid.');
+    }
+
+    const databaseCompanyId = normalizeCompanyId(user.companyId);
+    if (tokenCompanyId !== databaseCompanyId) {
+      throw new UnauthorizedException('Token company is no longer valid.');
+    }
+
     return {
       userId: user.id,
       email: user.email,
-      tenantId: payload.tenantId,
+      companyId: databaseCompanyId,
       roles: [user.role],
-      memberships: (user.memberships ?? []).map((membership) => ({
-        companyId: membership.companyId,
-        organizationId: membership.organizationId,
-        roleCode: membership.roleCode,
-        isDefault: membership.isDefault,
-      })),
     };
   }
 }
