@@ -22,7 +22,7 @@ import { UsersPolicy } from '@/app/providers/users.policy';
 import {
   platformServiceExports,
   platformServiceProviders,
-} from '@/app/providers/interfaces.service';
+} from '@/app/interfaces/interfaces.service';
 
 @Module({
   imports: [
