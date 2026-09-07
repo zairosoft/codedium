@@ -1,7 +1,6 @@
 import type { PropsWithChildren, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createTranslator, type AppLocale } from '@/workless/i18n';
-import { minify } from '@/workless/minify';
 
 export { createTranslator, type AppLocale };
 
@@ -80,8 +79,7 @@ export function Html({
 }
 
 export function Render(props: HtmlDocumentProps): string {
-  const raw = renderToStaticMarkup(<Html {...props} />);
-  return "<!DOCTYPE html>" + minify(raw);
+  return "<!DOCTYPE html>" + renderToStaticMarkup(<Html {...props} />);
 }
 
 export type ViewContext = {
