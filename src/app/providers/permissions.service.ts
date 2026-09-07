@@ -24,8 +24,6 @@ export class PermissionsService implements PermissionServicePort {
         'system.module.uninstall',
         'system.module.upgrade',
         'system.module.seed',
-        'crm.contact.read',
-        'crm.contact.write',
       ],
     ],
     [
@@ -33,12 +31,8 @@ export class PermissionsService implements PermissionServicePort {
       [
         'platform.user.read',
         'platform.user.write',
-        'crm.contact.read',
-        'crm.contact.write',
       ],
-    ],
-    ['org.admin', ['platform.user.read', 'crm.contact.read']],
-    ['org.member', ['platform.user.read', 'crm.contact.read']],
+    ]
   ]);
 
   listForRole(roleCode: string): PermissionRecord[] {

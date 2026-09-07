@@ -10,8 +10,6 @@ const logger = new Logger('RuntimeModules');
 
 const RUNTIME_MODULE_SPECS: RuntimeModuleSpec[] = [
   { name: 'website', exportName: 'WebsiteModule', requirePath: './website/module' },
-  { name: 'crm', exportName: 'CrmModule', requirePath: './crm/module' },
-  { name: 'org', exportName: 'OrgModule', requirePath: './org/module' },
 ];
 
 export function loadRuntimeModules(): Type<unknown>[] {
