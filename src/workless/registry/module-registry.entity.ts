@@ -43,16 +43,15 @@ export class ModuleRegistryEntity {
   @Column({ type: 'simple-json', nullable: true })
   metadata?: Record<string, unknown> | null;
 
-  @Column({ type: 'timestamptz', nullable: true })
+  @Column({ name: 'installed_at', type: 'timestamptz', nullable: true })
   installedAt?: Date | null;
 
-  @Column({ type: 'timestamptz', nullable: true })
+  @Column({ name: 'upgraded_at', type: 'timestamptz', nullable: true })
   upgradedAt?: Date | null;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 }
-

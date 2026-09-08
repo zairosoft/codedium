@@ -1,24 +1,10 @@
 import { DEFAULT_COMPANY_ID } from '@/workless/company/company.constants';
-import {
-  QueryRunner,
-  Table,
-  TableForeignKey,
-  TableIndex,
-} from 'typeorm';
-
-async function tableHasIndex(
-  queryRunner: QueryRunner,
-  tableName: string,
-  indexName: string,
-): Promise<boolean> {
-  const table = await queryRunner.getTable(tableName);
-  return table?.indices.some((index) => index.name === indexName) ?? false;
-}
+import { QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class CreateUsersMigration {
   readonly name = 'create-users';
   readonly timestamp = 202607120002;
-  readonly checksum = 'create-users-v5-company-id-columns';
+  readonly checksum = 'create-users-v6-users-only';
 
   async up(queryRunner: QueryRunner): Promise<void> {
     const hasTable = await queryRunner.hasTable('users');
@@ -166,116 +152,9 @@ export class CreateUsersMigration {
       );
     }
 
-      const hasMembershipsTable = await queryRunner.hasTable('user_memberships');
-      if (!hasMembershipsTable) {
-        await queryRunner.createTable(
-          new Table({
-            name: 'user_memberships',
-            columns: [
-              {
-                name: 'id',
-                type: 'uuid',
-                isPrimary: true,
-                isNullable: false,
-              },
-              {
-                name: 'tenantId',
-                type: 'uuid',
-                isNullable: false,
-                default: `'${DEFAULT_COMPANY_ID}'`,
-              },
-              {
-                name: 'userId',
-                type: 'uuid',
-                isNullable: false,
-              },
-              {
-                name: 'company_id',
-                type: 'uuid',
-                isNullable: false,
-              },
-              {
-                name: 'organizationId',
-                type: 'uuid',
-                isNullable: false,
-              },
-              {
-                name: 'roleCode',
-                type: 'varchar',
-                length: '80',
-                isNullable: false,
-              },
-              {
-                name: 'isDefault',
-                type: 'boolean',
-                default: false,
-                isNullable: false,
-              },
-              {
-                name: 'createdAt',
-                type: 'timestamptz',
-                default: 'now()',
-                isNullable: false,
-              },
-              {
-                name: 'updatedAt',
-                type: 'timestamptz',
-                default: 'now()',
-                isNullable: false,
-              },
-              {
-                name: 'deletedAt',
-                type: 'timestamptz',
-                isNullable: true,
-              },
-            ],
-            foreignKeys: [
-              new TableForeignKey({
-                columnNames: ['userId'],
-                referencedTableName: 'users',
-                referencedColumnNames: ['id'],
-                onDelete: 'CASCADE',
-              }),
-            ],
-          }),
-          true,
-        );
-      }
-
-      const hasMembershipIndex = await tableHasIndex(
-        queryRunner,
-        'user_memberships',
-        'uq_user_memberships_tenant_user_company_org',
-      );
-      if (!hasMembershipIndex) {
-        await queryRunner.createIndex(
-          'user_memberships',
-          new TableIndex({
-            name: 'uq_user_memberships_tenant_user_company_org',
-            columnNames: ['tenantId', 'userId', 'company_id', 'organizationId'],
-            isUnique: true,
-          }),
-        );
-      }
-
-      const hasCompanyIndex = await tableHasIndex(
-        queryRunner,
-        'user_memberships',
-        'idx_user_memberships_tenant_company',
-      );
-      if (!hasCompanyIndex) {
-        await queryRunner.createIndex(
-          'user_memberships',
-          new TableIndex({
-            name: 'idx_user_memberships_tenant_company',
-            columnNames: ['tenantId', 'company_id'],
-          }),
-        );
-      }
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user_memberships', true, true);
     await queryRunner.dropTable('users', true, true);
   }
 }

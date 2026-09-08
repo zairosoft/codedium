@@ -4,7 +4,7 @@ import { WorklessMigration } from '@/database/migration.interface';
 export class CreateModuleRegistryMigration implements WorklessMigration {
   readonly name = 'create-module-registry';
   readonly timestamp = 202607120001;
-  readonly checksum = 'create-module-registry-v1';
+  readonly checksum = 'create-module-registry-v2-snake-case-timestamps';
 
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -18,10 +18,10 @@ export class CreateModuleRegistryMigration implements WorklessMigration {
         "description" varchar(255),
         "dependencies" text,
         "metadata" text,
-        "installedAt" timestamptz,
-        "upgradedAt" timestamptz,
-        "createdAt" timestamptz NOT NULL DEFAULT now(),
-        "updatedAt" timestamptz NOT NULL DEFAULT now()
+        "installed_at" timestamptz,
+        "upgraded_at" timestamptz,
+        "created_at" timestamptz NOT NULL DEFAULT now(),
+        "updated_at" timestamptz NOT NULL DEFAULT now()
       )
     `);
     await queryRunner.query(`
