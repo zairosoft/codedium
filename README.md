@@ -271,17 +271,20 @@ The lifecycle API also exposes:
 
 Seeding applies pending migrations but does not install, enable, disable, or change the version of a module.
 
-
-## Security
-
-Please review [SECURITY.md](SECURITY.md).
-
 ## Contact
 
 - Email: [info@zairosoft.com](mailto:info@zairosoft.com)
 - LinkedIn: [linkedin.com/in/zairosoft](https://www.linkedin.com/in/zairosoft)
 - Website: [zairosoft.com](https://www.zairosoft.com)
 - Sponsors: [github.com/sponsors/zairosoft](https://github.com/sponsors/zairosoft)
+
+
+## Donors and sponsors
+Nothing
+
+## Security
+
+Please review [SECURITY.md](SECURITY.md).
 
 ## License
 
