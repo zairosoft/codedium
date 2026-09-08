@@ -79,6 +79,7 @@ export const sidebarMenuGroups: SidebarMenuGroup[] = [
       { label: 'Education', href: '#education' },
       { label: 'Authors', href: '#authors' },
       { label: 'Doctor', href: '#doctor' },
+      { label: 'Companies', href: '/api/v1/platform/companies/page' },
       { label: 'Employees', href: '#employees' },
       { label: 'Workspaces', href: '#workspaces' },
       { label: 'Meetings', href: '#meetings' },

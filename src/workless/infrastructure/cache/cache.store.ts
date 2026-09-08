@@ -4,6 +4,7 @@ export interface CacheStore {
   get<T>(key: string): Promise<T | null>;
   set<T>(key: string, value: T, ttlSeconds?: number): Promise<void>;
   del(key: string): Promise<void>;
+  delByPrefix(prefix: string): Promise<void>;
 }
 
 type MemoryValue = {
@@ -25,19 +26,36 @@ export class InMemoryCacheStore implements CacheStore {
       return null;
     }
 
-    return JSON.parse(entry.value) as T;
+    try {
+      return JSON.parse(entry.value) as T;
+    } catch {
+      this.data.delete(key);
+      return null;
+    }
   }
 
   async set<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
     const expiresAt = ttlSeconds ? Date.now() + ttlSeconds * 1000 : undefined;
+    const serializedValue = JSON.stringify(value);
+    if (serializedValue === undefined) {
+      throw new TypeError('Cache value must be JSON serializable.');
+    }
     this.data.set(key, {
-      value: JSON.stringify(value),
+      value: serializedValue,
       expiresAt,
     });
   }
 
   async del(key: string): Promise<void> {
     this.data.delete(key);
+  }
+
+  async delByPrefix(prefix: string): Promise<void> {
+    for (const key of this.data.keys()) {
+      if (key.startsWith(prefix)) {
+        this.data.delete(key);
+      }
+    }
   }
 }
 
@@ -46,11 +64,23 @@ export class RedisCacheStore implements CacheStore {
 
   async get<T>(key: string): Promise<T | null> {
     const raw = await this.redis.get(key);
-    return raw ? (JSON.parse(raw) as T) : null;
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(raw) as T;
+    } catch {
+      await this.redis.del(key);
+      return null;
+    }
   }
 
   async set<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
     const serializedValue = JSON.stringify(value);
+    if (serializedValue === undefined) {
+      throw new TypeError('Cache value must be JSON serializable.');
+    }
 
     if (ttlSeconds !== undefined) {
       await this.redis.set(key, serializedValue, 'EX', ttlSeconds);
@@ -62,5 +92,25 @@ export class RedisCacheStore implements CacheStore {
 
   async del(key: string): Promise<void> {
     await this.redis.del(key);
+  }
+
+  async delByPrefix(prefix: string): Promise<void> {
+    const pattern = `${prefix.replace(/[\\*?[\]]/g, '\\$&')}*`;
+    let cursor = '0';
+
+    do {
+      const [nextCursor, keys] = await this.redis.scan(
+        cursor,
+        'MATCH',
+        pattern,
+        'COUNT',
+        100,
+      );
+      cursor = nextCursor;
+
+      if (keys.length > 0) {
+        await this.redis.unlink(...keys);
+      }
+    } while (cursor !== '0');
   }
 }

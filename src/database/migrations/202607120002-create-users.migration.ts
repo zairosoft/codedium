@@ -1,4 +1,3 @@
-import { DEFAULT_COMPANY_ID } from '@/workless/company/company.constants';
 import { QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class CreateUsersMigration {
@@ -24,7 +23,7 @@ export class CreateUsersMigration {
               name: 'company_id',
               type: 'uuid',
               isNullable: false,
-              default: `'${DEFAULT_COMPANY_ID}'`,
+              default: "'00000000-0000-0000-0000-000000000000'",
             },
             {
               name: 'name',

@@ -10,7 +10,7 @@ import {
 } from '@/app/interfaces/user.interface';
 import { EVENT_BUS_PORT, EventBusPort } from '@/app/interfaces/event-bus.interface';
 import { HOOK_PORT, HookPort } from '@/app/interfaces/hook.interface';
-import { COMPANY_CONTEXT, CompanyContextPort } from '@/workless/company/company-context.interface';
+import { COMPANY_CONTEXT, CompanyContextPort } from '@/app/interfaces/company-context.interface';
 import { RequestActor } from '@/app/helpers/request-actor';
 import { ListUsersDto } from '@/app/dto/list-users.dto';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
@@ -31,13 +31,13 @@ export class UsersService implements UserServicePort {
   ) {}
 
   async findById(id: string): Promise<UserRecord | null> {
-    const companyId = this.companyContext.getCompanyId();
+    const companyId = this.companyContext.requireCompanyId();
     const entity = await this.usersRepository.findOne({ where: { id, companyId } });
     return entity ? this.toRecord(entity) : null;
   }
 
   async findByEmail(email: string): Promise<UserRecord | null> {
-    const companyId = this.companyContext.getCompanyId();
+    const companyId = this.companyContext.requireCompanyId();
     const entity = await this.usersRepository.findOne({
       where: { companyId, email: email.trim().toLowerCase() },
     });
@@ -55,7 +55,7 @@ export class UsersService implements UserServicePort {
   async listUsers(query: ListUsersDto, actor?: RequestActor) {
     if (actor) this.usersPolicy.assertCanReadDirectory(actor);
 
-    const companyId = this.companyContext.getCompanyId();
+    const companyId = this.companyContext.requireCompanyId();
     const page = query.page ?? 1;
     const limit = Math.min(query.limit ?? 20, 100);
     const search = query.search?.trim();
@@ -83,7 +83,7 @@ export class UsersService implements UserServicePort {
     if (actor) this.usersPolicy.assertCanCreate(actor);
 
     const payload = await this.hookService.emit('user.creating', input);
-    const companyId = this.companyContext.getCompanyId();
+    const companyId = this.companyContext.requireCompanyId();
     const email = payload.email.trim().toLowerCase();
     const existing = await this.usersRepository.findOne({ where: { companyId, email } });
 
@@ -111,7 +111,7 @@ export class UsersService implements UserServicePort {
   }
 
   async updateUser(id: string, input: UpdateUserInput, actor?: RequestActor): Promise<UserRecord> {
-    const companyId = this.companyContext.getCompanyId();
+    const companyId = this.companyContext.requireCompanyId();
     const payload = await this.hookService.emit('user.updating', input);
     const existing = await this.usersRepository.findOne({ where: { id, companyId } });
 

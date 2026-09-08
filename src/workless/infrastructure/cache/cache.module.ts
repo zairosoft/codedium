@@ -26,8 +26,18 @@ export class CacheModule implements OnModuleDestroy {
   constructor(@Inject(REDIS_CLIENT) private readonly redisClient: Redis | null) {}
 
   async onModuleDestroy(): Promise<void> {
-    if (this.redisClient) {
+    if (!this.redisClient) {
+      return;
+    }
+
+    if (this.redisClient.status === 'end') {
+      return;
+    }
+
+    try {
       await this.redisClient.quit();
+    } catch {
+      this.redisClient.disconnect(false);
     }
   }
 }

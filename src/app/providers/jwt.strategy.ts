@@ -4,10 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
+import { isUUID } from 'class-validator';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
 import type { AuthenticatedUser, JwtPayload } from '@/app/interfaces/auth.interface';
 import { resolveJwtSecret } from '@/config/jwt.config';
-import { normalizeCompanyId } from '@/workless/company/company.constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -35,14 +35,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Token company is invalid.');
     }
 
-    let tokenCompanyId: string;
-    try {
-      tokenCompanyId = normalizeCompanyId(payload.companyId);
-    } catch {
+    const tokenCompanyId = payload.companyId.trim().toLowerCase();
+    if (!isUUID(tokenCompanyId)) {
       throw new UnauthorizedException('Token company is invalid.');
     }
 
-    const databaseCompanyId = normalizeCompanyId(user.companyId);
+    const databaseCompanyId = user.companyId.trim().toLowerCase();
+    if (!isUUID(databaseCompanyId)) {
+      throw new UnauthorizedException('User company is invalid.');
+    }
     if (tokenCompanyId !== databaseCompanyId) {
       throw new UnauthorizedException('Token company is no longer valid.');
     }

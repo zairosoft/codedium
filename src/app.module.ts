@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -8,8 +8,6 @@ import { loadRuntimeModules } from '@modules/modules';
 import { WorklessModule } from '@/workless/workless.module';
 import { CacheModule } from '@/workless/infrastructure/cache/cache.module';
 import { DatabaseModule } from '@/database/database.module';
-import { CompanyContextMiddleware } from '@/workless/company/company-context.middleware';
-import { CompanyModule } from '@/workless/company/company.module';
 
 const runtimeModules = loadRuntimeModules();
 
@@ -37,7 +35,6 @@ const runtimeModules = loadRuntimeModules();
         limit: 200,
       },
     ]),
-    CompanyModule,
     DatabaseModule,
     CacheModule,
     PlatformModule,
@@ -51,10 +48,4 @@ const runtimeModules = loadRuntimeModules();
     },
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(CompanyContextMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}

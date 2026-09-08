@@ -10,7 +10,6 @@ import {
   JwtPayload,
   LoginResult,
 } from '@/app/interfaces/auth.interface';
-import { DEFAULT_COMPANY_ID, normalizeCompanyId } from '@/workless/company/company.constants';
 import { RegisterDto } from '@/app/dto/register.dto';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
 
@@ -32,7 +31,7 @@ export class AuthService implements AuthServicePort {
 
     return {
       userId: user.id,
-      companyId: normalizeCompanyId(user.companyId),
+      companyId: user.companyId.trim().toLowerCase(),
       authenticatedAt: new Date(),
     };
   }
@@ -65,7 +64,7 @@ export class AuthService implements AuthServicePort {
     }
 
     const user = this.usersRepository.create({
-      companyId: DEFAULT_COMPANY_ID,
+      companyId: '00000000-0000-0000-0000-000000000000',
       name: dto.displayName.trim(),
       email,
       password: await this.hashPassword(dto.password),
@@ -82,7 +81,7 @@ export class AuthService implements AuthServicePort {
     const payload: JwtPayload = {
       userId: user.id,
       email: user.email,
-      companyId: normalizeCompanyId(user.companyId),
+      companyId: user.companyId.trim().toLowerCase(),
       roles: [user.role],
     };
 
