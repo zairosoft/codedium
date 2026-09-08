@@ -127,68 +127,6 @@ Examples:
 
 Routes require JWT authentication unless marked public. Permission and module-enabled guards apply after authentication where configured.
 
-Tenant-aware requests use:
-
-    X-Tenant-Id: <tenant-uuid>
-
-## Source Structure
-
-    src/
-      app.module.ts
-      main.ts
-      app/
-        controllers/
-        dto/
-        entities/
-        helpers/
-        interfaces/
-        locales/
-          en/
-          th/
-        middleware/
-        providers/
-        services/
-        views/
-          components/
-          auth/
-          errors/
-          home/
-          permissions/
-          roles/
-          users/
-      config/
-        env.config.ts
-        jwt.config.ts
-        typeorm.config.ts
-      database/
-        migrations/
-        seeders/
-        migration.service.ts
-        migration.runner.ts
-        seeder.runner.ts
-      workless/
-        events/
-        http/
-        infrastructure/
-          cache/
-        jwt/
-        lifecycle/
-        module/
-        registry/
-        tenant/
-        i18n.ts
-        workless.module.ts
-      modules/
-        modules.ts
-        <module>/
-
-Main responsibilities:
-
-- src/app contains authentication, users, permissions, application locales, and shared views.
-- src/workless contains the module runtime, lifecycle, registry, tenant context, hooks, events, JWT guards, HTTP helpers, and cache implementation.
-- src/database contains application migrations and seeders.
-- src/modules contains installable business modules.
-- src/config contains environment, JWT, and TypeORM configuration.
 
 ## Database Migrations
 
