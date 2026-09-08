@@ -4,8 +4,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
-import type { JwtPayload, AuthenticatedUser } from '@/app/interfaces/auth.interface';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
+import type { AuthenticatedUser, JwtPayload } from '@/app/interfaces/auth.interface';
 import { resolveJwtSecret } from '@/config/jwt.config';
 import { normalizeCompanyId } from '@/workless/company/company.constants';
 
@@ -23,10 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  /**
-   * Passport calls this after decoding and verifying the JWT signature.
-   * Return value is attached to `request.user`.
-   */
   async validate(payload: JwtPayload): Promise<AuthenticatedUser> {
     const user = await this.usersRepository.findOne({
       where: { id: payload.userId, isActive: true },

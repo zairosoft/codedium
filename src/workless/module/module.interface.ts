@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { WorklessMigrationConstructor } from '@/database/migration.interface';
-import { CachePort } from '@/app/interfaces/cache.interface';
 import { HookPort } from '@/app/interfaces/hook.interface';
+import { CachePort } from '@/workless/infrastructure/cache/cache.interface';
 import { ModuleRegistryService } from '@/workless/registry/module.registry';
 import { ModuleSeederConstructor } from '@/workless/lifecycle/module-seeder.interface';
 
@@ -29,4 +29,3 @@ export interface DiscoveredSystemModule {
   };
   instance: SystemModuleLifecycle;
 }
-

@@ -7,7 +7,7 @@ import { AuthService } from '@/app/services/auth.service';
 import { CompanyContextGuard } from '@/workless/company/company-context.guard';
 import { CompanyContextService } from '@/workless/company/company-context.service';
 import { DEFAULT_COMPANY_ID } from '@/workless/company/company.constants';
-import { JwtStrategy } from '@/workless/jwt/jwt.strategy';
+import { JwtStrategy } from '@/app/providers/jwt.strategy';
 
 const COMPANY_A = '11111111-1111-4111-8111-111111111111';
 const COMPANY_B = '22222222-2222-4222-8222-222222222222';

@@ -1,8 +1,8 @@
 import { Global, Inject, Module, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
-import { CACHE_PORT } from '@app/interfaces/cache.interface';
 import { REDIS_CLIENT } from '@/workless/infrastructure/cache/cache.constants';
+import { CACHE_PORT } from '@/workless/infrastructure/cache/cache.interface';
 import { CacheService } from '@/workless/infrastructure/cache/cache.service';
 import { createRedisClient } from '@/workless/infrastructure/cache/redis.provider';
 
@@ -20,7 +20,7 @@ import { createRedisClient } from '@/workless/infrastructure/cache/redis.provide
       useExisting: CacheService,
     },
   ],
-  exports: [REDIS_CLIENT, CacheService, CACHE_PORT],
+  exports: [CACHE_PORT],
 })
 export class CacheModule implements OnModuleDestroy {
   constructor(@Inject(REDIS_CLIENT) private readonly redisClient: Redis | null) {}

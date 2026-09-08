@@ -49,8 +49,15 @@ export class RedisCacheStore implements CacheStore {
     return raw ? (JSON.parse(raw) as T) : null;
   }
 
-  async set<T>(key: string, value: T, ttlSeconds = 60): Promise<void> {
-    await this.redis.set(key, JSON.stringify(value), 'EX', ttlSeconds);
+  async set<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
+    const serializedValue = JSON.stringify(value);
+
+    if (ttlSeconds !== undefined) {
+      await this.redis.set(key, serializedValue, 'EX', ttlSeconds);
+      return;
+    }
+
+    await this.redis.set(key, serializedValue);
   }
 
   async del(key: string): Promise<void> {

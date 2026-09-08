@@ -1,8 +1,11 @@
-import { ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { CacheService } from '@/workless/infrastructure/cache/cache.service';
 import { EventBusService } from '@/workless/events/event-bus.service';
 import { HookService } from '@/workless/events/hook.service';
+import {
+  CACHE_PORT,
+  CachePort,
+} from '@/workless/infrastructure/cache/cache.interface';
 import { SystemModuleExplorer } from '@/workless/module/module.explorer';
 import { ModuleLifecycleContext } from '@/workless/module/module.interface';
 import { ModuleRegistryService } from '@/workless/registry/module.registry';
@@ -17,7 +20,7 @@ export class ModuleLifecycleService {
     private readonly moduleExplorer: SystemModuleExplorer,
     private readonly moduleRegistry: ModuleRegistryService,
     private readonly dataSource: DataSource,
-    private readonly cacheService: CacheService,
+    @Inject(CACHE_PORT) private readonly cacheService: CachePort,
     private readonly hookService: HookService,
     private readonly eventBus: EventBusService,
     private readonly migrationService: MigrationService,

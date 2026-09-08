@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAuthGuard } from '@/workless/jwt/jwt-auth.guard';
 import { resolveJwtSecret } from '@/config/jwt.config';
-import { JwtStrategy } from '@/workless/jwt/jwt.strategy';
+import { JwtStrategy } from '@/app/providers/jwt.strategy';
 import { AuthController } from '@/app/controllers/auth.controller';
 import { ComponentsController } from '@/app/controllers/components.controller';
 import { HomeController } from '@/app/controllers/home.controller';

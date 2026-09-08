@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import { REDIS_CLIENT } from '@/workless/infrastructure/cache/cache.constants';
+import { CachePort } from '@/workless/infrastructure/cache/cache.interface';
 import { CacheStore, InMemoryCacheStore, RedisCacheStore } from '@/workless/infrastructure/cache/cache.store';
 
 @Injectable()
-export class CacheService {
+export class CacheService implements CachePort {
   private readonly store: CacheStore;
 
   constructor(@Inject(REDIS_CLIENT) redisClient: Redis | null) {
