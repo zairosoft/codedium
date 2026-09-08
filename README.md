@@ -217,7 +217,7 @@ Seeding applies pending migrations but does not install, enable, disable, or cha
 - Sponsors: [github.com/sponsors/zairosoft](https://github.com/sponsors/zairosoft)
 
 
-## Donors and sponsors
+## Donors and Sponsors
 Nothing
 
 ## Security
