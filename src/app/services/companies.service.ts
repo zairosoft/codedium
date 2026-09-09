@@ -13,9 +13,10 @@ import {
 import { CompaniesPolicy } from '@/app/providers/companies.policy';
 import { CACHE_PORT, CachePort } from '@/workless/infrastructure/cache/cache.interface';
 
-type CachedCompanyRecord = Omit<CompanyRecord, 'createdAt' | 'updatedAt'> & {
+type CachedCompanyRecord = Omit<CompanyRecord, 'createdAt' | 'updatedAt' | 'deletedAt'> & {
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
 };
 
 @Injectable()
@@ -196,6 +197,7 @@ export class CompaniesService {
       ...company,
       createdAt: company.createdAt.toISOString(),
       updatedAt: company.updatedAt.toISOString(),
+      deletedAt: company.deletedAt?.toISOString() ?? null,
     };
   }
 
@@ -204,6 +206,7 @@ export class CompaniesService {
       ...company,
       createdAt: new Date(company.createdAt),
       updatedAt: new Date(company.updatedAt),
+      deletedAt: company.deletedAt ? new Date(company.deletedAt) : null,
     };
   }
 
@@ -216,7 +219,11 @@ export class CompaniesService {
       logo: company.logo,
       isActive: company.isActive,
       createdAt: company.createdAt,
+      createdBy: company.createdBy ?? null,
       updatedAt: company.updatedAt,
+      updatedBy: company.updatedBy ?? null,
+      deletedAt: company.deletedAt ?? null,
+      deletedBy: company.deletedBy ?? null,
     };
   }
 }
