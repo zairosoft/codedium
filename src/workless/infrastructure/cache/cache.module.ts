@@ -5,6 +5,7 @@ import { REDIS_CLIENT } from '@/workless/infrastructure/cache/cache.constants';
 import { CACHE_PORT } from '@/workless/infrastructure/cache/cache.interface';
 import { CacheService } from '@/workless/infrastructure/cache/cache.service';
 import { createRedisClient } from '@/workless/infrastructure/cache/redis.provider';
+import { CompanyCacheService } from '@/workless/infrastructure/cache/company-cache.service';
 
 @Global()
 @Module({
@@ -15,12 +16,13 @@ import { createRedisClient } from '@/workless/infrastructure/cache/redis.provide
       useFactory: createRedisClient,
     },
     CacheService,
+    CompanyCacheService,
     {
       provide: CACHE_PORT,
       useExisting: CacheService,
     },
   ],
-  exports: [CACHE_PORT],
+  exports: [CACHE_PORT, CompanyCacheService],
 })
 export class CacheModule implements OnModuleDestroy {
   constructor(@Inject(REDIS_CLIENT) private readonly redisClient: Redis | null) {}

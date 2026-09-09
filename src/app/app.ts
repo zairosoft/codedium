@@ -15,7 +15,6 @@ import { LanguageController } from '@/app/controllers/language.controller';
 import { UsersController } from '@/app/controllers/users.controller';
 import { CompanyEntity } from '@/app/entities/company.entity';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
-import { COMPANY_CONTEXT } from '@/app/interfaces/company-context.interface';
 import { CompanyContextMiddleware } from '@/app/middleware/company-context.middleware';
 import { CompaniesPolicy } from '@/app/providers/companies.policy';
 import { CompanyContextGuard } from '@/app/providers/company-context.guard';
@@ -23,7 +22,6 @@ import { HtmlCacheInterceptor } from '@/app/providers/html-cache.interceptor';
 import { NotificationsListener } from '@/app/providers/notifications.listener';
 import { PermissionGuard } from '@/app/providers/permission.guard';
 import { PermissionsService } from '@/app/providers/permissions.service';
-import { RequestCompanyContextService } from '@/app/providers/request-company-context.service';
 import { UsersEventsListener } from '@/app/providers/users-events.listener';
 import { UsersPolicy } from '@/app/providers/users.policy';
 import {
@@ -58,11 +56,6 @@ import { CompaniesService } from '@/app/services/companies.service';
     JwtStrategy,
     CompaniesPolicy,
     CompaniesService,
-    RequestCompanyContextService,
-    {
-      provide: COMPANY_CONTEXT,
-      useExisting: RequestCompanyContextService,
-    },
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

@@ -8,6 +8,7 @@ import { loadRuntimeModules } from '@modules/modules';
 import { WorklessModule } from '@/workless/workless.module';
 import { CacheModule } from '@/workless/infrastructure/cache/cache.module';
 import { DatabaseModule } from '@/database/database.module';
+import { CompanyContextModule } from '@/app/providers/company-context.module';
 
 const runtimeModules = loadRuntimeModules();
 
@@ -18,6 +19,7 @@ const runtimeModules = loadRuntimeModules();
       envFilePath: ['.env.local', '.env'],
     }),
     EventEmitterModule.forRoot(),
+    CompanyContextModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',

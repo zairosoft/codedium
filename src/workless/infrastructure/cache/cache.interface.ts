@@ -1,10 +1,9 @@
 /**
  * Generic JSON data cache. HTML documents are intentionally rejected.
  *
- * Callers own their logical namespaces. Use the convention
- * `<area>:<resource>:<operation-or-id>[:<scope>...]` and include a company or
- * other ownership id whenever data is scoped. CacheService adds the physical
- * `workless:data:` prefix; consumers must not add it themselves.
+ * Use CompanyCacheService for company-owned records. Direct CachePort access is
+ * reserved for shared system data whose namespace is managed by the caller.
+ * CacheService adds the physical `workless:data:` prefix.
  */
 export interface CachePort {
   get<T>(key: string): Promise<T | null>;

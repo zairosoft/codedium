@@ -15,6 +15,17 @@ import { RequestActor } from '@/app/helpers/request-actor';
 import { ListUsersDto } from '@/app/dto/list-users.dto';
 import { PlatformUserEntity } from '@/app/entities/user.entity';
 import { UsersPolicy } from '@/app/providers/users.policy';
+import { CompanyCacheService } from '@/workless/infrastructure/cache/company-cache.service';
+
+type CachedUserRecord = Omit<UserRecord, 'createdAt' | 'updatedAt'> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
+type CachedUserList = {
+  data: CachedUserRecord[];
+  meta: { page: number; limit: number; total: number };
+};
 
 @Injectable()
 export class UsersService implements UserServicePort {
@@ -28,20 +39,38 @@ export class UsersService implements UserServicePort {
     private readonly hookService: HookPort,
     @Inject(COMPANY_CONTEXT)
     private readonly companyContext: CompanyContextPort,
+    private readonly companyCache: CompanyCacheService,
   ) {}
 
   async findById(id: string): Promise<UserRecord | null> {
     const companyId = this.companyContext.requireCompanyId();
-    const entity = await this.usersRepository.findOne({ where: { id, companyId } });
-    return entity ? this.toRecord(entity) : null;
+    const cached = await this.companyCache.remember<CachedUserRecord | null>(
+      'users',
+      { action: 'detail', id },
+      300,
+      async () => {
+        const entity = await this.usersRepository.findOne({ where: { id, companyId } });
+        return entity ? this.toCachedRecord(this.toRecord(entity)) : null;
+      },
+    );
+    return cached ? this.fromCachedRecord(cached) : null;
   }
 
   async findByEmail(email: string): Promise<UserRecord | null> {
     const companyId = this.companyContext.requireCompanyId();
-    const entity = await this.usersRepository.findOne({
-      where: { companyId, email: email.trim().toLowerCase() },
-    });
-    return entity ? this.toRecord(entity) : null;
+    const normalizedEmail = email.trim().toLowerCase();
+    const cached = await this.companyCache.remember<CachedUserRecord | null>(
+      'users',
+      { action: 'email', email: normalizedEmail },
+      300,
+      async () => {
+        const entity = await this.usersRepository.findOne({
+          where: { companyId, email: normalizedEmail },
+        });
+        return entity ? this.toCachedRecord(this.toRecord(entity)) : null;
+      },
+    );
+    return cached ? this.fromCachedRecord(cached) : null;
   }
 
   async getUserById(id: string, actor?: RequestActor): Promise<UserRecord> {
@@ -66,16 +95,26 @@ export class UsersService implements UserServicePort {
         ]
       : { companyId };
 
-    const [entities, total] = await this.usersRepository.findAndCount({
-      where,
-      order: { createdAt: 'DESC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
-
+    const cached = await this.companyCache.remember<CachedUserList>(
+      'users',
+      { action: 'list', page, limit, search: search?.toLowerCase() ?? '' },
+      120,
+      async () => {
+        const [entities, total] = await this.usersRepository.findAndCount({
+          where,
+          order: { createdAt: 'DESC' },
+          skip: (page - 1) * limit,
+          take: limit,
+        });
+        return {
+          data: entities.map((entity) => this.toCachedRecord(this.toRecord(entity))),
+          meta: { page, limit, total },
+        };
+      },
+    );
     return {
-      data: entities.map((entity) => this.toRecord(entity)),
-      meta: { page, limit, total },
+      data: cached.data.map((user) => this.fromCachedRecord(user)),
+      meta: cached.meta,
     };
   }
 
@@ -101,6 +140,14 @@ export class UsersService implements UserServicePort {
       updatedAt: now,
     }));
     const created = this.toRecord(saved);
+
+    await this.companyCache.invalidateTable('users');
+    await this.companyCache.set(
+      'users',
+      { action: 'detail', id: created.id },
+      this.toCachedRecord(created),
+      300,
+    );
 
     await this.eventBus.emit('user.created', {
       userId: created.id,
@@ -134,6 +181,14 @@ export class UsersService implements UserServicePort {
     }));
     const updated = this.toRecord(saved);
 
+    await this.companyCache.invalidateTable('users');
+    await this.companyCache.set(
+      'users',
+      { action: 'detail', id: updated.id },
+      this.toCachedRecord(updated),
+      300,
+    );
+
     await this.eventBus.emit('user.updated', {
       userId: updated.id,
       companyId,
@@ -152,6 +207,22 @@ export class UsersService implements UserServicePort {
       roles: [...(entity.roles ?? [])],
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
+    };
+  }
+
+  private toCachedRecord(user: UserRecord): CachedUserRecord {
+    return {
+      ...user,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    };
+  }
+
+  private fromCachedRecord(user: CachedUserRecord): UserRecord {
+    return {
+      ...user,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
     };
   }
 }
